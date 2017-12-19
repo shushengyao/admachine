@@ -16,6 +16,25 @@ html {
     font-weight: 400;
 }
 
+@media only screen and (min-width: 993px) {
+    header, main, footer {
+        padding-left: 300px;
+    }
+
+    #main-content {
+        width: 90%;
+    }
+
+    #fixed-add-btn {
+        position: fixed;
+        right: 23px;
+        bottom: 61px;
+        padding-top: 15px;
+        margin-bottom: 0;
+        z-index: 997
+    }
+}
+
 /* region navbar full screen background */
 nav {
     background-color: #37474f;
@@ -63,8 +82,35 @@ nav .nav-background .full-width {
     min-width: 100%
 }
 
+ul.side-nav.fixed li.logo {
+    text-align: center;
+    margin-top: 32px;
+    margin-bottom: 80px;
+    padding-bottom: 100px;
+}
+
+ul.side-nav.fixed li.logo:hover, ul.side-nav.fixed li.logo #logo-container:hover {
+    background-color: transparent
+}
+
+ul.side-nav.fixed li.logo img {
+    width: 236px;
+}
+
 /* endregion */
 
 #login-background {
     background-image: url("../../application/image/stars.jpg");
+}
+
+.main-end-stage-frame {
+    width: 100%;
+    height: auto;
+    background-color: white;
+    margin: 5px;
+    padding: 5px;
+}
+
+#active-page {
+    background-color: #5ebae5;
 }

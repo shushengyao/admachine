@@ -1,11 +1,220 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html>
 <head>
     <meta charset="UTF-8"/>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <title>广告机列表</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"/>
+    <link rel="stylesheet" href="../../static/application/css/global.css"/>
+    <link rel="stylesheet" href="../../static/materialize/css/materialize.min.css"/>
+    <link rel="shoutcut icon" type="image/x-icon" href="favicon.ico" media="all"/>
+    <style type="text/css">
+        .side-nav li.active {
+            background-color: rgba(0, 0, 0, 0.15);
+        }
+    </style>
+    <title>广告机 - 广告机管理后台</title>
 </head>
 <body>
+<header>
+    <nav style="background-color: #37474f;z-index: 1;">
+        <div class="nav-wrapper">
+            <!--/* <editor-fold desc="responsive navigation"> */-->
+            <ul class="left">
+                <li style="height: 56px;">
+                    <a href="#" data-activates="nav-mobile" id="button-nav-menu" class="hide-on-large-only">
+                        <i class="material-icons">menu</i>
+                    </a>
+                </li>
+            </ul>
+            <ul id="nav-mobile" class="side-nav fixed" style="transform: translateX(0%);">
+                <li class="logo">
+                    <a id="logo-container" href="#" class="brand-logo">
+                        <img src="../../static/application/image/logo.png" alt="logo" class="center-block"/>
+                    </a>
+                </li>
+                <li>
+                    <a href="../system/main.html" class="waves-effect waves-teal">首页</a>
+                </li>
+                <li class="active">
+                    <a href="#" class="waves-effect waves-teal">广告机</a>
+                </li>
+                <li>
+                    <a href="../advertisement/advertisementList.html" class="waves-effect waves-teal">广告</a>
+                </li>
+                <li>
+                    <a href="../user/userList.html" class="waves-effect waves-teal">用户</a>
+                </li>
+                <li>
+                    <a href="../role/roleList.html" class="waves-effect waves-teal">角色 - 需要角色判断来显示</a>
+                </li>
+            </ul>
+            <!--/* </editor-fold> */-->
+            <!--/* <editor-fold desc="right navbar item"> */-->
+            <ul class="right">
+                <li>username，欢迎</li>
+                <li>
+                    <a class="dropdown-button" href="#!" data-activates="dropdown-menu">
+                        <i class="material-icons right">account_circle</i>
+                    </a>
+                </li>
+            </ul>
+            <ul id="dropdown-menu" class="dropdown-content">
+                <!--<li><a href="#!" class="black-text">one</a></li>-->
+                <!--<li class="divider"></li>-->
+                <li><a href="#!" class="black-text">退出</a></li>
+            </ul>
+            <!--/* </editor-fold> */-->
+        </div>
+    </nav>
+</header>
 
+<main>
+    <div id="main-content" class="container">
+        <h4 class="title">广告机列表</h4>
+        <li class="divider"></li>
+
+        <div id="search-box">
+            <form action="#!" method="post">
+                <ul class="collapsible popout" data-collapsible="accordion">
+                    <li>
+                        <div class="collapsible-header"><i class="material-icons">search</i>条件搜索</div>
+                        <div class="collapsible-body">
+                            <div class="row">
+                                <div class="col s12 m8 l8 center">
+                                    <div class="row">
+                                        <div class="input-field col s12 m4 l4">
+                                            <input id="name" name="name" type="text">
+                                            <label for="name">待查广告机名称</label>
+                                        </div>
+                                        <div class="input-field col s12 m4 l4">
+                                            <input id="codeNumber" name="codeNumber" type="text">
+                                            <label for="codeNumber">待查广告机识别码</label>
+                                        </div>
+                                        <div class="input-field col s12 m4 l4">
+                                            <input id="addTime" name="addTime" type="text" class="date-picker">
+                                            <label for="addTime">时间查询</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col s12 m4 l4 center">
+                                    <div class="input-field">
+                                        <button type="submit"
+                                                class="btn-floating btn-large waves-effect waves-light green">
+                                            <i class="material-icons">search</i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </form>
+        </div>
+
+        <table class="highlight responsive-table">
+            <thead>
+            <tr>
+                <th>广告机名称</th>
+                <th>地址</th>
+                <th>加入时间</th>
+                <th>机器识别码</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody class="card">
+            <tr>
+                <td>name</td>
+                <td>address</td>
+                <td>addTime</td>
+                <td>codeNumber</td>
+                <td width="15%" class="right-align hide-on-med-and-down">
+                    <a class="btn-floating blue waves-effect waves-light tooltipped btn modal-trigger"
+                       data-position="top" data-delay="50" data-tooltip="查看详情" href="#detail-modal">
+                        <i class="material-icons">more_horiz</i>
+                    </a>
+                    <a class="btn-floating green waves-effect waves-light tooltipped"
+                       data-position="top" data-delay="50" data-tooltip="编辑">
+                        <i class="material-icons">edit</i>
+                    </a>
+                    <a class="btn-floating red darken-1 waves-effect waves-light tooltipped"
+                       data-position="top" data-delay="50" data-tooltip="删除">
+                        <i class="material-icons">delete</i>
+                    </a>
+                </td>
+                <td class="hide-on-large-only">
+
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+        <div id="fixed-add-btn" class="fixed-action-btn">
+            <a class="btn-floating btn-large waves-effect waves-light blue">
+                <i class="large material-icons">add</i>
+            </a>
+        </div>
+
+        <div class="center">
+            <ul class="pagination">
+                <li class="disabled"><a href="#!"><i class="material-icons">chevron_left</i></a></li>
+                <li class="waves-effect" id="active-page"><a href="#!">1</a></li>
+                <li class="waves-effect"><a href="#!">2</a></li>
+                <li class="waves-effect"><a href="#!">3</a></li>
+                <li class="waves-effect"><a href="#!">4</a></li>
+                <li class="waves-effect"><a href="#!">5</a></li>
+                <li class="waves-effect"><a href="#!"><i class="material-icons">chevron_right</i></a></li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- <editor-fold desc="Modal"> -->
+    <div id="detail-modal" class="modal modal-fixed-footer">
+        <div class="modal-content">
+            <h4>广告机名称在这里</h4>
+            <p>A bunch of text</p>
+        </div>
+        <div class="modal-footer">
+            <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">关闭</a>
+        </div>
+    </div>
+    <!-- </editor-fold> -->
+</main>
+
+<footer class="page-footer hide-on-med-and-down"
+        style="position: absolute; bottom: 0; left: 0;background-color: #37474f;">
+    <div class="footer-copyright">
+        <div class="container right-align">
+            © 2017 Copyright 珠海希梦电子科技有限公司
+        </div>
+    </div>
+</footer>
+
+<script type="text/javascript" src="../../static/application/js/jquery.min.js"></script>
+<script type="text/javascript" src="../../static/materialize/js/materialize.min.js"></script>
+<script type="text/javascript" src="../../static/application/js/date-picker.js"></script>
+<script type="text/javascript" src="../../static/application/js/global.js"></script>
+<script type="text/javascript">
+    $(document.body).css({
+        "overflow-x": "hidden",
+        "overflow-y": "hidden"
+    });
+
+    $(function () {
+        resize_footer(window.screen.width);
+        $('#button-nav-menu').sideNav({
+            closeOnClick: true,
+            draggable: true
+        });
+
+        $('.dropdown-button').dropdown();
+
+        $('.date-picker').pickadatee({
+            closeOnSelect: true
+        });
+
+        $("#detail-modal").modal();
+    });
+</script>
 </body>
 </html>

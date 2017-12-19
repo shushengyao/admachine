@@ -1,27 +1,92 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html>
 <head>
     <meta charset="UTF-8"/>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"/>
-    <link rel="stylesheet" th:href="@{static/materialize/css/materialize.min.css}"/>
-    <link rel="stylesheet" th:href="@{static/application/css/global.css}"/>
+    <link rel="stylesheet" href="../../static/application/css/global.css"/>
+    <link rel="stylesheet" href="../../static/materialize/css/materialize.min.css"/>
     <link rel="shoutcut icon" type="image/x-icon" href="favicon.ico" media="all"/>
-    <title>广告机管理后台</title>
+    <style type="text/css">
+        .side-nav li.active {
+            background-color: rgba(0, 0, 0, 0.15);
+        }
+    </style>
+    <title>首页 - 广告机管理后台</title>
 </head>
 <body>
+<header>
+    <nav style="background-color: #37474f;z-index: 1;">
+        <div class="nav-wrapper">
+            <!--/* <editor-fold desc="responsive navigation"> */-->
+            <ul class="left">
+                <li style="height: 56px;">
+                    <a href="#" data-activates="nav-mobile" id="button-nav-menu" class="hide-on-large-only">
+                        <i class="material-icons">menu</i>
+                    </a>
+                </li>
+            </ul>
+            <ul id="nav-mobile" class="side-nav fixed" style="transform: translateX(0%);">
+                <li class="logo">
+                    <a id="logo-container" href="#" class="brand-logo">
+                        <img src="../../static/application/image/logo.png" alt="logo" class="center-block"/>
+                    </a>
+                </li>
+                <li class="active">
+                    <a href="#" class="waves-effect waves-teal">首页</a>
+                </li>
+                <li>
+                    <a href="../advertisementMachine/advertisementMachineList.html"
+                       class="waves-effect waves-teal">广告机</a>
+                </li>
+                <li>
+                    <a href="../advertisement/advertisementList.html" class="waves-effect waves-teal">广告</a>
+                </li>
+                <li>
+                    <a href="../user/userList.html" class="waves-effect waves-teal">用户</a>
+                </li>
+                <li>
+                    <a href="../role/roleList.html" class="waves-effect waves-teal">角色 - 需要角色判断来显示</a>
+                </li>
+            </ul>
+            <!--/* </editor-fold> */-->
+            <!--/* <editor-fold desc="right navbar item"> */-->
+            <ul class="right">
+                <li>username，欢迎</li>
+                <li>
+                    <a class="dropdown-button" href="#!" data-activates="dropdown-menu">
+                        <i class="material-icons right">account_circle</i>
+                    </a>
+                </li>
+            </ul>
+            <ul id="dropdown-menu" class="dropdown-content">
+                <!--<li><a href="#!" class="black-text">one</a></li>-->
+                <!--<li class="divider"></li>-->
+                <li><a href="#!" class="black-text">退出</a></li>
+            </ul>
+            <!--/* </editor-fold> */-->
+        </div>
+    </nav>
+</header>
 
-<footer class="page-footer" style="position: absolute; bottom: 0;background-color: #37474f;">
+<main>
+    <div id="main-content" class="container">
+        <h1 class="flow-text">欢迎使用 灯杆广告机管理后台</h1>
+    </div>
+</main>
+
+<footer class="page-footer hide-on-med-and-down"
+        style="position: absolute; bottom: 0; left: 0;background-color: #37474f;">
     <div class="footer-copyright">
-        <div class="container">
+        <div class="container right-align">
             © 2017 Copyright 珠海希梦电子科技有限公司
         </div>
     </div>
 </footer>
 
-<script type="text/javascript" th:src="@{static/application/js/jquery.min.js}"></script>
-<script type="text/javascript" th:src="@{static/materialize/js/materialize.min.js}"></script>
+<script type="text/javascript" src="../../static/application/js/jquery.min.js"></script>
+<script type="text/javascript" src="../../static/materialize/js/materialize.min.js"></script>
 <script type="text/javascript">
     $(document.body).css({
         "overflow-x": "hidden",
@@ -35,7 +100,14 @@
             "height": 40 + 'px',
             "padding": 0
         });
-    })
+    });
+
+    $('#button-nav-menu').sideNav({
+        closeOnClick: true,
+        draggable: true
+    });
+
+    $('.dropdown-button').dropdown();
 </script>
 </body>
 </html>
