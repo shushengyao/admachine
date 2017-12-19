@@ -5,14 +5,9 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"/>
-    <link rel="stylesheet" href="../../static/application/css/global.css"/>
-    <link rel="stylesheet" href="../../static/materialize/css/materialize.min.css"/>
+    <link rel="stylesheet" href="../../../static/application/css/global.css"/>
+    <link rel="stylesheet" href="../../../static/materialize/css/materialize.min.css"/>
     <link rel="shoutcut icon" type="image/x-icon" href="favicon.ico" media="all"/>
-    <style type="text/css">
-        .side-nav li.active {
-            background-color: rgba(0, 0, 0, 0.15);
-        }
-    </style>
     <title>广告机 - 广告机管理后台</title>
 </head>
 <body>
@@ -30,7 +25,7 @@
             <ul id="nav-mobile" class="side-nav fixed" style="transform: translateX(0%);">
                 <li class="logo">
                     <a id="logo-container" href="#" class="brand-logo">
-                        <img src="../../static/application/image/logo.png" alt="logo" class="center-block"/>
+                        <img src="../../../static/application/image/logo.png" alt="logo" class="center-block"/>
                     </a>
                 </li>
                 <li>
@@ -72,7 +67,9 @@
 <main>
     <div id="main-content" class="container">
         <h4 class="title">广告机列表</h4>
-        <li class="divider"></li>
+        <ul>
+            <li class="divider"></li>
+        </ul>
 
         <div id="search-box">
             <form action="#!" method="post">
@@ -115,11 +112,12 @@
         <table class="highlight responsive-table">
             <thead>
             <tr>
-                <th>广告机名称</th>
+                <th>名称</th>
                 <th>地址</th>
                 <th>加入时间</th>
                 <th>机器识别码</th>
-                <th></th>
+                <th class="hide-on-med-and-down"></th>
+                <th class="hide-on-large-only"></th>
             </tr>
             </thead>
             <tbody class="card">
@@ -142,15 +140,27 @@
                         <i class="material-icons">delete</i>
                     </a>
                 </td>
-                <td class="hide-on-large-only">
-
+                <td class="hide-on-large-only" id="mobile-table-item-buttons">
+                    <a class="btn-floating blue waves-effect waves-light tooltipped btn modal-trigger"
+                       data-position="top" data-delay="50" data-tooltip="查看详情" href="#detail-modal">
+                        <i class="material-icons">more_horiz</i>
+                    </a>
+                    <br/>
+                    <a class="btn-floating green waves-effect waves-light tooltipped"
+                       data-position="top" data-delay="50" data-tooltip="编辑" href="advertisementMachineForm.html">
+                        <i class="material-icons">edit</i>
+                    </a>
+                    <a class="btn-floating red darken-1 waves-effect waves-light tooltipped"
+                       data-position="top" data-delay="50" data-tooltip="删除">
+                        <i class="material-icons">delete</i>
+                    </a>
                 </td>
             </tr>
             </tbody>
         </table>
 
         <div id="fixed-add-btn" class="fixed-action-btn">
-            <a class="btn-floating btn-large waves-effect waves-light blue">
+            <a class="btn-floating btn-large waves-effect waves-light blue" href="advertisementMachineForm.html">
                 <i class="large material-icons">add</i>
             </a>
         </div>
@@ -172,7 +182,15 @@
     <div id="detail-modal" class="modal modal-fixed-footer">
         <div class="modal-content">
             <h4>广告机名称在这里</h4>
-            <p>A bunch of text</p>
+            <h6>广告机ID</h6>
+            <p>1</p>
+            <h6>名称</h6>
+            <p>1</p>
+            <h6>地址</h6>
+            <p>1</p>
+            .
+            .
+            .
         </div>
         <div class="modal-footer">
             <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">关闭</a>
@@ -190,10 +208,10 @@
     </div>
 </footer>
 
-<script type="text/javascript" src="../../static/application/js/jquery.min.js"></script>
-<script type="text/javascript" src="../../static/materialize/js/materialize.min.js"></script>
-<script type="text/javascript" src="../../static/application/js/date-picker.js"></script>
-<script type="text/javascript" src="../../static/application/js/global.js"></script>
+<script type="text/javascript" src="../../../static/application/js/jquery.min.js"></script>
+<script type="text/javascript" src="../../../static/materialize/js/materialize.min.js"></script>
+<script type="text/javascript" src="../../../static/application/js/date-picker.js"></script>
+<script type="text/javascript" src="../../../static/application/js/global.js"></script>
 <script type="text/javascript">
     $(document.body).css({
         "overflow-x": "hidden",

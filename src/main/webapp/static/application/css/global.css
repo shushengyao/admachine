@@ -114,3 +114,8 @@ ul.side-nav.fixed li.logo img {
 #active-page {
     background-color: #5ebae5;
 }
+
+#mobile-table-item-buttons a {
+    margin-top: 2px;
+    margin-right: 2px;
+}
