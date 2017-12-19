@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"/>
+    <link rel="stylesheet" th:href="@{static/materialize/css/materialize.min.css}"/>
+    <link rel="stylesheet" th:href="@{static/application/css/global.css}"/>
+    <link rel="shoutcut icon" type="image/x-icon" href="favicon.ico" media="all"/>
+    <title>广告机管理后台</title>
+</head>
+<body>
+
+<footer class="page-footer" style="position: absolute; bottom: 0;background-color: #37474f;">
+    <div class="footer-copyright">
+        <div class="container">
+            © 2017 Copyright 珠海希梦电子科技有限公司
+        </div>
+    </div>
+</footer>
+
+<script type="text/javascript" th:src="@{static/application/js/jquery.min.js}"></script>
+<script type="text/javascript" th:src="@{static/materialize/js/materialize.min.js}"></script>
+<script type="text/javascript">
+    $(document.body).css({
+        "overflow-x": "hidden",
+        "overflow-y": "hidden"
+    });
+
+    $(function () {
+        var screen_width = window.screen.width;
+        $('.page-footer').css({
+            "width": screen_width + "px",
+            "height": 40 + 'px',
+            "padding": 0
+        });
+    })
+</script>
+</body>
+</html>

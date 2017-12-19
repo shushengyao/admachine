@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.xmlan.machine.module.advertisement.dao.AdvertisementDAO">
+
+    <resultMap id="advertisementResultMap" type="Advertisement">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="url" property="url"/>
+        <result column="time" property="time"/>
+        <result column="addTime" property="addTime"/>
+        <result column="machineID" property="machineID"/>
+        <result column="remark" property="remark"/>
+    </resultMap>
+
+    <sql id="columns">
+        t.id as "id",
+        t.name as "name",
+        t.url as "url",
+        t.time as "time",
+        t.addTime as "addTime",
+        t.machineID as "machineID",
+        t.remark as "remark"
+    </sql>
+
+    <!-- <editor-fold desc="BaseDAO functions">  -->
+    <select id="get" parameterType="java.lang.String" resultMap="advertisementResultMap">
+        select
+        <include refid="columns"/>
+        from advertisement t
+        where t.id = #{id}
+    </select>
+
+    <select id="findAll" resultMap="advertisementResultMap">
+        select
+        <include refid="columns"/>
+        from advertisement t
+        order by t.addTime, convert(t.name using gbk) asc
+    </select>
+
+    <select id="findList" parameterType="Advertisement" resultMap="advertisementResultMap">
+        select
+        <include refid="columns"/>
+        from advertisement t
+        <where>
+            <if test="name != null and name != ''">
+                t.name like concat('%',#{name},'%')
+            </if>
+            <if test="name != null and name != ''">
+                t.name like concat('%',#{name},'%')
+            </if>
+            <if test="name != null and name != ''">
+                t.name like concat('%',#{name},'%')
+            </if>
+            <if test="machineID != null and machineID != ''">
+                t.machineID = #{machineID}
+            </if>
+            <if test="remark != null and remark != ''">
+                t.remark like concat('%',#{remark},'%')
+            </if>
+        </where>
+        <choose>
+            <otherwise>
+                order by t.addTime, convert(t.name using gbk) asc
+            </otherwise>
+        </choose>
+    </select>
+
+    <insert id="insert" parameterType="Advertisement">
+        insert into advertisement (
+            id,
+            name,
+            url,
+            time,
+            addTime,
+            machineID,
+            remark
+        ) values (
+            id,
+            #{name},
+            #{url},
+            #{time},
+            #{addTime},
+            #{machineID},
+            #{remark}
+        );
+    </insert>
+
+    <update id="update" parameterType="Advertisement">
+        update advertisement
+        set
+            name      = #{name},
+            url       = #{url},
+            time      = #{time},
+            machineID = #{machineID},
+            remark    = #{remark}
+        where id = #{id}
+    </update>
+
+    <delete id="delete" parameterType="Advertisement">
+        delete from advertisement
+        where id = #{id}
+    </delete>
+    <!-- </editor-fold> -->
+
+    <!-- <editor-fold desc="Custom DAO functions"> -->
+
+    <!-- </editor-fold> -->
+
+</mapper>

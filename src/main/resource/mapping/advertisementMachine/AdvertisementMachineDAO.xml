@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.xmlan.machine.module.advertisementMachine.dao.AdvertisementMachineDAO">
+
+    <resultMap id="advertisementMachineResultMap" type="AdvertisementMachine">
+        <id column="id" property="id"/>
+        <result column="userID" property="userID"/>
+        <result column="name" property="name"/>
+        <result column="address" property="address"/>
+        <result column="longitude" property="longitude"/>
+        <result column="latitude" property="latitude"/>
+        <result column="addTime" property="addTime"/>
+        <result column="codeNumber" property="codeNumber"/>
+        <result column="remark" property="remark"/>
+    </resultMap>
+
+    <sql id="columns">
+        t.id as "id",
+        t.userID as "userID",
+        t.name as "name",
+        t.address as "address",
+        t.longitude as "longitude",
+        t.latitude as "latitude",
+        t.addTime as "addTime",
+        t.codeNumber as "codeNumber",
+        t.remark as "remark"
+    </sql>
+
+    <!-- <editor-fold desc="BaseDAO functions">  -->
+    <select id="get" parameterType="java.lang.String" resultMap="advertisementMachineResultMap">
+        select
+        <include refid="columns"/>
+        from advertisement_machine t
+        where t.id = #{id}
+    </select>
+
+    <select id="findAll" resultMap="advertisementMachineResultMap">
+        select
+        <include refid="columns"/>
+        from advertisement_machine t
+        order by t.addTime, convert(t.name using gbk) asc
+    </select>
+
+    <select id="findList" parameterType="AdvertisementMachine" resultMap="advertisementMachineResultMap">
+        select
+        <include refid="columns"/>
+        from advertisement_machine t
+        <where>
+            <if test="userID != null and userID != ''">
+                t.userID = #{userID}
+            </if>
+            <if test="name != null and name != ''">
+                t.name like concat('%',#{name},'%')
+            </if>
+            <if test="address != null and address != ''">
+                t.address like concat('%',#{address},'%')
+            </if>
+            <if test="codeNumber != null and codeNumber != ''">
+                t.codeNumber = #{codeNumber}
+            </if>
+            <if test="remark != null and remark != ''">
+                t.remark like concat('%',#{remark},'%')
+            </if>
+            <if test="longitude != null and longitude != ''">
+                t.longitude = #{longitude}
+            </if>
+            <if test="latitude != null and latitude != ''">
+                t.latitude = #{latitude}
+            </if>
+        </where>
+        <choose>
+            <otherwise>
+                order by t.addTime, convert(t.name using gbk) asc
+            </otherwise>
+        </choose>
+    </select>
+
+    <insert id="insert" parameterType="AdvertisementMachine">
+        insert into advertisement_machine (
+            id,
+            userID,
+            name,
+            address,
+            longitude,
+            latitude,
+            addTime,
+            codeNumber,
+            remark
+        ) values (
+            id,
+            #{userID},
+            #{name},
+            #{address},
+            #{longitude},
+            #{latitude},
+            #{addTime},
+            #{codeNumber},
+            #{remark}
+        );
+    </insert>
+
+    <update id="update" parameterType="AdvertisementMachine">
+        update advertisement_machine
+        set
+            userID  = #{userID},
+            name    = #{name},
+            address = #{address},
+            remark  = #{remark}
+        where id = #{id}
+    </update>
+
+    <delete id="delete" parameterType="AdvertisementMachine">
+        delete from advertisement_machine
+        where id = #{id}
+    </delete>
+    <!-- </editor-fold> -->
+
+    <!-- <editor-fold desc="Custom DAO functions"> -->
+    <select id="findAllADMachineByUser" resultMap="advertisementMachineResultMap">
+        select
+        <include refid="columns"/>
+        from advertisement_machine
+        where userID = #{userID}
+    </select>
+    <!-- </editor-fold> -->
+
+</mapper>

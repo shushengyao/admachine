@@ -1,0 +1,70 @@
+/* Global html stylesheet */
+@font-face {
+    font-family: source-han-sans-sc;
+    src: url("../font/SourceHanSansProRegular.ttf"),
+    url("../font/SourceHanSansNormal.ttf"),
+    url("../font/SourceHanSansMedium.ttf"),
+    url("../font/SourceHanSansLightHeavy.ttf"),
+    url("../font/SourceHanSansLightExtraLight.ttf"),
+    url("../font/SourceHanSansLightBold.ttf"),
+    url("../font/SourceHanSansLight.ttf");
+}
+
+html {
+    font-family: source-han-sans-sc, sans-serif;
+    font-style: normal;
+    font-weight: 400;
+}
+
+/* region navbar full screen background */
+nav {
+    background-color: #37474f;
+}
+
+nav.nav-full-header {
+    height: 100%
+}
+
+nav .nav-background {
+    overflow: hidden;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    opacity: .8;
+    z-index: -1;
+}
+
+nav .nav-background img, nav .nav-background .pattern {
+    opacity: 0;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    right: 0;
+    left: 0;
+    margin: 0 auto;
+    max-width: 100%;
+    transition: opacity .7s
+}
+
+nav .nav-background img.active, nav .nav-background .pattern.active {
+    opacity: 1
+}
+
+nav .nav-background .pattern {
+    top: 0;
+    bottom: 0;
+    transform: none;
+    background-repeat: repeat
+}
+
+nav .nav-background .full-width {
+    min-width: 100%
+}
+
+/* endregion */
+
+#login-background {
+    background-image: url("../../application/image/stars.jpg");
+}

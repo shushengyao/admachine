@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context.xsd
+       http://www.springframework.org/schema/tx
+       http://www.springframework.org/schema/tx/spring-tx.xsd
+       http://www.springframework.org/schema/aop
+       http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+    <!-- Context binding -->
+    <context:component-scan base-package="com.xmlan.machine"/>
+    <context:property-placeholder location="classpath:machine.properties"/>
+
+    <!-- DataSource binding -->
+    <!-- # MySQL configuration # -->
+    <bean name="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
+        <property name="driverClassName" value="${mysql.driver}"/>
+        <property name="url" value="${mysql.url}"/>
+        <property name="username" value="${mysql.user}"/>
+        <property name="password" value="${mysql.pass}"/>
+        <property name="initialSize" value="${dbcp.initialSize}"/>
+        <property name="maxActive" value="${dbcp.maxActive}"/>
+        <property name="maxIdle" value="${dbcp.maxIdle}"/>
+        <property name="minIdle" value="${dbcp.minIdle}"/>
+        <property name="maxWait" value="${dbcp.maxWait}"/>
+        <property name="maxOpenPreparedStatements" value="${dbcp.maxOpenPreparedStatements}"/>
+    </bean>
+    <bean name="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="typeAliasesPackage" value="com.xmlan.machine"/>
+        <property name="configuration" ref="mybatisConfiguration"/>
+        <property name="mapperLocations" value="classpath*:mapping/**/*.xml"/>
+        <property name="plugins">
+            <array>
+                <bean class="com.github.pagehelper.PageInterceptor">
+                    <property name="properties">
+                        <value>helperDialect=mysql</value>
+                    </property>
+                </bean>
+            </array>
+        </property>
+    </bean>
+    <bean name="mapperScannerConfigurer" class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="com.xmlan.machine"/>
+        <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"/>
+        <property name="annotationClass" value="com.xmlan.machine.common.annotation.MyBatisDao"/>
+    </bean>
+    <bean id="mybatisConfiguration" class="org.apache.ibatis.session.Configuration"
+          p:logImpl="org.apache.ibatis.logging.log4j2.Log4j2Impl"/>
+
+    <!-- Cache configuration -->
+    <bean id="cacheManager" class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">
+        <property name="configLocation" value="classpath:cache/ehcache-local.xml"/>
+    </bean>
+
+    <!-- Validator -->
+    <bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean"/>
+
+    <!-- Transaction -->
+    <tx:annotation-driven/>
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+    <tx:advice id="txAdvice" transaction-manager="transactionManager">
+        <tx:attributes>
+            <tx:method name="save*" propagation="REQUIRED"/>
+            <tx:method name="delete*" propagation="REQUIRED"/>
+            <tx:method name="insert*" propagation="REQUIRED"/>
+            <tx:method name="update*" propagation="REQUIRED"/>
+            <tx:method name="find*" propagation="SUPPORTS" read-only="true"/>
+            <tx:method name="get*" propagation="SUPPORTS" read-only="true"/>
+            <tx:method name="select*" propagation="SUPPORTS" read-only="true"/>
+        </tx:attributes>
+    </tx:advice>
+    <aop:aspectj-autoproxy/>
+    <aop:config>
+        <aop:advisor advice-ref="txAdvice" pointcut="execution(* com.xmlan.machine..*.*(..))"/>
+    </aop:config>
+
+    <!-- Custom bean binding configuration following here -->
+    <bean id="springContextUtils" class="com.xmlan.machine.common.util.SpringContextUtils"/>
+
+</beans>

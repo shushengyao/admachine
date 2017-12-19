@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.xmlan.machine.module.role.dao.RoleDAO">
+
+    <resultMap id="roleResultMap" type="Role">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="remark" property="remark"/>
+    </resultMap>
+
+    <sql id="columns">
+        t.id as "id",
+        t.name as "name",
+        t.remark as "remark"
+    </sql>
+
+    <!-- <editor-fold desc="BaseDAO functions">  -->
+    <select id="get" parameterType="java.lang.String" resultMap="roleResultMap">
+        select
+        <include refid="columns"/>
+        from `role` t
+        where t.id = #{id}
+    </select>
+
+    <select id="findAll" resultMap="roleResultMap">
+        select
+        <include refid="columns"/>
+        from `role` t
+        order by t.id asc
+    </select>
+
+    <select id="findList" parameterType="Role" resultMap="roleResultMap">
+        select
+        <include refid="columns"/>
+        from `role` t
+        <where>
+            <if test="name != null and name != ''">
+                t.name like concat('%',#{name},'%')
+            </if>
+            <if test="remark != null and remark != ''">
+                t.remark like concat('%',#{remark},'%')
+            </if>
+        </where>
+        <choose>
+            <otherwise>
+                order by t.id asc
+            </otherwise>
+        </choose>
+    </select>
+
+    <insert id="insert" parameterType="Role">
+        insert into `role` (
+            id,
+            name,
+            remark
+        ) values (
+            id,
+            #{name},
+            #{remark}
+        );
+    </insert>
+
+    <update id="update" parameterType="Role">
+        update `role`
+        set
+            name   = #{name},
+            remark = #{remark}
+        where id = #{id}
+    </update>
+
+    <delete id="delete" parameterType="Role">
+        delete from `role`
+        where id = #{id}
+    </delete>
+    <!-- </editor-fold> -->
+
+    <!-- <editor-fold desc="Custom DAO functions"> -->
+
+    <!-- </editor-fold> -->
+
+</mapper>

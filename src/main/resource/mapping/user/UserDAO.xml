@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.xmlan.machine.module.user.dao.UserDAO">
+
+    <resultMap id="userResultMap" type="User">
+        <id column="id" property="id"/>
+        <result column="username" property="username"/>
+        <result column="authname" property="authname"/>
+        <result column="password" property="password"/>
+        <result column="roleID" property="roleID"/>
+        <result column="address" property="address"/>
+        <result column="addTime" property="addTime"/>
+        <result column="phone" property="phone"/>
+        <result column="remark" property="remark"/>
+    </resultMap>
+
+    <sql id="columns">
+        t.id as "id",
+        t.username as "username",
+        t.authname as "authname",
+        t.password as "password",
+        t.roleID as "roleID",
+        t.address as "address",
+        t.addTime as "addTime",
+        t.phone as "phone",
+        t.remark as "remark"
+    </sql>
+
+    <!-- <editor-fold desc="BaseDAO functions"> -->
+    <select id="get" parameterType="java.lang.String" resultMap="userResultMap">
+        select
+        <include refid="columns"/>
+        from `user` t
+        where t.id = #{id}
+    </select>
+
+    <select id="findAll" resultMap="userResultMap">
+        select
+        <include refid="columns"/>
+        from `user` t
+        order by t.addTime, convert(t.username using gbk) asc
+    </select>
+
+    <select id="findList" parameterType="User" resultMap="userResultMap">
+        select
+        <include refid="columns"/>
+        from `user` t
+        <where>
+            <if test="username != null and username != ''">
+                t.username like concat('%',#{username},'%')
+            </if>
+            <if test="authname != null and authname != ''">
+                t.authname like concat('%',#{authname},'%')
+            </if>
+            <if test="roleID != null and roleID != ''">
+                t.roleID = #{roleID}
+            </if>
+            <if test="phone != null and phone != ''">
+                t.phone like concat('%',#{phone},'%')
+            </if>
+            <if test="remark != null and remark != ''">
+                t.remark like concat('%',#{remark},'%')
+            </if>
+        </where>
+        <choose>
+            <otherwise>
+                order by t.addTime, convert(t.username using gbk) asc
+            </otherwise>
+        </choose>
+    </select>
+
+    <insert id="insert" parameterType="User">
+        insert into `user` (
+            id,
+            username,
+            authname,
+            password,
+            roleID,
+            address,
+            addTime,
+            phone,
+            remark
+        ) values (
+            id,
+            #{username},
+            #{authname},
+            #{password},
+            #{roleID},
+            #{address},
+            #{addTime},
+            #{phone},
+            #{remark}
+        );
+    </insert>
+
+    <update id="update" parameterType="User">
+        update `user`
+        set
+            username = #{username},
+            address  = #{address},
+            phone    = #{phone},
+            remark   = #{remark}
+        where id = #{id}
+    </update>
+
+    <delete id="delete" parameterType="User">
+        delete from `user`
+        where id = #{id}
+    </delete>
+    <!-- </editor-fold> -->
+
+    <!-- <editor-fold desc="Custom DAO functions"> -->
+    <update id="changeRoleID" parameterType="User">
+        update `user`
+        set roleID = #{roleID}
+        where id = #{id}
+    </update>
+
+    <update id="changePassword" parameterType="User">
+        update `user`
+        set password = #{password}
+        where id = #{id}
+    </update>
+
+    <select id="login" resultMap="userResultMap">
+        select
+        <include refid="columns"/>
+        from `user` t
+        where t.authname = #{authname} and t.password = #{password}
+    </select>
+    <!-- </editor-fold> -->
+
+</mapper>
