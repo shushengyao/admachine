@@ -55,8 +55,6 @@
                 </li>
             </ul>
             <ul id="dropdown-menu" class="dropdown-content">
-                <!--<li><a href="#!" class="black-text">one</a></li>-->
-                <!--<li class="divider"></li>-->
                 <li><a href="#!" class="black-text">退出</a></li>
             </ul>
             <!--/* </editor-fold> */-->
@@ -66,10 +64,75 @@
 
 <main>
     <div id="main-content" class="container">
-        <h4 class="title">编辑广告机——名称</h4>
-        <li class="divider"></li>
+        <h4 class="title">
+            <a class="btn-flat tooltipped" data-position="bottom" data-delay="50" data-tooltip="返回列表"
+               onclick="history.go(-1);"><i class="material-icons">arrow_back</i></a>&nbsp;|&nbsp;编辑广告机——名称
+        </h4>
+        <ul>
+            <li class="divider"></li>
+        </ul>
 
+        <form action="#!" method="post">
+            <!--/* <editor-fold desc="hidden fields"> */-->
+            <input id="id" name="id" type="hidden" disabled="disabled" class="validate" required="required"/>
+            <input id="longitude" name="longitude" type="hidden" disabled="disabled" class="validate"/>
+            <input id="latitude" name="latitude" type="hidden" disabled="disabled" class="validate"/>
+            <!--/* </editor-fold> */-->
 
+            <div class="row">
+                <div class="input-field col s6 m6 l6">
+                    <i class="material-icons prefix">create</i>
+                    <input id="name" name="name" type="text" class="validate" placeholder="输入名称" required="required"/>
+                    <label for="name">广告机名称</label>
+                </div>
+                <div class="input-field col s6 m6 l6">
+                    <i class="material-icons prefix">account_circle</i>
+                    <select id="userID" name="userID">
+                        <option value="" disabled="disabled" selected="selected">选择用户</option>
+                        <option value="1">用户1</option>
+                        <option value="2">用户2</option>
+                        <option value="3">用户3</option>
+                    </select>
+                    <label for="userID">所属用户</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="input-field col s12 m12 l12">
+                    <i class="material-icons prefix">place</i>
+                    <input id="address" name="address" type="text" class="validate" placeholder="输入地址"/>
+                    <label for="address">广告机地址</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="input-field col s6 m6 l6">
+                    <i class="material-icons prefix">date_range</i>
+                    <input id="addTime" name="addTime" type="text" class="date-picker" placeholder="选择加入时间"/>
+                    <label for="addTime">加入时间</label>
+                </div>
+                <div class="input-field col s6 m6 l6">
+                    <i class="material-icons prefix">code</i>
+                    <input id="codeNumber" name="codeNumber" type="text" class="validate" placeholder=""/>
+                    <label for="codeNumber">机器识别码</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="input-field col s12 m12 l12">
+                    <i class="material-icons prefix">insert_comment</i>
+                    <textarea id="remark" name="remark" class="materialize-textarea"></textarea>
+                    <label for="remark">备注</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="input-field col s6 m6 l6 right-align">
+                    <button type="reset" class="waves-effect waves-light btn"><i class="material-icons left">clear</i>清空
+                    </button>
+                </div>
+                <div class="input-field col s6 m6 l6 left-align">
+                    <button type="submit" class="waves-effect waves-light btn"><i class="material-icons right">send</i>提交
+                    </button>
+                </div>
+            </div>
+        </form>
     </div>
 </main>
 
@@ -94,16 +157,18 @@
 
     $(function () {
         resize_footer(window.screen.width);
-        $('#button-nav-menu').sideNav({
+        $("#button-nav-menu").sideNav({
             closeOnClick: true,
             draggable: true
         });
 
-        $('.dropdown-button').dropdown();
+        $(".dropdown-button").dropdown();
 
-        $('.date-picker').pickadatee({
+        $(".date-picker").pickadatee({
             closeOnSelect: true
         });
+
+        $("#userID").material_select();
     });
 </script>
 </body>

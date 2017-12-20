@@ -71,6 +71,7 @@
             <li class="divider"></li>
         </ul>
 
+        <!--/* <editor-fold desc="search box"> */-->
         <div id="search-box">
             <form action="#!" method="post">
                 <ul class="collapsible popout" data-collapsible="accordion">
@@ -81,15 +82,15 @@
                                 <div class="col s12 m8 l8 center">
                                     <div class="row">
                                         <div class="input-field col s12 m4 l4">
-                                            <input id="name" name="name" type="text">
+                                            <input id="name" name="name" type="text"/>
                                             <label for="name">待查广告机名称</label>
                                         </div>
                                         <div class="input-field col s12 m4 l4">
-                                            <input id="codeNumber" name="codeNumber" type="text">
+                                            <input id="codeNumber" name="codeNumber" type="text"/>
                                             <label for="codeNumber">待查广告机识别码</label>
                                         </div>
                                         <div class="input-field col s12 m4 l4">
-                                            <input id="addTime" name="addTime" type="text" class="date-picker">
+                                            <input id="addTime" name="addTime" type="text" class="date-picker"/>
                                             <label for="addTime">时间查询</label>
                                         </div>
                                     </div>
@@ -108,7 +109,9 @@
                 </ul>
             </form>
         </div>
+        <!--/* </editor-fold> */-->
 
+        <!--/* <editor-fold desc="table main content"> */-->
         <table class="highlight responsive-table">
             <thead>
             <tr>
@@ -132,7 +135,7 @@
                         <i class="material-icons">more_horiz</i>
                     </a>
                     <a class="btn-floating green waves-effect waves-light tooltipped"
-                       data-position="top" data-delay="50" data-tooltip="编辑">
+                       data-position="top" data-delay="50" data-tooltip="编辑" href="advertisementMachineForm.html">
                         <i class="material-icons">edit</i>
                     </a>
                     <a class="btn-floating red darken-1 waves-effect waves-light tooltipped"
@@ -158,13 +161,17 @@
             </tr>
             </tbody>
         </table>
+        <!--/* </editor-fold> */-->
 
+        <!--/* <editor-fold desc="add button"> */-->
         <div id="fixed-add-btn" class="fixed-action-btn">
             <a class="btn-floating btn-large waves-effect waves-light blue" href="advertisementMachineForm.html">
                 <i class="large material-icons">add</i>
             </a>
         </div>
+        <!--/* </editor-fold> */-->
 
+        <!--/* <editor-fold desc="pagination"> */-->
         <div class="center">
             <ul class="pagination">
                 <li class="disabled"><a href="#!"><i class="material-icons">chevron_left</i></a></li>
@@ -176,21 +183,37 @@
                 <li class="waves-effect"><a href="#!"><i class="material-icons">chevron_right</i></a></li>
             </ul>
         </div>
+        <!--/* </editor-fold> */-->
     </div>
 
     <!-- <editor-fold desc="Modal"> -->
     <div id="detail-modal" class="modal modal-fixed-footer">
         <div class="modal-content">
             <h4>广告机名称在这里</h4>
-            <h6>广告机ID</h6>
-            <p>1</p>
-            <h6>名称</h6>
-            <p>1</p>
-            <h6>地址</h6>
-            <p>1</p>
-            .
-            .
-            .
+            <div class="row">
+                <div class="col s12 m6 l6">
+                    <h6>广告机ID</h6>
+                    <p>id</p>
+                    <h6>名称</h6>
+                    <p>name</p>
+                    <h6>加入时间</h6>
+                    <p>addTime</p>
+                </div>
+                <div class="col s12 m6 l6">
+                    <h6>所属用户</h6>
+                    <p>userID -> username</p>
+                    <h6>机器识别码</h6>
+                    <p>codeNumber</p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col s12 m12 l12">
+                    <h6>地址</h6>
+                    <p>address</p>
+                    <h6>备注</h6>
+                    <p>remark</p>
+                </div>
+            </div>
         </div>
         <div class="modal-footer">
             <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">关闭</a>
