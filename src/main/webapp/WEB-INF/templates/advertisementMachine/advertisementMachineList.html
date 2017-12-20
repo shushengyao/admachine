@@ -49,15 +49,13 @@
             <ul class="right">
                 <li>username，欢迎</li>
                 <li>
-                    <a class="dropdown-button" href="#!" data-activates="dropdown-menu">
+                    <a class="dropdown-button" href="#" data-activates="dropdown-menu">
                         <i class="material-icons right">account_circle</i>
                     </a>
                 </li>
             </ul>
             <ul id="dropdown-menu" class="dropdown-content">
-                <!--<li><a href="#!" class="black-text">one</a></li>-->
-                <!--<li class="divider"></li>-->
-                <li><a href="#!" class="black-text">退出</a></li>
+                <li><a href="#" class="black-text">退出</a></li>
             </ul>
             <!--/* </editor-fold> */-->
         </div>
@@ -66,14 +64,14 @@
 
 <main>
     <div id="main-content" class="container">
-        <h4 class="title">广告机列表</h4>
+        <h5 class="title">广告机列表</h5>
         <ul>
             <li class="divider"></li>
         </ul>
 
         <!--/* <editor-fold desc="search box"> */-->
         <div id="search-box">
-            <form action="#!" method="post">
+            <form action="#" method="post">
                 <ul class="collapsible popout" data-collapsible="accordion">
                     <li>
                         <div class="collapsible-header"><i class="material-icons">search</i>条件搜索</div>
@@ -96,11 +94,13 @@
                                     </div>
                                 </div>
                                 <div class="col s12 m4 l4 center">
-                                    <div class="input-field">
-                                        <button type="submit"
-                                                class="btn-floating btn-large waves-effect waves-light green">
-                                            <i class="material-icons">search</i>
-                                        </button>
+                                    <div class="row">
+                                        <div class="input-field col s12 m12 l12">
+                                            <button type="submit"
+                                                    class="btn-floating btn-large waves-effect waves-light green">
+                                                <i class="material-icons">search</i>
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -174,13 +174,13 @@
         <!--/* <editor-fold desc="pagination"> */-->
         <div class="center">
             <ul class="pagination">
-                <li class="disabled"><a href="#!"><i class="material-icons">chevron_left</i></a></li>
-                <li class="waves-effect" id="active-page"><a href="#!">1</a></li>
-                <li class="waves-effect"><a href="#!">2</a></li>
-                <li class="waves-effect"><a href="#!">3</a></li>
-                <li class="waves-effect"><a href="#!">4</a></li>
-                <li class="waves-effect"><a href="#!">5</a></li>
-                <li class="waves-effect"><a href="#!"><i class="material-icons">chevron_right</i></a></li>
+                <li class="disabled"><a href="#"><i class="material-icons">chevron_left</i></a></li>
+                <li class="waves-effect" id="active-page"><a href="#">1</a></li>
+                <li class="waves-effect"><a href="#">2</a></li>
+                <li class="waves-effect"><a href="#">3</a></li>
+                <li class="waves-effect"><a href="#">4</a></li>
+                <li class="waves-effect"><a href="#">5</a></li>
+                <li class="waves-effect"><a href="#"><i class="material-icons">chevron_right</i></a></li>
             </ul>
         </div>
         <!--/* </editor-fold> */-->
@@ -189,7 +189,7 @@
     <!-- <editor-fold desc="Modal"> -->
     <div id="detail-modal" class="modal modal-fixed-footer">
         <div class="modal-content">
-            <h4>广告机名称在这里</h4>
+            <h4>详情</h4>
             <div class="row">
                 <div class="col s12 m6 l6">
                     <h6>广告机ID</h6>
@@ -216,7 +216,7 @@
             </div>
         </div>
         <div class="modal-footer">
-            <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">关闭</a>
+            <a href="#" class="modal-action modal-close waves-effect waves-green btn-flat">关闭</a>
         </div>
     </div>
     <!-- </editor-fold> -->
@@ -236,11 +236,6 @@
 <script type="text/javascript" src="../../../static/application/js/date-picker.js"></script>
 <script type="text/javascript" src="../../../static/application/js/global.js"></script>
 <script type="text/javascript">
-    $(document.body).css({
-        "overflow-x": "hidden",
-        "overflow-y": "hidden"
-    });
-
     $(function () {
         resize_footer(window.screen.width);
         $('#button-nav-menu').sideNav({
