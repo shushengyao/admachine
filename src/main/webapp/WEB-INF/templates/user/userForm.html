@@ -1,11 +1,165 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html>
 <head>
     <meta charset="UTF-8"/>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <title>编辑用户</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"/>
+    <link rel="stylesheet" href="../../../static/application/css/global.css"/>
+    <link rel="stylesheet" href="../../../static/materialize/css/materialize.min.css"/>
+    <link rel="shoutcut icon" type="image/x-icon" href="favicon.ico" media="all"/>
+    <title>编辑广告 - 广告机管理后台</title>
 </head>
 <body>
+<header>
+    <nav style="background-color: #37474f;z-index: 1;">
+        <div class="nav-wrapper">
+            <!--/* <editor-fold desc="responsive navigation"> */-->
+            <ul class="left">
+                <li style="height: 56px;">
+                    <a href="#" data-activates="nav-mobile" id="button-nav-menu" class="hide-on-large-only">
+                        <i class="material-icons">menu</i>
+                    </a>
+                </li>
+            </ul>
+            <ul id="nav-mobile" class="side-nav fixed" style="transform: translateX(0%);">
+                <li class="logo">
+                    <a id="logo-container" href="#" class="brand-logo">
+                        <img src="../../../static/application/image/logo.png" alt="logo" class="center-block"/>
+                    </a>
+                </li>
+                <li>
+                    <a href="../system/main.html" class="waves-effect waves-teal">首页</a>
+                </li>
+                <li>
+                    <a href="../advertisementMachine/advertisementMachineList.html"
+                       class="waves-effect waves-teal">广告机</a>
+                </li>
+                <li>
+                    <a href="../advertisement/advertisementList.html" class="waves-effect waves-teal">广告</a>
+                </li>
+                <li class="active">
+                    <a href="#" class="waves-effect waves-teal">用户</a>
+                </li>
+                <li>
+                    <a href="../role/roleList.html" class="waves-effect waves-teal">角色 - 需要角色判断来显示</a>
+                </li>
+            </ul>
+            <!--/* </editor-fold> */-->
+            <!--/* <editor-fold desc="right navbar item"> */-->
+            <ul class="right">
+                <li>username，欢迎</li>
+                <li>
+                    <a class="dropdown-button" href="#" data-activates="dropdown-menu">
+                        <i class="material-icons right">account_circle</i>
+                    </a>
+                </li>
+            </ul>
+            <ul id="dropdown-menu" class="dropdown-content">
+                <li><a href="#" class="black-text">退出</a></li>
+            </ul>
+            <!--/* </editor-fold> */-->
+        </div>
+    </nav>
+</header>
 
+<main>
+    <div id="main-content" class="container">
+        <h5 class="title">
+            <a class="btn-flat tooltipped" data-position="bottom" data-delay="50" data-tooltip="返回列表"
+               onclick="history.go(-1);"><i class="material-icons">arrow_back</i></a>&nbsp;|&nbsp;编辑广告——名称
+        </h5>
+        <ul>
+            <li class="divider"></li>
+        </ul>
+
+        <form action="#" method="post">
+            <!--/* <editor-fold desc="hidden fields"> */-->
+            <input id="id" name="id" type="hidden" disabled="disabled" class="validate" required="required"/>
+            <input id="url" name="url" type="hidden" disabled="disabled" class="validate"/>
+            <!--/* </editor-fold> */-->
+
+            <div class="row">
+                <div class="input-field col s6 m6 l6">
+                    <i class="material-icons prefix">create</i>
+                    <input id="name" name="name" type="text" class="validate" placeholder="输入名称" required="required"/>
+                    <label for="name">广告名称</label>
+                </div>
+                <div class="input-field col s6 m6 l6">
+                    <i class="material-icons prefix">access_time</i>
+                    <input id="time" name="time" type="text" class="text" placeholder="输入播放时间" onblur="checknumber();"/>
+                    <label for="time">播放时间</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="input-field col s6 m6 l6">
+                    <i class="material-icons prefix">date_range</i>
+                    <input id="addTime" name="addTime" type="text" class="date-picker" placeholder="选择加入时间"/>
+                    <label for="addTime">加入时间</label>
+                </div>
+                <div class="input-field col s6 m6 l6">
+                    <i class="material-icons prefix">personal_video</i>
+                    <select id="machineID" name="machineID">
+                        <option value="" disabled="disabled" selected="selected">选择广告机</option>
+                        <option value="1">广告机1</option>
+                        <option value="2">广告机2</option>
+                        <option value="3">广告机3</option>
+                    </select>
+                    <label for="machineID">所属广告机</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="input-field col s12 m12 l12">
+                    <i class="material-icons prefix">insert_comment</i>
+                    <textarea id="remark" name="remark" class="materialize-textarea" placeholder=""></textarea>
+                    <label for="remark">备注</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="input-field col s6 m6 l6 right-align">
+                    <button type="reset" class="waves-effect waves-light btn">
+                        <i class="material-icons left">clear</i>清空
+                    </button>
+                </div>
+                <div class="input-field col s6 m6 l6 left-align">
+                    <button type="submit" class="waves-effect waves-light btn">
+                        <i class="material-icons right">send</i>提交
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</main>
+
+<footer class="page-footer hide-on-med-and-down"
+        style="position: absolute; bottom: 0; left: 0;background-color: #37474f;">
+    <div class="footer-copyright">
+        <div class="container right-align">
+            © 2017 Copyright 珠海希梦电子科技有限公司
+        </div>
+    </div>
+</footer>
+
+<script type="text/javascript" src="../../../static/application/js/jquery.min.js"></script>
+<script type="text/javascript" src="../../../static/materialize/js/materialize.min.js"></script>
+<script type="text/javascript" src="../../../static/application/js/date-picker.js"></script>
+<script type="text/javascript" src="../../../static/application/js/global.js"></script>
+<script type="text/javascript">
+    $(function () {
+        resize_footer(window.screen.width);
+        $("#button-nav-menu").sideNav({
+            closeOnClick: true,
+            draggable: true
+        });
+
+        $(".dropdown-button").dropdown();
+
+        $(".date-picker").pickadatee({
+            closeOnSelect: true
+        });
+
+        $("#machineID").material_select();
+    });
+</script>
 </body>
 </html>
