@@ -77,36 +77,33 @@
                     <li>
                         <div class="collapsible-header"><i class="material-icons">search</i>条件搜索</div>
                         <div class="collapsible-body">
-                            <div class="row valign-wrapper">
-                                <div class="col s12 m8 l8 center">
-                                    <div class="row">
-                                        <div class="input-field col s12 m6 l6">
-                                            <input id="name" name="name" type="text"/>
-                                            <label for="name">待查广告名称</label>
-                                        </div>
-                                        <div class="input-field col s12 m6 l6">
-                                            <select id="machineID" name="machineID">
-                                                <option value="" disabled="disabled" selected="selected">选择广告机</option>
-                                                <option value="1">广告机1</option>
-                                                <option value="2">广告机2</option>
-                                                <option value="3">广告机3</option>
-                                            </select>
-                                            <label for="machineID">按所属广告机查询</label>
-                                        </div>
+                            <div class="row">
+                                <div class="col s12 m10 l10 center">
+                                    <div class="input-field col s6 m3 l3">
+                                        <input id="name" name="name" type="text" placeholder=""/>
+                                        <label for="name">按广告名称</label>
                                     </div>
-                                    <div class="row">
-                                        <div class="input-field col s12 m6 l6">
-                                            <input id="time" name="time" type="text" placeholder="输入播放时间"
-                                                   onmouseleave="checknumber()"/>
-                                            <label for="time">播放时间查询</label>
-                                        </div>
-                                        <div class="input-field col s12 m6 l6">
-                                            <input id="addTime" name="addTime" type="text" class="date-picker"/>
-                                            <label for="addTime">加入时间查询</label>
-                                        </div>
+                                    <div class="input-field col s6 m3 l3">
+                                        <select id="machineID" name="machineID">
+                                            <option value="" disabled="disabled" selected="selected">选择广告机</option>
+                                            <option value="1">广告机1</option>
+                                            <option value="2">广告机2</option>
+                                            <option value="3">广告机3</option>
+                                        </select>
+                                        <label for="machineID">按所属广告机</label>
+                                    </div>
+                                    <div class="input-field col s6 m3 l3">
+                                        <input id="time" name="time" type="text" placeholder="输入播放时间"
+                                               onmouseleave="checknumber()"/>
+                                        <label for="time">按播放时间</label>
+                                    </div>
+                                    <div class="input-field col s6 m3 l3">
+                                        <input id="addTime" name="addTime" type="text" class="date-picker"
+                                               placeholder="选择日期"/>
+                                        <label for="addTime">按加入时间</label>
                                     </div>
                                 </div>
-                                <div class="col s12 m4 l4 center">
+                                <div class="col s12 m2 l2 center">
                                     <div class="input-field">
                                         <button type="submit"
                                                 class="btn-floating btn-large waves-effect waves-light green">
