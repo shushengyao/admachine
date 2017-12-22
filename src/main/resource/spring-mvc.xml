@@ -24,7 +24,14 @@
             <mvc:mapping path="/**"/>
             <bean class="com.xmlan.machine.common.interceptor.URLInterceptor"/>
         </mvc:interceptor>
-
+        <mvc:interceptor>
+            <mvc:mapping path="${adminPath}/**"/>
+            <mvc:exclude-mapping path="${adminPath}/login"/>
+            <mvc:exclude-mapping path="${adminPath}/auth"/>
+            <mvc:exclude-mapping path="${adminPath}/logout"/>
+            <mvc:exclude-mapping path="/static/**"/>
+            <bean class="com.xmlan.machine.common.interceptor.LoginInterceptor"/>
+        </mvc:interceptor>
     </mvc:interceptors>
     <!-- </editor-fold> -->
 

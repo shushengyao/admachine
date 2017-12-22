@@ -1,16 +1,16 @@
-package com.xmlan.machine.module.user.dao;
+package com.xmlan.machine.module.user.dao
 
-import com.xmlan.machine.common.annotation.MyBatisDao;
-import com.xmlan.machine.common.base.BaseDAO;
-import com.xmlan.machine.module.user.entity.User;
-import org.apache.ibatis.annotations.Param;
+import com.xmlan.machine.common.annotation.MyBatisDao
+import com.xmlan.machine.common.base.BaseDAO
+import com.xmlan.machine.module.user.entity.User
+import org.apache.ibatis.annotations.Param
 
 /**
  * Created by ayakurayuki on 2017/12/12-10:51.
  * Package: com.xmlan.machine.module.user.dao
  */
 @MyBatisDao
-public interface UserDAO extends BaseDAO<User> {
+interface UserDAO extends BaseDAO<User> {
 
     /**
      * 修改角色
@@ -18,7 +18,7 @@ public interface UserDAO extends BaseDAO<User> {
      * @param user 待修改用户
      * @return 修改影响的条目数
      */
-    int changeRoleID(User user);
+    int changeRoleID(User user)
 
     /**
      * 修改密码
@@ -26,7 +26,7 @@ public interface UserDAO extends BaseDAO<User> {
      * @param user 待修改用户
      * @return 修改影响的条目数
      */
-    int changePassword(User user);
+    int changePassword(User user)
 
     /**
      * 登录
@@ -35,6 +35,6 @@ public interface UserDAO extends BaseDAO<User> {
      * @param password 密码
      * @return 获取到登录用户对象
      */
-    User login(@Param("authname") String authname, @Param("password") String password);
+    User login(@Param("authname") String authname, @Param("password") String password)
 
 }

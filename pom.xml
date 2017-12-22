@@ -44,6 +44,14 @@
     </properties>
 
     <dependencies>
+        <!-- <editor-fold desc="Groovy"> -->
+        <dependency>
+            <groupId>org.codehaus.groovy</groupId>
+            <artifactId>groovy-all</artifactId>
+            <version>2.4.13</version>
+        </dependency>
+        <!-- </editor-fold> -->
+
         <!-- <editor-fold desc="Spring"> -->
         <dependency>
             <groupId>org.springframework</groupId>

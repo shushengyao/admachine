@@ -29,7 +29,7 @@ public abstract class BaseController {
      * 配置的管理页面根路径
      */
     @Value("${adminPath}")
-    protected String adminPath;
+    public String adminPath;
 
     @Autowired
     protected Validator validator;

@@ -29,19 +29,21 @@
                 <span class="card-title center-align">广告机管理后台 登录</span>
             </div>
             <div class="card-action">
-                <form th:action="@{/login}" method="post">
+                <form th:action="${session.adminPath}+'/auth'" method="post">
                     <!-- <editor-fold desc="login input elements"> -->
                     <div class="row">
                         <div class="input-field col s12 m12 l12"
                              style="margin-top: 10px;margin-bottom: 0;padding-top: 0; padding-bottom: 0;">
                             <i class="material-icons prefix">account_circle</i>
-                            <input id="authname" name="authname" type="text" class="validate white-text" required="required"/>
+                            <input id="authname" name="authname" type="text" class="validate white-text"
+                                   required="required"/>
                             <label for="authname" class="grey-text">登录账号</label>
                         </div>
                         <div class="input-field col s12 m12 l12"
                              style="margin-top: 0;margin-bottom: 10px;padding-top: 0; padding-bottom: 0;">
                             <i class="material-icons prefix">security</i>
-                            <input id="password" name="password" type="password" class="validate white-text" required="required"/>
+                            <input id="password" name="password" type="password" class="validate white-text"
+                                   required="required"/>
                             <label for="password" class="grey-text">登录密码</label>
                         </div>
                     </div>
@@ -86,6 +88,10 @@
             "height": 40 + 'px',
             "padding": 0
         });
+        var message = '[[${message}]]';
+        if (message !== '') {
+            Materialize.toast(message, 5000);
+        }
     });
 </script>
 </body>

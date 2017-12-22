@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8"/>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"/>
     <link rel="stylesheet" href="../../../static/application/css/global.css"/>
     <link rel="stylesheet" href="../../../static/materialize/css/materialize.min.css"/>
-    <link rel="shoutcut icon" type="image/x-icon" href="favicon.ico" media="all"/>
+    <link rel="shoutcut icon" type="image/x-icon" href="/favicon.ico" media="all"/>
     <title>首页 - 广告机管理后台</title>
 </head>
 <body>
@@ -38,11 +38,11 @@
                 <li>
                     <a href="../advertisement/advertisementList.html" class="waves-effect waves-teal">广告</a>
                 </li>
-                <li>
+                <li th:if="${session.managementUser.roleID == 1}">
                     <a href="../user/userList.html" class="waves-effect waves-teal">用户</a>
                 </li>
-                <li>
-                    <a href="../role/roleList.html" class="waves-effect waves-teal">角色 - 需要角色判断来显示</a>
+                <li th:if="${session.managementUser.roleID == 1}">
+                    <a href="../role/roleList.html" class="waves-effect waves-teal">角色</a>
                 </li>
             </ul>
             <!--/* </editor-fold> */-->
@@ -56,7 +56,7 @@
                 </li>
             </ul>
             <ul id="dropdown-menu" class="dropdown-content">
-                <li><a href="#" class="black-text">退出</a></li>
+                <li><a th:href="${session.adminPath}+'/logout'" class="black-text">退出</a></li>
             </ul>
             <!--/* </editor-fold> */-->
         </div>
@@ -99,14 +99,16 @@
             "height": 40 + 'px',
             "padding": 0
         });
+        $("#button-nav-menu").sideNav({
+            closeOnClick: true,
+            draggable: true
+        });
+        $(".dropdown-button").dropdown();
+        var message = '[[${message}]]';
+        if (message !== '') {
+            Materialize.toast(message, 5000);
+        }
     });
-
-    $('#button-nav-menu').sideNav({
-        closeOnClick: true,
-        draggable: true
-    });
-
-    $('.dropdown-button').dropdown();
 </script>
 </body>
 </html>

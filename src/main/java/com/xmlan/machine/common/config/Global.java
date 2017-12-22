@@ -38,7 +38,7 @@ public class Global {
     /**
      * session管理员标记
      */
-    public static final String ADMIN = "adminUser";
+    public static final String USER = "managementUser";
 
     /**
      * 获取当前对象实例
