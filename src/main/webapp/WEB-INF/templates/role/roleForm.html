@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="../../../static/application/css/global.css"/>
     <link rel="stylesheet" href="../../../static/materialize/css/materialize.min.css"/>
     <link rel="shoutcut icon" type="image/x-icon" href="favicon.ico" media="all"/>
-    <title>编辑广告 - 广告机管理后台</title>
+    <title>编辑角色 - 广告机管理后台</title>
 </head>
 <body>
 <header>
@@ -67,7 +67,7 @@
     <div id="main-content" class="container">
         <h5 class="title">
             <a class="btn-flat tooltipped" data-position="bottom" data-delay="50" data-tooltip="返回列表"
-               onclick="history.go(-1);"><i class="material-icons">arrow_back</i></a>&nbsp;|&nbsp;编辑用户——名称
+               onclick="history.go(-1);"><i class="material-icons">arrow_back</i></a>&nbsp;|&nbsp;编辑角色——名称
         </h5>
         <ul>
             <li class="divider"></li>
@@ -81,54 +81,9 @@
             <div class="row">
                 <div class="input-field col s6 m3 l3">
                     <i class="material-icons prefix">assignment_ind</i>
-                    <input id="username" name="username" type="text" class="validate" placeholder="输入用户名"
+                    <input id="name" name="name" type="text" class="validate" placeholder="输入角色名"
                            required="required"/>
-                    <label for="username">用户名</label>
-                </div>
-                <div class="input-field col s6 m3 l3">
-                    <i class="material-icons prefix">account_circle</i>
-                    <input id="authname" name="authname" type="text" class="text" placeholder="输入登录账号"
-                           required="required"/>
-                    <label for="authname">登录名</label>
-                </div>
-                <div class="input-field col s6 m3 l3">
-                    <i class="material-icons prefix">lock_outline</i>
-                    <input id="password" name="password" type="password" class="text"
-                           placeholder="输入登录密码" required="required"/>
-                    <label for="password">登录密码</label>
-                </div>
-                <div class="input-field col s6 m3 l3">
-                    <i class="material-icons prefix">lock</i>
-                    <input id="confirmPassword" name="confirmPassword" type="password" class="text"
-                           placeholder="重新确认密码" required="required"/>
-                    <label for="confirmPassword">确认密码</label>
-                </div>
-
-                <div class="input-field col s12 m3 l3">
-                    <i class="material-icons prefix">smartphone</i>
-                    <input id="phone" name="phone" type="text" placeholder="输入手机号"/>
-                    <label for="phone">联系电话</label>
-                </div>
-                <div class="input-field col s12 m3 l3">
-                    <i class="material-icons prefix">date_range</i>
-                    <input id="addTime" name="addTime" type="text" class="date-picker" placeholder="选择加入时间"/>
-                    <label for="addTime">加入时间</label>
-                </div>
-                <div class="input-field col s12 m3 l3">
-                    <i class="material-icons prefix">group</i>
-                    <select id="roleID" name="roleID">
-                        <option value="" disabled="disabled" selected="selected">选择角色</option>
-                        <option value="1">角色1</option>
-                        <option value="2">角色2</option>
-                        <option value="3">角色3</option>
-                    </select>
-                    <label for="roleID">所属角色</label>
-                </div>
-
-                <div class="input-field col s12 m12 l12">
-                    <i class="material-icons prefix">place</i>
-                    <input id="address" name="address" type="text" class="validate" placeholder="输入地址"/>
-                    <label for="address">地址</label>
+                    <label for="name">角色名</label>
                 </div>
 
                 <div class="input-field col s12 m12 l12">
