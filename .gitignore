@@ -28,4 +28,3 @@ out/
 src/main/webapp/WEB-INF/classes/
 *.iml
 src/test/
-sql/
