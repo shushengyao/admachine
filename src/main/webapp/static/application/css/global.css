@@ -119,3 +119,8 @@ ul.side-nav.fixed li.logo img {
     margin-top: 2px;
     margin-right: 2px;
 }
+
+.nav-logo-img {
+    margin: 8px;
+    height: 48px;
+}

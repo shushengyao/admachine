@@ -14,12 +14,12 @@
        http://www.springframework.org/schema/aop
        http://www.springframework.org/schema/aop/spring-aop.xsd">
 
-    <!-- Context binding -->
+    <!-- <editor-fold desc="Context"> -->
     <context:component-scan base-package="com.xmlan.machine"/>
     <context:property-placeholder location="classpath:machine.properties"/>
+    <!-- </editor-fold> -->
 
-    <!-- DataSource binding -->
-    <!-- # MySQL configuration # -->
+    <!-- <editor-fold desc="DataSource and Mapping"> -->
     <bean name="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
         <property name="driverClassName" value="${mysql.driver}"/>
         <property name="url" value="${mysql.url}"/>
@@ -54,16 +54,19 @@
     </bean>
     <bean id="mybatisConfiguration" class="org.apache.ibatis.session.Configuration"
           p:logImpl="org.apache.ibatis.logging.log4j2.Log4j2Impl"/>
+    <!-- </editor-fold> -->
 
-    <!-- Cache configuration -->
+    <!-- <editor-fold desc="Cache Manager"> -->
     <bean id="cacheManager" class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">
         <property name="configLocation" value="classpath:cache/ehcache-local.xml"/>
     </bean>
+    <!-- </editor-fold> -->
 
-    <!-- Validator -->
+    <!-- <editor-fold desc="Validator"> -->
     <bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean"/>
+    <!-- </editor-fold> -->
 
-    <!-- Transaction -->
+    <!-- <editor-fold desc="Transaction"> -->
     <tx:annotation-driven/>
     <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
         <property name="dataSource" ref="dataSource"/>
@@ -83,6 +86,7 @@
     <aop:config>
         <aop:advisor advice-ref="txAdvice" pointcut="execution(* com.xmlan.machine..*.*(..))"/>
     </aop:config>
+    <!-- </editor-fold> -->
 
     <!-- Custom bean binding configuration following here -->
     <bean id="springContextUtils" class="com.xmlan.machine.common.util.SpringContextUtils"/>

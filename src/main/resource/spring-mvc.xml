@@ -24,6 +24,7 @@
             <mvc:mapping path="/**"/>
             <bean class="com.xmlan.machine.common.interceptor.URLInterceptor"/>
         </mvc:interceptor>
+
     </mvc:interceptors>
     <!-- </editor-fold> -->
 
@@ -62,7 +63,7 @@
 
     <!-- <editor-fold desc="Resource"> -->
     <mvc:resources location="/static/" mapping="/static/**"/>
-    <mvc:resources mapping="favicon.ico" location="favicon.ico"/>
+    <mvc:resources mapping="favicon.ico" location="/favicon.ico"/>
     <!-- </editor-fold> -->
 
     <!-- <editor-fold desc="Resolver"> -->
