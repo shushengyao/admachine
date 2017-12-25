@@ -29,7 +29,6 @@ class IndexController extends BaseController {
 
     @RequestMapping(['${adminPath}', '${adminPath}/main', '${adminPath}/login'])
     String main(HttpServletRequest request, HttpServletResponse response, Model model) {
-        request.getSession().setAttribute('adminPath', adminPath)
         if (SessionUtils.GetAdmin(request) != null) {
             "system/main"
         } else {

@@ -10,6 +10,8 @@
     <link rel="shoutcut icon" type="image/x-icon" href="favicon.ico" media="all"/>
     <title>广告机 - 广告机管理后台</title>
 </head>
+<!--/*@thymesVar id="adminPath" type="java.lang.String"*/-->
+<!--/*@thymesVar id="loginUser" type="com.xmlan.machine.module.user.entity.User"*/-->
 <body>
 <header>
     <nav style="background-color: #37474f;z-index: 1;">
@@ -24,30 +26,30 @@
             </ul>
             <ul id="nav-mobile" class="side-nav fixed" style="transform: translateX(0%);">
                 <li class="logo">
-                    <a id="logo-container" href="#" class="brand-logo">
+                    <a id="logo-container" th:href="@{${adminPath}+'/main'}" class="brand-logo">
                         <img src="../../../static/application/image/logo.png" alt="logo" class="center-block"/>
                     </a>
                 </li>
                 <li>
-                    <a href="../system/main.html" class="waves-effect waves-teal">首页</a>
+                    <a th:href="@{${adminPath}+'/main'}" class="waves-effect waves-teal">首页</a>
                 </li>
                 <li class="active">
-                    <a href="#" class="waves-effect waves-teal">广告机</a>
+                    <a th:href="@{${adminPath}+'/advertisementMachine/list'}" class="waves-effect waves-teal">广告机</a>
                 </li>
                 <li>
-                    <a href="../advertisement/advertisementList.html" class="waves-effect waves-teal">广告</a>
+                    <a th:href="@{${adminPath}+'/advertisement/list'}" class="waves-effect waves-teal">广告</a>
                 </li>
-                <li th:if="${session.managementUser.roleID == 1}">
-                    <a href="../user/userList.html" class="waves-effect waves-teal">用户</a>
+                <li th:if="${loginUser.roleID==1}">
+                    <a th:href="@{${adminPath}+'/user/list'}" class="waves-effect waves-teal">用户</a>
                 </li>
-                <li th:if="${session.managementUser.roleID == 1}">
-                    <a href="../role/roleList.html" class="waves-effect waves-teal">角色</a>
+                <li th:if="${loginUser.roleID==1}">
+                    <a th:href="@{${adminPath}+'/role/list'}" class="waves-effect waves-teal">角色</a>
                 </li>
             </ul>
             <!--/* </editor-fold> */-->
             <!--/* <editor-fold desc="right navbar item"> */-->
             <ul class="right">
-                <li>username，欢迎</li>
+                <li th:text="|${loginUser.username}, 欢迎|"></li>
                 <li>
                     <a class="dropdown-button" href="#" data-activates="dropdown-menu">
                         <i class="material-icons right">account_circle</i>
@@ -55,7 +57,7 @@
                 </li>
             </ul>
             <ul id="dropdown-menu" class="dropdown-content">
-                <li><a href="#" class="black-text">退出</a></li>
+                <li><a th:href="@{${adminPath}+'/logout'}" class="black-text">退出</a></li>
             </ul>
             <!--/* </editor-fold> */-->
         </div>
@@ -71,7 +73,7 @@
 
         <!--/* <editor-fold desc="search box"> */-->
         <div id="search-box">
-            <form action="#" method="post">
+            <form th:action="@{${adminPath}+'/advertisementMachine/list'}" method="post">
                 <ul class="collapsible popout" data-collapsible="accordion">
                     <li>
                         <div class="collapsible-header"><i class="material-icons">search</i>条件搜索</div>
@@ -121,22 +123,25 @@
             </tr>
             </thead>
             <tbody class="card">
-            <tr>
-                <td>name</td>
-                <td>address</td>
-                <td>addTime</td>
-                <td>codeNumber</td>
+            <!--/*@thymesVar id="list" type="java.util.List<com.xmlan.machine.module.advertisementMachine.entity.AdvertisementMachine>"*/-->
+            <tr th:each="item : ${list}">
+                <td th:text="*{item.name}">name</td>
+                <td th:text="*{#strings.abbreviate(item.address,30)}">address</td>
+                <td th:text="*{item.addTime}">addTime</td>
+                <td th:text="*{item.codeNumber}">codeNumber</td>
                 <td width="15%" class="right-align hide-on-med-and-down">
                     <a class="btn-floating blue waves-effect waves-light tooltipped btn modal-trigger"
                        data-position="top" data-delay="50" data-tooltip="查看详情" href="#detail-modal">
                         <i class="material-icons">more_horiz</i>
                     </a>
                     <a class="btn-floating green waves-effect waves-light tooltipped"
-                       data-position="top" data-delay="50" data-tooltip="编辑" href="advertisementMachineForm.html">
+                       data-position="top" data-delay="50" data-tooltip="编辑"
+                       th:href="@{${adminPath}+'/advertisementMachine/form?id='+${item.id}}">
                         <i class="material-icons">edit</i>
                     </a>
                     <a class="btn-floating red darken-1 waves-effect waves-light tooltipped"
-                       data-position="top" data-delay="50" data-tooltip="删除">
+                       data-position="top" data-delay="50" data-tooltip="删除"
+                       th:href="@{${adminPath}+'advertisementMachine/delete?id='+${item.id}}">
                         <i class="material-icons">delete</i>
                     </a>
                 </td>
@@ -156,13 +161,15 @@
                     </a>
                 </td>
             </tr>
+
             </tbody>
         </table>
         <!--/* </editor-fold> */-->
 
         <!--/* <editor-fold desc="add button"> */-->
-        <div id="fixed-add-btn" class="fixed-action-btn">
-            <a class="btn-floating btn-large waves-effect waves-light blue" href="advertisementMachineForm.html">
+        <div id="fixed-add-btn" class="fixed-action-btn" th:if="${loginUser.roleID==1}">
+            <a class="btn-floating btn-large waves-effect waves-light blue"
+               th:href="@{${adminPath}+'/advertisementMachine/form'}">
                 <i class="large material-icons">add</i>
             </a>
         </div>

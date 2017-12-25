@@ -1,13 +1,17 @@
 package com.xmlan.machine.common.base
 
 import com.xmlan.machine.common.util.BeanValidator
+import com.xmlan.machine.common.util.SessionUtils
+import com.xmlan.machine.module.user.entity.User
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.ui.Model
+import org.springframework.web.bind.annotation.ModelAttribute
 import org.springframework.web.servlet.mvc.support.RedirectAttributes
 
+import javax.servlet.http.HttpServletRequest
 import javax.validation.ConstraintViolationException
 import javax.validation.Validator
 import java.util.List
@@ -30,6 +34,16 @@ abstract class BaseController {
      */
     @Value('${adminPath}')
     public String adminPath
+
+    @ModelAttribute('adminPath')
+    String adminPath() {
+        return adminPath
+    }
+
+    @ModelAttribute('loginUser')
+    User loginUser(HttpServletRequest request) {
+        return SessionUtils.GetAdmin(request)
+    }
 
     @Autowired
     protected Validator validator

@@ -10,6 +10,7 @@
     <link rel="shoutcut icon" type="image/x-icon" href="/favicon.ico" media="all"/>
     <title>登录 - 广告机管理后台</title>
 </head>
+<!--/*@thymesVar id="adminPath" type="java.lang.String"*/-->
 <body>
 <nav class="nav-extended nav-full-header" style="background-color: #37474f;">
     <div class="nav-background">
@@ -29,7 +30,7 @@
                 <span class="card-title center-align">广告机管理后台 登录</span>
             </div>
             <div class="card-action">
-                <form th:action="${session.adminPath}+'/auth'" method="post">
+                <form th:action="@{${adminPath}+'/auth'}" method="post">
                     <!-- <editor-fold desc="login input elements"> -->
                     <div class="row">
                         <div class="input-field col s12 m12 l12"
