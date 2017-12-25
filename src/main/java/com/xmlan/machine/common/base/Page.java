@@ -9,10 +9,10 @@ import java.util.List;
  */
 public class Page<T> {
 
-    protected int pageNo = 1; // 当前页, 默认为第1页
-    protected int pageSize = Global.getPageSize(); // 每页记录数
-    protected long totalRecord = -1; // 总记录数, 默认为-1, 表示需要查询
-    protected int totalPage = -1; // 总页数, 默认为-1, 表示需要计算
+    private int pageNo = 1; // 当前页, 默认为第1页
+    private int pageSize = Global.getPageSize(); // 每页记录数
+    private long totalRecord = -1; // 总记录数, 默认为-1, 表示需要查询
+    private int totalPage = -1; // 总页数, 默认为-1, 表示需要计算
 
     protected List<T> list; // 当前页记录List形式
 
@@ -46,7 +46,7 @@ public class Page<T> {
         computeTotalPage();
     }
 
-    protected void computeTotalPage() {
+    public void computeTotalPage() {
         if (getPageSize() > 0 && getTotalRecord() > -1) {
             this.totalPage =
                     (int) (getTotalRecord() % getPageSize() == 0 ?

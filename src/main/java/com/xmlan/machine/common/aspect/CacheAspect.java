@@ -22,7 +22,7 @@ public class CacheAspect {
     public CacheAspect(CacheManager cacheManager) {
         this.cacheManager = cacheManager;
     }
-    //
+
     //    @After(value = "execution(* com.xmlan.machine.module.user..*.insert*(..))" +
     //            "|| execution(* com.xmlan.machine.module.order..*.insert*(..))" +
     //            "|| execution(* com.xmlan.machine.module.carrier..*.insert*(..))" +
