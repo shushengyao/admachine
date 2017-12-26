@@ -36,13 +36,13 @@
                     <a th:href="@{${adminPath}+'/advertisementMachine/list/1'}" class="waves-effect waves-teal">广告机</a>
                 </li>
                 <li>
-                    <a th:href="@{${adminPath}+'/advertisement/list'}" class="waves-effect waves-teal">广告</a>
+                    <a th:href="@{${adminPath}+'/advertisement/list/1'}" class="waves-effect waves-teal">广告</a>
                 </li>
                 <li th:if="${loginUser.roleID==1}">
-                    <a th:href="@{${adminPath}+'/user/list'}" class="waves-effect waves-teal">用户</a>
+                    <a th:href="@{${adminPath}+'/user/list/1'}" class="waves-effect waves-teal">用户</a>
                 </li>
                 <li class="active" th:if="${loginUser.roleID==1}">
-                    <a th:href="@{${adminPath}+'/role/list'}" class="waves-effect waves-teal">角色</a>
+                    <a th:href="@{${adminPath}+'/role/list/1'}" class="waves-effect waves-teal">角色</a>
                 </li>
             </ul>
             <ul class="right">
@@ -59,33 +59,36 @@
         </div>
     </nav>
 </header>
-
+<!--/*@thymesVar id="role" type="com.xmlan.machine.module.role.entity.Role"*/-->
 <main>
     <div id="main-content" class="container">
         <h5 class="title">
             <a class="btn-flat tooltipped" data-position="bottom" data-delay="50" data-tooltip="返回列表"
-               onclick="history.go(-1);"><i class="material-icons">arrow_back</i></a>&nbsp;|&nbsp;编辑角色——名称
+               onclick="history.go(-1);"><i class="material-icons">arrow_back</i></a><span
+                th:text="'&nbsp;|&nbsp;编辑角色——'+${role.id==-2?'新增广告机':role.name}"></span>
         </h5>
         <ul>
             <li class="divider"></li>
         </ul>
 
-        <form action="#" method="post">
+        <form th:action="@{${adminPath}+'/role/save/'+${role.id}}" method="post">
             <!--/* <editor-fold desc="hidden fields"> */-->
-            <input id="id" name="id" type="hidden" disabled="disabled" class="validate" required="required"/>
+            <input id="id" name="id" type="hidden" th:value="${role.id}" disabled="disabled" class="validate"
+                   required="required"/>
             <!--/* </editor-fold> */-->
 
             <div class="row">
                 <div class="input-field col s6 m3 l3">
                     <i class="material-icons prefix">assignment_ind</i>
-                    <input id="name" name="name" type="text" class="validate" placeholder="输入角色名"
-                           required="required"/>
+                    <input id="name" name="name" type="text" th:value="${role.name}" class="validate"
+                           placeholder="输入角色名" required="required"/>
                     <label for="name">角色名</label>
                 </div>
 
                 <div class="input-field col s12 m12 l12">
                     <i class="material-icons prefix">insert_comment</i>
-                    <textarea id="remark" name="remark" class="materialize-textarea" placeholder=""></textarea>
+                    <textarea id="remark" name="remark" th:value="${role.remark}" class="materialize-textarea"
+                              placeholder=""></textarea>
                     <label for="remark">备注</label>
                 </div>
             </div>

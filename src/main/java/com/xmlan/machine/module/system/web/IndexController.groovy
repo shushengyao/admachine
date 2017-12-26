@@ -54,4 +54,19 @@ class IndexController extends BaseController {
         "system/login"
     }
 
+    @RequestMapping('/404')
+    String pageNotFound() {
+        "errorPage/404"
+    }
+
+    @RequestMapping('/400')
+    String dataNotMatch() {
+        "errorPage/400"
+    }
+
+    @RequestMapping('/500')
+    String systemBusy() {
+        "errorPage/500"
+    }
+
 }

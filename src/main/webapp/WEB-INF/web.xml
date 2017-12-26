@@ -64,16 +64,16 @@
     </welcome-file-list>
 
     <!--<error-page>-->
-        <!--<error-code>400</error-code>-->
-        <!--<location>/WEB-INF/templates/errorPage/400.html</location>-->
+    <!--<error-code>400</error-code>-->
+    <!--<location>/WEB-INF/templates/errorPage/400.html</location>-->
     <!--</error-page>-->
+    <error-page>
+        <error-code>404</error-code>
+        <location>/404</location>
+    </error-page>
     <!--<error-page>-->
-        <!--<error-code>404</error-code>-->
-        <!--<location>/WEB-INF/templates/errorPage/404.html</location>-->
-    <!--</error-page>-->
-    <!--<error-page>-->
-        <!--<error-code>500</error-code>-->
-        <!--<location>/WEB-INF/templates/errorPage/500.html</location>-->
+    <!--<error-code>500</error-code>-->
+    <!--<location>/WEB-INF/templates/errorPage/500.html</location>-->
     <!--</error-page>-->
 
     <security-constraint>

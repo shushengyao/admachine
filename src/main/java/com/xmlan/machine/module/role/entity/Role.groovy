@@ -29,7 +29,6 @@ class Role {
         return name
     }
 
-    @Length(min = 1, max = 64)
     void setName(String name) {
         this.name = name
     }

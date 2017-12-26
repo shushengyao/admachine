@@ -15,11 +15,24 @@ import org.springframework.transaction.annotation.Transactional
 class RoleService extends BaseService<Role, RoleDAO> {
 
     @Override
+    int update(Role entity) {
+        if (entity.id == ADMIN_ROLE_ID) {
+            return DATABASE_DO_NOTHING
+        } else {
+            logger.trace "${this.class.name}: update(${entity.toString()})."
+            int result = dao.update(entity)
+            cacheManager.clearAll()
+            return result
+        }
+    }
+
+    @Override
     int delete(Role entity) {
         if (entity.id == ADMIN_ROLE_ID) {
             return DATABASE_DO_NOTHING
+        } else {
+            return super.delete(entity)
         }
-        return super.delete(entity)
     }
 
 }

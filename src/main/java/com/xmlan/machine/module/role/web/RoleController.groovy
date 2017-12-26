@@ -72,8 +72,12 @@ class RoleController extends BaseController {
             addMessage redirectAttributes, "创建角色成功"
         } else {
             role.id = id.toInteger()
-            service.update role
-            addMessage redirectAttributes, "修改角色成功"
+            int result = service.update role
+            if (result == -1) {
+                addMessage redirectAttributes, "管理员角色不能修改"
+            } else {
+                addMessage redirectAttributes, "修改角色成功"
+            }
         }
         "redirect:$adminPath/role/list/1"
     }

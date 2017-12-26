@@ -36,13 +36,13 @@
                     <a th:href="@{${adminPath}+'/advertisementMachine/list/1'}" class="waves-effect waves-teal">广告机</a>
                 </li>
                 <li>
-                    <a th:href="@{${adminPath}+'/advertisement/list'}" class="waves-effect waves-teal">广告</a>
+                    <a th:href="@{${adminPath}+'/advertisement/list/1'}" class="waves-effect waves-teal">广告</a>
                 </li>
                 <li th:if="${loginUser.roleID==1}">
-                    <a th:href="@{${adminPath}+'/user/list'}" class="waves-effect waves-teal">用户</a>
+                    <a th:href="@{${adminPath}+'/user/list/1'}" class="waves-effect waves-teal">用户</a>
                 </li>
                 <li class="active" th:if="${loginUser.roleID==1}">
-                    <a th:href="@{${adminPath}+'/role/list'}" class="waves-effect waves-teal">角色</a>
+                    <a th:href="@{${adminPath}+'/role/list/1'}" class="waves-effect waves-teal">角色</a>
                 </li>
             </ul>
             <ul class="right">
@@ -128,7 +128,8 @@
                     </a>
                     <a class="btn-floating red darken-1 waves-effect waves-light tooltipped"
                        data-position="top" data-delay="50" data-tooltip="删除"
-                       th:href="@{${adminPath}+'/role/delete?id='+${item.id}}">
+                       th:href="@{${adminPath}+'/role/delete?id='+${item.id}}"
+                       th:if="${item.id!=1}">
                         <i class="material-icons">delete</i>
                     </a>
                 </td>
@@ -146,7 +147,8 @@
                     </a>
                     <a class="btn-floating red darken-1 waves-effect waves-light tooltipped"
                        data-position="top" data-delay="50" data-tooltip="删除"
-                       th:href="@{${adminPath}+'/role/delete?id='+${item.id}}">
+                       th:href="@{${adminPath}+'/role/delete?id='+${item.id}}"
+                       th:if="${item.id!=1}">
                         <i class="material-icons">delete</i>
                     </a>
                 </td>
