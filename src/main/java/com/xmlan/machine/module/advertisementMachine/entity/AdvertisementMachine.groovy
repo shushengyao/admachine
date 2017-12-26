@@ -10,7 +10,7 @@ import org.apache.ibatis.type.Alias
 class AdvertisementMachine {
 
     int id // 广告机ID
-    String userID // 用户ID
+    int userID // 用户ID
     String name // 广告机名称
     String address // 地址
     String longitude // 经度

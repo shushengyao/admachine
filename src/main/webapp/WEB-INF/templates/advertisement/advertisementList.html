@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8"/>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
@@ -10,11 +10,12 @@
     <link rel="shoutcut icon" type="image/x-icon" href="favicon.ico" media="all"/>
     <title>广告 - 广告机管理后台</title>
 </head>
+<!--/*@thymesVar id="adminPath" type="java.lang.String"*/-->
+<!--/*@thymesVar id="loginUser" type="com.xmlan.machine.module.user.entity.User"*/-->
 <body>
 <header>
     <nav style="background-color: #37474f;z-index: 1;">
         <div class="nav-wrapper">
-            <!--/* <editor-fold desc="responsive navigation"> */-->
             <ul class="left">
                 <li style="height: 56px;">
                     <a href="#" data-activates="nav-mobile" id="button-nav-menu" class="hide-on-large-only">
@@ -24,31 +25,28 @@
             </ul>
             <ul id="nav-mobile" class="side-nav fixed" style="transform: translateX(0%);">
                 <li class="logo">
-                    <a id="logo-container" href="#" class="brand-logo">
+                    <a id="logo-container" th:href="@{${adminPath}+'/main'}" class="brand-logo">
                         <img src="../../../static/application/image/logo.png" alt="logo" class="center-block"/>
                     </a>
                 </li>
                 <li>
-                    <a href="../system/main.html" class="waves-effect waves-teal">首页</a>
+                    <a th:href="@{${adminPath}+'/main'}" class="waves-effect waves-teal">首页</a>
                 </li>
                 <li>
-                    <a href="../advertisementMachine/advertisementMachineList.html"
-                       class="waves-effect waves-teal">广告机</a>
+                    <a th:href="@{${adminPath}+'/advertisementMachine/list'}" class="waves-effect waves-teal">广告机</a>
                 </li>
                 <li class="active">
-                    <a href="#" class="waves-effect waves-teal">广告</a>
+                    <a th:href="@{${adminPath}+'/advertisement/list'}" class="waves-effect waves-teal">广告</a>
                 </li>
-                <li>
-                    <a href="../user/userList.html" class="waves-effect waves-teal">用户</a>
+                <li th:if="${loginUser.roleID==1}">
+                    <a th:href="@{${adminPath}+'/user/list'}" class="waves-effect waves-teal">用户</a>
                 </li>
-                <li>
-                    <a href="../role/roleList.html" class="waves-effect waves-teal">角色 - 需要角色判断来显示</a>
+                <li th:if="${loginUser.roleID==1}">
+                    <a th:href="@{${adminPath}+'/role/list'}" class="waves-effect waves-teal">角色</a>
                 </li>
             </ul>
-            <!--/* </editor-fold> */-->
-            <!--/* <editor-fold desc="right navbar item"> */-->
             <ul class="right">
-                <li>username，欢迎</li>
+                <li th:text="|${loginUser.username}, 欢迎|"></li>
                 <li>
                     <a class="dropdown-button" href="#" data-activates="dropdown-menu">
                         <i class="material-icons right">account_circle</i>
@@ -56,9 +54,8 @@
                 </li>
             </ul>
             <ul id="dropdown-menu" class="dropdown-content">
-                <li><a href="#" class="black-text">退出</a></li>
+                <li><a th:href="@{${adminPath}+'/logout'}" class="black-text">退出</a></li>
             </ul>
-            <!--/* </editor-fold> */-->
         </div>
     </nav>
 </header>
@@ -94,7 +91,7 @@
                                     </div>
                                     <div class="input-field col s6 m3 l3">
                                         <input id="time" name="time" type="text" placeholder="输入播放时间"
-                                               onmouseleave="checknumber()"/>
+                                               onmouseleave="checkNumber()"/>
                                         <label for="time">按播放时间</label>
                                     </div>
                                     <div class="input-field col s6 m3 l3">
@@ -254,7 +251,7 @@
             <div class="modal-footer">
                 <a href="#" class="modal-action modal-close waves-effect waves-green btn-flat">关闭</a>
                 <a class="modal-action modal-close waves-effect waves-green btn-flat"
-                   onclick="uploadimageorvideo()">上传</a>
+                   onclick="uploadImageOrVideo()">上传</a>
             </div>
         </form>
     </div>
@@ -281,20 +278,20 @@
             closeOnClick: true,
             draggable: true
         });
-
         $('.dropdown-button').dropdown();
-
         $('.date-picker').pickadatee({
             closeOnSelect: true
         });
-
         $("#detail-modal").modal();
         $("#upload-new-image-or-video").modal();
-
         $("#machineID").material_select();
+        var message = '[[${message}]]';
+        if (message !== '') {
+            Materialize.toast(message, 5000);
+        }
     });
 
-    function uploadimageorvideo() {
+    function uploadImageOrVideo() {
         var file = $("#url").val();
         if (file === '') {
             Materialize.toast("没有选择文件，该广告的图片/视频没有更新。", 5000);
@@ -302,17 +299,6 @@
             // TODO: ajax submit form
             $("#new-file").val(null);
             $("#url").val(null);
-        }
-    }
-
-    function checknumber() {
-        var value = $("#time").val();
-        if (isNaN(value)) {
-            Materialize.toast("播放时间必须是整数", 5000);
-            $("#time").val(null);
-            return false;
-        } else {
-            return true;
         }
     }
 </script>

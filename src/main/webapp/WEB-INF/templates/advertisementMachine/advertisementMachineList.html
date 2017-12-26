@@ -16,7 +16,6 @@
 <header>
     <nav style="background-color: #37474f;z-index: 1;">
         <div class="nav-wrapper">
-            <!--/* <editor-fold desc="responsive navigation"> */-->
             <ul class="left">
                 <li style="height: 56px;">
                     <a href="#" data-activates="nav-mobile" id="button-nav-menu" class="hide-on-large-only">
@@ -46,8 +45,6 @@
                     <a th:href="@{${adminPath}+'/role/list'}" class="waves-effect waves-teal">角色</a>
                 </li>
             </ul>
-            <!--/* </editor-fold> */-->
-            <!--/* <editor-fold desc="right navbar item"> */-->
             <ul class="right">
                 <li th:text="|${loginUser.username}, 欢迎|"></li>
                 <li>
@@ -59,7 +56,6 @@
             <ul id="dropdown-menu" class="dropdown-content">
                 <li><a th:href="@{${adminPath}+'/logout'}" class="black-text">退出</a></li>
             </ul>
-            <!--/* </editor-fold> */-->
         </div>
     </nav>
 </header>
@@ -127,11 +123,12 @@
             <tr th:each="item : ${list}">
                 <td th:text="*{item.name}">name</td>
                 <td th:text="*{#strings.abbreviate(item.address,30)}">address</td>
-                <td th:text="*{item.addTime}">addTime</td>
-                <td th:text="*{item.codeNumber}">codeNumber</td>
+                <td th:text="*{#strings.substring(item.addTime,0,10)}">addTime</td>
+                <td th:text="*{#strings.abbreviate(item.codeNumber,15)}">codeNumber</td>
                 <td width="15%" class="right-align hide-on-med-and-down">
                     <a class="btn-floating blue waves-effect waves-light tooltipped btn modal-trigger"
-                       data-position="top" data-delay="50" data-tooltip="查看详情" href="#detail-modal">
+                       data-position="top" data-delay="50" data-tooltip="查看详情" href="#detail-modal"
+                       th:onclick="'javascript:detail(\''+*{item.id}+'\')'">
                         <i class="material-icons">more_horiz</i>
                     </a>
                     <a class="btn-floating green waves-effect waves-light tooltipped"
@@ -141,22 +138,25 @@
                     </a>
                     <a class="btn-floating red darken-1 waves-effect waves-light tooltipped"
                        data-position="top" data-delay="50" data-tooltip="删除"
-                       th:href="@{${adminPath}+'advertisementMachine/delete?id='+${item.id}}">
+                       th:href="@{${adminPath}+'/advertisementMachine/delete?id='+${item.id}}">
                         <i class="material-icons">delete</i>
                     </a>
                 </td>
                 <td class="hide-on-large-only" id="mobile-table-item-buttons">
                     <a class="btn-floating blue waves-effect waves-light tooltipped btn modal-trigger"
-                       data-position="top" data-delay="50" data-tooltip="查看详情" href="#detail-modal">
+                       data-position="top" data-delay="50" data-tooltip="查看详情" href="#detail-modal"
+                       th:onclick="'javascript:detail(\''+*{item.id}+'\')'">
                         <i class="material-icons">more_horiz</i>
                     </a>
                     <br/>
                     <a class="btn-floating green waves-effect waves-light tooltipped"
-                       data-position="top" data-delay="50" data-tooltip="编辑" href="advertisementMachineForm.html">
+                       data-position="top" data-delay="50" data-tooltip="编辑"
+                       th:href="@{${adminPath}+'/advertisementMachine/form?id='+${item.id}}">
                         <i class="material-icons">edit</i>
                     </a>
                     <a class="btn-floating red darken-1 waves-effect waves-light tooltipped"
-                       data-position="top" data-delay="50" data-tooltip="删除">
+                       data-position="top" data-delay="50" data-tooltip="删除"
+                       th:href="@{${adminPath}+'/advertisementMachine/delete?id='+${item.id}}">
                         <i class="material-icons">delete</i>
                     </a>
                 </td>
@@ -197,23 +197,23 @@
             <div class="row">
                 <div class="col s12 m6 l6">
                     <h6>广告机ID</h6>
-                    <p>id</p>
+                    <p id="detail-item-id">id</p>
                     <h6>名称</h6>
-                    <p>name</p>
+                    <p id="detail-item-name">name</p>
                     <h6>加入时间</h6>
-                    <p>addTime</p>
+                    <p id="detail-item-add-time">addTime</p>
                 </div>
                 <div class="col s12 m6 l6">
                     <h6>所属用户</h6>
-                    <p>userID -> username</p>
+                    <p id="detail-item-user-id">userID -> username</p>
                     <h6>机器识别码</h6>
-                    <p>codeNumber</p>
+                    <p id="detail-item-code-number">codeNumber</p>
                 </div>
                 <div class="col s12 m12 l12">
                     <h6>地址</h6>
-                    <p>address</p>
+                    <p id="detail-item-address">address</p>
                     <h6>备注</h6>
-                    <p>remark</p>
+                    <p id="detail-item-remark">remark</p>
                 </div>
             </div>
         </div>
@@ -244,15 +244,35 @@
             closeOnClick: true,
             draggable: true
         });
-
         $('.dropdown-button').dropdown();
-
         $('.date-picker').pickadatee({
             closeOnSelect: true
         });
-
         $("#detail-modal").modal();
+        var message = '[[${message}]]';
+        if (message !== '') {
+            Materialize.toast(message, 5000);
+        }
     });
+
+    function detail(id) {
+        var url = '[[${adminPath}]]' + "/advertisementMachine/detail/" + id;
+        $.ajax({
+            url: url,
+            type: "GET",
+            success: function (data) {
+                $("#detail-item-id").text(data.machine.id);
+                $("#detail-item-name").text(data.machine.name);
+                $("#detail-item-add-time").text(data.machine.addTime.substr(0, 10));
+                $("#detail-item-user-id").text(data.owner);
+                $("#detail-item-code-number").text(data.machine.codeNumber);
+                $("#detail-item-address").text(data.machine.address);
+                $("#detail-item-remark").text(data.machine.remark);
+            },
+            error: function () {
+            }
+        });
+    }
 </script>
 </body>
 </html>

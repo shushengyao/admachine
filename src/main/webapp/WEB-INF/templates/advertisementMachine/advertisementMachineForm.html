@@ -16,7 +16,6 @@
 <header>
     <nav style="background-color: #37474f;z-index: 1;">
         <div class="nav-wrapper">
-            <!--/* <editor-fold desc="responsive navigation"> */-->
             <ul class="left">
                 <li style="height: 56px;">
                     <a href="#" data-activates="nav-mobile" id="button-nav-menu" class="hide-on-large-only">
@@ -46,8 +45,6 @@
                     <a th:href="@{${adminPath}+'/role/list'}" class="waves-effect waves-teal">角色</a>
                 </li>
             </ul>
-            <!--/* </editor-fold> */-->
-            <!--/* <editor-fold desc="right navbar item"> */-->
             <ul class="right">
                 <li th:text="|${loginUser.username}, 欢迎|"></li>
                 <li>
@@ -59,7 +56,6 @@
             <ul id="dropdown-menu" class="dropdown-content">
                 <li><a th:href="@{${adminPath}+'/logout'}" class="black-text">退出</a></li>
             </ul>
-            <!--/* </editor-fold> */-->
         </div>
     </nav>
 </header>
@@ -75,7 +71,7 @@
             <li class="divider"></li>
         </ul>
 
-        <form th:action="@{${adminPath}+'/advertisementMachine/save'}" method="post">
+        <form th:action="@{${adminPath}+'/advertisementMachine/save/'+${advertisementMachine.id}}" method="post">
             <input id="id" name="id" type="hidden" disabled="disabled" class="validate" required="required"
                    th:value="${advertisementMachine.id}"/>
             <input id="longitude" name="longitude" type="hidden" disabled="disabled" class="validate"
@@ -91,11 +87,13 @@
                 </div>
                 <div class="input-field col s6 m6 l6">
                     <i class="material-icons prefix">account_circle</i>
+                    <!--/*@thymesVar id="dropdownUserList" type="java.util.List<com.xmlan.machine.module.user.entity.SimpleUser>"*/-->
+                    <!--/*@thymesVar id="adMachineUsername" type="java.lang.String"*/-->
                     <select id="userID" name="userID">
-                        <option value="" disabled="disabled" selected="selected">选择用户</option>
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                        <option value="3">3</option>
+                        <option th:value="${advertisementMachine.userID}" th:text="${adMachineUsername}"
+                                disabled="disabled" selected="selected"></option>
+                        <option th:each="item : ${dropdownUserList}" th:value="*{item.id}"
+                                th:text="*{item.username}"></option>
                     </select>
                     <label for="userID">所属用户</label>
                 </div>
@@ -161,14 +159,15 @@
             closeOnClick: true,
             draggable: true
         });
-
         $(".dropdown-button").dropdown();
-
         $(".date-picker").pickadatee({
             closeOnSelect: true
         });
-
         $("#userID").material_select();
+        var message = '[[${message}]]';
+        if (message !== '') {
+            Materialize.toast(message, 5000);
+        }
     });
 </script>
 </body>
