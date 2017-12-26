@@ -16,7 +16,7 @@ class RoleService extends BaseService<Role, RoleDAO> {
 
     @Override
     int delete(Role entity) {
-        if (entity.getId() == 1) {
+        if (entity.id == ADMIN_ROLE_ID) {
             return DATABASE_DO_NOTHING
         }
         return super.delete(entity)

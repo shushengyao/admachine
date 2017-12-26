@@ -1,5 +1,6 @@
 package com.xmlan.machine.module.user.web
 
+import com.github.pagehelper.PageInfo
 import com.xmlan.machine.common.base.BaseController
 import com.xmlan.machine.common.util.StringUtils
 import com.xmlan.machine.module.user.entity.User
@@ -8,11 +9,11 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.ModelAttribute
+import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
-
-import javax.servlet.http.HttpServletRequest
-import javax.servlet.http.HttpServletResponse
+import org.springframework.web.bind.annotation.ResponseBody
+import org.springframework.web.servlet.mvc.support.RedirectAttributes
 
 /**
  * Created by ayakurayuki on 2017/12/13-14:26.
@@ -38,42 +39,50 @@ class UserController extends BaseController {
         return entity
     }
 
-    @RequestMapping(value = '/list')
-    String list(User user, HttpServletRequest request, HttpServletResponse response, Model model) {
-        List<User> list = service.findList(user)
-        model.addAttribute("list", list)
-        return "user/userList"
+    @RequestMapping(value = "/detail/{id}", produces = "application/json; charset=utf-8")
+    @ResponseBody
+    User detail(@PathVariable String id) {
+        service.get id
+    }
+
+    @RequestMapping(value = '/list/{pageNo}')
+    String list(User user, @PathVariable int pageNo, Model model) {
+        List<User> list = service.findList(user, pageNo)
+        PageInfo<User> page = new PageInfo<>(list)
+        model.addAttribute "page", page
+        "user/userList"
     }
 
     @RequestMapping(value = '/form')
-    String form(User user, HttpServletRequest request, HttpServletResponse response, Model model) {
+    String form(User user, Model model) {
         model.addAttribute("user", user)
-        return "user/userForm"
+        "user/userForm"
     }
 
-    @RequestMapping(value = '/save')
-    String save(User user, HttpServletRequest request, HttpServletResponse response, Model model) {
+    @RequestMapping(value = '/save/{id}')
+    String save(User user, @PathVariable String id, Model model, RedirectAttributes redirectAttributes) {
         if (!beanValidator(model, user)) {
-            return form(user, request, response, model)
+            return form(user, model)
         }
-        if (user.getId() == NEW_INSERT_ID) {
-            service.insert(user)
-            addMessage(model, "创建用户成功")
+        if (StringUtils.equals(id, NEW_INSERT_ID.toString())) {
+            service.insert user
+            addMessage redirectAttributes, "创建用户成功"
         } else {
-            service.update(user)
-            addMessage(model, "修改用户成功")
+            user.id = id.toInteger()
+            service.update user
+            addMessage redirectAttributes, "修改用户成功"
         }
-        return "redirect:$adminPath/user/list"
+        "redirect:$adminPath/user/list/1"
     }
 
     @RequestMapping(value = '/delete')
-    String delete(User user, HttpServletRequest request, HttpServletResponse response, Model model) {
+    String delete(User user, RedirectAttributes redirectAttributes) {
         if (service.delete(user) == UserService.DATABASE_DO_NOTHING) {
-            addMessage(model, "这个操作没有删除任何用户")
+            addMessage redirectAttributes, "这个操作没有删除任何用户"
         } else {
-            addMessage(model, "删除用户成功")
+            addMessage redirectAttributes, "删除用户成功"
         }
-        return "redirect:$adminPath/user/list"
+        "redirect:$adminPath/user/list/1"
     }
 
 }

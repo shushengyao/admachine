@@ -13,13 +13,4 @@ import org.springframework.transaction.annotation.Transactional
 @Service("AdvertisementService")
 @Transactional(readOnly = true)
 class AdvertisementService extends BaseService<Advertisement, AdvertisementDAO> {
-
-    @Override
-    int delete(Advertisement entity) {
-        if (entity.id == ADMIN_ROLE_ID) {
-            return DATABASE_DO_NOTHING
-        }
-        return super.delete(entity)
-    }
-
 }
