@@ -1,6 +1,6 @@
 package com.xmlan.machine.module.advertisementMachine.web
 
-import com.google.common.collect.Lists
+import com.github.pagehelper.PageInfo
 import com.google.common.collect.Maps
 import com.xmlan.machine.common.base.BaseController
 import com.xmlan.machine.common.cache.UserCache
@@ -12,11 +12,7 @@ import com.xmlan.machine.module.user.service.UserService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
-import org.springframework.web.bind.annotation.ModelAttribute
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RequestParam
-import org.springframework.web.bind.annotation.ResponseBody
+import org.springframework.web.bind.annotation.*
 import org.springframework.web.servlet.mvc.support.RedirectAttributes
 
 /**
@@ -54,9 +50,26 @@ class AdvertisementMachineController extends BaseController {
         return data
     }
 
-    @RequestMapping(value = "/list")
-    String list(AdvertisementMachine advertisementMachine, Model model) {
-        model.addAttribute "list", service.findList(advertisementMachine)
+    @RequestMapping(value = "/list/{pageNo}")
+    String list(AdvertisementMachine advertisementMachine, @PathVariable int pageNo, Model model) {
+        // region 格式化查询条件
+        if (StringUtils.isNotBlank(advertisementMachine.addTime)) {
+            advertisementMachine.addTime = advertisementMachine.addTime.substring 0, 10
+        }
+        // endregion
+
+        // region 执行查询
+        List<AdvertisementMachine> list = service.findList advertisementMachine, pageNo
+        PageInfo<AdvertisementMachine> page = new PageInfo<>(list)
+        model.addAttribute "page", page
+        // endregion
+
+        // region 搜索条件继承
+        model.addAttribute "name", advertisementMachine.name
+        model.addAttribute "codeNumber", advertisementMachine.codeNumber
+        model.addAttribute "addTime", advertisementMachine.addTime
+        // endregion
+
         "advertisementMachine/advertisementMachineList"
     }
 
@@ -65,7 +78,7 @@ class AdvertisementMachineController extends BaseController {
         if (StringUtils.isBlank(advertisementMachine.codeNumber)) {
             advertisementMachine.codeNumber = IDUtils.UUID()
         }
-        model.addAttribute("adMachineUsername", userService.get(advertisementMachine.userID.toString()).username)
+        model.addAttribute("adMachineUsername", userService.get(advertisementMachine.userID.toString())?.username)
         model.addAttribute("dropdownUserList", UserCache.getDropdownUserList())
         model.addAttribute "advertisementMachine", advertisementMachine
         "advertisementMachine/advertisementMachineForm"
@@ -77,7 +90,7 @@ class AdvertisementMachineController extends BaseController {
         if (!beanValidator(model, advertisementMachine)) {
             return form(advertisementMachine, model)
         }
-        if (id == NEW_INSERT_ID.toString()) {
+        if (StringUtils.equals(id, NEW_INSERT_ID.toString())) {
             service.insert advertisementMachine
             addMessage redirectAttributes, "创建广告机成功"
         } else {
@@ -85,7 +98,7 @@ class AdvertisementMachineController extends BaseController {
             service.update advertisementMachine
             addMessage redirectAttributes, "修改广告机成功"
         }
-        "redirect:" + adminPath + "/advertisementMachine/list"
+        "redirect:$adminPath/advertisementMachine/list/1"
     }
 
     @RequestMapping(value = "/delete")
@@ -95,7 +108,7 @@ class AdvertisementMachineController extends BaseController {
         } else {
             addMessage redirectAttributes, "删除广告机成功"
         }
-        "redirect:" + adminPath + "/advertisementMachine/list"
+        "redirect:$adminPath/advertisementMachine/list/1"
     }
 
 }

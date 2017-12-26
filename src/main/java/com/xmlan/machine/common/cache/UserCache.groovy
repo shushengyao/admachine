@@ -25,7 +25,7 @@ class UserCache {
      * @return 初始化的map
      */
     static Map<String, List> initialCacheMap() {
-        Map<String, List> map = CacheUtils.get(CACHE_NAME, MAP_NAME) as Map<String, List>
+        Map map = CacheUtils.get(CACHE_NAME, MAP_NAME) as Map<String, List>
         if (map == null) {
             map = Maps.newHashMap()
             List<User> userList = userDAO.findAll()
@@ -39,7 +39,7 @@ class UserCache {
      * @param key 定义的key name
      * @return 相应的List对象
      */
-    static List getList(String key) {
+    private static List getList(String key) {
         Map<String, List> map = initialCacheMap()
         List list = map.get(key)
         if (list == null) {

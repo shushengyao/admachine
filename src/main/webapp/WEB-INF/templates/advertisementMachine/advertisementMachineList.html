@@ -33,7 +33,7 @@
                     <a th:href="@{${adminPath}+'/main'}" class="waves-effect waves-teal">首页</a>
                 </li>
                 <li class="active">
-                    <a th:href="@{${adminPath}+'/advertisementMachine/list'}" class="waves-effect waves-teal">广告机</a>
+                    <a th:href="@{${adminPath}+'/advertisementMachine/list/1'}" class="waves-effect waves-teal">广告机</a>
                 </li>
                 <li>
                     <a th:href="@{${adminPath}+'/advertisement/list'}" class="waves-effect waves-teal">广告</a>
@@ -60,6 +60,10 @@
     </nav>
 </header>
 
+<!--/*@thymesVar id="page" type="com.github.pagehelper.PageInfo<com.xmlan.machine.module.advertisementMachine.entity.AdvertisementMachine>"*/-->
+<!--/*@thymesVar id="name" type="java.lang.String"*/-->
+<!--/*@thymesVar id="codeNumber" type="java.lang.String"*/-->
+<!--/*@thymesVar id="addTime" type="java.lang.String"*/-->
 <main>
     <div id="main-content" class="container">
         <h5 class="title">广告机列表</h5>
@@ -69,7 +73,7 @@
 
         <!--/* <editor-fold desc="search box"> */-->
         <div id="search-box">
-            <form th:action="@{${adminPath}+'/advertisementMachine/list'}" method="post">
+            <form th:action="@{${adminPath}+'/advertisementMachine/list/1'}" method="post">
                 <ul class="collapsible popout" data-collapsible="accordion">
                     <li>
                         <div class="collapsible-header"><i class="material-icons">search</i>条件搜索</div>
@@ -77,16 +81,16 @@
                             <div class="row">
                                 <div class="col s12 m10 l10 center">
                                     <div class="input-field col s12 m4 l4">
-                                        <input id="name" name="name" type="text"/>
+                                        <input id="name" name="name" type="text" th:value="${name}"/>
                                         <label for="name">按广告机名称</label>
                                     </div>
                                     <div class="input-field col s12 m4 l4">
-                                        <input id="codeNumber" name="codeNumber" type="text"/>
+                                        <input id="codeNumber" name="codeNumber" type="text" th:value="${codeNumber}"/>
                                         <label for="codeNumber">按广告机识别码</label>
                                     </div>
                                     <div class="input-field col s12 m4 l4">
                                         <input id="addTime" name="addTime" type="text" class="date-picker"
-                                               placeholder="选择日期"/>
+                                               placeholder="选择日期" th:value="${addTime}"/>
                                         <label for="addTime">按加入时间</label>
                                     </div>
                                 </div>
@@ -120,7 +124,7 @@
             </thead>
             <tbody class="card">
             <!--/*@thymesVar id="list" type="java.util.List<com.xmlan.machine.module.advertisementMachine.entity.AdvertisementMachine>"*/-->
-            <tr th:each="item : ${list}">
+            <tr th:each="item : ${page.list}">
                 <td th:text="*{item.name}">name</td>
                 <td th:text="*{#strings.abbreviate(item.address,30)}">address</td>
                 <td th:text="*{#strings.substring(item.addTime,0,10)}">addTime</td>
@@ -178,13 +182,32 @@
         <!--/* <editor-fold desc="pagination"> */-->
         <div class="center">
             <ul class="pagination">
-                <li class="disabled"><a href="#"><i class="material-icons">chevron_left</i></a></li>
-                <li class="waves-effect" id="active-page"><a href="#">1</a></li>
-                <li class="waves-effect"><a href="#">2</a></li>
-                <li class="waves-effect"><a href="#">3</a></li>
-                <li class="waves-effect"><a href="#">4</a></li>
-                <li class="waves-effect"><a href="#">5</a></li>
-                <li class="waves-effect"><a href="#"><i class="material-icons">chevron_right</i></a></li>
+                <li th:if="${!page.hasPreviousPage}" class="disabled">
+                    <a href="#"><i class="material-icons">chevron_left</i></a>
+                </li>
+                <li th:if="${page.hasPreviousPage}" class="waves-effect">
+                    <a th:href="@{${adminPath}+'/advertisementMachine/list/'+${page.prePage}+'?name='+${name}+'&codeNumber='+${codeNumber}+'&addTime='+${addTime}}"><i
+                            class="
+                       material-icons">chevron_left</i></a>
+                </li>
+
+                <th:block th:each="number : ${page.navigatepageNums}">
+                    <li th:if="${number==page.pageNum}" class="waves-effect" id="active-page">
+                        <a href="#" th:text="${number}"></a>
+                    </li>
+                    <li th:if="${number!=page.pageNum}" class="waves-effect">
+                        <a th:href="@{${adminPath}+'/advertisementMachine/list/'+${number}+'?name='+${name}+'&codeNumber='+${codeNumber}+'&addTime='+${addTime}}"
+                           th:text="${number}"></a>
+                    </li>
+                </th:block>
+
+                <li th:if="${!page.hasNextPage}" class="disabled">
+                    <a href="#"><i class="material-icons">chevron_right</i></a>
+                </li>
+                <li th:if="${page.hasNextPage}" class="waves-effect">
+                    <a th:href="@{${adminPath}+'/advertisementMachine/list/'+${page.nextPage}+'?name='+${name}+'&codeNumber='+${codeNumber}+'&addTime='+${addTime}}"><i
+                            class="material-icons">chevron_right</i></a>
+                </li>
             </ul>
         </div>
         <!--/* </editor-fold> */-->

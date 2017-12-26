@@ -15,6 +15,10 @@
     <cache name="userCache" maxEntriesLocalHeap="2000" eternal="true" overflowToDisk="true"
            memoryStoreEvictionPolicy="LFU" statistics="true"/>
 
+    <!-- 广告相关缓存 -->
+    <cache name="advertisementCache" maxEntriesLocalHeap="2000" eternal="true" overflowToDisk="true"
+           memoryStoreEvictionPolicy="LFU" statistics="true"/>
+
     <!-- 集团缓存 -->
     <cache name="corpCache" maxEntriesLocalHeap="2000" eternal="true" overflowToDisk="true"
            memoryStoreEvictionPolicy="LFU" statistics="true"/>

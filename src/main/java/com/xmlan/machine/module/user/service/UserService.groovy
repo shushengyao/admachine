@@ -16,7 +16,7 @@ class UserService extends BaseService<User, UserDAO> {
 
     @Override
     int delete(User entity) {
-        if (entity.id == 1) {
+        if (entity.id == ADMIN_ROLE_ID) {
             return DATABASE_DO_NOTHING
         }
         return super.delete(entity)

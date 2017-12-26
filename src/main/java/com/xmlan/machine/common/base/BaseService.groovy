@@ -1,6 +1,8 @@
 package com.xmlan.machine.common.base
 
+import com.github.pagehelper.PageHelper
 import com.xmlan.machine.common.config.Global
+import net.sf.ehcache.CacheManager
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
 import org.springframework.beans.factory.annotation.Autowired
@@ -14,41 +16,52 @@ import org.springframework.transaction.annotation.Transactional
 abstract class BaseService<T, DAO extends BaseDAO<T>> {
 
     public static final int DATABASE_DO_NOTHING = -1
+    public static final int ADMIN_ROLE_ID = 1
 
-    private Logger logger = LogManager.getLogger(getClass())
+    protected Logger logger = LogManager.getLogger(getClass())
     public int pageSize = Global.getPageSize()
 
     @Autowired
-    private DAO dao
+    protected DAO dao
+
+    @Autowired
+    protected CacheManager cacheManager
 
     T get(String id) {
-        logger.trace("${this.class.name}: get(${id}).")
+        logger.trace "${this.class.name}: get(${id})."
         return dao.get(id)
     }
 
     List<T> findAll() {
-        logger.trace("${this.class.name}: findAll().")
+        logger.trace "${this.class.name}: findAll()."
         return dao.findAll()
     }
 
-    List<T> findList(T entity) {
-        logger.trace("${this.class.name}: findList(${entity.toString()}).")
+    List<T> findList(T entity, int pageNo) {
+        logger.trace "${this.class.name}: findList(${entity.toString()})."
+        PageHelper.startPage pageNo, pageSize
         return dao.findList(entity)
     }
 
     int insert(T entity) {
-        logger.trace("${this.class.name}: insert(${entity.toString()}).")
-        return dao.insert(entity)
+        logger.trace "${this.class.name}: insert(${entity.toString()})."
+        int result = dao.insert(entity)
+        cacheManager.clearAll()
+        return result
     }
 
     int update(T entity) {
-        logger.trace("${this.class.name}: update(${entity.toString()}).")
-        return dao.update(entity)
+        logger.trace "${this.class.name}: update(${entity.toString()})."
+        int result = dao.update(entity)
+        cacheManager.clearAll()
+        return result
     }
 
     int delete(T entity) {
-        logger.trace("${this.class.name}: delete(${entity.toString()}).")
-        return dao.delete(entity)
+        logger.trace "${this.class.name}: delete(${entity.toString()})."
+        int result = dao.delete(entity)
+        cacheManager.clearAll()
+        return result
     }
 
 }
