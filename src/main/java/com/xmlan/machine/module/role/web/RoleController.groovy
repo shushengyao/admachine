@@ -43,9 +43,6 @@ class RoleController extends BaseController {
 
     @RequestMapping(value = "/list/{pageNo}")
     String list(Role role, @PathVariable int pageNo, Model model) {
-        // region 格式化查询条件
-        // endregion
-
         // region 执行查询
         List<Role> list = service.findList role, pageNo
         PageInfo<Role> page = new PageInfo<>(list)
@@ -53,6 +50,7 @@ class RoleController extends BaseController {
         // endregion
 
         // region 搜索条件继承
+        model.addAttribute "searchName", role.name
         // endregion
 
         "role/roleList"

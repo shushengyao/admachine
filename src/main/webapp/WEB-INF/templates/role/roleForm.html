@@ -130,6 +130,10 @@
         $(".date-picker").pickadatee({
             closeOnSelect: true
         });
+        var message = '[[${message}]]';
+        if (message !== '') {
+            Materialize.toast(message, 5000);
+        }
     });
 </script>
 </body>

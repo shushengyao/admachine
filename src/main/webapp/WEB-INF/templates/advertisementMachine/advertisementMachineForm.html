@@ -36,13 +36,13 @@
                     <a th:href="@{${adminPath}+'/advertisementMachine/list/1'}" class="waves-effect waves-teal">广告机</a>
                 </li>
                 <li>
-                    <a th:href="@{${adminPath}+'/advertisement/list'}" class="waves-effect waves-teal">广告</a>
+                    <a th:href="@{${adminPath}+'/advertisement/list/1'}" class="waves-effect waves-teal">广告</a>
                 </li>
                 <li th:if="${loginUser.roleID==1}">
-                    <a th:href="@{${adminPath}+'/user/list'}" class="waves-effect waves-teal">用户</a>
+                    <a th:href="@{${adminPath}+'/user/list/1'}" class="waves-effect waves-teal">用户</a>
                 </li>
                 <li th:if="${loginUser.roleID==1}">
-                    <a th:href="@{${adminPath}+'/role/list'}" class="waves-effect waves-teal">角色</a>
+                    <a th:href="@{${adminPath}+'/role/list/1'}" class="waves-effect waves-teal">角色</a>
                 </li>
             </ul>
             <ul class="right">

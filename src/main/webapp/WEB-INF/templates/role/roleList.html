@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"/>
     <link rel="stylesheet" href="../../../static/application/css/global.css"/>
     <link rel="stylesheet" href="../../../static/materialize/css/materialize.min.css"/>
-    <link rel="shoutcut icon" type="image/x-icon" href="favicon.ico" media="all"/>
+    <link rel="shoutcut icon" type="image/x-icon" href="/favicon.ico" media="all"/>
     <title>角色 - 广告机管理后台</title>
 </head>
 <!--/*@thymesVar id="adminPath" type="java.lang.String"*/-->
@@ -60,6 +60,9 @@
     </nav>
 </header>
 
+<!--/*@thymesVar id="page" type="com.github.pagehelper.PageInfo<com.xmlan.machine.module.role.entity.Role>"*/-->
+<!--/*@thymesVar id="searchName" type="java.lang.String"*/-->
+
 <main>
     <div id="main-content" class="container">
         <h5 class="title">角色列表</h5>
@@ -69,7 +72,7 @@
 
         <!--/* <editor-fold desc="search box"> */-->
         <div id="search-box">
-            <form th:action="@{${adminPath}+'/role/list'}" method="post">
+            <form th:action="@{${adminPath}+'/role/list/1'}" method="post">
                 <ul class="collapsible popout" data-collapsible="accordion">
                     <li>
                         <div class="collapsible-header"><i class="material-icons">search</i>条件搜索</div>
@@ -77,8 +80,9 @@
                             <div class="row">
                                 <div class="col s12 m10 l10 center">
                                     <div class="input-field">
-                                        <input id="username" name="username" type="text" placeholder="输入角色名称"/>
-                                        <label for="username">按角色名称</label>
+                                        <input id="name" name="name" type="text" placeholder="输入角色名称"
+                                               th:value="${searchName}"/>
+                                        <label for="name">按角色名称</label>
                                     </div>
                                 </div>
                                 <div class="col s12 m2 l2 center">
@@ -108,8 +112,7 @@
             </tr>
             </thead>
             <tbody class="card">
-            <!--/*@thymesVar id="list" type="java.util.List<com.xmlan.machine.module.role.entity.Role>"*/-->
-            <tr th:each="item : ${list}">
+            <tr th:each="item : ${page.list}">
                 <td th:text="*{item.name}"></td>
                 <td th:text="*{#strings.abbreviate(item.remark,50)}"></td>
                 <td class="right-align hide-on-med-and-down">
@@ -164,13 +167,31 @@
         <!--/* <editor-fold desc="pagination"> */-->
         <div class="center">
             <ul class="pagination">
-                <li class="disabled"><a href="#"><i class="material-icons">chevron_left</i></a></li>
-                <li class="waves-effect" id="active-page"><a href="#">1</a></li>
-                <li class="waves-effect"><a href="#">2</a></li>
-                <li class="waves-effect"><a href="#">3</a></li>
-                <li class="waves-effect"><a href="#">4</a></li>
-                <li class="waves-effect"><a href="#">5</a></li>
-                <li class="waves-effect"><a href="#"><i class="material-icons">chevron_right</i></a></li>
+                <li th:if="${!page.hasPreviousPage}" class="disabled">
+                    <a href="#"><i class="material-icons">chevron_left</i></a>
+                </li>
+                <li th:if="${page.hasPreviousPage}" class="waves-effect">
+                    <a th:href="@{${adminPath}+'/role/list/'+${page.prePage}+'?name='+${searchName}}"><i
+                            class="material-icons">chevron_left</i></a>
+                </li>
+
+                <th:block th:each="number : ${page.navigatepageNums}">
+                    <li th:if="${number==page.pageNum}" class="waves-effect" id="active-page">
+                        <a href="#" th:text="${number}"></a>
+                    </li>
+                    <li th:if="${number!=page.pageNum}" class="waves-effect">
+                        <a th:href="@{${adminPath}+'/role/list/'+${number}+'?name='+${searchName}}"
+                           th:text="${number}"></a>
+                    </li>
+                </th:block>
+
+                <li th:if="${!page.hasNextPage}" class="disabled">
+                    <a href="#"><i class="material-icons">chevron_right</i></a>
+                </li>
+                <li th:if="${page.hasNextPage}" class="waves-effect">
+                    <a th:href="@{${adminPath}+'/role/list/'+${page.nextPage}+'?name='+${searchName}}"><i
+                            class="material-icons">chevron_right</i></a>
+                </li>
             </ul>
         </div>
         <!--/* </editor-fold> */-->
@@ -229,6 +250,10 @@
         });
         $("#detail-modal").modal();
         $("#roleID").material_select();
+        var message = '[[${message}]]';
+        if (message !== '') {
+            Materialize.toast(message, 5000);
+        }
     });
 
     function detail(id) {
@@ -237,9 +262,9 @@
             url: url,
             type: "GET",
             success: function (data) {
-                $("#detail-item-id").text(data.role.id);
-                $("#detail-item-name").text(data.role.name);
-                $("#detail-item-remark").text(data.role.remark);
+                $("#detail-item-id").text(data.id);
+                $("#detail-item-name").text(data.name);
+                $("#detail-item-remark").text(data.remark);
             },
             error: function () {
             }
