@@ -1,6 +1,7 @@
 package com.xmlan.machine.common.task
 
 import com.xmlan.machine.common.cache.AdvertisementCache
+import com.xmlan.machine.common.cache.RoleCache
 import com.xmlan.machine.common.cache.UserCache
 import com.xmlan.machine.common.util.CacheUtils
 import org.apache.logging.log4j.LogManager
@@ -20,8 +21,9 @@ class CacheTask {
     @Scheduled(fixedRate = 1800000L)
     def refreshCache() {
         CacheUtils.cacheManager.clearAll()
-        UserCache.initialCacheMap()
         AdvertisementCache.initialCacheMap()
+        UserCache.initialCacheMap()
+        RoleCache.initialCacheMap()
         logger.trace "Cache refreshed."
     }
 

@@ -39,12 +39,7 @@ class AdvertisementCache {
         return map
     }
 
-    /**
-     * 根据key获取缓存中的列表
-     * @param key 定义的key name
-     * @return 相应的List对象
-     */
-    private static List getList(String key) {
+    static List getList(String key) {
         Map<String, List> map = initialCacheMap()
         List list = map.get(key)
         if (list == null) {

@@ -19,7 +19,7 @@ class User {
     private String password // 密码, 建议SHA-256 x 10
     private int roleID // 角色ID
     private String address // 地址
-    private Date addTime // 加入时间
+    private String addTime // 加入时间
     private String phone // 联系电话
     private String remark // 备注
 
@@ -78,11 +78,11 @@ class User {
         this.address = address
     }
 
-    Date getAddTime() {
+    String getAddTime() {
         return addTime
     }
 
-    void setAddTime(Date addTime) {
+    void setAddTime(String addTime) {
         this.addTime = addTime
     }
 

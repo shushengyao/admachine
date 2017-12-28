@@ -1,8 +1,12 @@
 package com.xmlan.machine.module.user.web
 
 import com.github.pagehelper.PageInfo
+import com.google.common.collect.Maps
 import com.xmlan.machine.common.base.BaseController
+import com.xmlan.machine.common.cache.RoleCache
+import com.xmlan.machine.common.cache.UserCache
 import com.xmlan.machine.common.util.StringUtils
+import com.xmlan.machine.module.role.service.RoleService
 import com.xmlan.machine.module.user.entity.User
 import com.xmlan.machine.module.user.service.UserService
 import org.springframework.beans.factory.annotation.Autowired
@@ -25,6 +29,8 @@ class UserController extends BaseController {
 
     @Autowired
     private UserService service
+    @Autowired
+    private RoleService roleService
 
     @ModelAttribute
     User get(@RequestParam(required = false) String id) {
@@ -41,15 +47,32 @@ class UserController extends BaseController {
 
     @RequestMapping(value = "/detail/{id}", produces = "application/json; charset=utf-8")
     @ResponseBody
-    User detail(@PathVariable String id) {
-        service.get id
+    Map<String, Object> detail(@PathVariable String id) {
+        Map<String, Object> data = Maps.newHashMap()
+        data.put("user", UserCache.get(id))
+        data.put("roleName", RoleCache.get(UserCache.get(id).roleID.toString()).name)
+        return data
     }
 
     @RequestMapping(value = '/list/{pageNo}')
     String list(User user, @PathVariable int pageNo, Model model) {
+        if (StringUtils.isNotBlank(user.addTime)) {
+            user.addTime = user.addTime.toString().substring 0, 10
+        }
+        if (user.roleID < 1) {
+            user.roleID = -2
+        }
+
         List<User> list = service.findList(user, pageNo)
         PageInfo<User> page = new PageInfo<>(list)
         model.addAttribute "page", page
+
+        model.addAttribute "dropdownRoleList", RoleCache.getRoleList()
+        model.addAttribute "username", user.username
+        model.addAttribute "authname", user.authname
+        model.addAttribute "addTime", user.addTime
+        model.addAttribute "roleID", user.roleID.toString()
+        model.addAttribute "roleName", RoleCache.get(user.roleID.toString())?.name
         "user/userList"
     }
 

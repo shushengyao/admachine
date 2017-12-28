@@ -4,6 +4,7 @@ import com.google.common.collect.Lists
 import com.google.common.collect.Maps
 import com.xmlan.machine.common.util.CacheUtils
 import com.xmlan.machine.common.util.SpringContextUtils
+import com.xmlan.machine.common.util.StringUtils
 import com.xmlan.machine.module.user.dao.UserDAO
 import com.xmlan.machine.module.user.entity.SimpleUser
 import com.xmlan.machine.module.user.entity.User
@@ -34,12 +35,7 @@ class UserCache {
         return map
     }
 
-    /**
-     * 根据key获取缓存中的列表
-     * @param key 定义的key name
-     * @return 相应的List对象
-     */
-    private static List getList(String key) {
+    static List getList(String key) {
         Map<String, List> map = initialCacheMap()
         List list = map.get(key)
         if (list == null) {
@@ -70,6 +66,21 @@ class UserCache {
             simpleUserList.add(bean)
         }
         return simpleUserList
+    }
+
+    /**
+     * 根据ID获取用户
+     * @param id 查询ID
+     * @return
+     */
+    static User get(String id) {
+        List<User> list = getUserList()
+        for (user in list) {
+            if (StringUtils.equals(user.id.toString(), id)) {
+                return user
+            }
+        }
+        return null
     }
 
 }
