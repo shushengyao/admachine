@@ -5,6 +5,7 @@ import com.google.common.collect.Maps
 import com.xmlan.machine.common.base.BaseController
 import com.xmlan.machine.common.cache.RoleCache
 import com.xmlan.machine.common.cache.UserCache
+import com.xmlan.machine.common.util.DateUtils
 import com.xmlan.machine.common.util.StringUtils
 import com.xmlan.machine.module.role.service.RoleService
 import com.xmlan.machine.module.user.entity.User
@@ -100,6 +101,7 @@ class UserController extends BaseController {
             addMessage redirectAttributes, "手机号码格式不正确"
             return form(user, model)
         }
+        user.addTime = "${user.addTime} ${DateUtils.GetTime()}"
         if (StringUtils.equals(id, NEW_INSERT_ID.toString())) {
             service.insert user
             addMessage redirectAttributes, "创建用户成功"

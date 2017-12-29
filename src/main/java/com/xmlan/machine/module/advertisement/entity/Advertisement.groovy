@@ -16,7 +16,7 @@ class Advertisement {
     private String name // 广告名称
     private String url // 图片或视频地址
     private int time // 播放时间
-    private Date addTime // 加入时间
+    private String addTime // 加入时间
     private int machineID // 机器识别码
     private String remark // 备注
 
@@ -29,11 +29,11 @@ class Advertisement {
     }
 
     @NotNull(message = "广告名称不能为空")
+    @Length(min = 1, max = 96)
     String getName() {
         return name
     }
 
-    @Length(min = 1, max = 96)
     void setName(String name) {
         this.name = name
     }
@@ -54,11 +54,11 @@ class Advertisement {
         this.time = time
     }
 
-    Date getAddTime() {
+    String getAddTime() {
         return addTime
     }
 
-    void setAddTime(Date addTime) {
+    void setAddTime(String addTime) {
         this.addTime = addTime
     }
 

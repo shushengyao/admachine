@@ -4,6 +4,7 @@ import com.github.pagehelper.PageInfo
 import com.google.common.collect.Maps
 import com.xmlan.machine.common.base.BaseController
 import com.xmlan.machine.common.cache.UserCache
+import com.xmlan.machine.common.util.DateUtils
 import com.xmlan.machine.common.util.IDUtils
 import com.xmlan.machine.common.util.StringUtils
 import com.xmlan.machine.module.advertisementMachine.entity.AdvertisementMachine
@@ -90,6 +91,7 @@ class AdvertisementMachineController extends BaseController {
         if (!beanValidator(model, advertisementMachine)) {
             return form(advertisementMachine, model)
         }
+        advertisementMachine.addTime = "${advertisementMachine.addTime} ${DateUtils.GetTime()}"
         if (StringUtils.equals(id, NEW_INSERT_ID.toString())) {
             service.insert advertisementMachine
             addMessage redirectAttributes, "创建广告机成功"

@@ -3,6 +3,7 @@ package com.xmlan.machine.module.advertisement.web
 import com.github.pagehelper.PageInfo
 import com.xmlan.machine.common.base.BaseController
 import com.xmlan.machine.common.cache.AdvertisementMachineCache
+import com.xmlan.machine.common.util.DateUtils
 import com.xmlan.machine.common.util.StringUtils
 import com.xmlan.machine.module.advertisement.entity.Advertisement
 import com.xmlan.machine.module.advertisement.service.AdvertisementService
@@ -84,6 +85,7 @@ class AdvertisementController extends BaseController {
         if (!beanValidator(model, advertisement)) {
             return form(advertisement, model)
         }
+        advertisement.addTime = "${advertisement.addTime} ${DateUtils.GetTime()}"
         if (StringUtils.equals(id, NEW_INSERT_ID.toString())) {
             service.insert advertisement
             addMessage redirectAttributes, "创建广告成功"
