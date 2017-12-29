@@ -59,6 +59,7 @@
         </div>
     </nav>
 </header>
+<!--/*@thymesVar id="page" type="com.github.pagehelper.PageInfo<com.xmlan.machine.module.advertisement.entity.Advertisement>"*/-->
 <!--/*@thymesVar id="dropdownList" type="java.util.List<com.xmlan.machine.module.advertisementMachine.entity.SimpleAdvertisementMachine>"*/-->
 <!--/*@thymesVar id="name" type="java.lang.String"*/-->
 <!--/*@thymesVar id="machineID" type="java.lang.Integer"*/-->
@@ -136,45 +137,55 @@
             </tr>
             </thead>
             <tbody class="card">
-            <tr>
-                <td>name</td>
-                <td>time</td>
-                <td>addTime</td>
-                <td>machineID</td>
+            <tr th:each="item:${page.list}">
+                <td th:text="*{item.name}">name</td>
+                <td th:text="*{item.time}">time</td>
+                <td th:text="*{item.addTime}">addTime</td>
+                <th:block th:each="machine:${dropdownList}">
+                    <td th:if="${machine.id==item.machineID}" th:text="*{machine.name}">machineID</td>
+                </th:block>
                 <td width="18%" class="right-align hide-on-med-and-down">
                     <a class="btn-floating blue waves-effect waves-light tooltipped btn modal-trigger"
-                       data-position="top" data-delay="50" data-tooltip="查看详情" href="#detail-modal">
+                       data-position="top" data-delay="50" data-tooltip="查看详情" href="#detail-modal"
+                       th:onclick="'javascript:detail(\''+*{item.id}+'\')'">
                         <i class="material-icons">more_horiz</i>
                     </a>
                     <a class="btn-floating yellow waves-effect waves-light tooltipped btn modal-trigger"
-                       data-position="top" data-delay="50" data-tooltip="上传新图片/视频" href="#upload-new-image-or-video">
+                       data-position="top" data-delay="50" data-tooltip="上传新图片/视频" onclick="openUploadModal()"
+                       href="#upload-new-image-or-video">
                         <i class="material-icons">file_upload</i>
                     </a>
                     <a class="btn-floating green waves-effect waves-light tooltipped"
-                       data-position="top" data-delay="50" data-tooltip="编辑" href="advertisementForm.html">
+                       data-position="top" data-delay="50" data-tooltip="编辑"
+                       th:href="@{${adminPath}+'/advertisement/form?id='+${item.id}}">
                         <i class="material-icons">edit</i>
                     </a>
-                    <a class="btn-floating red darken-1 waves-effect waves-light tooltipped"
-                       data-position="top" data-delay="50" data-tooltip="删除">
+                    <a class="btn-floating red darken-1 waves-effect waves-light tooltipped btn modal-trigger"
+                       data-position="top" data-delay="50" data-tooltip="删除" href="#delete-modal"
+                       th:onclick="'javascript:prepareForDeleting(\''+${item.id}+'\', \''+${item.name}+'\')'">
                         <i class="material-icons">delete</i>
                     </a>
                 </td>
                 <td class="hide-on-large-only" id="mobile-table-item-buttons">
                     <a class="btn-floating blue waves-effect waves-light tooltipped btn modal-trigger"
-                       data-position="top" data-delay="50" data-tooltip="查看详情" href="#detail-modal">
+                       data-position="top" data-delay="50" data-tooltip="查看详情" href="#detail-modal"
+                       th:onclick="'javascript:detail(\''+*{item.id}+'\')'">
                         <i class="material-icons">more_horiz</i>
                     </a>
                     <a class="btn-floating yellow waves-effect waves-light tooltipped btn modal-trigger"
-                       data-position="top" data-delay="50" data-tooltip="上传新图片/视频" href="#upload-new-image-or-video">
+                       data-position="top" data-delay="50" data-tooltip="上传新图片/视频" onclick="openUploadModal()"
+                       href="#upload-new-image-or-video">
                         <i class="material-icons">file_upload</i>
                     </a>
                     <br/>
                     <a class="btn-floating green waves-effect waves-light tooltipped"
-                       data-position="top" data-delay="50" data-tooltip="编辑" href="advertisementForm.html">
+                       data-position="top" data-delay="50" data-tooltip="编辑"
+                       th:href="@{${adminPath}+'/advertisement/form?id='+${item.id}}">
                         <i class="material-icons">edit</i>
                     </a>
-                    <a class="btn-floating red darken-1 waves-effect waves-light tooltipped"
-                       data-position="top" data-delay="50" data-tooltip="删除">
+                    <a class="btn-floating red darken-1 waves-effect waves-light tooltipped btn modal-trigger"
+                       data-position="top" data-delay="50" data-tooltip="删除" href="#delete-modal"
+                       th:onclick="'javascript:prepareForDeleting(\''+${item.id}+'\', \''+${item.name}+'\')'">
                         <i class="material-icons">delete</i>
                     </a>
                 </td>
@@ -185,7 +196,8 @@
 
         <!--/* <editor-fold desc="add button"> */-->
         <div id="fixed-add-btn" class="fixed-action-btn">
-            <a class="btn-floating btn-large waves-effect waves-light blue" href="advertisementForm.html">
+            <a class="btn-floating btn-large waves-effect waves-light blue"
+               th:href="@{${adminPath}+'/advertisement/form'}">
                 <i class="large material-icons">add</i>
             </a>
         </div>
@@ -194,13 +206,32 @@
         <!--/* <editor-fold desc="pagination"> */-->
         <div class="center">
             <ul class="pagination">
-                <li class="disabled"><a href="#"><i class="material-icons">chevron_left</i></a></li>
-                <li class="waves-effect" id="active-page"><a href="#">1</a></li>
-                <li class="waves-effect"><a href="#">2</a></li>
-                <li class="waves-effect"><a href="#">3</a></li>
-                <li class="waves-effect"><a href="#">4</a></li>
-                <li class="waves-effect"><a href="#">5</a></li>
-                <li class="waves-effect"><a href="#"><i class="material-icons">chevron_right</i></a></li>
+                <li th:if="${!page.hasPreviousPage}" class="disabled">
+                    <a href="#"><i class="material-icons">chevron_left</i></a>
+                </li>
+                <li th:if="${page.hasPreviousPage}" class="waves-effect">
+                    <a th:href="@{${adminPath}+'/advertisement/list/'+${page.prePage}+'?name='+${name}+'&machineID='+${machineID}+'&addTime='+${addTime}+'&time='+${time}}"><i
+                            class="
+                       material-icons">chevron_left</i></a>
+                </li>
+
+                <th:block th:each="number : ${page.navigatepageNums}">
+                    <li th:if="${number==page.pageNum}" class="waves-effect" id="active-page">
+                        <a href="#" th:text="${number}"></a>
+                    </li>
+                    <li th:if="${number!=page.pageNum}" class="waves-effect">
+                        <a th:href="@{${adminPath}+'/advertisement/list/'+${number}+'?name='+${name}+'&machineID='+${machineID}+'&addTime='+${addTime}+'&time='+${time}}"
+                           th:text="${number}"></a>
+                    </li>
+                </th:block>
+
+                <li th:if="${!page.hasNextPage}" class="disabled">
+                    <a href="#"><i class="material-icons">chevron_right</i></a>
+                </li>
+                <li th:if="${page.hasNextPage}" class="waves-effect">
+                    <a th:href="@{${adminPath}+'/advertisement/list/'+${page.nextPage}+'?name='+${name}+'&machineID='+${machineID}+'&addTime='+${addTime}+'&time='+${time}}"><i
+                            class="material-icons">chevron_right</i></a>
+                </li>
             </ul>
         </div>
         <!--/* </editor-fold> */-->
@@ -213,23 +244,23 @@
             <div class="row">
                 <div class="col s12 m6 l6">
                     <h6>广告ID</h6>
-                    <p>id</p>
+                    <p id="detail-item-id">id</p>
                     <h6>名称</h6>
-                    <p>name</p>
+                    <p id="detail-item-name">name</p>
                     <h6>所属广告机</h6>
-                    <p>machineID</p>
+                    <p id="detail-item-machine-id">machineID</p>
                 </div>
                 <div class="col s12 m6 l6">
                     <h6>播放时间</h6>
-                    <p>time</p>
+                    <p id="detail-item-time">time</p>
                     <h6>加入时间</h6>
-                    <p>addTime</p>
+                    <p id="detail-item-add-time">addTime</p>
                 </div>
                 <div class="col s12 m12 l12">
                     <h6>图片/视频</h6>
-                    <p>播放内容</p>
+                    <p id="detail-item-media">播放内容</p>
                     <h6>备注</h6>
-                    <p>remark</p>
+                    <p id="detail-item-remark">remark</p>
                 </div>
             </div>
         </div>
@@ -239,7 +270,8 @@
     </div>
 
     <div id="upload-new-image-or-video" class="modal modal-fixed-footer">
-        <form id="upload-image-or-video-form" action="#" method="post" enctype="multipart/form-data">
+        <form id="upload-image-or-video-form" th:action="@{${adminPath}+'/advertisement/uploadMedia'}" method="post"
+              enctype="multipart/form-data" onsubmit="return uploadImageOrVideo();">
             <div class="modal-content">
                 <h4>上传</h4>
                 <div class="col s12 m12 l12">
@@ -257,8 +289,21 @@
             </div>
             <div class="modal-footer">
                 <a href="#" class="modal-action modal-close waves-effect waves-green btn-flat">关闭</a>
-                <a class="modal-action modal-close waves-effect waves-green btn-flat"
-                   onclick="uploadImageOrVideo()">上传</a>
+                <button type="submit" class="modal-action modal-close waves-effect waves-green btn-flat">上传</button>
+            </div>
+        </form>
+    </div>
+
+    <div id="delete-modal" class="modal">
+        <form th:action="@{${adminPath}+'/advertisement/delete'}">
+            <div class="modal-content">
+                <h4>注意！</h4>
+                <input id="delete-confirm-id" name="id" type="hidden"/>
+                <p>是否要删除用户 <span id="delete-name"></span> ?</p>
+            </div>
+            <div class="modal-footer">
+                <a href="#" class="modal-action modal-close waves-effect waves-green btn-flat">不是</a>
+                <button type="submit" class="modal-action modal-close waves-effect btn-flat">是</button>
             </div>
         </form>
     </div>
@@ -291,6 +336,7 @@
         });
         $("#detail-modal").modal();
         $("#upload-new-image-or-video").modal();
+        $("#delete-modal").modal();
         $("#machineID").material_select();
         var message = '[[${message}]]';
         if (message !== '') {
@@ -298,15 +344,43 @@
         }
     });
 
+    function detail(id) {
+        var url = '[[${adminPath}]]' + "/advertisement/detail/" + id;
+        $.ajax({
+            url: url,
+            type: "GET",
+            success: function (data) {
+                $("#detail-item-id").text(data.ad.id);
+                $("#detail-item-name").text(data.ad.name);
+                $("#detail-item-machine-id").text(data.machine);
+                $("#detail-item-time").text(data.ad.time);
+                $("#detail-item-add-time").text(data.ad.addTime);
+                $("#detail-item-media").html();
+                $("#detail-item-remark").text(data.ad.remark);
+            },
+            error: function () {
+            }
+        });
+    }
+
     function uploadImageOrVideo() {
         var file = $("#url").val();
         if (file === '') {
             Materialize.toast("没有选择文件，该广告的图片/视频没有更新。", 5000);
+            return false;
         } else {
-            // TODO: ajax submit form
-            $("#new-file").val(null);
-            $("#url").val(null);
+            return true;
         }
+    }
+
+    function openUploadModal() {
+        $("#new-file").val(null);
+        $("#url").val(null);
+    }
+
+    function prepareForDeleting(id, name) {
+        $("#delete-confirm-id").val(id);
+        $("#delete-name").text(name);
     }
 </script>
 </body>

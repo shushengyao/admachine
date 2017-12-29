@@ -205,8 +205,7 @@
                 </li>
                 <li th:if="${page.hasPreviousPage}" class="waves-effect">
                     <a th:href="@{${adminPath}+'/user/list/'+${page.prePage}+'?username='+${username}+'&authname='+${authname}+'&addTime='+${addTime}+'&roleID='+${roleID}}"><i
-                            class="
-                       material-icons">chevron_left</i></a>
+                            class="material-icons">chevron_left</i></a>
                 </li>
 
                 <th:block th:each="number : ${page.navigatepageNums}">

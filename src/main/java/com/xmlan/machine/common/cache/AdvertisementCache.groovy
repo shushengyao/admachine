@@ -46,8 +46,23 @@ class AdvertisementCache {
      * 获取完整的广告列表
      * @return 完整的广告列表
      */
-    static List<Advertisement> getAdvertisement() {
+    static List<Advertisement> getAdvertisementList() {
         return getList(AD_LIST_NAME)
+    }
+
+    /**
+     * 根据ID获取对象
+     * @param id
+     * @return
+     */
+    static Advertisement get(int id) {
+        List<Advertisement> list = advertisementList
+        for (advertisement in list) {
+            if (advertisement.id == id) {
+                return advertisement
+            }
+        }
+        return null
     }
 
 }

@@ -1,7 +1,9 @@
 package com.xmlan.machine.module.advertisement.web
 
 import com.github.pagehelper.PageInfo
+import com.google.common.collect.Maps
 import com.xmlan.machine.common.base.BaseController
+import com.xmlan.machine.common.cache.AdvertisementCache
 import com.xmlan.machine.common.cache.AdvertisementMachineCache
 import com.xmlan.machine.common.util.DateUtils
 import com.xmlan.machine.common.util.StringUtils
@@ -43,8 +45,12 @@ class AdvertisementController extends BaseController {
 
     @RequestMapping(value = "/detail/{id}", produces = "application/json; charset=utf-8")
     @ResponseBody
-    String detail(@PathVariable String id) {
-        service.get(id)
+    Map<String, Object> detail(@PathVariable String id) {
+        Map<String, Object> data = Maps.newHashMap()
+        Advertisement advertisement = AdvertisementCache.get(id.toInteger())
+        data.put "ad", advertisement
+        data.put "machine", AdvertisementMachineCache.getMachineNameByID(advertisement.machineID)
+        return data
     }
 
     @RequestMapping(value = "/list/{pageNo}")
@@ -106,5 +112,7 @@ class AdvertisementController extends BaseController {
         }
         "redirect:$adminPath/advertisement/list/1"
     }
+
+
 
 }

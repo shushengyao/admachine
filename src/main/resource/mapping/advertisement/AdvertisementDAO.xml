@@ -48,14 +48,14 @@
             <if test="name != null and name != ''">
                 t.name like concat('%',#{name},'%')
             </if>
-            <if test="name != null and name != ''">
-                t.name like concat('%',#{name},'%')
-            </if>
-            <if test="name != null and name != ''">
-                t.name like concat('%',#{name},'%')
+            <if test="time != null and time != '' and time != 0">
+                t.time = #{time}
             </if>
             <if test="machineID != null and machineID != '' and machineID != '-2'">
                 t.machineID = #{machineID}
+            </if>
+            <if test="addTime != null and addTime != ''">
+                t.addTime like concat('%',#{addTime},'%')
             </if>
             <if test="remark != null and remark != ''">
                 t.remark like concat('%',#{remark},'%')
