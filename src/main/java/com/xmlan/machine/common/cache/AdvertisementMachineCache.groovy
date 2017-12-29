@@ -4,8 +4,10 @@ import com.google.common.collect.Lists
 import com.google.common.collect.Maps
 import com.xmlan.machine.common.util.CacheUtils
 import com.xmlan.machine.common.util.SpringContextUtils
+import com.xmlan.machine.common.util.StringUtils
 import com.xmlan.machine.module.advertisementMachine.dao.AdvertisementMachineDAO
 import com.xmlan.machine.module.advertisementMachine.entity.AdvertisementMachine
+import com.xmlan.machine.module.advertisementMachine.entity.SimpleAdvertisementMachine
 
 /**
  * Created by ayakurayuki on 2017/12/29-10:35.
@@ -56,7 +58,7 @@ class AdvertisementMachineCache {
      * @return
      */
     static int getUserOwnMachineCount(int userID) {
-        List<AdvertisementMachine> list = getAdvertisementMachineList()
+        List<AdvertisementMachine> list = advertisementMachineList
         int count = 0
         list.forEach({
             if (it.userID == userID) {
@@ -64,6 +66,37 @@ class AdvertisementMachineCache {
             }
         })
         return count
+    }
+
+    /**
+     * 获取下拉菜单的广告机列表
+     * @return
+     */
+    static List<SimpleAdvertisementMachine> getDropdownAdvertisementMachineList() {
+        List<AdvertisementMachine> advertisementMachines = advertisementMachineList
+        List<SimpleAdvertisementMachine> simpleAdvertisementMachines = Lists.newArrayList()
+        advertisementMachines.each {
+            def simpleADMachine = new SimpleAdvertisementMachine()
+            simpleADMachine.id = it.id
+            simpleADMachine.name = it.name
+            simpleAdvertisementMachines.add(simpleADMachine)
+        }
+        return simpleAdvertisementMachines
+    }
+
+    /**
+     * 根据ID获取名称
+     * @param id
+     * @return
+     */
+    static String getMachineNameByID(int id) {
+        List<AdvertisementMachine> list = advertisementMachineList
+        for (item in list) {
+            if (item.id == id) {
+                return item.name
+            }
+        }
+        return StringUtils.EMPTY
     }
 
 }

@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"/>
     <link rel="stylesheet" href="../../../static/application/css/global.css"/>
     <link rel="stylesheet" href="../../../static/materialize/css/materialize.min.css"/>
-    <link rel="shoutcut icon" type="image/x-icon" href="favicon.ico" media="all"/>
+    <link rel="shoutcut icon" type="image/x-icon" href="/favicon.ico" media="all"/>
     <title>广告 - 广告机管理后台</title>
 </head>
 <!--/*@thymesVar id="adminPath" type="java.lang.String"*/-->
@@ -59,7 +59,12 @@
         </div>
     </nav>
 </header>
-
+<!--/*@thymesVar id="dropdownList" type="java.util.List<com.xmlan.machine.module.advertisementMachine.entity.SimpleAdvertisementMachine>"*/-->
+<!--/*@thymesVar id="name" type="java.lang.String"*/-->
+<!--/*@thymesVar id="machineID" type="java.lang.Integer"*/-->
+<!--/*@thymesVar id="machineName" type="java.lang.String"*/-->
+<!--/*@thymesVar id="time" type="java.lang.Integer"*/-->
+<!--/*@thymesVar id="addTime" type="java.lang.String"*/-->
 <main>
     <div id="main-content" class="container">
         <h5 class="title">广告列表</h5>
@@ -69,7 +74,7 @@
 
         <!--/* <editor-fold desc="search box"> */-->
         <div id="search-box">
-            <form action="#" method="post">
+            <form th:action="@{${adminPath}+'/advertisement/list/1'}" method="post">
                 <ul class="collapsible popout" data-collapsible="accordion">
                     <li>
                         <div class="collapsible-header"><i class="material-icons">search</i>条件搜索</div>
@@ -77,25 +82,27 @@
                             <div class="row">
                                 <div class="col s12 m10 l10 center">
                                     <div class="input-field col s6 m3 l3">
-                                        <input id="name" name="name" type="text" placeholder=""/>
+                                        <input id="name" name="name" th:value="${name}" type="text" placeholder=""/>
                                         <label for="name">按广告名称</label>
                                     </div>
                                     <div class="input-field col s6 m3 l3">
                                         <select id="machineID" name="machineID">
-                                            <option value="" disabled="disabled" selected="selected">选择广告机</option>
-                                            <option value="1">广告机1</option>
-                                            <option value="2">广告机2</option>
-                                            <option value="3">广告机3</option>
+                                            <option th:value="${machineID}" th:text="${machineName}" disabled="disabled"
+                                                    selected="selected"></option>
+                                            <option value="-2">不选择</option>
+                                            <option th:each="item:${dropdownList}" th:value="${item.id}"
+                                                    th:text="${item.name}"></option>
                                         </select>
                                         <label for="machineID">按所属广告机</label>
                                     </div>
                                     <div class="input-field col s6 m3 l3">
-                                        <input id="time" name="time" type="text" placeholder="输入播放时间"
+                                        <input id="time" name="time" th:value="${time}" type="text" placeholder="输入播放时间"
                                                onmouseleave="checkNumber()"/>
                                         <label for="time">按播放时间</label>
                                     </div>
                                     <div class="input-field col s6 m3 l3">
-                                        <input id="addTime" name="addTime" type="text" class="date-picker"
+                                        <input id="addTime" name="addTime" th:value="${addTime}" type="text"
+                                               class="date-picker"
                                                placeholder="选择日期"/>
                                         <label for="addTime">按加入时间</label>
                                     </div>

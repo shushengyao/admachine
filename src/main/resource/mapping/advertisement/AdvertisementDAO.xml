@@ -54,7 +54,7 @@
             <if test="name != null and name != ''">
                 t.name like concat('%',#{name},'%')
             </if>
-            <if test="machineID != null and machineID != ''">
+            <if test="machineID != null and machineID != '' and machineID != '-2'">
                 t.machineID = #{machineID}
             </if>
             <if test="remark != null and remark != ''">
