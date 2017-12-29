@@ -20,7 +20,7 @@
         t.name as "name",
         t.url as "url",
         t.time as "time",
-        t.addTime as "addTime",
+        date_format(t.addTime, '%Y-%m-%d %H:%i:%s') as "addTime",
         t.machineID as "machineID",
         t.remark as "remark"
     </sql>

@@ -24,7 +24,7 @@
         t.address as "address",
         t.longitude as "longitude",
         t.latitude as "latitude",
-        t.addTime as "addTime",
+        date_format(t.addTime, '%Y-%m-%d %H:%i:%s') as "addTime",
         t.codeNumber as "codeNumber",
         t.remark as "remark"
     </sql>
