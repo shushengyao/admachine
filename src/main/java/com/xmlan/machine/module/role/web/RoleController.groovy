@@ -2,6 +2,7 @@ package com.xmlan.machine.module.role.web
 
 import com.github.pagehelper.PageInfo
 import com.xmlan.machine.common.base.BaseController
+import com.xmlan.machine.common.cache.RoleCache
 import com.xmlan.machine.common.util.StringUtils
 import com.xmlan.machine.module.role.entity.Role
 import com.xmlan.machine.module.role.service.RoleService
@@ -43,16 +44,12 @@ class RoleController extends BaseController {
 
     @RequestMapping(value = "/list/{pageNo}")
     String list(Role role, @PathVariable int pageNo, Model model) {
-        // region 执行查询
-        List<Role> list = service.findList role, pageNo
-        PageInfo<Role> page = new PageInfo<>(list)
+        List<Role> list = service.findList role, pageNo // 查询
+        PageInfo<Role> page = new PageInfo<>(list) // 处理分页数据
         model.addAttribute "page", page
-        // endregion
 
-        // region 搜索条件继承
+        model.addAttribute "userCount", service.getUserCount(list)
         model.addAttribute "searchName", role.name
-        // endregion
-
         "role/roleList"
     }
 
@@ -73,7 +70,7 @@ class RoleController extends BaseController {
         } else {
             role.id = id.toInteger()
             int result = service.update role
-            if (result == -1) {
+            if (result == DATABASE_DO_NOTHING) {
                 addMessage redirectAttributes, "管理员角色不能修改"
             } else {
                 addMessage redirectAttributes, "修改角色成功"
@@ -84,8 +81,11 @@ class RoleController extends BaseController {
 
     @RequestMapping(value = "/delete")
     String delete(Role role, RedirectAttributes redirectAttributes) {
-        if (service.delete(role) == RoleService.DATABASE_DO_NOTHING) {
+        int responseCode = service.delete(role)
+        if (responseCode == DATABASE_DO_NOTHING) {
             addMessage redirectAttributes, "什么都没有删除"
+        } else if (responseCode == RoleService.ROLE_HAVE_SOME_USERS) {
+            addMessage redirectAttributes, "这个角色有从属用户，不能删除"
         } else {
             addMessage redirectAttributes, "删除角色成功"
         }

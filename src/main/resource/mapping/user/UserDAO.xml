@@ -24,7 +24,7 @@
         t.password as "password",
         t.roleID as "roleID",
         t.address as "address",
-        t.addTime as "addTime",
+        date_format(t.addTime, '%Y-%m-%d %H:%i:%s') as "addTime",
         t.phone as "phone",
         t.remark as "remark"
     </sql>

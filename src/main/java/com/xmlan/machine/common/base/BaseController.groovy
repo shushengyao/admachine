@@ -25,6 +25,11 @@ abstract class BaseController {
     protected Logger logger = LogManager.getLogger(getClass())
 
     /**
+     * 没有修改数据库
+     */
+    public static final int DATABASE_DO_NOTHING = -1
+
+    /**
      * 新的记录标记
      */
     protected final int NEW_INSERT_ID = -2

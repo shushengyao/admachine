@@ -1,6 +1,7 @@
 package com.xmlan.machine.common.task
 
 import com.xmlan.machine.common.cache.AdvertisementCache
+import com.xmlan.machine.common.cache.AdvertisementMachineCache
 import com.xmlan.machine.common.cache.RoleCache
 import com.xmlan.machine.common.cache.UserCache
 import com.xmlan.machine.common.util.CacheUtils
@@ -21,6 +22,7 @@ class CacheTask {
     @Scheduled(fixedRate = 1800000L)
     def refreshCache() {
         CacheUtils.cacheManager.clearAll()
+        AdvertisementMachineCache.initialCacheMap()
         AdvertisementCache.initialCacheMap()
         UserCache.initialCacheMap()
         RoleCache.initialCacheMap()

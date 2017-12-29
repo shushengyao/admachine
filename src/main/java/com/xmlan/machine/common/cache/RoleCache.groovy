@@ -7,6 +7,7 @@ import com.xmlan.machine.common.util.SpringContextUtils
 import com.xmlan.machine.common.util.StringUtils
 import com.xmlan.machine.module.role.dao.RoleDAO
 import com.xmlan.machine.module.role.entity.Role
+import com.xmlan.machine.module.user.entity.User
 
 /**
  * Created by ayakurayuki on 2017/12/27-16:11.
@@ -51,6 +52,22 @@ class RoleCache {
             }
         }
         return null
+    }
+
+    /**
+     * 获取角色拥有的用户数量
+     * @param roleID
+     * @return
+     */
+    static int getUserCountInRole(int roleID) {
+        List<User> list = UserCache.getUserList()
+        int count = 0
+        list.forEach({
+            if (it.roleID == roleID) {
+                count++
+            }
+        })
+        return count
     }
 
 }

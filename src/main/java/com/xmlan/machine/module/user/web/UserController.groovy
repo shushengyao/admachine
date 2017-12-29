@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.ResponseBody
 import org.springframework.web.servlet.mvc.support.RedirectAttributes
 
+import javax.servlet.http.HttpServletRequest
+
 /**
  * Created by ayakurayuki on 2017/12/13-14:26.
  * Package: com.xmlan.machine.module.user.web
@@ -67,7 +69,7 @@ class UserController extends BaseController {
         PageInfo<User> page = new PageInfo<>(list)
         model.addAttribute "page", page
 
-        model.addAttribute "dropdownRoleList", RoleCache.getRoleList()
+        model.addAttribute "dropdownRoleList", RoleCache.roleList
         model.addAttribute "username", user.username
         model.addAttribute "authname", user.authname
         model.addAttribute "addTime", user.addTime
@@ -78,13 +80,24 @@ class UserController extends BaseController {
 
     @RequestMapping(value = '/form')
     String form(User user, Model model) {
-        model.addAttribute("user", user)
+        model.addAttribute "user", user
+        model.addAttribute "dropdownRoleList", RoleCache.roleList
+        model.addAttribute "roleName", RoleCache.get(user.roleID.toString())?.name
         "user/userForm"
     }
 
     @RequestMapping(value = '/save/{id}')
-    String save(User user, @PathVariable String id, Model model, RedirectAttributes redirectAttributes) {
+    String save(User user,
+                @PathVariable String id, HttpServletRequest request, Model model, RedirectAttributes redirectAttributes) {
         if (!beanValidator(model, user)) {
+            return form(user, model)
+        }
+        if (!StringUtils.equals(user.password, request.getParameter("confirmPassword"))) {
+            addMessage redirectAttributes, "确认密码与登录密码不匹配"
+            return form(user, model)
+        }
+        if (!(user.phone ==~ /((86)|(\+86))?(\-)?1[3|4|5|7|8][0-9]\d{8}/)) {
+            addMessage redirectAttributes, "手机号码格式不正确"
             return form(user, model)
         }
         if (StringUtils.equals(id, NEW_INSERT_ID.toString())) {
@@ -100,8 +113,11 @@ class UserController extends BaseController {
 
     @RequestMapping(value = '/delete')
     String delete(User user, RedirectAttributes redirectAttributes) {
-        if (service.delete(user) == UserService.DATABASE_DO_NOTHING) {
+        int responseCode = service.delete(user)
+        if (responseCode == DATABASE_DO_NOTHING) {
             addMessage redirectAttributes, "这个操作没有删除任何用户"
+        } else if (responseCode == UserService.USER_HAVE_SOME_MACHINES) {
+            addMessage redirectAttributes, "这个用户拥有广告机，不能删除"
         } else {
             addMessage redirectAttributes, "删除用户成功"
         }

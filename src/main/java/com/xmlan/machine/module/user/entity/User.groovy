@@ -32,31 +32,31 @@ class User {
     }
 
     @NotNull(message = "用户名不能为空")
+    @Length(min = 1, max = 64)
     String getUsername() {
         return username
     }
 
-    @Length(min = 1, max = 64)
     void setUsername(String username) {
         this.username = username
     }
 
     @NotNull(message = "登录名不能为空")
+    @Length(min = 1, max = 64)
     String getAuthname() {
         return authname
     }
 
-    @Length(min = 1, max = 64)
     void setAuthname(String authname) {
         this.authname = authname
     }
 
     @NotNull(message = "密码不能为空")
+    @Length(min = 1, max = 256)
     String getPassword() {
         return password
     }
 
-    @Length(min = 1, max = 256)
     void setPassword(String password) {
         this.password = password
     }

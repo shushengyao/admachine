@@ -160,7 +160,7 @@
                        th:href="@{${adminPath}+'/user/form?id='+${item.id}}">
                         <i class="material-icons">edit</i>
                     </a>
-                    <a class="btn-floating red darken-1 waves-effect waves-light tooltipped"
+                    <a class="btn-floating red darken-1 waves-effect waves-light tooltipped btn modal-trigger"
                        data-position="top" data-delay="50" data-tooltip="删除" href="#delete-modal"
                        th:onclick="'javascript:prepareForDeleting(\''+${item.id}+'\', \''+${item.username}+'\')'">
                         <i class="material-icons">delete</i>
@@ -178,7 +178,7 @@
                        th:href="@{${adminPath}+'/user/form?id='+${item.id}}">
                         <i class="material-icons">edit</i>
                     </a>
-                    <a class="btn-floating red darken-1 waves-effect waves-light tooltipped"
+                    <a class="btn-floating red darken-1 waves-effect waves-light tooltipped btn modal-trigger"
                        data-position="top" data-delay="50" data-tooltip="删除" href="#delete-modal"
                        th:onclick="'javascript:prepareForDeleting(\''+${item.id}+'\', \''+${item.username}+'\')'">
                         <i class="material-icons">delete</i>
@@ -248,7 +248,7 @@
                     <h6>联系电话</h6>
                     <p id="detail-item-phone">phone</p>
                     <h6>加入时间</h6>
-                    <p id="detail-item-addTime">addTime</p>
+                    <p id="detail-item-add-time">addTime</p>
                     <h6>角色</h6>
                     <p id="detail-item-role">roleID -> role.name</p>
                 </div>
@@ -266,17 +266,17 @@
     </div>
 
     <div id="delete-modal" class="modal">
-        <div class="modal-content">
-            <h4>注意！</h4>
-            <form th:action="@{${adminPath}+'/user/delete'}">
+        <form th:action="@{${adminPath}+'/user/delete'}">
+            <div class="modal-content">
+                <h4>注意！</h4>
                 <input id="delete-confirm-id" name="id" type="hidden"/>
-            </form>
-            <p>是否要删除用户 <span id="delete-name"></span> ?</p>
-        </div>
-        <div class="modal-footer">
-            <a href="#" class="modal-action modal-close waves-effect waves-green btn-flat">不是</a>
-            <button type="submit" class="modal-action modal-close waves-effect btn-flat">是</button>
-        </div>
+                <p>是否要删除用户 <span id="delete-name"></span> ?</p>
+            </div>
+            <div class="modal-footer">
+                <a href="#" class="modal-action modal-close waves-effect waves-green btn-flat">不是</a>
+                <button type="submit" class="modal-action modal-close waves-effect btn-flat">是</button>
+            </div>
+        </form>
     </div>
     <!-- </editor-fold> -->
 
@@ -307,6 +307,7 @@
             closeOnSelect: true
         });
         $("#detail-modal").modal();
+        $("#delete-modal").modal();
         $("#roleID").material_select();
         var message = '[[${message}]]';
         if (message !== '') {
@@ -324,7 +325,7 @@
                 $("#detail-item-username").text(data.user.username);
                 $("#detail-item-authname").text(data.user.authname);
                 $("#detail-item-phone").text(data.user.phone);
-                $("#detail-item-add-time").text(data.user.addTime.substr(0, 10));
+                $("#detail-item-add-time").text(data.user.addTime);
                 $("#detail-item-role").text(data.roleName);
                 $("#detail-item-address").text(data.user.address);
                 $("#detail-item-remark").text(data.user.remark);

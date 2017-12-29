@@ -62,7 +62,7 @@
 
 <!--/*@thymesVar id="page" type="com.github.pagehelper.PageInfo<com.xmlan.machine.module.role.entity.Role>"*/-->
 <!--/*@thymesVar id="searchName" type="java.lang.String"*/-->
-
+<!--/*@thymesVar id="userCount" type="java.util.List<com.xmlan.machine.module.role.entity.RoleCount>"*/-->
 <main>
     <div id="main-content" class="container">
         <h5 class="title">角色列表</h5>
@@ -106,6 +106,7 @@
             <thead>
             <tr>
                 <th width="20%">角色名</th>
+                <th width="10%">用户数</th>
                 <th>备注</th>
                 <th width="15%" class="hide-on-med-and-down"></th>
                 <th class="hide-on-large-only"></th>
@@ -114,6 +115,9 @@
             <tbody class="card">
             <tr th:each="item : ${page.list}">
                 <td th:text="*{item.name}"></td>
+                <th:block th:each="count:${userCount}">
+                    <td th:if="${item.id==count.id}" th:text="${count.count}"></td>
+                </th:block>
                 <td th:text="*{#strings.abbreviate(item.remark,50)}"></td>
                 <td class="right-align hide-on-med-and-down">
                     <a class="btn-floating blue waves-effect waves-light tooltipped btn modal-trigger"
@@ -126,9 +130,9 @@
                        th:href="@{${adminPath}+'/role/form?id='+${item.id}}">
                         <i class="material-icons">edit</i>
                     </a>
-                    <a class="btn-floating red darken-1 waves-effect waves-light tooltipped"
-                       data-position="top" data-delay="50" data-tooltip="删除"
-                       th:href="@{${adminPath}+'/role/delete?id='+${item.id}}"
+                    <a class="btn-floating red darken-1 waves-effect waves-light tooltipped btn modal-trigger"
+                       data-position="top" data-delay="50" data-tooltip="删除" href="#delete-modal"
+                       th:onclick="'javascript:prepareForDeleting(\''+${item.id}+'\',\''+${item.name}+'\')'"
                        th:if="${item.id!=1}">
                         <i class="material-icons">delete</i>
                     </a>
@@ -145,9 +149,9 @@
                        th:href="@{${adminPath}+'/role/form?id='+${item.id}}">
                         <i class="material-icons">edit</i>
                     </a>
-                    <a class="btn-floating red darken-1 waves-effect waves-light tooltipped"
-                       data-position="top" data-delay="50" data-tooltip="删除"
-                       th:href="@{${adminPath}+'/role/delete?id='+${item.id}}"
+                    <a class="btn-floating red darken-1 waves-effect waves-light tooltipped btn modal-trigger"
+                       data-position="top" data-delay="50" data-tooltip="删除" href="#delete-modal"
+                       th:onclick="'javascript:prepareForDeleting(\''+${item.id}+'\',\''+${item.name}+'\')'"
                        th:if="${item.id!=1}">
                         <i class="material-icons">delete</i>
                     </a>
@@ -223,6 +227,20 @@
             <a href="#" class="modal-action modal-close waves-effect waves-green btn-flat">关闭</a>
         </div>
     </div>
+
+    <div id="delete-modal" class="modal">
+        <form th:action="@{${adminPath}+'/role/delete'}">
+            <div class="modal-content">
+                <h4>注意！</h4>
+                <input id="delete-confirm-id" name="id" type="hidden"/>
+                <p>是否要删除角色 <span id="delete-name"></span> ?</p>
+            </div>
+            <div class="modal-footer">
+                <a href="#" class="modal-action modal-close waves-effect waves-green btn-flat">不是</a>
+                <button type="submit" class="modal-action modal-close waves-effect btn-flat">是</button>
+            </div>
+        </form>
+    </div>
     <!-- </editor-fold> -->
 </main>
 
@@ -251,6 +269,7 @@
             closeOnSelect: true
         });
         $("#detail-modal").modal();
+        $("#delete-modal").modal();
         $("#roleID").material_select();
         var message = '[[${message}]]';
         if (message !== '') {
@@ -271,6 +290,11 @@
             error: function () {
             }
         });
+    }
+
+    function prepareForDeleting(id, name) {
+        $("#delete-confirm-id").val(id);
+        $("#delete-name").text(name);
     }
 </script>
 </body>
