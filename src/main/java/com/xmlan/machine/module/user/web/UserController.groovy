@@ -6,6 +6,7 @@ import com.xmlan.machine.common.base.BaseController
 import com.xmlan.machine.common.cache.RoleCache
 import com.xmlan.machine.common.cache.UserCache
 import com.xmlan.machine.common.util.DateUtils
+import com.xmlan.machine.common.util.JsonUtils
 import com.xmlan.machine.common.util.StringUtils
 import com.xmlan.machine.module.role.service.RoleService
 import com.xmlan.machine.module.user.entity.User
@@ -124,6 +125,34 @@ class UserController extends BaseController {
             addMessage redirectAttributes, "删除用户成功"
         }
         "redirect:$adminPath/user/list/1"
+    }
+
+    @RequestMapping(value = '/passwd/{id}')
+    @ResponseBody
+    String passwd(@PathVariable String id, String oldPasswd, String newPasswd, String rePasswd) {
+        if (StringUtils.isBlank(newPasswd)) {
+            return "没有输入新密码"
+        }
+        if (StringUtils.isBlank(rePasswd)) {
+            return "请确认密码"
+        }
+        int responseCode = service.passwd(id, oldPasswd, newPasswd, rePasswd)
+        if (responseCode == ADMIN_DONE) {
+            return "修改成功，建议重新登录"
+        }
+        if (responseCode == DONE) {
+            return "修改完毕"
+        }
+        if (responseCode == INCORRECT_OLDPASSWD) {
+            if (StringUtils.isBlank(oldPasswd)) {
+                return "没有填原密码"
+            } else {
+                return "原密码不匹配"
+            }
+        }
+        if (responseCode == INCORRECT_REPASSWD) {
+            return "确认密码和新密码不匹配"
+        }
     }
 
 }

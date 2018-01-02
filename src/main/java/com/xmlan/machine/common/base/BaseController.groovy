@@ -24,6 +24,11 @@ abstract class BaseController {
 
     protected Logger logger = LogManager.getLogger(getClass())
 
+    public static final int DONE = 0
+    public static final int ADMIN_DONE = 10
+    public static final int INCORRECT_REPASSWD = 11
+    public static final int INCORRECT_OLDPASSWD = 12
+
     /**
      * 没有修改数据库
      */

@@ -160,6 +160,11 @@
                        th:href="@{${adminPath}+'/user/form?id='+${item.id}}">
                         <i class="material-icons">edit</i>
                     </a>
+                    <a class="btn-floating yellow waves-effect waves-light tooltipped btn modal-trigger"
+                       data-position="top" data-delay="50" data-tooltip="修改密码" href="#passwd-modal"
+                       th:onclick="'javascript:prepareForPasswd(\''+${item.id}+'\', \''+${item.roleID}+'\')'">
+                        <i class="material-icons">lock_outline</i>
+                    </a>
                     <a class="btn-floating red darken-1 waves-effect waves-light tooltipped btn modal-trigger"
                        data-position="top" data-delay="50" data-tooltip="删除" href="#delete-modal"
                        th:onclick="'javascript:prepareForDeleting(\''+${item.id}+'\', \''+${item.username}+'\')'">
@@ -172,11 +177,16 @@
                        th:onclick="'javascript:detail(\''+*{item.id}+'\')'">
                         <i class="material-icons">more_horiz</i>
                     </a>
-                    <br/>
                     <a class="btn-floating green waves-effect waves-light tooltipped"
                        data-position="top" data-delay="50" data-tooltip="编辑"
                        th:href="@{${adminPath}+'/user/form?id='+${item.id}}">
                         <i class="material-icons">edit</i>
+                    </a>
+                    <br/>
+                    <a class="btn-floating yellow waves-effect waves-light tooltipped btn modal-trigger"
+                       data-position="top" data-delay="50" data-tooltip="修改密码" href="#passwd-modal"
+                       th:onclick="'javascript:prepareForPasswd(\''+${item.id}+'\')'">
+                        <i class="material-icons">lock_outline</i>
                     </a>
                     <a class="btn-floating red darken-1 waves-effect waves-light tooltipped btn modal-trigger"
                        data-position="top" data-delay="50" data-tooltip="删除" href="#delete-modal"
@@ -277,6 +287,31 @@
             </div>
         </form>
     </div>
+
+    <div id="passwd-modal" class="modal">
+        <div class="modal-content">
+            <h4>修改密码</h4>
+            <input id="passwd-id" name="id" type="hidden">
+            <div class="row">
+                <div class="input-field col s12 m12 l12">
+                    <input id="old-passwd" name="oldPasswd" placeholder="角色是管理员则必填" type="password" class="validate">
+                    <label for="old-passwd">原密码</label>
+                </div>
+                <div class="input-field col s12 m12 l12">
+                    <input id="new-passwd" name="newPasswd" type="password" class="validate">
+                    <label for="new-passwd">新密码</label>
+                </div>
+                <div class="input-field col s12 m12 l12">
+                    <input id="re-passwd" name="rePasswd" type="password" class="validate">
+                    <label for="re-passwd">重复密码</label>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <a href="#" class="modal-action modal-close waves-effect waves-green btn-flat">放弃修改</a>
+            <a href="#" onclick="passwd()" class="modal-action modal-close waves-effect btn-flat">确认修改</a>
+        </div>
+    </div>
     <!-- </editor-fold> -->
 
 </main>
@@ -318,6 +353,13 @@
             }
         });
         $("#delete-modal").modal();
+        $("#passwd-modal").modal({
+            complete: function () {
+                $("#old-passwd").val(null);
+                $("#new-passwd").val(null);
+                $("#re-passwd").val(null);
+            }
+        });
         $("#roleID").material_select();
         var message = '[[${message}]]';
         if (message !== '') {
@@ -348,6 +390,34 @@
     function prepareForDeleting(id, name) {
         $("#delete-confirm-id").val(id);
         $("#delete-name").text(name);
+    }
+
+    function prepareForPasswd(id, role) {
+        $("#passwd-id").val(id);
+    }
+
+    function toast(msg) {
+        Materialize.toast(msg, 5000);
+    }
+
+    function passwd() {
+        var id = $("#passwd-id").val();
+        var oldPasswd = $("#old-passwd").val();
+        var newPasswd = $("#new-passwd").val();
+        var rePasswd = $("#re-passwd").val();
+        var url = '[[${adminPath}]]' + "/user/passwd/" + id;
+        $.ajax({
+            url: url,
+            type: "POST",
+            data: {"oldPasswd": oldPasswd, "newPasswd": newPasswd, "rePasswd": rePasswd},
+            dataType: "json",
+            cache: false,
+            success: function (msg) {
+                toast(msg);
+            },
+            error: function () {
+            }
+        })
     }
 </script>
 </body>
