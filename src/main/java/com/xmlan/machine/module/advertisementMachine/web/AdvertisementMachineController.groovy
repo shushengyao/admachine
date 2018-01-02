@@ -6,6 +6,7 @@ import com.xmlan.machine.common.base.BaseController
 import com.xmlan.machine.common.cache.UserCache
 import com.xmlan.machine.common.util.DateUtils
 import com.xmlan.machine.common.util.IDUtils
+import com.xmlan.machine.common.util.SessionUtils
 import com.xmlan.machine.common.util.StringUtils
 import com.xmlan.machine.module.advertisementMachine.entity.AdvertisementMachine
 import com.xmlan.machine.module.advertisementMachine.service.AdvertisementMachineService
@@ -15,6 +16,8 @@ import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.servlet.mvc.support.RedirectAttributes
+
+import javax.servlet.http.HttpServletRequest
 
 /**
  * Created by ayakurayuki on 2017/12/13-17:31.
@@ -52,10 +55,14 @@ class AdvertisementMachineController extends BaseController {
     }
 
     @RequestMapping(value = "/list/{pageNo}")
-    String list(AdvertisementMachine advertisementMachine, @PathVariable int pageNo, Model model) {
+    String list(AdvertisementMachine advertisementMachine,
+                @PathVariable int pageNo, HttpServletRequest request, Model model) {
         // region 格式化查询条件
         if (StringUtils.isNotBlank(advertisementMachine.addTime)) {
             advertisementMachine.addTime = advertisementMachine.addTime.substring 0, 10
+        }
+        if (SessionUtils.GetAdmin(request).roleID != 1) {
+            advertisementMachine.userID = SessionUtils.GetAdmin(request).id
         }
         // endregion
 
