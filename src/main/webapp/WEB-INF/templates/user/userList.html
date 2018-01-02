@@ -131,12 +131,12 @@
         <table class="highlight responsive-table">
             <thead>
             <tr>
-                <th>用户名</th>
-                <th>登录名</th>
-                <th>联系方式</th>
-                <th>角色</th>
+                <th width="10%">用户名</th>
+                <th width="10%">登录名</th>
+                <th width="12%">联系方式</th>
+                <th width="10%">角色</th>
                 <th>地址</th>
-                <th width="15%" class="hide-on-med-and-down"></th>
+                <th width="20%" class="hide-on-med-and-down"></th>
                 <th class="hide-on-large-only"></th>
             </tr>
             </thead>
@@ -152,7 +152,7 @@
                 <td class="right-align hide-on-med-and-down">
                     <a class="btn-floating blue waves-effect waves-light tooltipped btn modal-trigger"
                        data-position="top" data-delay="50" data-tooltip="查看详情" href="#detail-modal"
-                       th:onclick="'javascript:detail(\''+*{item.id}+'\')'">
+                       th:onmouseover="'javascript:detail(\''+*{item.id}+'\')'">
                         <i class="material-icons">more_horiz</i>
                     </a>
                     <a class="btn-floating green waves-effect waves-light tooltipped"
@@ -305,7 +305,18 @@
         $('.date-picker').pickadatee({
             closeOnSelect: true
         });
-        $("#detail-modal").modal();
+        $("#detail-modal").modal({
+            complete: function () {
+                $("#detail-item-id").text('');
+                $("#detail-item-username").text('');
+                $("#detail-item-authname").text('');
+                $("#detail-item-phone").text('');
+                $("#detail-item-add-time").text('');
+                $("#detail-item-role").text('');
+                $("#detail-item-address").text('');
+                $("#detail-item-remark").text('');
+            }
+        });
         $("#delete-modal").modal();
         $("#roleID").material_select();
         var message = '[[${message}]]';
@@ -320,14 +331,14 @@
             url: url,
             type: "GET",
             success: function (data) {
-                $("#detail-item-id").text(data.user.id);
-                $("#detail-item-username").text(data.user.username);
-                $("#detail-item-authname").text(data.user.authname);
-                $("#detail-item-phone").text(data.user.phone);
-                $("#detail-item-add-time").text(data.user.addTime);
-                $("#detail-item-role").text(data.roleName);
-                $("#detail-item-address").text(data.user.address);
-                $("#detail-item-remark").text(data.user.remark);
+                $("#detail-item-id").text(data['user'].id);
+                $("#detail-item-username").text(data['user'].username);
+                $("#detail-item-authname").text(data['user'].authname);
+                $("#detail-item-phone").text(data['user'].phone);
+                $("#detail-item-add-time").text(data['user'].addTime);
+                $("#detail-item-role").text(data['roleName']);
+                $("#detail-item-address").text(data['user'].address);
+                $("#detail-item-remark").text(data['user'].remark);
             },
             error: function () {
             }

@@ -64,8 +64,9 @@
     <div id="main-content" class="container">
         <h5 class="title">
             <a class="btn-flat tooltipped" data-position="bottom" data-delay="50" data-tooltip="返回列表"
-               onclick="history.go(-1);"><i class="material-icons">arrow_back</i></a><span
-                th:text="'&nbsp;|&nbsp;编辑广告机——'+${advertisementMachine.id==-2?'新增广告机':advertisementMachine.name}"></span>
+               th:href="@{${adminPath}+'/advertisementMachine/list/1'}"><i
+                    class="material-icons">arrow_back</i></a>
+            <span th:text="'&nbsp;|&nbsp;编辑广告机——'+${advertisementMachine.id==-2?'新增广告机':advertisementMachine.name}"></span>
         </h5>
         <ul>
             <li class="divider"></li>
@@ -107,8 +108,10 @@
 
                 <div class="input-field col s6 m6 l6">
                     <i class="material-icons prefix">date_range</i>
+                    <input id="addTime" name="addTime" type="text" placeholder="选择加入时间" readonly="readonly"
+                           th:value="${advertisementMachine.addTime}" th:if="${advertisementMachine.addTime!=''}"/>
                     <input id="addTime" name="addTime" type="text" class="date-picker" placeholder="选择加入时间"
-                           th:value="${advertisementMachine.addTime}"/>
+                           th:value="${advertisementMachine.addTime}" th:if="${advertisementMachine.addTime==''}"/>
                     <label for="addTime">加入时间</label>
                 </div>
                 <div class="input-field col s6 m6 l6">

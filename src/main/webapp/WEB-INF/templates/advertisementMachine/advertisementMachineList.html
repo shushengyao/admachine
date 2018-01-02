@@ -10,8 +10,6 @@
     <link rel="shoutcut icon" type="image/x-icon" href="favicon.ico" media="all"/>
     <title>广告机 - 广告机管理后台</title>
 </head>
-<!--/*@thymesVar id="adminPath" type="java.lang.String"*/-->
-<!--/*@thymesVar id="loginUser" type="com.xmlan.machine.module.user.entity.User"*/-->
 <body>
 <header>
     <nav style="background-color: #37474f;z-index: 1;">
@@ -59,7 +57,8 @@
         </div>
     </nav>
 </header>
-
+<!--/*@thymesVar id="adminPath" type="java.lang.String"*/-->
+<!--/*@thymesVar id="loginUser" type="com.xmlan.machine.module.user.entity.User"*/-->
 <!--/*@thymesVar id="page" type="com.github.pagehelper.PageInfo<com.xmlan.machine.module.advertisementMachine.entity.AdvertisementMachine>"*/-->
 <!--/*@thymesVar id="name" type="java.lang.String"*/-->
 <!--/*@thymesVar id="codeNumber" type="java.lang.String"*/-->
@@ -71,7 +70,6 @@
             <li class="divider"></li>
         </ul>
 
-        <!--/* <editor-fold desc="search box"> */-->
         <div id="search-box">
             <form th:action="@{${adminPath}+'/advertisementMachine/list/1'}" method="post">
                 <ul class="collapsible popout" data-collapsible="accordion">
@@ -81,15 +79,15 @@
                             <div class="row">
                                 <div class="col s12 m10 l10 center">
                                     <div class="input-field col s12 m4 l4">
-                                        <input id="name" name="name" type="text" th:value="${name}"/>
+                                        <input type="text" id="name" name="name" th:value="${name}"/>
                                         <label for="name">按广告机名称</label>
                                     </div>
                                     <div class="input-field col s12 m4 l4">
-                                        <input id="codeNumber" name="codeNumber" type="text" th:value="${codeNumber}"/>
+                                        <input type="text" id="codeNumber" name="codeNumber" th:value="${codeNumber}"/>
                                         <label for="codeNumber">按广告机识别码</label>
                                     </div>
                                     <div class="input-field col s12 m4 l4">
-                                        <input id="addTime" name="addTime" type="text" class="date-picker"
+                                        <input type="text" id="addTime" name="addTime" class="date-picker"
                                                placeholder="选择日期" th:value="${addTime}"/>
                                         <label for="addTime">按加入时间</label>
                                     </div>
@@ -108,9 +106,7 @@
                 </ul>
             </form>
         </div>
-        <!--/* </editor-fold> */-->
 
-        <!--/* <editor-fold desc="table main content"> */-->
         <table class="highlight responsive-table">
             <thead>
             <tr>
@@ -164,21 +160,16 @@
                     </a>
                 </td>
             </tr>
-
             </tbody>
         </table>
-        <!--/* </editor-fold> */-->
 
-        <!--/* <editor-fold desc="add button"> */-->
         <div id="fixed-add-btn" class="fixed-action-btn" th:if="${loginUser.roleID==1}">
             <a class="btn-floating btn-large waves-effect waves-light blue"
                th:href="@{${adminPath}+'/advertisementMachine/form'}">
                 <i class="large material-icons">add</i>
             </a>
         </div>
-        <!--/* </editor-fold> */-->
 
-        <!--/* <editor-fold desc="pagination"> */-->
         <div class="center">
             <ul class="pagination">
                 <li th:if="${!page.hasPreviousPage}" class="disabled">
@@ -209,41 +200,31 @@
                 </li>
             </ul>
         </div>
-        <!--/* </editor-fold> */-->
     </div>
 
-    <!-- <editor-fold desc="Modal"> -->
     <div id="detail-modal" class="modal modal-fixed-footer">
         <div class="modal-content">
             <h4>详情</h4>
-            <div class="row">
-                <div class="col s12 m6 l6">
-                    <h6>广告机ID</h6>
-                    <p id="detail-item-id">id</p>
-                    <h6>名称</h6>
-                    <p id="detail-item-name">name</p>
-                    <h6>加入时间</h6>
-                    <p id="detail-item-add-time">addTime</p>
-                </div>
-                <div class="col s12 m6 l6">
-                    <h6>所属用户</h6>
-                    <p id="detail-item-user-id">userID -> username</p>
-                    <h6>机器识别码</h6>
-                    <p id="detail-item-code-number">codeNumber</p>
-                </div>
-                <div class="col s12 m12 l12">
-                    <h6>地址</h6>
-                    <p id="detail-item-address">address</p>
-                    <h6>备注</h6>
-                    <p id="detail-item-remark">remark</p>
-                </div>
-            </div>
+            <h6 class="green-text text-darken-2">广告机ID</h6>
+            <p id="detail-item-id">id</p>
+            <h6 class="green-text text-darken-2">名称</h6>
+            <p id="detail-item-name">name</p>
+            <h6 class="green-text text-darken-2">加入时间</h6>
+            <p id="detail-item-add-time">addTime</p>
+            <h6 class="green-text text-darken-2">所属用户</h6>
+            <p id="detail-item-user-id">userID -> username</p>
+            <h6 class="green-text text-darken-2">机器识别码</h6>
+            <p id="detail-item-code-number">codeNumber</p>
+            <h6 class="green-text text-darken-2">地址</h6>
+            <p id="detail-item-address">address</p>
+            <h6 class="green-text text-darken-2">备注</h6>
+            <p id="detail-item-remark">remark</p>
         </div>
         <div class="modal-footer">
             <a href="#" class="modal-action modal-close waves-effect waves-green btn-flat">关闭</a>
         </div>
     </div>
-    <!-- </editor-fold> -->
+
 </main>
 
 <footer class="page-footer hide-on-med-and-down"

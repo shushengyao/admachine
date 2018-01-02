@@ -82,6 +82,8 @@ class AdvertisementController extends BaseController {
     @RequestMapping(value = "/form")
     String form(Advertisement advertisement, Model model) {
         model.addAttribute "advertisement", advertisement
+        model.addAttribute "dropdownList", AdvertisementMachineCache.dropdownAdvertisementMachineList
+        model.addAttribute "machineName", AdvertisementMachineCache.getMachineNameByID(advertisement.machineID)
         "advertisement/advertisementForm"
     }
 
@@ -112,7 +114,6 @@ class AdvertisementController extends BaseController {
         }
         "redirect:$adminPath/advertisement/list/1"
     }
-
 
 
 }
