@@ -28,6 +28,7 @@ class RoleCache {
             List<Role> roleList = roleDAO.findAll()
             map.put ROLE_LIST_NAME, roleList
         }
+        CacheUtils.put(CACHE_NAME, MAP_NAME, map)
         return map
     }
 

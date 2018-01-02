@@ -32,6 +32,7 @@ class AdvertisementMachineCache {
             List<AdvertisementMachine> advertisementMachineList = advertisementMachineDAO.findAll()
             map.put AD_MACHINE_LIST_NAME, advertisementMachineList
         }
+        CacheUtils.put(CACHE_NAME, MAP_NAME, map)
         return map
     }
 

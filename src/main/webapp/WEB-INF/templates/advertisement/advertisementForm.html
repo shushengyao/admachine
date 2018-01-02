@@ -59,54 +59,61 @@
         </div>
     </nav>
 </header>
-
+<!--/*@thymesVar id="advertisement" type="com.xmlan.machine.module.advertisement.entity.Advertisement"*/-->
+<!--/*@thymesVar id="dropdownList" type="java.util.List<com.xmlan.machine.module.advertisementMachine.entity.SimpleAdvertisementMachine>"*/-->
 <main>
     <div id="main-content" class="container">
         <h5 class="title">
             <a class="btn-flat tooltipped" data-position="bottom" data-delay="50" data-tooltip="返回列表"
-               onclick="history.go(-1);"><i class="material-icons">arrow_back</i></a>&nbsp;|&nbsp;编辑广告——名称
+               onclick="history.go(-1);"><i class="material-icons">arrow_back</i></a><span
+                th:text="'&nbsp;|&nbsp;编辑广告——'+${advertisement.id==-2?'新增广告':advertisement.name}"></span>
         </h5>
         <ul>
             <li class="divider"></li>
         </ul>
 
-        <form action="#!" method="post">
-            <!--/* <editor-fold desc="hidden fields"> */-->
-            <input id="id" name="id" type="hidden" disabled="disabled" class="validate" required="required"/>
-            <input id="url" name="url" type="hidden" disabled="disabled" class="validate"/>
-            <!--/* </editor-fold> */-->
+        <form th:action="@{${adminPath}+'/advertisement/save/'+${advertisement.id}}" method="post">
+            <input id="id" name="id" th:value="${advertisement.id}" type="hidden" disabled="disabled" class="validate"
+                   required="required"/>
+            <input id="url" name="url" th:value="${advertisement.url}" type="hidden" disabled="disabled"
+                   class="validate"/>
 
             <div class="row">
                 <div class="input-field col s6 m6 l6">
                     <i class="material-icons prefix">create</i>
-                    <input id="name" name="name" type="text" class="validate" placeholder="输入名称" required="required"/>
+                    <input id="name" name="name" th:value="${advertisement.name}" type="text" class="validate"
+                           placeholder="输入名称" required="required"/>
                     <label for="name">广告名称</label>
                 </div>
                 <div class="input-field col s6 m6 l6">
                     <i class="material-icons prefix">access_time</i>
-                    <input id="time" name="time" type="text" class="text" placeholder="输入播放时间" onblur="checkNumber();"/>
+                    <input id="time" name="time" th:value="${advertisement.time}" type="text" class="text"
+                           placeholder="输入播放时间" onblur="checkNumber();"/>
                     <label for="time">播放时间</label>
                 </div>
 
                 <div class="input-field col s6 m6 l6">
                     <i class="material-icons prefix">date_range</i>
-                    <input id="addTime" name="addTime" type="text" class="date-picker" placeholder="选择加入时间"/>
+                    <input id="addTime" name="addTime" th:value="${advertisement.addTime}" type="text"
+                           class="date-picker" placeholder="选择加入时间"/>
                     <label for="addTime">加入时间</label>
                 </div>
                 <div class="input-field col s6 m6 l6">
                     <i class="material-icons prefix">personal_video</i>
                     <select id="machineID" name="machineID">
-                        <option value="" disabled="disabled" selected="selected">选择广告机</option>
-                        <option value="1">广告机1</option>
-                        <option value="2">广告机2</option>
-                        <option value="3">广告机3</option>
+                        <!--/*@thymesVar id="machineName" type="java.lang.String"*/-->
+                        <option th:value="${advertisement.machineID}" th:text="${machineName}" disabled="disabled"
+                                selected="selected"></option>
+                        <option th:each="item:${dropdownList}" th:value="${item.id}"
+                                th:text="${item.name}"></option>
                     </select>
                     <label for="machineID">所属广告机</label>
                 </div>
 
                 <div class="input-field col s12 m12 l12">
                     <i class="material-icons prefix">insert_comment</i>
-                    <textarea id="remark" name="remark" class="materialize-textarea" placeholder=""></textarea>
+                    <textarea id="remark" th:text="${advertisement.remark}" name="remark" class="materialize-textarea"
+                              placeholder=""></textarea>
                     <label for="remark">备注</label>
                 </div>
             </div>

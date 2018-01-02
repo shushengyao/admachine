@@ -7,7 +7,7 @@ import org.apache.ibatis.type.Alias
  * Package: com.xmlan.machine.module.role.entity
  */
 @Alias("RoleCount")
-class RoleCount {
+class RoleCount implements Serializable {
 
     int id
     int count

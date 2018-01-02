@@ -32,6 +32,7 @@ class UserCache {
             List<User> userList = userDAO.findAll()
             map.put USER_LIST_NAME, userList
         }
+        CacheUtils.put(CACHE_NAME, MAP_NAME, map)
         return map
     }
 

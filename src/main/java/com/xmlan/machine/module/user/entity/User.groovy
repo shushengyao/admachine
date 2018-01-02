@@ -11,7 +11,7 @@ import java.util.Date
  * Package: com.xmlan.machine.module.user.entity
  */
 @Alias("User")
-class User {
+class User implements Serializable {
 
     private int id // 用户ID
     private String username // 用户名

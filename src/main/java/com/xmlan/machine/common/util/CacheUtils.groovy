@@ -65,7 +65,9 @@ class CacheUtils {
      */
     static void put(String cacheName, String key, Object value) {
         Element element = new Element(key, value)
-        getCache(cacheName).put(element)
+        Cache cache = getCache(cacheName)
+        cache.put(element)
+        cache.flush()
     }
 
     /**

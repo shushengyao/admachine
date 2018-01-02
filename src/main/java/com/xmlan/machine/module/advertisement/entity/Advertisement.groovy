@@ -10,7 +10,7 @@ import javax.validation.constraints.NotNull
  * Package: com.xmlan.machine.module.advertisement.entity
  */
 @Alias("Advertisement")
-class Advertisement {
+class Advertisement implements Serializable {
 
     private int id // 广告ID
     private String name // 广告名称

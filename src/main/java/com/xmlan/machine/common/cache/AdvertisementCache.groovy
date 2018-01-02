@@ -30,6 +30,7 @@ class AdvertisementCache {
             List<Advertisement> advertisementList = advertisementDAO.findAll()
             map.put AD_LIST_NAME, advertisementList
         }
+        CacheUtils.put(CACHE_NAME, MAP_NAME, map)
         return map
     }
 

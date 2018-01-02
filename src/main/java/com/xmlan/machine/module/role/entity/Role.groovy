@@ -10,7 +10,7 @@ import javax.validation.constraints.NotNull
  * Package: com.xmlan.machine.module.role.entity
  */
 @Alias("Role")
-class Role {
+class Role implements Serializable {
 
     private int id // 角色ID
     private String name // 角色名称

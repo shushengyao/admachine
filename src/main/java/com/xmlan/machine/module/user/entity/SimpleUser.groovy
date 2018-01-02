@@ -7,7 +7,7 @@ import org.apache.ibatis.type.Alias
  * Package: com.xmlan.machine.module.user.entity
  */
 @Alias("SimpleUser")
-class SimpleUser {
+class SimpleUser implements Serializable {
 
     int id // 用户ID
     String username // 用户名
