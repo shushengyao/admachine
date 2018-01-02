@@ -18,6 +18,7 @@ class Advertisement implements Serializable {
     private int time // 播放时间
     private String addTime // 加入时间
     private int machineID // 机器识别码
+    private int userID // 用户ID
     private String remark // 备注
 
     int getId() {
@@ -69,6 +70,14 @@ class Advertisement implements Serializable {
 
     void setMachineID(int machineID) {
         this.machineID = machineID
+    }
+
+    int getUserID() {
+        return userID
+    }
+
+    void setUserID(int userID) {
+        this.userID = userID
     }
 
     String getRemark() {

@@ -5,7 +5,9 @@ import com.google.common.collect.Maps
 import com.xmlan.machine.common.base.BaseController
 import com.xmlan.machine.common.cache.AdvertisementCache
 import com.xmlan.machine.common.cache.AdvertisementMachineCache
+import com.xmlan.machine.common.cache.UserCache
 import com.xmlan.machine.common.util.DateUtils
+import com.xmlan.machine.common.util.SessionUtils
 import com.xmlan.machine.common.util.StringUtils
 import com.xmlan.machine.module.advertisement.entity.Advertisement
 import com.xmlan.machine.module.advertisement.service.AdvertisementService
@@ -17,7 +19,12 @@ import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.ResponseBody
+import org.springframework.web.context.support.RequestHandledEvent
 import org.springframework.web.servlet.mvc.support.RedirectAttributes
+import org.springframework.web.servlet.support.RequestContextUtils
+import org.springframework.web.servlet.theme.SessionThemeResolver
+
+import javax.servlet.http.HttpServletRequest
 
 /**
  * Created by ayakurayuki on 2017/12/13-17:21.
@@ -38,7 +45,8 @@ class AdvertisementController extends BaseController {
         }
         if (null == entity) {
             entity = new Advertisement()
-            entity.setId(NEW_INSERT_ID)
+            entity.id = NEW_INSERT_ID
+            entity.userID = SessionUtils.GetAdmin(request).id
         }
         return entity
     }
@@ -58,6 +66,9 @@ class AdvertisementController extends BaseController {
         // region 格式化查询条件
         if (advertisement.machineID < 1) {
             advertisement.machineID = -2
+        }
+        if (SessionUtils.GetAdmin(request).roleID != 1) {
+            advertisement.userID = SessionUtils.GetAdmin(request).id
         }
         // endregion
 
@@ -84,6 +95,8 @@ class AdvertisementController extends BaseController {
         model.addAttribute "advertisement", advertisement
         model.addAttribute "dropdownList", AdvertisementMachineCache.dropdownAdvertisementMachineList
         model.addAttribute "machineName", AdvertisementMachineCache.getMachineNameByID(advertisement.machineID)
+        model.addAttribute "dropdownUserList", UserCache.dropdownUserList
+        model.addAttribute "adUsername", UserCache.get(advertisement.userID.toString()).username
         "advertisement/advertisementForm"
     }
 
@@ -92,6 +105,9 @@ class AdvertisementController extends BaseController {
                 @PathVariable String id, Model model, RedirectAttributes redirectAttributes) {
         if (!beanValidator(model, advertisement)) {
             return form(advertisement, model)
+        }
+        if (SessionUtils.GetAdmin(request).roleID != 1) {
+            advertisement.userID = SessionUtils.GetAdmin(request).id
         }
         advertisement.addTime = "${advertisement.addTime} ${DateUtils.GetTime()}"
         if (StringUtils.equals(id, NEW_INSERT_ID.toString())) {

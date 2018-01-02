@@ -109,9 +109,10 @@
                 <div class="input-field col s6 m6 l6">
                     <i class="material-icons prefix">date_range</i>
                     <input id="addTime" name="addTime" type="text" placeholder="选择加入时间" readonly="readonly"
-                           th:value="${advertisementMachine.addTime}" th:if="${advertisementMachine.addTime!=''}"/>
+                           th:value="${advertisementMachine.addTime}" th:if="${advertisementMachine.addTime!=' '}"/>
                     <input id="addTime" name="addTime" type="text" class="date-picker" placeholder="选择加入时间"
-                           th:value="${advertisementMachine.addTime}" th:if="${advertisementMachine.addTime==''}"/>
+                           th:value="${advertisementMachine.addTime==' '?'':advertisementMachine.addTime}"
+                           th:if="${advertisementMachine.addTime==' '}"/>
                     <label for="addTime">加入时间</label>
                 </div>
                 <div class="input-field col s6 m6 l6">

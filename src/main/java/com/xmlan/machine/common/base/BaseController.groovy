@@ -58,6 +58,9 @@ abstract class BaseController {
     @Autowired
     protected Validator validator
 
+    @Autowired
+    protected HttpServletRequest request
+
     /**
      * 添加临时消息
      *

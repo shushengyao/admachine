@@ -67,6 +67,8 @@ create table `advertisement` (
   addTime   datetime comment '添加时间',
   machineID int                not null
   comment '机器标识码',
+  userID    int                not null
+  comment '用户ID',
   remark    text comment '备注',
   primary key (id)
 )
@@ -78,7 +80,7 @@ insert into user values (
   id,
   'admin',
   'admin',
-  'yuki6261',
+  'd6afefbaa8389a98c03e37035bc4cd264776bb784993b877afda72e20d8d5865', -- d6afefbaa8389a98c03e37035bc4cd264776bb784993b877afda72e20d8d5865 -> yuki6261
   1,
   '',
   now(),

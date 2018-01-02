@@ -41,6 +41,7 @@ class AdvertisementMachineController extends BaseController {
         if (null == entity) {
             entity = new AdvertisementMachine()
             entity.id = NEW_INSERT_ID
+            entity.addTime = StringUtils.SPACE
         }
         return entity
     }
@@ -55,14 +56,16 @@ class AdvertisementMachineController extends BaseController {
     }
 
     @RequestMapping(value = "/list/{pageNo}")
-    String list(AdvertisementMachine advertisementMachine,
-                @PathVariable int pageNo, HttpServletRequest request, Model model) {
+    String list(AdvertisementMachine advertisementMachine, @PathVariable int pageNo, Model model) {
         // region 格式化查询条件
-        if (StringUtils.isNotBlank(advertisementMachine.addTime)) {
+        if (StringUtils.isNotBlank(advertisementMachine.addTime) && advertisementMachine.addTime != StringUtils.SPACE) {
             advertisementMachine.addTime = advertisementMachine.addTime.substring 0, 10
         }
         if (SessionUtils.GetAdmin(request).roleID != 1) {
             advertisementMachine.userID = SessionUtils.GetAdmin(request).id
+        }
+        if (advertisementMachine.addTime == StringUtils.SPACE) {
+            advertisementMachine.addTime = ''
         }
         // endregion
 

@@ -88,7 +88,7 @@
                                     </div>
                                     <div class="input-field col s12 m4 l4">
                                         <input type="text" id="addTime" name="addTime" class="date-picker"
-                                               placeholder="选择日期" th:value="${addTime}"/>
+                                               placeholder="选择日期" th:value="${addTime==' '?'':addTime}"/>
                                         <label for="addTime">按加入时间</label>
                                     </div>
                                 </div>

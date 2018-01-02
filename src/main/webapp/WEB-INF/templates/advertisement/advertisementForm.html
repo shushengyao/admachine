@@ -77,6 +77,8 @@
                    required="required"/>
             <input id="url" name="url" th:value="${advertisement.url}" type="hidden" disabled="disabled"
                    class="validate"/>
+            <input id="userID" name="userID" th:value="${advertisement.userID}" type="hidden" disabled="disabled"
+                   class="validate" required="required" th:if="${loginUser.roleID!=1}"/>
 
             <div class="row">
                 <div class="input-field col s6 m6 l6">
@@ -108,6 +110,19 @@
                                 th:text="${item.name}"></option>
                     </select>
                     <label for="machineID">所属广告机</label>
+                </div>
+
+                <div class="input-field col s12 m12 l12" th:if="${loginUser.roleID==1}">
+                    <i class="material-icons prefix">account_circle</i>
+                    <!--/*@thymesVar id="dropdownUserList" type="java.util.List<com.xmlan.machine.module.user.entity.SimpleUser>"*/-->
+                    <!--/*@thymesVar id="adUsername" type="java.lang.String"*/-->
+                    <select id="userID" name="userID">
+                        <option th:value="${advertisement.userID}" th:text="${adUsername}"
+                                disabled="disabled" selected="selected"></option>
+                        <option th:each="item : ${dropdownUserList}" th:value="*{item.id}"
+                                th:text="*{item.username}"></option>
+                    </select>
+                    <label for="userID">所属用户</label>
                 </div>
 
                 <div class="input-field col s12 m12 l12">
@@ -158,6 +173,10 @@
             closeOnSelect: true
         });
         $("#machineID").material_select();
+        var roleID = '[[${loginUser.roleID}]]';
+        if (roleID === '1') {
+            $("#userID").material_select();
+        }
         var message = '[[${message}]]';
         if (message !== '') {
             Materialize.toast(message, 5000);

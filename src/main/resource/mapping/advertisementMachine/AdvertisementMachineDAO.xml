@@ -58,7 +58,7 @@
             <if test="address != null and address != ''">
                 t.address like concat('%',#{address},'%')
             </if>
-            <if test="addTime != null and addTime != ''">
+            <if test="addTime != null and addTime != '' and addTime != ' '">
                 t.addTime like concat('%',#{addTime},'%')
             </if>
             <if test="codeNumber != null and codeNumber != ''">
