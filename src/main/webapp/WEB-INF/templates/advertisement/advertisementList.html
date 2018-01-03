@@ -135,11 +135,11 @@
         <table class="highlight responsive-table">
             <thead>
             <tr>
-                <th>名称</th>
-                <th>播放时间</th>
-                <th>加入时间</th>
+                <th width="25%">名称</th>
+                <th width="10%">播放时间</th>
+                <th width="15%">加入时间</th>
                 <th>所属机器</th>
-                <th class="hide-on-med-and-down"></th>
+                <th class="hide-on-med-and-down" width="20%"></th>
                 <th class="hide-on-large-only"></th>
             </tr>
             </thead>
@@ -147,7 +147,7 @@
             <tr th:each="item:${page.list}">
                 <td th:text="*{item.name}">name</td>
                 <td th:text="*{item.time}">time</td>
-                <td th:text="*{item.addTime}">addTime</td>
+                <td th:text="*{#strings.substring(item.addTime,0,10)}">addTime</td>
                 <th:block th:each="machine:${machineList}">
                     <td th:if="${machine.id==item.machineID}" th:text="*{machine.name}">machineID</td>
                 </th:block>
@@ -269,9 +269,9 @@
     </div>
 
     <div id="upload-new-image-or-video" class="modal modal-fixed-footer">
+        <input id="upload-target-id" type="hidden"/>
         <form id="upload-image-or-video-form" method="post" enctype="multipart/form-data" action="#"
               onsubmit="return uploadImageOrVideo();">
-            <input id="upload-target-id" type="hidden"/>
             <div class="modal-content">
                 <h4>上传</h4>
                 <div class="col s12 m12 l12">

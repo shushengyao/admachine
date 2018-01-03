@@ -23,9 +23,9 @@ class UploadUtils {
 
     static String uploadImages(HttpServletRequest request) {
         def imagePath = new File(Global.imagePath)
-        imagePath.exists() ?: imagePath.mkdirs()
+        if (!imagePath.exists()) imagePath.mkdirs()
         def videoPath = new File(Global.videoPath)
-        videoPath.exists() ?: videoPath.mkdirs()
+        if (!videoPath.exists()) videoPath.mkdirs()
 
         Map<String, List<String>> json = Maps.newHashMap()
         List<String> fileList = Lists.newArrayList()
@@ -36,28 +36,27 @@ class UploadUtils {
             Iterator iterator = multiRequest.fileNames // 获取multiRequest的全部文件名
             int i = 1 // 编号计数器
             while (iterator.hasNext()) { // 遍历所有文件
-                MultipartFile file = multiRequest.getFile((++iterator).toString())
+                MultipartFile file = multiRequest.getFile(iterator.next().toString())
                 try {
                     String extension = file.originalFilename.substring(file.originalFilename.lastIndexOf('.'))
                     if (file != null && isMedia(file.originalFilename)) {
-                        // 日期_文件编号.后缀名
-                        String filename = "${DateUtils.GetDate('yyyy.MM.dd.HH.mm.ss_No')}${i}${extension}"
+                        String filename = "${DateUtils.GetDate('yyyy-MM-dd_HH-mm-ss')}_No${i}${extension}"
                         try { // 存储文件
                             if (isImage(extension)) {
                                 file.transferTo(new File("${Global.imagePath}/${filename}"))
-                            }
-                            if (isVideo(extension)) {
+                                fileList.add "${Global.apacheServer}/${Global.imagePath}/${filename}".toString()
+                            } else if (isVideo(extension)) {
                                 file.transferTo(new File("${Global.videoPath}/${filename}"))
+                                fileList.add "${Global.apacheServer}/${Global.videoPath}/${filename}".toString()
                             }
                         } catch (IOException e) {
                             logger.debug e
                         }
-                        fileList.add "${Global.apacheServer}/${filename}"
                         i++
                         logger.trace "Added media: ${filename}"
                     }
                 } catch (StringIndexOutOfBoundsException ignored) {
-                    logger.error "没有选中文件！"
+                    logger.info "没有选中文件！"
                 }
             }
         }

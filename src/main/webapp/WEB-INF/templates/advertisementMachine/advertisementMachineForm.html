@@ -110,11 +110,12 @@
 
                 <div class="input-field col s6 m6 l6">
                     <i class="material-icons prefix">date_range</i>
-                    <input id="addTime" name="addTime" type="text" placeholder="选择加入时间" readonly="readonly"
+                    <input id="addTime-ro" name="addTime" type="text" placeholder="选择加入时间" readonly="readonly"
                            th:value="${machine.addTime}" th:if="${machine.addTime!=' '}"/>
+                    <label for="addTime-ro" th:if="${machine.addTime!=' '}">加入时间</label>
                     <input id="addTime" name="addTime" type="text" class="date-picker" placeholder="选择加入时间"
                            th:value="${machine.addTime==' '?'':machine.addTime}" th:if="${machine.addTime==' '}"/>
-                    <label for="addTime">加入时间</label>
+                    <label for="addTime" th:if="${machine.addTime==' '}">加入时间</label>
                 </div>
                 <div class="input-field col s6 m6 l6">
                     <i class="material-icons prefix">code</i>

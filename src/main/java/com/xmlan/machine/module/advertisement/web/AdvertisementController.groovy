@@ -14,15 +14,8 @@ import com.xmlan.machine.module.advertisement.service.AdvertisementService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
-import org.springframework.web.bind.annotation.ModelAttribute
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RequestParam
-import org.springframework.web.bind.annotation.ResponseBody
-import org.springframework.web.context.support.RequestHandledEvent
+import org.springframework.web.bind.annotation.*
 import org.springframework.web.servlet.mvc.support.RedirectAttributes
-import org.springframework.web.servlet.support.RequestContextUtils
-import org.springframework.web.servlet.theme.SessionThemeResolver
 
 import javax.servlet.http.HttpServletRequest
 
@@ -129,8 +122,14 @@ class AdvertisementController extends BaseController {
     }
 
     @RequestMapping(value = '/uploadMedia/{id}')
-    String uploadMedia(@PathVariable String id) {
-        service.uploadMedia(id, request)
+    String uploadMedia(@PathVariable String id, HttpServletRequest httpServletRequest, RedirectAttributes attributes) {
+        def responseCode = service.uploadMedia(id, httpServletRequest)
+        if (responseCode == DONE) {
+            addMessage attributes, "上传成功"
+        }
+        if (responseCode == FAILURE) {
+            addMessage attributes, "上传失败，文件类型错误"
+        }
         "redirect:$adminPath/advertisement/list/1"
     }
 

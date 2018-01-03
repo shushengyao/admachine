@@ -1,6 +1,7 @@
 package com.xmlan.machine.module.advertisement.service
 
 import com.xmlan.machine.common.base.BaseService
+import com.xmlan.machine.common.util.JsonUtils
 import com.xmlan.machine.common.util.UploadUtils
 import com.xmlan.machine.module.advertisement.dao.AdvertisementDAO
 import com.xmlan.machine.module.advertisement.entity.Advertisement
@@ -18,14 +19,16 @@ import javax.servlet.http.HttpServletRequest
 class AdvertisementService extends BaseService<Advertisement, AdvertisementDAO> {
 
     int uploadMedia(String id, HttpServletRequest request) {
-        def advertisement = dao.get(id)
-        def json = UploadUtils.uploadImages(request)
-        if (json != '[]') {
-            println json
-            return DONE
-        } else {
+        Advertisement advertisement = dao.get(id)
+        String jsonString = UploadUtils.uploadImages(request)
+        if (jsonString == '[]') {
             return FAILURE
         }
+        def json = JsonUtils.fromJsonString(jsonString, Map.class) as Map
+        def list = json.get(UploadUtils.MEDIA_KEY) as List<String>
+        advertisement.url = list.get(0)
+        update(advertisement)
+        return DONE
     }
 
 }
