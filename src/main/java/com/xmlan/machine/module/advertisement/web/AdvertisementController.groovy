@@ -76,13 +76,12 @@ class AdvertisementController extends BaseController {
         List<Advertisement> list = service.findList advertisement, pageNo
         PageInfo<Advertisement> page = new PageInfo<>(list)
         model.addAttribute "page", page
-        model.addAttribute "dropdownList", AdvertisementMachineCache.dropdownAdvertisementMachineList
+        model.addAttribute "machineList", AdvertisementMachineCache.dropdownAdvertisementMachineList
         // endregion
 
         // region 搜索条件继承
         model.addAttribute "name", advertisement.name
         model.addAttribute "machineID", advertisement.machineID
-        model.addAttribute "machineName", AdvertisementMachineCache.getMachineNameByID(advertisement.machineID)
         model.addAttribute "time", advertisement.time
         model.addAttribute "addTime", advertisement.addTime
         // endregion
@@ -93,10 +92,8 @@ class AdvertisementController extends BaseController {
     @RequestMapping(value = "/form")
     String form(Advertisement advertisement, Model model) {
         model.addAttribute "advertisement", advertisement
-        model.addAttribute "dropdownList", AdvertisementMachineCache.dropdownAdvertisementMachineList
-        model.addAttribute "machineName", AdvertisementMachineCache.getMachineNameByID(advertisement.machineID)
-        model.addAttribute "dropdownUserList", UserCache.dropdownUserList
-        model.addAttribute "adUsername", UserCache.get(advertisement.userID.toString()).username
+        model.addAttribute "machineList", AdvertisementMachineCache.dropdownAdvertisementMachineList
+        model.addAttribute "userList", UserCache.dropdownUserList
         "advertisement/advertisementForm"
     }
 

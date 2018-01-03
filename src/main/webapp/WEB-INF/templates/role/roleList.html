@@ -10,8 +10,15 @@
     <link rel="shoutcut icon" type="image/x-icon" href="/favicon.ico" media="all"/>
     <title>角色 - 广告机管理后台</title>
 </head>
+
+<!--/* <editor-fold desc="define"> */-->
 <!--/*@thymesVar id="adminPath" type="java.lang.String"*/-->
 <!--/*@thymesVar id="loginUser" type="com.xmlan.machine.module.user.entity.User"*/-->
+<!--/*@thymesVar id="page" type="com.github.pagehelper.PageInfo<com.xmlan.machine.module.role.entity.Role>"*/-->
+<!--/*@thymesVar id="name" type="java.lang.String"*/-->
+<!--/*@thymesVar id="userCount" type="java.util.List<com.xmlan.machine.module.role.entity.RoleCount>"*/-->
+<!--/* </editor-fold> */-->
+
 <body>
 <header>
     <nav style="background-color: #37474f;z-index: 1;">
@@ -60,9 +67,6 @@
     </nav>
 </header>
 
-<!--/*@thymesVar id="page" type="com.github.pagehelper.PageInfo<com.xmlan.machine.module.role.entity.Role>"*/-->
-<!--/*@thymesVar id="searchName" type="java.lang.String"*/-->
-<!--/*@thymesVar id="userCount" type="java.util.List<com.xmlan.machine.module.role.entity.RoleCount>"*/-->
 <main>
     <div id="main-content" class="container">
         <h5 class="title">角色列表</h5>
@@ -81,7 +85,7 @@
                                 <div class="col s12 m10 l10 center">
                                     <div class="input-field">
                                         <input id="name" name="name" type="text" placeholder="输入角色名称"
-                                               th:value="${searchName}"/>
+                                               th:value="${name}"/>
                                         <label for="name">按角色名称</label>
                                     </div>
                                 </div>
@@ -177,7 +181,7 @@
                     <a href="#"><i class="material-icons">chevron_left</i></a>
                 </li>
                 <li th:if="${page.hasPreviousPage}" class="waves-effect">
-                    <a th:href="@{${adminPath}+'/role/list/'+${page.prePage}+'?name='+${searchName}}"><i
+                    <a th:href="@{${adminPath}+'/role/list/'+${page.prePage}+'?name='+${name}}"><i
                             class="material-icons">chevron_left</i></a>
                 </li>
 
@@ -186,8 +190,7 @@
                         <a href="#" th:text="${number}"></a>
                     </li>
                     <li th:if="${number!=page.pageNum}" class="waves-effect">
-                        <a th:href="@{${adminPath}+'/role/list/'+${number}+'?name='+${searchName}}"
-                           th:text="${number}"></a>
+                        <a th:href="@{${adminPath}+'/role/list/'+${number}+'?name='+${name}}" th:text="${number}"></a>
                     </li>
                 </th:block>
 
@@ -195,7 +198,7 @@
                     <a href="#"><i class="material-icons">chevron_right</i></a>
                 </li>
                 <li th:if="${page.hasNextPage}" class="waves-effect">
-                    <a th:href="@{${adminPath}+'/role/list/'+${page.nextPage}+'?name='+${searchName}}"><i
+                    <a th:href="@{${adminPath}+'/role/list/'+${page.nextPage}+'?name='+${name}}"><i
                             class="material-icons">chevron_right</i></a>
                 </li>
             </ul>
@@ -207,21 +210,12 @@
     <div id="detail-modal" class="modal modal-fixed-footer">
         <div class="modal-content">
             <h4>详情</h4>
-            <div class="row">
-                <div class="col s12 m6 l6">
-                    <h6>角色编号</h6>
-                    <p id="detail-item-id">id</p>
-                </div>
-                <div class="col s12 m6 l6">
-                    <h6>角色名</h6>
-                    <p id="detail-item-name">name</p>
-                </div>
-
-                <div class="col s12 m12 l12">
-                    <h6>备注</h6>
-                    <p id="detail-item-remark">remark</p>
-                </div>
-            </div>
+            <h6 class="green-text text-darken-2">角色编号</h6>
+            <p id="detail-item-id">id</p>
+            <h6 class="green-text text-darken-2">角色名</h6>
+            <p id="detail-item-name">name</p>
+            <h6 class="green-text text-darken-2">备注</h6>
+            <p id="detail-item-remark">remark</p>
         </div>
         <div class="modal-footer">
             <a href="#" class="modal-action modal-close waves-effect waves-green btn-flat">关闭</a>

@@ -89,9 +89,8 @@ class AdvertisementMachineController extends BaseController {
         if (StringUtils.isBlank(advertisementMachine.codeNumber)) {
             advertisementMachine.codeNumber = IDUtils.UUID()
         }
-        model.addAttribute "adMachineUsername", userService.get(advertisementMachine.userID.toString())?.username
-        model.addAttribute "dropdownUserList", UserCache.dropdownUserList
-        model.addAttribute "advertisementMachine", advertisementMachine
+        model.addAttribute "userList", UserCache.dropdownUserList
+        model.addAttribute "machine", advertisementMachine
         "advertisementMachine/advertisementMachineForm"
     }
 

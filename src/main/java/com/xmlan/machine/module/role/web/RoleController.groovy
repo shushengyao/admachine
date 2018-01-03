@@ -47,9 +47,8 @@ class RoleController extends BaseController {
         List<Role> list = service.findList role, pageNo // 查询
         PageInfo<Role> page = new PageInfo<>(list) // 处理分页数据
         model.addAttribute "page", page
-
         model.addAttribute "userCount", service.getUserCount(list)
-        model.addAttribute "searchName", role.name
+        model.addAttribute "name", role.name
         "role/roleList"
     }
 

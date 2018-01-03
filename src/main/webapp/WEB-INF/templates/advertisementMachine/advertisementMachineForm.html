@@ -10,8 +10,14 @@
     <link rel="shoutcut icon" type="image/x-icon" href="favicon.ico" media="all"/>
     <title>编辑广告机 - 广告机管理后台</title>
 </head>
+
+<!--/* <editor-fold desc="define"> */-->
 <!--/*@thymesVar id="adminPath" type="java.lang.String"*/-->
 <!--/*@thymesVar id="loginUser" type="com.xmlan.machine.module.user.entity.User"*/-->
+<!--/*@thymesVar id="machine" type="com.xmlan.machine.module.advertisementMachine.entity.AdvertisementMachine"*/-->
+<!--/*@thymesVar id="userList" type="java.util.List<com.xmlan.machine.module.user.entity.SimpleUser>"*/-->
+<!--/* </editor-fold> */-->
+
 <body>
 <header>
     <nav style="background-color: #37474f;z-index: 1;">
@@ -59,41 +65,38 @@
         </div>
     </nav>
 </header>
-<!--/*@thymesVar id="advertisementMachine" type="com.xmlan.machine.module.advertisementMachine.entity.AdvertisementMachine"*/-->
-<!--/*@thymesVar id="dropdownUserList" type="java.util.List<com.xmlan.machine.module.user.entity.SimpleUser>"*/-->
+
 <main>
     <div id="main-content" class="container">
         <h5 class="title">
             <a class="btn-flat tooltipped" data-position="bottom" data-delay="50" data-tooltip="返回列表"
-               th:href="@{${adminPath}+'/advertisementMachine/list/1'}"><i
-                    class="material-icons">arrow_back</i></a>
-            <span th:text="'&nbsp;|&nbsp;编辑广告机——'+${advertisementMachine.id==-2?'新增广告机':advertisementMachine.name}"></span>
+               th:href="@{${adminPath}+'/advertisementMachine/list/1'}"><i class="material-icons">arrow_back</i></a>
+            <span th:text="'&nbsp;|&nbsp;编辑广告机——'+${machine.id==-2?'新增广告机':machine.name}"></span>
         </h5>
         <ul>
             <li class="divider"></li>
         </ul>
 
-        <form th:action="@{${adminPath}+'/advertisementMachine/save/'+${advertisementMachine.id}}" method="post">
+        <form th:action="@{${adminPath}+'/advertisementMachine/save/'+${machine.id}}" method="post">
             <input id="id" name="id" type="hidden" disabled="disabled" class="validate" required="required"
-                   th:value="${advertisementMachine.id}"/>
+                   th:value="${machine.id}"/>
             <input id="longitude" name="longitude" type="hidden" disabled="disabled" class="validate"
-                   th:value="${advertisementMachine.longitude}"/>
+                   th:value="${machine.longitude}"/>
             <input id="latitude" name="latitude" type="hidden" disabled="disabled" class="validate"
-                   th:value="${advertisementMachine.latitude}"/>
+                   th:value="${machine.latitude}"/>
             <div class="row">
                 <div class="input-field col s6 m6 l6">
                     <i class="material-icons prefix">create</i>
                     <input id="name" name="name" type="text" class="validate" placeholder="输入名称" required="required"
-                           th:value="${advertisementMachine.name}"/>
+                           th:value="${machine.name}"/>
                     <label for="name">广告机名称</label>
                 </div>
                 <div class="input-field col s6 m6 l6">
                     <i class="material-icons prefix">account_circle</i>
                     <select id="userID" name="userID">
-                        <option th:each="item:${dropdownUserList}" th:value="*{item.id}" th:text="*{item.username}"
-                                th:if="${item.id==advertisementMachine.userID}" selected="selected"></option>
-                        <option th:each="item:${dropdownUserList}" th:value="*{item.id}"
-                                th:text="*{item.username}"></option>
+                        <option th:each="item:${userList}" th:value="*{item.id}" th:text="*{item.username}"
+                                th:if="${item.id==machine.userID}" selected="selected"></option>
+                        <option th:each="item:${userList}" th:value="*{item.id}" th:text="*{item.username}"></option>
                     </select>
                     <label for="userID">所属用户</label>
                 </div>
@@ -101,30 +104,29 @@
                 <div class="input-field col s12 m12 l12">
                     <i class="material-icons prefix">place</i>
                     <input id="address" name="address" type="text" class="validate" placeholder="输入地址"
-                           th:value="${advertisementMachine.address}"/>
+                           th:value="${machine.address}"/>
                     <label for="address">广告机地址</label>
                 </div>
 
                 <div class="input-field col s6 m6 l6">
                     <i class="material-icons prefix">date_range</i>
                     <input id="addTime" name="addTime" type="text" placeholder="选择加入时间" readonly="readonly"
-                           th:value="${advertisementMachine.addTime}" th:if="${advertisementMachine.addTime!=' '}"/>
+                           th:value="${machine.addTime}" th:if="${machine.addTime!=' '}"/>
                     <input id="addTime" name="addTime" type="text" class="date-picker" placeholder="选择加入时间"
-                           th:value="${advertisementMachine.addTime==' '?'':advertisementMachine.addTime}"
-                           th:if="${advertisementMachine.addTime==' '}"/>
+                           th:value="${machine.addTime==' '?'':machine.addTime}" th:if="${machine.addTime==' '}"/>
                     <label for="addTime">加入时间</label>
                 </div>
                 <div class="input-field col s6 m6 l6">
                     <i class="material-icons prefix">code</i>
                     <input id="codeNumber" name="codeNumber" type="text" readonly="readonly" class="validate"
-                           placeholder="" th:value="${advertisementMachine.codeNumber}"/>
+                           placeholder="" th:value="${machine.codeNumber}"/>
                     <label for="codeNumber">机器识别码</label>
                 </div>
 
                 <div class="input-field col s12 m12 l12">
                     <i class="material-icons prefix">insert_comment</i>
                     <textarea id="remark" name="remark" class="materialize-textarea" placeholder=""
-                              th:text="${advertisementMachine.remark}"></textarea>
+                              th:text="${machine.remark}"></textarea>
                     <label for="remark">备注</label>
                 </div>
             </div>

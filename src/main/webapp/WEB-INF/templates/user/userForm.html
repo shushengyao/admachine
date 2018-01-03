@@ -10,8 +10,14 @@
     <link rel="shoutcut icon" type="image/x-icon" href="favicon.ico" media="all"/>
     <title>编辑广告 - 广告机管理后台</title>
 </head>
+
+<!--/* <editor-fold desc="define"> */-->
 <!--/*@thymesVar id="adminPath" type="java.lang.String"*/-->
 <!--/*@thymesVar id="loginUser" type="com.xmlan.machine.module.user.entity.User"*/-->
+<!--/*@thymesVar id="user" type="com.xmlan.machine.module.user.entity.User"*/-->
+<!--/*@thymesVar id="roleList" type="java.util.List<com.xmlan.machine.module.role.entity.Role>"*/-->
+<!--/* </editor-fold> */-->
+
 <body>
 <header>
     <nav style="background-color: #37474f;z-index: 1;">
@@ -59,8 +65,7 @@
         </div>
     </nav>
 </header>
-<!--/*@thymesVar id="user" type="com.xmlan.machine.module.user.entity.User"*/-->
-<!--/*@thymesVar id="dropdownRoleList" type="java.util.List<com.xmlan.machine.module.role.entity.Role>"*/-->
+
 <main>
     <div id="main-content" class="container">
         <h5 class="title">
@@ -90,31 +95,34 @@
                     <th:block th:switch="${user.id}">
                         <input th:case="-2" id="authname" name="authname" th:value="${user.authname}" type="text"
                                class="text" placeholder="输入登录账号" required="required"/>
-                        <input th:case="*" id="authname" name="authname" th:value="${user.authname}" type="text"
+                        <label th:case="-2" for="authname">登录名</label>
+                        <input th:case="*" id="authname-ro" name="authname" th:value="${user.authname}" type="text"
                                class="text" readonly="readonly" placeholder="输入登录账号" required="required"/>
+                        <label th:case="*" for="authname-ro">登录名</label>
                     </th:block>
-                    <label for="authname">登录名</label>
                 </div>
                 <div class="input-field col s6 m3 l3">
                     <i class="material-icons prefix">lock_outline</i>
                     <th:block th:switch="${user.id}">
                         <input th:case="-2" id="password" name="password" th:value="${user.password}" type="password"
                                class="text" placeholder="输入登录密码" required="required"/>
-                        <input th:case="*" id="password" name="password" th:value="${user.password}" type="password"
+                        <label th:case="-2" for="password">登录密码</label>
+                        <input th:case="*" id="password-ro" name="password" th:value="${user.password}" type="password"
                                class="text" placeholder="输入登录密码" required="required" readonly="readonly"/>
+                        <label th:case="*" for="password-ro">登录密码</label>
                     </th:block>
-                    <label for="password">登录密码</label>
                 </div>
                 <div class="input-field col s6 m3 l3">
                     <i class="material-icons prefix">lock</i>
                     <th:block th:switch="${user.id}">
                         <input th:case="-2" id="confirmPassword" name="confirmPassword" th:value="${user.password}"
                                type="password" class="text" placeholder="重新确认密码" required="required"/>
-                        <input th:case="*" id="confirmPassword" name="confirmPassword" th:value="${user.password}"
+                        <label th:case="-2" for="confirmPassword">确认密码</label>
+                        <input th:case="*" id="confirmPassword-ro" name="confirmPassword" th:value="${user.password}"
                                type="password" class="text" placeholder="重新确认密码" required="required"
                                readonly="readonly"/>
+                        <label th:case="*" for="confirmPassword-ro">确认密码</label>
                     </th:block>
-                    <label for="confirmPassword">确认密码</label>
                 </div>
 
                 <div class="input-field col s12 m3 l3">
@@ -131,9 +139,9 @@
                 <div class="input-field col s12 m3 l3">
                     <i class="material-icons prefix">group</i>
                     <select id="roleID" name="roleID">
-                        <option th:each="item:${dropdownRoleList}" th:value="*{item.id}" th:text="*{item.name}"
+                        <option th:each="item:${roleList}" th:value="*{item.id}" th:text="*{item.name}"
                                 th:if="${item.id==user.roleID}" disabled="disabled" selected="selected"></option>
-                        <option th:each="item:${dropdownRoleList}" th:value="*{item.id}"
+                        <option th:each="item:${roleList}" th:value="*{item.id}"
                                 th:text="*{item.name}"></option>
                     </select>
                     <label for="roleID">所属角色</label>

@@ -10,8 +10,18 @@
     <link rel="shoutcut icon" type="image/x-icon" href="/favicon.ico" media="all"/>
     <title>广告 - 广告机管理后台</title>
 </head>
+
+<!--/* <editor-fold desc="define"> */-->
 <!--/*@thymesVar id="adminPath" type="java.lang.String"*/-->
 <!--/*@thymesVar id="loginUser" type="com.xmlan.machine.module.user.entity.User"*/-->
+<!--/*@thymesVar id="page" type="com.github.pagehelper.PageInfo<com.xmlan.machine.module.advertisement.entity.Advertisement>"*/-->
+<!--/*@thymesVar id="machineList" type="java.util.List<com.xmlan.machine.module.advertisementMachine.entity.SimpleAdvertisementMachine>"*/-->
+<!--/*@thymesVar id="name" type="java.lang.String"*/-->
+<!--/*@thymesVar id="machineID" type="java.lang.Integer"*/-->
+<!--/*@thymesVar id="time" type="java.lang.Integer"*/-->
+<!--/*@thymesVar id="addTime" type="java.lang.String"*/-->
+<!--/* </editor-fold> */-->
+
 <body>
 <header>
     <nav style="background-color: #37474f;z-index: 1;">
@@ -59,19 +69,15 @@
         </div>
     </nav>
 </header>
-<!--/*@thymesVar id="page" type="com.github.pagehelper.PageInfo<com.xmlan.machine.module.advertisement.entity.Advertisement>"*/-->
-<!--/*@thymesVar id="dropdownList" type="java.util.List<com.xmlan.machine.module.advertisementMachine.entity.SimpleAdvertisementMachine>"*/-->
-<!--/*@thymesVar id="name" type="java.lang.String"*/-->
-<!--/*@thymesVar id="machineID" type="java.lang.Integer"*/-->
-<!--/*@thymesVar id="machineName" type="java.lang.String"*/-->
-<!--/*@thymesVar id="time" type="java.lang.Integer"*/-->
-<!--/*@thymesVar id="addTime" type="java.lang.String"*/-->
+
 <main>
     <div id="main-content" class="container">
+        <!--/* <editor-fold desc="header"> */-->
         <h5 class="title">广告列表</h5>
         <ul>
             <li class="divider"></li>
         </ul>
+        <!--/* </editor-fold> */-->
 
         <!--/* <editor-fold desc="search box"> */-->
         <div id="search-box">
@@ -88,10 +94,11 @@
                                     </div>
                                     <div class="input-field col s6 m3 l3">
                                         <select id="machineID" name="machineID">
-                                            <option th:value="${machineID}" th:text="${machineName}" disabled="disabled"
+                                            <option th:each="item:${machineList}" th:value="${item.id}"
+                                                    th:if="${machineID==item.id}" th:text="${item.name}"
                                                     selected="selected"></option>
                                             <option value="-2">不选择</option>
-                                            <option th:each="item:${dropdownList}" th:value="${item.id}"
+                                            <option th:each="item:${machineList}" th:value="${item.id}"
                                                     th:text="${item.name}"></option>
                                         </select>
                                         <label for="machineID">按所属广告机</label>
@@ -141,7 +148,7 @@
                 <td th:text="*{item.name}">name</td>
                 <td th:text="*{item.time}">time</td>
                 <td th:text="*{item.addTime}">addTime</td>
-                <th:block th:each="machine:${dropdownList}">
+                <th:block th:each="machine:${machineList}">
                     <td th:if="${machine.id==item.machineID}" th:text="*{machine.name}">machineID</td>
                 </th:block>
                 <td width="18%" class="right-align hide-on-med-and-down">
@@ -237,32 +244,24 @@
         <!--/* </editor-fold> */-->
     </div>
 
-    <!-- <editor-fold desc="Modal"> -->
+    <!--/* <editor-fold desc="modal"> */-->
     <div id="detail-modal" class="modal modal-fixed-footer">
         <div class="modal-content">
             <h4>详情</h4>
-            <div class="row">
-                <div class="col s12 m6 l6">
-                    <h6>广告ID</h6>
-                    <p id="detail-item-id">id</p>
-                    <h6>名称</h6>
-                    <p id="detail-item-name">name</p>
-                    <h6>所属广告机</h6>
-                    <p id="detail-item-machine-id">machineID</p>
-                </div>
-                <div class="col s12 m6 l6">
-                    <h6>播放时间</h6>
-                    <p id="detail-item-time">time</p>
-                    <h6>加入时间</h6>
-                    <p id="detail-item-add-time">addTime</p>
-                </div>
-                <div class="col s12 m12 l12">
-                    <h6>图片/视频</h6>
-                    <p id="detail-item-media">播放内容</p>
-                    <h6>备注</h6>
-                    <p id="detail-item-remark">remark</p>
-                </div>
-            </div>
+            <h6 class="green-text text-darken-2">广告ID</h6>
+            <p id="detail-item-id">id</p>
+            <h6 class="green-text text-darken-2">名称</h6>
+            <p id="detail-item-name">name</p>
+            <h6 class="green-text text-darken-2">所属广告机</h6>
+            <p id="detail-item-machine-id">machineID</p>
+            <h6 class="green-text text-darken-2">播放时间</h6>
+            <p id="detail-item-time">time</p>
+            <h6 class="green-text text-darken-2">加入时间</h6>
+            <p id="detail-item-add-time">addTime</p>
+            <h6 class="green-text text-darken-2">图片/视频</h6>
+            <p id="detail-item-media">播放内容</p>
+            <h6 class="green-text text-darken-2">备注</h6>
+            <p id="detail-item-remark">remark</p>
         </div>
         <div class="modal-footer">
             <a href="#" class="modal-action modal-close waves-effect waves-green btn-flat">关闭</a>
@@ -308,7 +307,7 @@
             </div>
         </form>
     </div>
-    <!-- </editor-fold> -->
+    <!--/* </editor-fold> */-->
 </main>
 
 <footer class="page-footer hide-on-med-and-down"

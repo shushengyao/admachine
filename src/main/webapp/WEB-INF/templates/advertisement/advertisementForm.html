@@ -10,8 +10,13 @@
     <link rel="shoutcut icon" type="image/x-icon" href="favicon.ico" media="all"/>
     <title>编辑广告 - 广告机管理后台</title>
 </head>
+
 <!--/*@thymesVar id="adminPath" type="java.lang.String"*/-->
 <!--/*@thymesVar id="loginUser" type="com.xmlan.machine.module.user.entity.User"*/-->
+<!--/*@thymesVar id="advertisement" type="com.xmlan.machine.module.advertisement.entity.Advertisement"*/-->
+<!--/*@thymesVar id="machineList" type="java.util.List<com.xmlan.machine.module.advertisementMachine.entity.SimpleAdvertisementMachine>"*/-->
+<!--/*@thymesVar id="userList" type="java.util.List<com.xmlan.machine.module.user.entity.SimpleUser>"*/-->
+
 <body>
 <header>
     <nav style="background-color: #37474f;z-index: 1;">
@@ -59,8 +64,7 @@
         </div>
     </nav>
 </header>
-<!--/*@thymesVar id="advertisement" type="com.xmlan.machine.module.advertisement.entity.Advertisement"*/-->
-<!--/*@thymesVar id="dropdownList" type="java.util.List<com.xmlan.machine.module.advertisementMachine.entity.SimpleAdvertisementMachine>"*/-->
+
 <main>
     <div id="main-content" class="container">
         <h5 class="title">
@@ -103,24 +107,19 @@
                 <div class="input-field col s6 m6 l6">
                     <i class="material-icons prefix">personal_video</i>
                     <select id="machineID" name="machineID">
-                        <!--/*@thymesVar id="machineName" type="java.lang.String"*/-->
-                        <option th:value="${advertisement.machineID}" th:text="${machineName}" disabled="disabled"
-                                selected="selected"></option>
-                        <option th:each="item:${dropdownList}" th:value="${item.id}"
-                                th:text="${item.name}"></option>
+                        <option th:each="item:${machineList}" th:value="${item.id}" th:text="${item.name}"
+                                th:if="${item.id==advertisement.machineID}" selected="selected"></option>
+                        <option th:each="item:${machineList}" th:value="${item.id}" th:text="${item.name}"></option>
                     </select>
                     <label for="machineID">所属广告机</label>
                 </div>
 
                 <div class="input-field col s12 m12 l12" th:if="${loginUser.roleID==1}">
                     <i class="material-icons prefix">account_circle</i>
-                    <!--/*@thymesVar id="dropdownUserList" type="java.util.List<com.xmlan.machine.module.user.entity.SimpleUser>"*/-->
-                    <!--/*@thymesVar id="adUsername" type="java.lang.String"*/-->
                     <select id="userID" name="userID">
-                        <option th:value="${advertisement.userID}" th:text="${adUsername}"
-                                disabled="disabled" selected="selected"></option>
-                        <option th:each="item : ${dropdownUserList}" th:value="*{item.id}"
-                                th:text="*{item.username}"></option>
+                        <option th:each="item:${userList}" th:value="*{item.id}" th:text="*{item.username}"
+                                th:if="${item.id==advertisement.userID}" selected="selected"></option>
+                        <option th:each="item:${userList}" th:value="*{item.id}" th:text="*{item.username}"></option>
                     </select>
                     <label for="userID">所属用户</label>
                 </div>

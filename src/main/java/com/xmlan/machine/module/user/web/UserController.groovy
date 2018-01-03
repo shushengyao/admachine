@@ -70,20 +70,18 @@ class UserController extends BaseController {
         PageInfo<User> page = new PageInfo<>(list)
         model.addAttribute "page", page
 
-        model.addAttribute "dropdownRoleList", RoleCache.roleList
+        model.addAttribute "roleList", RoleCache.roleList
         model.addAttribute "username", user.username
         model.addAttribute "authname", user.authname
         model.addAttribute "addTime", user.addTime
         model.addAttribute "roleID", user.roleID.toString()
-        model.addAttribute "roleName", RoleCache.get(user.roleID.toString())?.name
         "user/userList"
     }
 
     @RequestMapping(value = '/form')
     String form(User user, Model model) {
         model.addAttribute "user", user
-        model.addAttribute "dropdownRoleList", RoleCache.roleList
-        model.addAttribute "roleName", RoleCache.get(user.roleID.toString())?.name
+        model.addAttribute "roleList", RoleCache.roleList
         "user/userForm"
     }
 
