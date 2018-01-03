@@ -41,7 +41,7 @@
                 t.name like concat('%',#{name},'%')
             </if>
             <if test="remark != null and remark != ''">
-                t.remark like concat('%',#{remark},'%')
+                and t.remark like concat('%',#{remark},'%')
             </if>
         </where>
         <choose>

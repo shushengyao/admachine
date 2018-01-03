@@ -59,7 +59,7 @@ class AdvertisementMachineController extends BaseController {
     String list(AdvertisementMachine advertisementMachine, @PathVariable int pageNo, Model model) {
         // region 格式化查询条件
         if (StringUtils.isNotBlank(advertisementMachine.addTime) && advertisementMachine.addTime != StringUtils.SPACE) {
-            advertisementMachine.addTime = advertisementMachine.addTime.substring 0, 10
+            advertisementMachine.addTime = "${advertisementMachine.addTime.substring(0, 10)} 00:00:00".toString()
         }
         if (SessionUtils.GetAdmin(request).roleID != ADMIN_ROLE_ID) {
             advertisementMachine.userID = SessionUtils.GetAdmin(request).id

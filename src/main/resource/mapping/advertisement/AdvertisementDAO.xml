@@ -51,19 +51,19 @@
                 t.name like concat('%',#{name},'%')
             </if>
             <if test="time != null and time != '' and time != 0">
-                t.time = #{time}
+                and t.time = #{time}
             </if>
             <if test="machineID != null and machineID != '' and machineID != '-2'">
-                t.machineID = #{machineID}
+                and t.machineID = #{machineID}
             </if>
             <if test="userID != null and userID != ''">
-                t.userID = #{userID}
+                and t.userID = #{userID}
             </if>
-            <if test="addTime != null and addTime != ''">
-                t.addTime like concat('%',#{addTime},'%')
+            <if test='addTime != null and addTime != "" and addTime != " "'>
+                and t.addTime between #{addTime} and concat(left(#{addTime}, 10), ' 23:59:59')
             </if>
             <if test="remark != null and remark != ''">
-                t.remark like concat('%',#{remark},'%')
+                and t.remark like concat('%',#{remark},'%')
             </if>
         </where>
         <choose>

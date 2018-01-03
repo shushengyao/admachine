@@ -57,6 +57,9 @@ class AdvertisementController extends BaseController {
     @RequestMapping(value = "/list/{pageNo}")
     String list(Advertisement advertisement, @PathVariable int pageNo, Model model) {
         // region 格式化查询条件
+        if (StringUtils.isNotBlank(advertisement.addTime)) {
+            advertisement.addTime = "${advertisement.addTime.substring(0, 10)} 00:00:00".toString()
+        }
         if (advertisement.machineID < 1) {
             advertisement.machineID = -2
         }

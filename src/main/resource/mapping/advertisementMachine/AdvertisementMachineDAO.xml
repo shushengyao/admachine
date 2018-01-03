@@ -53,25 +53,25 @@
                 t.userID = #{userID}
             </if>
             <if test="name != null and name != ''">
-                t.name like concat('%',#{name},'%')
+                and t.name like concat('%',#{name},'%')
             </if>
             <if test="address != null and address != ''">
-                t.address like concat('%',#{address},'%')
+                and t.address like concat('%',#{address},'%')
             </if>
-            <if test="addTime != null and addTime != '' and addTime != ' '">
-                t.addTime like concat('%',#{addTime},'%')
+            <if test='addTime != null and addTime != "" and addTime != " "'>
+                and t.addTime between #{addTime} and concat(left(#{addTime}, 10), ' 23:59:59')
             </if>
             <if test="codeNumber != null and codeNumber != ''">
-                t.codeNumber = #{codeNumber}
+                and t.codeNumber = #{codeNumber}
             </if>
             <if test="remark != null and remark != ''">
-                t.remark like concat('%',#{remark},'%')
+                and t.remark like concat('%',#{remark},'%')
             </if>
             <if test="longitude != null and longitude != ''">
-                t.longitude = #{longitude}
+                and t.longitude = #{longitude}
             </if>
             <if test="latitude != null and latitude != ''">
-                t.latitude = #{latitude}
+                and t.latitude = #{latitude}
             </if>
         </where>
         <choose>

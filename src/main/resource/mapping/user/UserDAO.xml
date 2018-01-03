@@ -53,16 +53,16 @@
                 t.username like concat('%',#{username},'%')
             </if>
             <if test="authname != null and authname != ''">
-                t.authname like concat('%',#{authname},'%')
+                and t.authname like concat('%',#{authname},'%')
             </if>
             <if test="roleID != null and roleID != '' and roleID != '-2'">
-                t.roleID = #{roleID}
+                and t.roleID = #{roleID}
             </if>
             <if test="phone != null and phone != ''">
-                t.phone like concat('%',#{phone},'%')
+                and t.phone like concat('%',#{phone},'%')
             </if>
             <if test="remark != null and remark != ''">
-                t.remark like concat('%',#{remark},'%')
+                and t.remark like concat('%',#{remark},'%')
             </if>
         </where>
         <choose>
