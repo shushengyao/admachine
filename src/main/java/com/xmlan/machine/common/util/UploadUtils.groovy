@@ -22,7 +22,12 @@ class UploadUtils {
     public static final String MEDIA_KEY = "media"
 
     static String uploadImages(HttpServletRequest request) {
-        Map<String, List<String>> map = Maps.newHashMap()
+        def imagePath = new File(Global.imagePath)
+        imagePath.exists() ?: imagePath.mkdirs()
+        def videoPath = new File(Global.videoPath)
+        videoPath.exists() ?: videoPath.mkdirs()
+
+        Map<String, List<String>> json = Maps.newHashMap()
         List<String> fileList = Lists.newArrayList()
         CommonsMultipartResolver resolver = new CommonsMultipartResolver(request.session.servletContext)
         if (resolver.isMultipart(request)) { // 检查form中是否带有 enctype="multipart/form-data"
@@ -56,9 +61,9 @@ class UploadUtils {
                 }
             }
         }
-        map.put MEDIA_KEY, fileList
-        logger.trace "map size: ${map.size()}\tfileList size: ${fileList.size()}"
-        return fileList.isEmpty() ? "[]" : JsonUtils.toJsonString(map)
+        json.put MEDIA_KEY, fileList
+        logger.trace "map size: ${json.size()}\tfileList size: ${fileList.size()}"
+        return fileList.isEmpty() ? "[]" : JsonUtils.toJsonString(json)
     }
 
     private static boolean isMedia(String extension) {

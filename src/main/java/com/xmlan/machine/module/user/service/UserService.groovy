@@ -2,11 +2,9 @@ package com.xmlan.machine.module.user.service
 
 import com.xmlan.machine.common.base.BaseService
 import com.xmlan.machine.common.cache.AdvertisementMachineCache
-import com.xmlan.machine.common.util.CacheUtils
 import com.xmlan.machine.common.util.EncryptUtils
 import com.xmlan.machine.common.util.StringUtils
 import com.xmlan.machine.module.advertisementMachine.dao.AdvertisementMachineDAO
-import com.xmlan.machine.module.advertisementMachine.entity.AdvertisementMachine
 import com.xmlan.machine.module.user.dao.UserDAO
 import com.xmlan.machine.module.user.entity.User
 import org.springframework.beans.factory.annotation.Autowired
@@ -53,7 +51,7 @@ class UserService extends BaseService<User, UserDAO> {
                     cacheManager.clearAll()
                     return ADMIN_DONE
                 } else {
-                    return INCORRECT_OLDPASSWD
+                    return INCORRECT_OLD_PASSWD
                 }
             } else {
                 user.password = EncryptUtils.SHA256ForTenTimes(newPasswd)
@@ -62,7 +60,7 @@ class UserService extends BaseService<User, UserDAO> {
                 return DONE
             }
         } else {
-            return INCORRECT_REPASSWD
+            return INCORRECT_REPEAT_PASSWD
         }
     }
 

@@ -61,7 +61,7 @@ class AdvertisementMachineController extends BaseController {
         if (StringUtils.isNotBlank(advertisementMachine.addTime) && advertisementMachine.addTime != StringUtils.SPACE) {
             advertisementMachine.addTime = advertisementMachine.addTime.substring 0, 10
         }
-        if (SessionUtils.GetAdmin(request).roleID != 1) {
+        if (SessionUtils.GetAdmin(request).roleID != ADMIN_ROLE_ID) {
             advertisementMachine.userID = SessionUtils.GetAdmin(request).id
         }
         if (advertisementMachine.addTime == StringUtils.SPACE) {
@@ -115,7 +115,7 @@ class AdvertisementMachineController extends BaseController {
 
     @RequestMapping(value = "/delete")
     String delete(AdvertisementMachine advertisementMachine, RedirectAttributes redirectAttributes) {
-        if (service.delete(advertisementMachine) == AdvertisementMachineService.DATABASE_DO_NOTHING) {
+        if (service.delete(advertisementMachine) == DATABASE_DO_NOTHING) {
             addMessage redirectAttributes, "这个操作没有删除任何广告机"
         } else {
             addMessage redirectAttributes, "删除广告机成功"

@@ -6,7 +6,6 @@ import com.xmlan.machine.common.base.BaseController
 import com.xmlan.machine.common.cache.RoleCache
 import com.xmlan.machine.common.cache.UserCache
 import com.xmlan.machine.common.util.DateUtils
-import com.xmlan.machine.common.util.JsonUtils
 import com.xmlan.machine.common.util.StringUtils
 import com.xmlan.machine.module.role.service.RoleService
 import com.xmlan.machine.module.user.entity.User
@@ -143,14 +142,14 @@ class UserController extends BaseController {
         if (responseCode == DONE) {
             return "修改完毕"
         }
-        if (responseCode == INCORRECT_OLDPASSWD) {
+        if (responseCode == INCORRECT_OLD_PASSWD) {
             if (StringUtils.isBlank(oldPasswd)) {
                 return "没有填原密码"
             } else {
                 return "原密码不匹配"
             }
         }
-        if (responseCode == INCORRECT_REPASSWD) {
+        if (responseCode == INCORRECT_REPEAT_PASSWD) {
             return "确认密码和新密码不匹配"
         }
     }

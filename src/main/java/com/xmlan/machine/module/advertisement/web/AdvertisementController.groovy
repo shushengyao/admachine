@@ -106,7 +106,7 @@ class AdvertisementController extends BaseController {
         if (!beanValidator(model, advertisement)) {
             return form(advertisement, model)
         }
-        if (SessionUtils.GetAdmin(request).roleID != 1) {
+        if (SessionUtils.GetAdmin(request).roleID != ADMIN_ROLE_ID) {
             advertisement.userID = SessionUtils.GetAdmin(request).id
         }
         advertisement.addTime = "${advertisement.addTime} ${DateUtils.GetTime()}"
@@ -131,5 +131,10 @@ class AdvertisementController extends BaseController {
         "redirect:$adminPath/advertisement/list/1"
     }
 
+    @RequestMapping(value = '/uploadMedia/{id}')
+    String uploadMedia(@PathVariable String id) {
+        service.uploadMedia(id, request)
+        "redirect:$adminPath/advertisement/list/1"
+    }
 
 }

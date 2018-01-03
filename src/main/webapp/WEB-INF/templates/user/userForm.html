@@ -131,10 +131,9 @@
                 <div class="input-field col s12 m3 l3">
                     <i class="material-icons prefix">group</i>
                     <select id="roleID" name="roleID">
-                        <!--/*@thymesVar id="roleName" type="java.lang.String"*/-->
-                        <option th:value="${user.roleID}" th:text="${roleName}"
-                                disabled="disabled" selected="selected"></option>
-                        <option th:each="item : ${dropdownRoleList}" th:value="*{item.id}"
+                        <option th:each="item:${dropdownRoleList}" th:value="*{item.id}" th:text="*{item.name}"
+                                th:if="${item.id==user.roleID}" disabled="disabled" selected="selected"></option>
+                        <option th:each="item:${dropdownRoleList}" th:value="*{item.id}"
                                 th:text="*{item.name}"></option>
                     </select>
                     <label for="roleID">所属角色</label>

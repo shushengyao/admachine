@@ -26,7 +26,7 @@ class CacheTask {
         AdvertisementCache.initialCacheMap()
         UserCache.initialCacheMap()
         RoleCache.initialCacheMap()
-        logger.trace "Cache refreshed."
+        logger.info "Cache refreshed."
     }
 
 }

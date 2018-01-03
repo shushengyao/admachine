@@ -8,6 +8,7 @@ import org.aspectj.lang.annotation.Aspect;
 import org.springframework.stereotype.Component;
 
 /**
+ * 切面记录
  * Created by Ayakura Yuki on 2017/7/24.
  */
 @Component

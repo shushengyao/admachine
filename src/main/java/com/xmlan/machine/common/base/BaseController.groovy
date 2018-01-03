@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ModelAttribute
 import org.springframework.web.servlet.mvc.support.RedirectAttributes
 
 import javax.servlet.http.HttpServletRequest
+import javax.servlet.http.HttpServletResponse
 import javax.validation.ConstraintViolationException
 import javax.validation.Validator
 import java.util.List
@@ -20,24 +21,9 @@ import java.util.List
  * Created by ayakurayuki on 2017/12/11-14:41.
  * Package: com.xmlan.machine.common.base
  */
-abstract class BaseController {
+abstract class BaseController extends BaseBean {
 
     protected Logger logger = LogManager.getLogger(getClass())
-
-    public static final int DONE = 0
-    public static final int ADMIN_DONE = 10
-    public static final int INCORRECT_REPASSWD = 11
-    public static final int INCORRECT_OLDPASSWD = 12
-
-    /**
-     * 没有修改数据库
-     */
-    public static final int DATABASE_DO_NOTHING = -1
-
-    /**
-     * 新的记录标记
-     */
-    protected final int NEW_INSERT_ID = -2
 
     /**
      * 配置的管理页面根路径
@@ -60,6 +46,9 @@ abstract class BaseController {
 
     @Autowired
     protected HttpServletRequest request
+
+    @Autowired
+    protected HttpServletResponse response
 
     /**
      * 添加临时消息

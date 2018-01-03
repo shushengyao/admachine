@@ -60,6 +60,7 @@
     </nav>
 </header>
 <!--/*@thymesVar id="advertisementMachine" type="com.xmlan.machine.module.advertisementMachine.entity.AdvertisementMachine"*/-->
+<!--/*@thymesVar id="dropdownUserList" type="java.util.List<com.xmlan.machine.module.user.entity.SimpleUser>"*/-->
 <main>
     <div id="main-content" class="container">
         <h5 class="title">
@@ -88,12 +89,10 @@
                 </div>
                 <div class="input-field col s6 m6 l6">
                     <i class="material-icons prefix">account_circle</i>
-                    <!--/*@thymesVar id="dropdownUserList" type="java.util.List<com.xmlan.machine.module.user.entity.SimpleUser>"*/-->
-                    <!--/*@thymesVar id="adMachineUsername" type="java.lang.String"*/-->
                     <select id="userID" name="userID">
-                        <option th:value="${advertisementMachine.userID}" th:text="${adMachineUsername}"
-                                disabled="disabled" selected="selected"></option>
-                        <option th:each="item : ${dropdownUserList}" th:value="*{item.id}"
+                        <option th:each="item:${dropdownUserList}" th:value="*{item.id}" th:text="*{item.username}"
+                                th:if="${item.id==advertisementMachine.userID}" selected="selected"></option>
+                        <option th:each="item:${dropdownUserList}" th:value="*{item.id}"
                                 th:text="*{item.username}"></option>
                     </select>
                     <label for="userID">所属用户</label>
