@@ -13,6 +13,7 @@
 
 <!--/* <editor-fold desc="define"> */-->
 <!--/*@thymesVar id="adminPath" type="java.lang.String"*/-->
+<!--/*@thymesVar id="adminRoleID" type="java.lang.Integer"*/-->
 <!--/*@thymesVar id="loginUser" type="com.xmlan.machine.module.user.entity.User"*/-->
 <!--/*@thymesVar id="page" type="com.github.pagehelper.PageInfo<com.xmlan.machine.module.role.entity.Role>"*/-->
 <!--/*@thymesVar id="name" type="java.lang.String"*/-->
@@ -20,8 +21,8 @@
 <!--/* </editor-fold> */-->
 
 <body>
-<header>
-    <nav style="background-color: #37474f;z-index: 1;">
+<header style="z-index: 1;">
+    <nav class="z-depth-2 blue-grey darken-4">
         <div class="nav-wrapper">
             <ul class="left">
                 <li style="height: 56px;">
@@ -45,10 +46,10 @@
                 <li>
                     <a th:href="@{${adminPath}+'/advertisement/list/1'}" class="waves-effect waves-teal">广告</a>
                 </li>
-                <li th:if="${loginUser.roleID==1}">
+                <li th:if="${loginUser.roleID==adminRoleID}">
                     <a th:href="@{${adminPath}+'/user/list/1'}" class="waves-effect waves-teal">用户</a>
                 </li>
-                <li class="active" th:if="${loginUser.roleID==1}">
+                <li class="active" th:if="${loginUser.roleID==adminRoleID}">
                     <a th:href="@{${adminPath}+'/role/list/1'}" class="waves-effect waves-teal">角色</a>
                 </li>
             </ul>
@@ -67,14 +68,16 @@
     </nav>
 </header>
 
-<main>
+<main style="z-index: 0;">
+    <div class="page-title z-depth-1 blue-grey darken-2">
+        <div class="white-text">
+            <span class="flow-text">
+                <a class="btn-flat"><i class="material-icons white-text">list</i></a>角色列表
+            </span>
+        </div>
+    </div>
+    <br/>
     <div id="main-content" class="container">
-        <h5 class="title">角色列表</h5>
-        <ul>
-            <li class="divider"></li>
-        </ul>
-
-        <!--/* <editor-fold desc="search box"> */-->
         <div id="search-box">
             <form th:action="@{${adminPath}+'/role/list/1'}" method="post">
                 <ul class="collapsible popout" data-collapsible="accordion">
@@ -103,9 +106,7 @@
                 </ul>
             </form>
         </div>
-        <!--/* </editor-fold> */-->
 
-        <!--/* <editor-fold desc="table main content"> */-->
         <table class="highlight responsive-table">
             <thead>
             <tr>
@@ -117,7 +118,7 @@
             </tr>
             </thead>
             <tbody class="card">
-            <tr th:each="item : ${page.list}">
+            <tr th:each="item:${page.list}">
                 <td th:text="*{item.name}"></td>
                 <th:block th:each="count:${userCount}">
                     <td th:if="${item.id==count.id}" th:text="${count.count}"></td>
@@ -137,7 +138,7 @@
                     <a class="btn-floating red darken-1 waves-effect waves-light tooltipped btn modal-trigger"
                        data-position="top" data-delay="50" data-tooltip="删除" href="#delete-modal"
                        th:onclick="'javascript:prepareForDeleting(\''+${item.id}+'\',\''+${item.name}+'\')'"
-                       th:if="${item.id!=1}">
+                       th:if="${item.id!=adminRoleID}">
                         <i class="material-icons">delete</i>
                     </a>
                 </td>
@@ -156,36 +157,33 @@
                     <a class="btn-floating red darken-1 waves-effect waves-light tooltipped btn modal-trigger"
                        data-position="top" data-delay="50" data-tooltip="删除" href="#delete-modal"
                        th:onclick="'javascript:prepareForDeleting(\''+${item.id}+'\',\''+${item.name}+'\')'"
-                       th:if="${item.id!=1}">
+                       th:if="${item.id!=adminRoleID}">
                         <i class="material-icons">delete</i>
                     </a>
                 </td>
             </tr>
             </tbody>
         </table>
-        <!--/* </editor-fold> */-->
 
-        <!--/* <editor-fold desc="add button"> */-->
         <div id="fixed-add-btn" class="fixed-action-btn" th:if="${loginUser.roleID==1}">
             <a class="btn-floating btn-large waves-effect waves-light blue"
                th:href="@{${adminPath}+'/role/form'}">
                 <i class="large material-icons">add</i>
             </a>
         </div>
-        <!--/* </editor-fold> */-->
 
-        <!--/* <editor-fold desc="pagination"> */-->
         <div class="center">
             <ul class="pagination">
                 <li th:if="${!page.hasPreviousPage}" class="disabled">
                     <a href="#"><i class="material-icons">chevron_left</i></a>
                 </li>
                 <li th:if="${page.hasPreviousPage}" class="waves-effect">
-                    <a th:href="@{${adminPath}+'/role/list/'+${page.prePage}+'?name='+${name}}"><i
-                            class="material-icons">chevron_left</i></a>
+                    <a th:href="@{${adminPath}+'/role/list/'+${page.prePage}+'?name='+${name}}">
+                        <i class="material-icons">chevron_left</i>
+                    </a>
                 </li>
 
-                <th:block th:each="number : ${page.navigatepageNums}">
+                <th:block th:each="number:${page.navigatepageNums}">
                     <li th:if="${number==page.pageNum}" class="waves-effect" id="active-page">
                         <a href="#" th:text="${number}"></a>
                     </li>
@@ -198,8 +196,9 @@
                     <a href="#"><i class="material-icons">chevron_right</i></a>
                 </li>
                 <li th:if="${page.hasNextPage}" class="waves-effect">
-                    <a th:href="@{${adminPath}+'/role/list/'+${page.nextPage}+'?name='+${name}}"><i
-                            class="material-icons">chevron_right</i></a>
+                    <a th:href="@{${adminPath}+'/role/list/'+${page.nextPage}+'?name='+${name}}">
+                        <i class="material-icons">chevron_right</i>
+                    </a>
                 </li>
             </ul>
         </div>
@@ -238,8 +237,7 @@
     <!-- </editor-fold> -->
 </main>
 
-<footer class="page-footer hide-on-med-and-down"
-        style="position: absolute; bottom: 0; left: 0;background-color: #37474f;">
+<footer class="page-footer hide-on-med-and-down blue-grey darken-4" style="z-index: 1;">
     <div class="footer-copyright">
         <div class="container right-align">
             © 2017 Copyright 珠海希梦电子科技有限公司

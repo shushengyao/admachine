@@ -57,13 +57,13 @@ class AdvertisementController extends BaseController {
     @RequestMapping(value = "/list/{pageNo}")
     String list(Advertisement advertisement, @PathVariable int pageNo, Model model) {
         // region 格式化查询条件
+        if (advertisement.name == 'null') advertisement.name = StringUtils.EMPTY
+        if (advertisement.addTime == 'null') advertisement.addTime = StringUtils.EMPTY
+        if (advertisement.machineID < 1) advertisement.machineID = -2
         if (StringUtils.isNotBlank(advertisement.addTime)) {
             advertisement.addTime = "${advertisement.addTime.substring(0, 10)} 00:00:00".toString()
         }
-        if (advertisement.machineID < 1) {
-            advertisement.machineID = -2
-        }
-        if (SessionUtils.GetAdmin(request).roleID != 1) {
+        if (SessionUtils.GetAdmin(request).roleID != ADMIN_ROLE_ID) {
             advertisement.userID = SessionUtils.GetAdmin(request).id
         }
         // endregion

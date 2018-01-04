@@ -26,15 +26,6 @@ public class Global {
      */
     private static PropertiesUtils loader = new PropertiesUtils("machine.properties");
 
-    public static final String SHOW = "1";
-    public static final String HIDE = "0";
-
-    public static final String YES = "1";
-    public static final String NO = "0";
-
-    public static final String TRUE = "true";
-    public static final String FALSE = "false";
-
     /**
      * session管理员标记
      */

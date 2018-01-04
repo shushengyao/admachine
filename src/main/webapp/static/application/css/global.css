@@ -4,8 +4,6 @@
     src: url("../font/SourceHanSansProRegular.ttf"),
     url("../font/SourceHanSansNormal.ttf"),
     url("../font/SourceHanSansMedium.ttf"),
-    url("../font/SourceHanSansLightHeavy.ttf"),
-    url("../font/SourceHanSansLightExtraLight.ttf"),
     url("../font/SourceHanSansLightBold.ttf"),
     url("../font/SourceHanSansLight.ttf");
 }
@@ -123,4 +121,8 @@ ul.side-nav.fixed li.logo img {
 .nav-logo-img {
     margin: 8px;
     height: 48px;
+}
+
+.page-title {
+    line-height: 72px;
 }

@@ -66,4 +66,20 @@ class AdvertisementCache {
         return null
     }
 
+    /**
+     * 根据广告机ID获取所属广告数量
+     * @param id
+     * @return
+     */
+    static int getAdvertisementCountByMachineID(int id) {
+        List<Advertisement> list = advertisementList
+        int count = 0
+        list.each {
+            if (it.machineID == id) {
+                count++
+            }
+        }
+        return count
+    }
+
 }

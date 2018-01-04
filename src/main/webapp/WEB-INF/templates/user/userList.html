@@ -13,6 +13,7 @@
 
 <!--/* <editor-fold desc="define"> */-->
 <!--/*@thymesVar id="adminPath" type="java.lang.String"*/-->
+<!--/*@thymesVar id="adminRoleID" type="java.lang.Integer"*/-->
 <!--/*@thymesVar id="loginUser" type="com.xmlan.machine.module.user.entity.User"*/-->
 <!--/*@thymesVar id="page" type="com.github.pagehelper.PageInfo<com.xmlan.machine.module.user.entity.User>"*/-->
 <!--/*@thymesVar id="roleList" type="java.util.List<com.xmlan.machine.module.role.entity.Role>"*/-->
@@ -23,8 +24,8 @@
 <!--/* </editor-fold> */-->
 
 <body>
-<header>
-    <nav style="background-color: #37474f;z-index: 1;">
+<header style="z-index: 1;">
+    <nav class="z-depth-2 blue-grey darken-4">
         <div class="nav-wrapper">
             <ul class="left">
                 <li style="height: 56px;">
@@ -48,10 +49,10 @@
                 <li>
                     <a th:href="@{${adminPath}+'/advertisement/list/1'}" class="waves-effect waves-teal">广告</a>
                 </li>
-                <li class="active" th:if="${loginUser.roleID==1}">
+                <li class="active" th:if="${loginUser.roleID==adminRoleID}">
                     <a th:href="@{${adminPath}+'/user/list/1'}" class="waves-effect waves-teal">用户</a>
                 </li>
-                <li th:if="${loginUser.roleID==1}">
+                <li th:if="${loginUser.roleID==adminRoleID}">
                     <a th:href="@{${adminPath}+'/role/list/1'}" class="waves-effect waves-teal">角色</a>
                 </li>
             </ul>
@@ -70,13 +71,16 @@
     </nav>
 </header>
 
-<main>
+<main style="z-index: 0;">
+    <div class="page-title z-depth-1 blue-grey darken-2">
+        <div class="white-text">
+            <span class="flow-text">
+                <a class="btn-flat"><i class="material-icons white-text">list</i></a>用户列表
+            </span>
+        </div>
+    </div>
+    <br/>
     <div id="main-content" class="container">
-        <h5 class="title">用户列表</h5>
-        <ul>
-            <li class="divider"></li>
-        </ul>
-
         <div id="search-box">
             <form th:action="@{${adminPath}+'/user/list/1'}" method="post">
                 <ul class="collapsible popout" data-collapsible="accordion">
@@ -213,7 +217,7 @@
                             class="material-icons">chevron_left</i></a>
                 </li>
 
-                <th:block th:each="number : ${page.navigatepageNums}">
+                <th:block th:each="number:${page.navigatepageNums}">
                     <li th:if="${number==page.pageNum}" class="waves-effect" id="active-page">
                         <a href="#" th:text="${number}"></a>
                     </li>
@@ -302,8 +306,7 @@
 
 </main>
 
-<footer class="page-footer hide-on-med-and-down"
-        style="position: absolute; bottom: 0; left: 0;background-color: #37474f;">
+<footer class="page-footer hide-on-med-and-down blue-grey darken-4" style="z-index: 1;">
     <div class="footer-copyright">
         <div class="container right-align">
             © 2017 Copyright 珠海希梦电子科技有限公司

@@ -17,15 +17,12 @@ import org.springframework.transaction.annotation.Transactional
 @Transactional(readOnly = true)
 class RoleService extends BaseService<Role, RoleDAO> {
 
-    public static final int ROLE_HAVE_SOME_USERS = -20
-
     @Override
     int update(Role entity) {
         if (entity.id == ADMIN_ROLE_ID) {
             return DATABASE_DO_NOTHING
         } else {
             int result = dao.update(entity)
-            cacheManager.clearAll()
             return result
         }
     }

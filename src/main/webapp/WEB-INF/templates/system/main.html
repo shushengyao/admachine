@@ -11,12 +11,12 @@
     <title>首页 - 广告机管理后台</title>
 </head>
 <!--/*@thymesVar id="adminPath" type="java.lang.String"*/-->
+<!--/*@thymesVar id="adminRoleID" type="java.lang.Integer"*/-->
 <!--/*@thymesVar id="loginUser" type="com.xmlan.machine.module.user.entity.User"*/-->
 <body>
-<header>
-    <nav style="background-color: #37474f;z-index: 1;">
+<header style="z-index: 1;">
+    <nav class="z-depth-1 blue-grey darken-4">
         <div class="nav-wrapper">
-            <!--/* <editor-fold desc="responsive navigation"> */-->
             <ul class="left">
                 <li style="height: 56px;">
                     <a href="#" data-activates="nav-mobile" id="button-nav-menu" class="hide-on-large-only">
@@ -39,10 +39,10 @@
                 <li>
                     <a th:href="@{${adminPath}+'/advertisement/list/1'}" class="waves-effect waves-teal">广告</a>
                 </li>
-                <li th:if="${loginUser.roleID==1}">
+                <li th:if="${loginUser.roleID==adminRoleID}">
                     <a th:href="@{${adminPath}+'/user/list/1'}" class="waves-effect waves-teal">用户</a>
                 </li>
-                <li th:if="${loginUser.roleID==1}">
+                <li th:if="${loginUser.roleID==adminRoleID}">
                     <a th:href="@{${adminPath}+'/role/list/1'}" class="waves-effect waves-teal">角色</a>
                 </li>
             </ul>
@@ -61,7 +61,7 @@
     </nav>
 </header>
 
-<main>
+<main style="z-index: 0;">
     <div id="main-content" class="container center">
         <h1 class="flow-text" th:text="|${loginUser.username}您好, 欢迎使用灯杆广告机管理后台|"></h1>
     </div>
@@ -73,8 +73,7 @@
     </div>
 </main>
 
-<footer class="page-footer hide-on-med-and-down"
-        style="position: absolute; bottom: 0; left: 0;background-color: #37474f;">
+<footer class="page-footer hide-on-med-and-down blue-grey darken-4" style="z-index: 1;">
     <div class="footer-copyright">
         <div class="container right-align">
             © 2017 Copyright 珠海希梦电子科技有限公司

@@ -1,10 +1,14 @@
 package com.xmlan.machine.module.advertisement.service
 
+import com.google.common.collect.Lists
 import com.xmlan.machine.common.base.BaseService
+import com.xmlan.machine.common.cache.AdvertisementCache
 import com.xmlan.machine.common.util.JsonUtils
 import com.xmlan.machine.common.util.UploadUtils
 import com.xmlan.machine.module.advertisement.dao.AdvertisementDAO
 import com.xmlan.machine.module.advertisement.entity.Advertisement
+import com.xmlan.machine.module.advertisement.entity.AdvertisementCount
+import com.xmlan.machine.module.advertisementMachine.entity.AdvertisementMachine
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -29,6 +33,17 @@ class AdvertisementService extends BaseService<Advertisement, AdvertisementDAO> 
         advertisement.url = list.get(0)
         update(advertisement)
         return DONE
+    }
+
+    List<AdvertisementCount> getAdvertisementCount(List<AdvertisementMachine> list) {
+        List<AdvertisementCount> counts = Lists.newArrayList()
+        list.each {
+            AdvertisementCount count = new AdvertisementCount()
+            count.id = it.id
+            count.count = AdvertisementCache.getAdvertisementCountByMachineID(it.id)
+            counts.add(count)
+        }
+        return counts
     }
 
 }

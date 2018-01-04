@@ -3,11 +3,13 @@ package com.xmlan.machine.module.advertisementMachine.web
 import com.github.pagehelper.PageInfo
 import com.google.common.collect.Maps
 import com.xmlan.machine.common.base.BaseController
+import com.xmlan.machine.common.cache.AdvertisementCache
 import com.xmlan.machine.common.cache.UserCache
 import com.xmlan.machine.common.util.DateUtils
 import com.xmlan.machine.common.util.IDUtils
 import com.xmlan.machine.common.util.SessionUtils
 import com.xmlan.machine.common.util.StringUtils
+import com.xmlan.machine.module.advertisement.service.AdvertisementService
 import com.xmlan.machine.module.advertisementMachine.entity.AdvertisementMachine
 import com.xmlan.machine.module.advertisementMachine.service.AdvertisementMachineService
 import com.xmlan.machine.module.user.service.UserService
@@ -31,6 +33,8 @@ class AdvertisementMachineController extends BaseController {
     private AdvertisementMachineService service
     @Autowired
     private UserService userService
+    @Autowired
+    private AdvertisementService advertisementService
 
     @ModelAttribute
     AdvertisementMachine get(@RequestParam(required = false) String id) {
@@ -73,6 +77,7 @@ class AdvertisementMachineController extends BaseController {
         List<AdvertisementMachine> list = service.findList advertisementMachine, pageNo
         PageInfo<AdvertisementMachine> page = new PageInfo<>(list)
         model.addAttribute "page", page
+        model.addAttribute "adCount", advertisementService.getAdvertisementCount(list)
         // endregion
 
         // region 搜索条件继承

@@ -15,7 +15,6 @@ import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 import javax.validation.ConstraintViolationException
 import javax.validation.Validator
-import java.util.List
 
 /**
  * Created by ayakurayuki on 2017/12/11-14:41.
@@ -24,6 +23,13 @@ import java.util.List
 abstract class BaseController extends BaseBean {
 
     protected Logger logger = LogManager.getLogger(getClass())
+
+    @Autowired
+    protected Validator validator
+    @Autowired
+    protected HttpServletRequest request
+    @Autowired
+    protected HttpServletResponse response
 
     /**
      * 配置的管理页面根路径
@@ -36,19 +42,20 @@ abstract class BaseController extends BaseBean {
         return adminPath
     }
 
+    @ModelAttribute('adminRoleID')
+    int adminRoleID() {
+        return ADMIN_ROLE_ID
+    }
+
+    @ModelAttribute('newEntityID')
+    int newEntityID() {
+        return NEW_INSERT_ID
+    }
+
     @ModelAttribute('loginUser')
     User loginUser(HttpServletRequest request) {
         return SessionUtils.GetAdmin(request)
     }
-
-    @Autowired
-    protected Validator validator
-
-    @Autowired
-    protected HttpServletRequest request
-
-    @Autowired
-    protected HttpServletResponse response
 
     /**
      * 添加临时消息

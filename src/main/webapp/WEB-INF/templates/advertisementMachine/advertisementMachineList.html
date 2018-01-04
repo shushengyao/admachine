@@ -13,16 +13,18 @@
 
 <!--/* <editor-fold desc="define"> */-->
 <!--/*@thymesVar id="adminPath" type="java.lang.String"*/-->
+<!--/*@thymesVar id="adminRoleID" type="java.lang.Integer"*/-->
 <!--/*@thymesVar id="loginUser" type="com.xmlan.machine.module.user.entity.User"*/-->
 <!--/*@thymesVar id="page" type="com.github.pagehelper.PageInfo<com.xmlan.machine.module.advertisementMachine.entity.AdvertisementMachine>"*/-->
+<!--/*@thymesVar id="adCount" type="java.util.List<com.xmlan.machine.module.advertisement.entity.AdvertisementCount>"*/-->
 <!--/*@thymesVar id="name" type="java.lang.String"*/-->
 <!--/*@thymesVar id="codeNumber" type="java.lang.String"*/-->
 <!--/*@thymesVar id="addTime" type="java.lang.String"*/-->
 <!--/* </editor-fold> */-->
 
 <body>
-<header>
-    <nav style="background-color: #37474f;z-index: 1;">
+<header style="z-index: 1;">
+    <nav class="z-depth-2 blue-grey darken-4">
         <div class="nav-wrapper">
             <ul class="left">
                 <li style="height: 56px;">
@@ -46,10 +48,10 @@
                 <li>
                     <a th:href="@{${adminPath}+'/advertisement/list/1'}" class="waves-effect waves-teal">广告</a>
                 </li>
-                <li th:if="${loginUser.roleID==1}">
+                <li th:if="${loginUser.roleID==adminRoleID}">
                     <a th:href="@{${adminPath}+'/user/list/1'}" class="waves-effect waves-teal">用户</a>
                 </li>
-                <li th:if="${loginUser.roleID==1}">
+                <li th:if="${loginUser.roleID==adminRoleID}">
                     <a th:href="@{${adminPath}+'/role/list/1'}" class="waves-effect waves-teal">角色</a>
                 </li>
             </ul>
@@ -68,13 +70,16 @@
     </nav>
 </header>
 
-<main>
+<main style="z-index: 0;">
+    <div class="page-title z-depth-1 blue-grey darken-2">
+        <div class="white-text">
+            <span class="flow-text">
+                <a class="btn-flat"><i class="material-icons white-text">list</i></a>广告机列表
+            </span>
+        </div>
+    </div>
+    <br/>
     <div id="main-content" class="container">
-        <h5 class="title">广告机列表</h5>
-        <ul>
-            <li class="divider"></li>
-        </ul>
-
         <div id="search-box">
             <form th:action="@{${adminPath}+'/advertisementMachine/list/1'}" method="post">
                 <ul class="collapsible popout" data-collapsible="accordion">
@@ -115,33 +120,37 @@
         <table class="highlight responsive-table">
             <thead>
             <tr>
-                <th>名称</th>
+                <th width="20%">名称</th>
                 <th>地址</th>
-                <th>加入时间</th>
-                <th>机器识别码</th>
+                <th width="15%">加入时间</th>
+                <th width="15%">机器识别码</th>
+                <th width="10%">广告数</th>
                 <th class="hide-on-med-and-down"></th>
                 <th class="hide-on-large-only"></th>
             </tr>
             </thead>
             <tbody class="card">
-            <tr th:each="item : ${page.list}">
+            <tr th:each="item:${page.list}">
                 <td th:text="*{item.name}">name</td>
                 <td th:text="*{#strings.abbreviate(item.address,30)}">address</td>
                 <td th:text="*{#strings.substring(item.addTime,0,10)}">addTime</td>
                 <td th:text="*{#strings.abbreviate(item.codeNumber,15)}">codeNumber</td>
+                <th:block th:each="count:${adCount}">
+                    <td th:if="${item.id==count.id}" th:text="${count.count}"></td>
+                </th:block>
                 <td width="15%" class="right-align hide-on-med-and-down">
                     <a class="btn-floating blue waves-effect waves-light tooltipped btn modal-trigger"
                        data-position="top" data-delay="50" data-tooltip="查看详情" href="#detail-modal"
                        th:onmouseover="'javascript:detail(\''+*{item.id}+'\')'">
                         <i class="material-icons">more_horiz</i>
                     </a>
-                    <a class="btn-floating green waves-effect waves-light tooltipped"
-                       data-position="top" data-delay="50" data-tooltip="编辑"
+                    <a class="btn-floating green waves-effect waves-light tooltipped" data-position="top"
+                       data-delay="50" data-tooltip="编辑"
                        th:href="@{${adminPath}+'/advertisementMachine/form?id='+${item.id}}">
                         <i class="material-icons">edit</i>
                     </a>
-                    <a class="btn-floating red darken-1 waves-effect waves-light tooltipped"
-                       data-position="top" data-delay="50" data-tooltip="删除"
+                    <a class="btn-floating red darken-1 waves-effect waves-light tooltipped" data-position="top"
+                       data-delay="50" data-tooltip="删除"
                        th:href="@{${adminPath}+'/advertisementMachine/delete?id='+${item.id}}">
                         <i class="material-icons">delete</i>
                     </a>
@@ -153,13 +162,13 @@
                         <i class="material-icons">more_horiz</i>
                     </a>
                     <br/>
-                    <a class="btn-floating green waves-effect waves-light tooltipped"
-                       data-position="top" data-delay="50" data-tooltip="编辑"
+                    <a class="btn-floating green waves-effect waves-light tooltipped" data-position="top"
+                       data-delay="50" data-tooltip="编辑"
                        th:href="@{${adminPath}+'/advertisementMachine/form?id='+${item.id}}">
                         <i class="material-icons">edit</i>
                     </a>
-                    <a class="btn-floating red darken-1 waves-effect waves-light tooltipped"
-                       data-position="top" data-delay="50" data-tooltip="删除"
+                    <a class="btn-floating red darken-1 waves-effect waves-light tooltipped" data-position="top"
+                       data-delay="50" data-tooltip="删除"
                        th:href="@{${adminPath}+'/advertisementMachine/delete?id='+${item.id}}">
                         <i class="material-icons">delete</i>
                     </a>
@@ -168,14 +177,14 @@
             </tbody>
         </table>
 
-        <div id="fixed-add-btn" class="fixed-action-btn" th:if="${loginUser.roleID==1}">
+        <div id="fixed-add-btn" class="fixed-action-btn" th:if="${loginUser.roleID==adminRoleID}">
             <a class="btn-floating btn-large waves-effect waves-light blue"
                th:href="@{${adminPath}+'/advertisementMachine/form'}">
                 <i class="large material-icons">add</i>
             </a>
         </div>
 
-        <div class="center">
+        <div id="pagination-div" class="center">
             <ul class="pagination">
                 <li th:if="${!page.hasPreviousPage}" class="disabled">
                     <a href="#"><i class="material-icons">chevron_left</i></a>
@@ -186,7 +195,7 @@
                        material-icons">chevron_left</i></a>
                 </li>
 
-                <th:block th:each="number : ${page.navigatepageNums}">
+                <th:block th:each="number:${page.navigatepageNums}">
                     <li th:if="${number==page.pageNum}" class="waves-effect" id="active-page">
                         <a href="#" th:text="${number}"></a>
                     </li>
@@ -232,8 +241,7 @@
 
 </main>
 
-<footer class="page-footer hide-on-med-and-down"
-        style="position: absolute; bottom: 0; left: 0;background-color: #37474f;">
+<footer class="page-footer hide-on-med-and-down blue-grey darken-4" style="z-index: 1;">
     <div class="footer-copyright">
         <div class="container right-align">
             © 2017 Copyright 珠海希梦电子科技有限公司

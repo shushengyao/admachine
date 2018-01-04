@@ -16,14 +16,14 @@ import org.springframework.transaction.annotation.Transactional
 abstract class BaseService<T, DAO extends BaseDAO<T>> extends BaseBean {
 
     protected Logger logger = LogManager.getLogger(getClass())
-    public int pageSize = Global.getPageSize()
+    public int pageSize = Global.pageSize
 
     @Autowired
     protected DAO dao
 
     T get(String id) {
         logger.trace "${this.class.name}: get(${id})."
-        dao.get(id)
+        dao.get id
     }
 
     List<T> findAll() {
@@ -34,22 +34,22 @@ abstract class BaseService<T, DAO extends BaseDAO<T>> extends BaseBean {
     List<T> findList(T entity, int pageNo) {
         logger.trace "${this.class.name}: findList(${entity.toString()})."
         PageHelper.startPage pageNo, pageSize
-        dao.findList(entity)
+        dao.findList entity
     }
 
     int insert(T entity) {
         logger.trace "${this.class.name}: insert(${entity.toString()})."
-        dao.insert(entity)
+        dao.insert entity
     }
 
     int update(T entity) {
         logger.trace "${this.class.name}: update(${entity.toString()})."
-        dao.update(entity)
+        dao.update entity
     }
 
     int delete(T entity) {
         logger.trace "${this.class.name}: delete(${entity.toString()})."
-        dao.delete(entity)
+        dao.delete entity
     }
 
 }

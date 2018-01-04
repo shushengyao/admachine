@@ -63,11 +63,11 @@ class RoleCache {
     static int getUserCountInRole(int roleID) {
         List<User> list = UserCache.getUserList()
         int count = 0
-        list.forEach({
+        list.each {
             if (it.roleID == roleID) {
                 count++
             }
-        })
+        }
         return count
     }
 

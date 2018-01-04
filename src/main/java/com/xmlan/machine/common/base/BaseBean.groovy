@@ -20,4 +20,15 @@ class BaseBean {
     public static final int INCORRECT_REPEAT_PASSWD = 11
     public static final int INCORRECT_OLD_PASSWD = 12
 
+    public static final int ROLE_HAVE_SOME_USERS = -20
+
+    public static final String SHOW = "1"
+    public static final String HIDE = "0"
+
+    public static final String YES = "1"
+    public static final String NO = "0"
+
+    public static final String TRUE = "true"
+    public static final String FALSE = "false"
+
 }
