@@ -145,14 +145,14 @@
             </tr>
             </thead>
             <tbody class="card">
-            <tr th:each="item:${page.list}">
+            <tr th:each="item:${page.list}" th:onclick="'javascript:detail(\''+*{item.id}+'\')'">
                 <td th:text="*{item.name}">name</td>
                 <td th:text="*{item.time}">time</td>
                 <td th:text="*{#strings.substring(item.addTime,0,10)}">addTime</td>
                 <th:block th:each="machine:${machineList}">
                     <td th:if="${machine.id==item.machineID}" th:text="*{machine.name}">machineID</td>
                 </th:block>
-                <td width="18%" class="right-align hide-on-med-and-down">
+                <td class="right-align hide-on-med-and-down">
                     <a class="btn-floating blue waves-effect waves-light tooltipped btn modal-trigger"
                        data-position="top" data-delay="50" data-tooltip="查看详情" href="#detail-modal"
                        th:onmouseover="'javascript:detail(\''+*{item.id}+'\')'">
@@ -341,7 +341,7 @@
 
     function detail(id) {
         var url = '[[${adminPath}]]' + "/advertisement/detail/" + id;
-        var request_url = '[[${adminPath}]]' + "/advertisement/video/" + id;
+        var request_url = '[[${adminPath}]]' + "/advertisement/media/" + id;
         $.ajax({
             url: url,
             type: "GET",
@@ -353,7 +353,7 @@
                 $("#detail-item-add-time").text(data['ad'].addTime);
                 if (data['ad'].url !== null && data['ad'].url.indexOf("images") !== -1) {
                     $("#detail-item-media").html(
-                        '<img id="ad-image" class="materialboxed" width="450" src="' + data['ad'].url + '"/>'
+                        '<img id="ad-image" class="materialboxed" width="450" src="' + request_url + '"/>'
                     );
                 } else if (data['ad'].url !== null && data['ad'].url.indexOf("videos") !== -1) {
                     $("#detail-item-media").html(

@@ -61,26 +61,17 @@ public class Global {
         }
     }
 
-    public static String getApacheServer() {
-        String apacheServer = getConfig("apacheServer");
-        if (StringUtils.isNoneBlank(apacheServer)) {
-            return apacheServer;
-        } else {
-            return StringUtils.EMPTY;
-        }
-    }
-
     /**
-     * 获取配置的图片存储路径
+     * 获取媒体路径
      *
-     * @return 配置正确，返回配置的路径；错误，返回默认路径"/images"
+     * @return
      */
-    public static String getImagePath() {
-        String imagePath = getConfig("imagePath");
-        if (StringUtils.isNoneBlank(imagePath)) {
-            return imagePath;
+    public static String getMediaPath() {
+        String mediaPath = getConfig("mediaPath");
+        if (StringUtils.isNotBlank(mediaPath)) {
+            return mediaPath;
         } else {
-            return "/images";
+            return "/media";
         }
     }
 
@@ -90,20 +81,6 @@ public class Global {
             return imageTag;
         } else {
             return "images";
-        }
-    }
-
-    /**
-     * 获取配置的视频存储路径
-     *
-     * @return 配置正确，返回配置的路径；错误，返回默认路径"/videos"
-     */
-    public static String getVideoPath() {
-        String videoPath = getConfig("videoPath");
-        if (StringUtils.isNoneBlank(videoPath)) {
-            return videoPath;
-        } else {
-            return "/videos";
         }
     }
 

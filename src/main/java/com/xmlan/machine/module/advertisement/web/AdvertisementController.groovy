@@ -6,6 +6,7 @@ import com.xmlan.machine.common.base.BaseController
 import com.xmlan.machine.common.cache.AdvertisementCache
 import com.xmlan.machine.common.cache.AdvertisementMachineCache
 import com.xmlan.machine.common.cache.UserCache
+import com.xmlan.machine.common.config.Global
 import com.xmlan.machine.common.util.DateUtils
 import com.xmlan.machine.common.util.SessionUtils
 import com.xmlan.machine.common.util.StringUtils
@@ -138,11 +139,11 @@ class AdvertisementController extends BaseController {
         "redirect:$adminPath/advertisement/list/1"
     }
 
-    @RequestMapping('/video/{id}')
+    @RequestMapping('/media/{id}')
     @ResponseBody
-    void video(@PathVariable String id, HttpServletResponse response) {
-        Advertisement ad = service.get(id)
-        File file = new File(ad.url)
+    void media(@PathVariable String id, HttpServletResponse response) {
+        Advertisement ad = AdvertisementCache.get(id.toInteger())
+        File file = new File("${Global.mediaPath}/${ad.url}".toString())
         FileInputStream inputStream = new FileInputStream(file)
         ServletOutputStream outputStream = response.getOutputStream()
         byte[] bytes = null

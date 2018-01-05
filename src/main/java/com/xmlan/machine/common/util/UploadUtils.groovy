@@ -22,9 +22,9 @@ class UploadUtils {
     public static final String MEDIA_KEY = "media"
 
     static String uploadImages(HttpServletRequest request) {
-        def imagePath = new File(Global.imagePath)
+        def imagePath = new File("${Global.mediaPath}/${Global.imageTag}".toString())
         if (!imagePath.exists()) imagePath.mkdirs()
-        def videoPath = new File(Global.videoPath)
+        def videoPath = new File("${Global.mediaPath}/${Global.videoTag}".toString())
         if (!videoPath.exists()) videoPath.mkdirs()
 
         Map<String, List<String>> json = Maps.newHashMap()
@@ -43,11 +43,11 @@ class UploadUtils {
                         String filename = "${DateUtils.GetDate('yyyy-MM-dd_HH-mm-ss')}_No${i}${extension}"
                         try { // 存储文件
                             if (isImage(extension)) {
-                                file.transferTo(new File("${Global.imagePath}/${filename}"))
-                                fileList.add "${Global.apacheServer}/${Global.imageTag}/${filename}".toString()
+                                file.transferTo(new File("${Global.mediaPath}/${Global.imageTag}/${filename}"))
+                                fileList.add "${Global.imageTag}/${filename}".toString()
                             } else if (isVideo(extension)) {
-                                file.transferTo(new File("${Global.videoPath}/${filename}"))
-                                fileList.add "${Global.videoPath}/${filename}".toString()
+                                file.transferTo(new File("${Global.mediaPath}/${Global.videoTag}/${filename}"))
+                                fileList.add "${Global.videoTag}/${filename}".toString()
                             }
                         } catch (IOException e) {
                             logger.debug e
