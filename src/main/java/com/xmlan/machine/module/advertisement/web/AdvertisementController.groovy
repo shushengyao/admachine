@@ -68,6 +68,8 @@ class AdvertisementController extends BaseController {
         }
         if (SessionUtils.GetAdmin(request).roleID != ADMIN_ROLE_ID) {
             advertisement.userID = SessionUtils.GetAdmin(request).id
+        } else {
+            advertisement.userID = 0
         }
         // endregion
 

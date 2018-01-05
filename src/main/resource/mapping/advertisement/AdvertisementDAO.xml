@@ -56,7 +56,7 @@
             <if test="machineID != null and machineID != '' and machineID != '-2'">
                 and t.machineID = #{machineID}
             </if>
-            <if test="userID != null and userID != ''">
+            <if test="userID != null and userID != '' and userID != 0">
                 and t.userID = #{userID}
             </if>
             <if test='addTime != null and addTime != "" and addTime != " "'>

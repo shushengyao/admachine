@@ -7,6 +7,7 @@ import com.xmlan.machine.common.cache.RoleCache
 import com.xmlan.machine.common.cache.UserCache
 import com.xmlan.machine.common.util.DateUtils
 import com.xmlan.machine.common.util.StringUtils
+import com.xmlan.machine.module.advertisementMachine.service.AdvertisementMachineService
 import com.xmlan.machine.module.role.service.RoleService
 import com.xmlan.machine.module.user.entity.User
 import com.xmlan.machine.module.user.service.UserService
@@ -34,6 +35,8 @@ class UserController extends BaseController {
     private UserService service
     @Autowired
     private RoleService roleService
+    @Autowired
+    private AdvertisementMachineService advertisementMachineService
 
     @ModelAttribute
     User get(@RequestParam(required = false) String id) {
@@ -69,6 +72,7 @@ class UserController extends BaseController {
         List<User> list = service.findList(user, pageNo)
         PageInfo<User> page = new PageInfo<>(list)
         model.addAttribute "page", page
+        model.addAttribute "machineCount", advertisementMachineService.getMachineCountByUserID(list)
 
         model.addAttribute "roleList", RoleCache.roleList
         model.addAttribute "username", user.username
