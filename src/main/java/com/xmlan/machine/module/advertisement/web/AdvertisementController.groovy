@@ -17,7 +17,9 @@ import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.servlet.mvc.support.RedirectAttributes
 
+import javax.servlet.ServletOutputStream
 import javax.servlet.http.HttpServletRequest
+import javax.servlet.http.HttpServletResponse
 
 /**
  * Created by ayakurayuki on 2017/12/13-17:21.
@@ -134,6 +136,28 @@ class AdvertisementController extends BaseController {
             addMessage attributes, "上传失败，文件类型错误"
         }
         "redirect:$adminPath/advertisement/list/1"
+    }
+
+    @RequestMapping('/video/{id}')
+    @ResponseBody
+    void video(@PathVariable String id, HttpServletResponse response) {
+        Advertisement ad = service.get(id)
+        File file = new File(ad.url)
+        FileInputStream inputStream = new FileInputStream(file)
+        ServletOutputStream outputStream = response.getOutputStream()
+        byte[] bytes = null
+        while (inputStream.available() > 0) {
+            if (inputStream.available() > 10240) {
+                bytes = new byte[10240]
+            } else {
+                bytes = new byte[inputStream.available()]
+            }
+            inputStream.read(bytes, 0, bytes.length)
+            outputStream.write(bytes, 0, bytes.length)
+        }
+        inputStream.close()
+        outputStream.flush()
+        outputStream.close()
     }
 
 }

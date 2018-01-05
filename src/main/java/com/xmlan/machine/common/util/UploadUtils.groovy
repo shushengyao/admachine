@@ -44,10 +44,10 @@ class UploadUtils {
                         try { // 存储文件
                             if (isImage(extension)) {
                                 file.transferTo(new File("${Global.imagePath}/${filename}"))
-                                fileList.add "${Global.apacheServer}/${Global.imagePath}/${filename}".toString()
+                                fileList.add "${Global.apacheServer}/${Global.imageTag}/${filename}".toString()
                             } else if (isVideo(extension)) {
                                 file.transferTo(new File("${Global.videoPath}/${filename}"))
-                                fileList.add "${Global.apacheServer}/${Global.videoPath}/${filename}".toString()
+                                fileList.add "${Global.videoPath}/${filename}".toString()
                             }
                         } catch (IOException e) {
                             logger.debug e

@@ -84,6 +84,15 @@ public class Global {
         }
     }
 
+    public static String getImageTag() {
+        String imageTag = getConfig("imageTag");
+        if (StringUtils.isNoneBlank(imageTag)) {
+            return imageTag;
+        } else {
+            return "images";
+        }
+    }
+
     /**
      * 获取配置的视频存储路径
      *
@@ -95,6 +104,15 @@ public class Global {
             return videoPath;
         } else {
             return "/videos";
+        }
+    }
+
+    public static String getVideoTag() {
+        String videoTag = getConfig("videoTag");
+        if (StringUtils.isNoneBlank(videoTag)) {
+            return videoTag;
+        } else {
+            return "videos";
         }
     }
 

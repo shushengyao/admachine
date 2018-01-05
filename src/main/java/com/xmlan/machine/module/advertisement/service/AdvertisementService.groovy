@@ -35,7 +35,7 @@ class AdvertisementService extends BaseService<Advertisement, AdvertisementDAO> 
         return DONE
     }
 
-    List<AdvertisementCount> getAdvertisementCount(List<AdvertisementMachine> list) {
+    static List<AdvertisementCount> getAdvertisementCount(List<AdvertisementMachine> list) {
         List<AdvertisementCount> counts = Lists.newArrayList()
         list.each {
             AdvertisementCount count = new AdvertisementCount()
