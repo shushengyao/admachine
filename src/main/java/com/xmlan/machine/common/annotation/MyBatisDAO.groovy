@@ -8,7 +8,7 @@ import java.lang.annotation.*
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 @Documented
-@interface MyBatisDao {
+@interface MyBatisDAO {
 
     String value() default ""
 

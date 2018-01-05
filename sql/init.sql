@@ -75,12 +75,27 @@ create table `advertisement` (
   char set utf8
   comment '广告表';
 
+drop table if exists `machine_sensor`;
+create table `machine_sensor` (
+  id          int auto_increment not null
+  comment '传感记录ID',
+  temperature varchar(64) comment '温度',
+  humidity    varchar(64) comment '湿度',
+  pm25        varchar(64) comment 'PM2.5',
+  pm10        varchar(64) comment 'PM10',
+  codeNumber  varchar(512)       not null
+  comment '机器标识码(注册码)',
+  primary key (id)
+)
+  char set utf8
+  comment '传感器参数';
+
 insert into role values (id, '管理员', '管理员'), (id, '用户', '用户');
 insert into user values (
   id,
   'admin',
   'admin',
-  'd6afefbaa8389a98c03e37035bc4cd264776bb784993b877afda72e20d8d5865', -- d6afefbaa8389a98c03e37035bc4cd264776bb784993b877afda72e20d8d5865 -> yuki6261
+  'd6afefbaa8389a98c03e37035bc4cd264776bb784993b877afda72e20d8d5865',
   1,
   '',
   now(),
@@ -96,7 +111,9 @@ insert into user values (
   now(),
   '',
   ''
-); -- 4dae3c427732469187d806fa83470313a21e6a827b35d831a6b70f420cff97fd -> zhxm2512209
+);
+-- d6afefbaa8389a98c03e37035bc4cd264776bb784993b877afda72e20d8d5865 -> yuki6261
+-- 4dae3c427732469187d806fa83470313a21e6a827b35d831a6b70f420cff97fd -> zhxm2512209
 
 -- 防止删除管理员角色
 create trigger `ROLE_DELETE_CHECK_TRIGGER`

@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.xmlan.machine.module.advertisementMachine.dao.MachineSensorDAO">
+
+    <resultMap id="machineSensorResultMap" type="MachineSensor">
+        <id column="id" property="id"/>
+        <result column="temperature" property="temperature"/>
+        <result column="humidity" property="humidity"/>
+        <result column="pm25" property="pm25"/>
+        <result column="pm10" property="pm10"/>
+        <result column="codeNumber" property="codeNumber"/>
+    </resultMap>
+
+    <sql id="columns">
+        t.id as "id",
+        t.temperature as "temperature",
+        t.humidity as "humidity",
+        t.pm25 as "pm25",
+        t.pm10 as "pm10",
+        t.codeNumber as "codeNumber"
+    </sql>
+
+    <select id="get" parameterType="java.lang.String" resultMap="advertisementMachineResultMap">
+        select
+        <include refid="columns"/>
+        from machine_sensor t
+        where t.id = #{id}
+    </select>
+
+    <select id="findAll" resultMap="advertisementMachineResultMap">
+        select
+        <include refid="columns"/>
+        from machine_sensor t
+        order by t.codeNumber, t.id asc
+    </select>
+
+    <select id="findList" parameterType="AdvertisementMachine" resultMap="advertisementMachineResultMap">
+        select
+        <include refid="columns"/>
+        from machine_sensor t
+        <where>
+            <if test="temperature != null and temperature != ''">
+                t.temperature = #{temperature}
+            </if>
+            <if test="humidity != null and humidity != ''">
+                and t.humidity = #{humidity}
+            </if>
+            <if test="pm25 != null and pm25 != ''">
+                and t.pm25 = #{pm25}
+            </if>
+            <if test="pm10 != null and pm10 != ''">
+                and t.pm10 = #{pm10}
+            </if>
+            <if test="codeNumber != null and codeNumber != ''">
+                and t.codeNumber = #{codeNumber}
+            </if>
+        </where>
+        <choose>
+            <otherwise>
+                order by t.codeNumber, t.id asc
+            </otherwise>
+        </choose>
+    </select>
+
+    <insert id="insert" parameterType="AdvertisementMachine">
+        insert into machine_sensor (
+            id,
+            temperature,
+            humidity,
+            pm25,
+            pm10,
+            codeNumber
+        ) values (
+            id,
+            #{temperature},
+            #{humidity},
+            #{pm25},
+            #{pm10},
+            #{codeNumber}
+        );
+    </insert>
+
+    <update id="update" parameterType="AdvertisementMachine">
+        update machine_sensor
+        set
+            temperature = #{temperature},
+            humidity    = #{humidity},
+            pm25        = #{pm25},
+            pm25        = #{pm25}
+        where codeNumber = #{codeNumber}
+    </update>
+
+    <delete id="delete" parameterType="AdvertisementMachine">
+        delete from machine_sensor
+        where codeNumber = #{codeNumber}
+    </delete>
+
+
+</mapper>

@@ -56,7 +56,7 @@
     <bean name="mapperScannerConfigurer" class="org.mybatis.spring.mapper.MapperScannerConfigurer">
         <property name="basePackage" value="com.xmlan.machine"/>
         <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"/>
-        <property name="annotationClass" value="com.xmlan.machine.common.annotation.MyBatisDao"/>
+        <property name="annotationClass" value="com.xmlan.machine.common.annotation.MyBatisDAO"/>
     </bean>
     <bean id="mybatisConfiguration" class="org.apache.ibatis.session.Configuration"
           p:logImpl="org.apache.ibatis.logging.log4j2.Log4j2Impl"/>

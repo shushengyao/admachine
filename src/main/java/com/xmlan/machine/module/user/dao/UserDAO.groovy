@@ -1,6 +1,6 @@
 package com.xmlan.machine.module.user.dao
 
-import com.xmlan.machine.common.annotation.MyBatisDao
+import com.xmlan.machine.common.annotation.MyBatisDAO
 import com.xmlan.machine.common.base.BaseDAO
 import com.xmlan.machine.module.user.entity.User
 import org.apache.ibatis.annotations.Param
@@ -9,7 +9,7 @@ import org.apache.ibatis.annotations.Param
  * Created by ayakurayuki on 2017/12/12-10:51.
  * Package: com.xmlan.machine.module.user.dao
  */
-@MyBatisDao
+@MyBatisDAO
 interface UserDAO extends BaseDAO<User> {
 
     /**
