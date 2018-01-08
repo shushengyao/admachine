@@ -46,4 +46,8 @@ class AdvertisementService extends BaseService<Advertisement, AdvertisementDAO> 
         return counts
     }
 
+    List<Advertisement> findList(Advertisement advertisement) {
+        dao.findList advertisement
+    }
+
 }

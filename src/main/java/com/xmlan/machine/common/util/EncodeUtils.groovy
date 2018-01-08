@@ -5,10 +5,6 @@ import org.apache.commons.codec.binary.Base64
 import org.apache.commons.codec.binary.Hex
 import org.apache.commons.lang3.StringEscapeUtils
 
-import java.io.UnsupportedEncodingException
-import java.net.URLDecoder
-import java.net.URLEncoder
-
 /**
  * Created by Ayakura Yuki on 2017/7/11.<br/>
  * 编码解码工具类

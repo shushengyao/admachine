@@ -2,7 +2,6 @@ package com.xmlan.machine.module.role.web
 
 import com.github.pagehelper.PageInfo
 import com.xmlan.machine.common.base.BaseController
-import com.xmlan.machine.common.cache.RoleCache
 import com.xmlan.machine.common.util.StringUtils
 import com.xmlan.machine.module.role.entity.Role
 import com.xmlan.machine.module.role.service.RoleService

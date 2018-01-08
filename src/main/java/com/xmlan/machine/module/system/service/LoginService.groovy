@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 import javax.servlet.http.HttpServletRequest
-import javax.servlet.http.HttpSession
 
 /**
  * Created by ayakurayuki on 2017/12/13-15:51.

@@ -23,21 +23,21 @@
         t.codeNumber as "codeNumber"
     </sql>
 
-    <select id="get" parameterType="java.lang.String" resultMap="advertisementMachineResultMap">
+    <select id="get" parameterType="java.lang.String" resultMap="machineSensorResultMap">
         select
         <include refid="columns"/>
         from machine_sensor t
         where t.id = #{id}
     </select>
 
-    <select id="findAll" resultMap="advertisementMachineResultMap">
+    <select id="findAll" resultMap="machineSensorResultMap">
         select
         <include refid="columns"/>
         from machine_sensor t
         order by t.codeNumber, t.id asc
     </select>
 
-    <select id="findList" parameterType="AdvertisementMachine" resultMap="advertisementMachineResultMap">
+    <select id="findList" parameterType="MachineSensor" resultMap="machineSensorResultMap">
         select
         <include refid="columns"/>
         from machine_sensor t
@@ -65,7 +65,7 @@
         </choose>
     </select>
 
-    <insert id="insert" parameterType="AdvertisementMachine">
+    <insert id="insert" parameterType="MachineSensor">
         insert into machine_sensor (
             id,
             temperature,
@@ -83,7 +83,7 @@
         );
     </insert>
 
-    <update id="update" parameterType="AdvertisementMachine">
+    <update id="update" parameterType="MachineSensor">
         update machine_sensor
         set
             temperature = #{temperature},
@@ -93,7 +93,7 @@
         where codeNumber = #{codeNumber}
     </update>
 
-    <delete id="delete" parameterType="AdvertisementMachine">
+    <delete id="delete" parameterType="MachineSensor">
         delete from machine_sensor
         where codeNumber = #{codeNumber}
     </delete>

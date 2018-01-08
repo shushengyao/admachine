@@ -94,10 +94,10 @@
                 <div class="input-field col s6 m3 l3">
                     <i class="material-icons prefix">account_circle</i>
                     <th:block th:switch="${user.id}">
-                        <input th:case="newEntityID" id="authname" name="authname" th:value="${user.authname}"
+                        <input th:case="${newEntityID}" id="authname" name="authname" th:value="${user.authname}"
                                type="text"
                                class="text" placeholder="输入登录账号" required="required"/>
-                        <label th:case="newEntityID" for="authname">登录名</label>
+                        <label th:case="${newEntityID}" for="authname">登录名</label>
                         <input th:case="*" id="authname-ro" name="authname" th:value="${user.authname}" type="text"
                                class="text" readonly="readonly" placeholder="输入登录账号" required="required"/>
                         <label th:case="*" for="authname-ro">登录名</label>
@@ -106,9 +106,9 @@
                 <div class="input-field col s6 m3 l3">
                     <i class="material-icons prefix">lock_outline</i>
                     <th:block th:switch="${user.id}">
-                        <input th:case="newEntityID" id="password" name="password" th:value="${user.password}"
+                        <input th:case="${newEntityID}" id="password" name="password" th:value="${user.password}"
                                type="password" class="text" placeholder="输入登录密码" required="required"/>
-                        <label th:case="newEntityID" for="password">登录密码</label>
+                        <label th:case="${newEntityID}" for="password">登录密码</label>
                         <input th:case="*" id="password-ro" name="password" th:value="${user.password}" type="password"
                                class="text" placeholder="输入登录密码" required="required" readonly="readonly"/>
                         <label th:case="*" for="password-ro">登录密码</label>
@@ -117,9 +117,9 @@
                 <div class="input-field col s6 m3 l3">
                     <i class="material-icons prefix">lock</i>
                     <th:block th:switch="${user.id}">
-                        <input th:case="newEntityID" id="confirmPassword" name="confirmPassword" required="required"
+                        <input th:case="${newEntityID}" id="confirmPassword" name="confirmPassword" required="required"
                                th:value="${user.password}" type="password" class="text" placeholder="重新确认密码"/>
-                        <label th:case="newEntityID" for="confirmPassword">确认密码</label>
+                        <label th:case="${newEntityID}" for="confirmPassword">确认密码</label>
                         <input th:case="*" id="confirmPassword-ro" name="confirmPassword" th:value="${user.password}"
                                type="password" class="text" placeholder="重新确认密码" required="required"
                                readonly="readonly"/>

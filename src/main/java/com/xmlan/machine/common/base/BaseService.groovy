@@ -2,7 +2,6 @@ package com.xmlan.machine.common.base
 
 import com.github.pagehelper.PageHelper
 import com.xmlan.machine.common.config.Global
-import net.sf.ehcache.CacheManager
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
 import org.springframework.beans.factory.annotation.Autowired

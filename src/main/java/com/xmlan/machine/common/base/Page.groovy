@@ -2,8 +2,6 @@ package com.xmlan.machine.common.base
 
 import com.xmlan.machine.common.config.Global
 
-import java.util.List
-
 /**
  * Created by Ayakura Yuki on 2017/7/24.
  */

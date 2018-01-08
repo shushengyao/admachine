@@ -7,7 +7,6 @@ import com.xmlan.machine.common.util.SpringContextUtils
 import com.xmlan.machine.common.util.StringUtils
 import com.xmlan.machine.module.advertisementMachine.dao.AdvertisementMachineDAO
 import com.xmlan.machine.module.advertisementMachine.entity.AdvertisementMachine
-import com.xmlan.machine.module.advertisementMachine.entity.AdvertisementMachineCount
 import com.xmlan.machine.module.advertisementMachine.entity.SimpleAdvertisementMachine
 
 /**

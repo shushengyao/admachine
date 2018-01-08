@@ -3,7 +3,6 @@ package com.xmlan.machine.module.advertisementMachine.web
 import com.github.pagehelper.PageInfo
 import com.google.common.collect.Maps
 import com.xmlan.machine.common.base.BaseController
-import com.xmlan.machine.common.cache.AdvertisementCache
 import com.xmlan.machine.common.cache.UserCache
 import com.xmlan.machine.common.util.DateUtils
 import com.xmlan.machine.common.util.IDUtils
@@ -18,8 +17,6 @@ import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.servlet.mvc.support.RedirectAttributes
-
-import javax.servlet.http.HttpServletRequest
 
 /**
  * Created by ayakurayuki on 2017/12/13-17:31.

@@ -36,10 +36,17 @@ abstract class BaseController extends BaseBean {
      */
     @Value('${adminPath}')
     public String adminPath
+    @Value('${servicePath}')
+    public String servicePath
 
     @ModelAttribute('adminPath')
     String adminPath() {
         return adminPath
+    }
+
+    @ModelAttribute('servicePath')
+    String servicePath() {
+        return servicePath
     }
 
     @ModelAttribute('adminRoleID')

@@ -4,7 +4,6 @@ import org.apache.ibatis.type.Alias
 import org.hibernate.validator.constraints.Length
 
 import javax.validation.constraints.NotNull
-import java.util.Date
 
 /**
  * Created by ayakurayuki on 2017/12/12-10:46.

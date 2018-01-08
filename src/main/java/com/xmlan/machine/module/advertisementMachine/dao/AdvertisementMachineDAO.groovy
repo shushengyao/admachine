@@ -19,4 +19,6 @@ interface AdvertisementMachineDAO extends BaseDAO<AdvertisementMachine> {
      */
     List<AdvertisementMachine> findAllADMachineByUser(@Param("userID") int userID)
 
+    AdvertisementMachine getByCodeNumber(@Param("codeNumber") String codeNumber)
+
 }

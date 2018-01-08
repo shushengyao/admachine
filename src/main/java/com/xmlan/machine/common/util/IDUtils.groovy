@@ -1,7 +1,6 @@
 package com.xmlan.machine.common.util
 
 import java.security.SecureRandom
-import java.util.UUID
 
 /**
  * Created by Ayakura Yuki on 2017/7/10. <br/>

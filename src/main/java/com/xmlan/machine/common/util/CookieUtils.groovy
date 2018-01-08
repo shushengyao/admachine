@@ -3,9 +3,6 @@ package com.xmlan.machine.common.util
 import javax.servlet.http.Cookie
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
-import java.io.UnsupportedEncodingException
-import java.net.URLDecoder
-import java.net.URLEncoder
 
 /**
  * Created by Ayakura Yuki on 2017/7/11. <br />

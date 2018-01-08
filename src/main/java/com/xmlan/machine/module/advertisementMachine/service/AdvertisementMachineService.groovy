@@ -29,4 +29,8 @@ class AdvertisementMachineService extends BaseService<AdvertisementMachine, Adve
         return counts
     }
 
+    AdvertisementMachine getByCodeNumber(String codeNumber) {
+        return dao.getByCodeNumber(codeNumber)
+    }
+
 }

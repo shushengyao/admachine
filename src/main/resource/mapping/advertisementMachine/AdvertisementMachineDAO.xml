@@ -128,6 +128,13 @@
         from advertisement_machine
         where userID = #{userID}
     </select>
+
+    <select id="getByCodeNumber" resultMap="advertisementMachineResultMap">
+        select
+        <include refid="columns"/>
+        from advertisement_machine
+        where codeNumber = #{codeNumber}
+    </select>
     <!-- </editor-fold> -->
 
 </mapper>

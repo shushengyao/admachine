@@ -8,10 +8,12 @@ import com.xmlan.machine.common.cache.AdvertisementMachineCache
 import com.xmlan.machine.common.cache.UserCache
 import com.xmlan.machine.common.config.Global
 import com.xmlan.machine.common.util.DateUtils
+import com.xmlan.machine.common.util.MediaUtils
 import com.xmlan.machine.common.util.SessionUtils
 import com.xmlan.machine.common.util.StringUtils
 import com.xmlan.machine.module.advertisement.entity.Advertisement
 import com.xmlan.machine.module.advertisement.service.AdvertisementService
+import com.xmlan.machine.module.advertisementMachine.service.AdvertisementMachineService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
@@ -55,6 +57,12 @@ class AdvertisementController extends BaseController {
         data.put "ad", advertisement
         data.put "machine", AdvertisementMachineCache.getMachineNameByID(advertisement.machineID)
         return data
+    }
+
+    @RequestMapping(value = "/count", produces = "application/json; charset=utf-8")
+    @ResponseBody
+    int count() {
+        AdvertisementMachineCache.getMachineCountByUserID(SessionUtils.GetAdmin(request).id)
     }
 
     @RequestMapping(value = "/list/{pageNo}")
@@ -144,23 +152,8 @@ class AdvertisementController extends BaseController {
     @RequestMapping('/media/{id}')
     @ResponseBody
     void media(@PathVariable String id, HttpServletResponse response) {
-        Advertisement ad = AdvertisementCache.get(id.toInteger())
-        File file = new File("${Global.mediaPath}/${ad.url}".toString())
-        FileInputStream inputStream = new FileInputStream(file)
-        ServletOutputStream outputStream = response.getOutputStream()
-        byte[] bytes = null
-        while (inputStream.available() > 0) {
-            if (inputStream.available() > 10240) {
-                bytes = new byte[10240]
-            } else {
-                bytes = new byte[inputStream.available()]
-            }
-            inputStream.read(bytes, 0, bytes.length)
-            outputStream.write(bytes, 0, bytes.length)
-        }
-        inputStream.close()
-        outputStream.flush()
-        outputStream.close()
+        Advertisement advertisement = AdvertisementCache.get(id.toInteger())
+        MediaUtils.mediaTransfer advertisement.url, response
     }
 
 }
