@@ -15,12 +15,15 @@ class BaseBean {
     public static final int FAILURE = -3
 
     public static final int ADMIN_ROLE_ID = 1
+    public static final int ROOT_ADMIN_ID = 1
 
-    public static final int ADMIN_DONE = 10
-    public static final int INCORRECT_REPEAT_PASSWD = 11
-    public static final int INCORRECT_OLD_PASSWD = 12
+    public static final int ADMIN_DONE = 100
+    public static final int INCORRECT_REPEAT_PASSWD = 101
+    public static final int INCORRECT_OLD_PASSWD = 102
 
-    public static final int ROLE_HAVE_SOME_USERS = -20
+    public static final int ROLE_HAVE_SOME_USERS = -200
+    public static final int ROLE_IS_NOT_EXISTS = -201
+    public static final int ROOT_ADMIN_CAN_NOT_CHANGE_ROLE = -202
 
     public static final String SHOW = "1"
     public static final String HIDE = "0"

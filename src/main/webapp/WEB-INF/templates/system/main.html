@@ -83,6 +83,7 @@
 
 <script type="text/javascript" src="../../../static/application/js/jquery.min.js"></script>
 <script type="text/javascript" src="../../../static/materialize/js/materialize.min.js"></script>
+<script type="text/javascript" src="../../../static/application/js/global.js"></script>
 <script type="text/javascript">
     $(document.body).css({
         "overflow-x": "hidden",
@@ -90,21 +91,13 @@
     });
 
     $(function () {
-        var screen_width = window.screen.width;
-        $('.page-footer').css({
-            "width": screen_width + "px",
-            "height": 40 + 'px',
-            "padding": 0
-        });
+        resize_footer(window.screen.width);
         $("#button-nav-menu").sideNav({
             closeOnClick: true,
             draggable: true
         });
         $(".dropdown-button").dropdown();
-        var message = '[[${message}]]';
-        if (message !== '') {
-            Materialize.toast(message, 5000);
-        }
+        toast('[[${message}]]');
     });
 </script>
 </body>

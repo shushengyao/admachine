@@ -153,49 +153,77 @@
                     <td th:if="${machine.id==item.machineID}" th:text="*{machine.name}">machineID</td>
                 </th:block>
                 <td class="right-align hide-on-med-and-down">
-                    <a class="btn-floating blue waves-effect waves-light tooltipped btn modal-trigger"
-                       data-position="top" data-delay="50" data-tooltip="查看详情" href="#detail-modal"
-                       th:onmouseover="'javascript:detail(\''+*{item.id}+'\')'">
-                        <i class="material-icons">more_horiz</i>
-                    </a>
-                    <a class="btn-floating yellow waves-effect waves-light tooltipped btn modal-trigger"
-                       data-position="top" data-delay="50" data-tooltip="上传新图片/视频"
-                       th:onclick="'javascript:openUploadModal(\''+${item.id}+'\')'" href="#upload-new-image-or-video">
-                        <i class="material-icons">file_upload</i>
-                    </a>
-                    <a class="btn-floating green waves-effect waves-light tooltipped"
-                       data-position="top" data-delay="50" data-tooltip="编辑"
-                       th:href="@{${adminPath}+'/advertisement/form?id='+${item.id}}">
-                        <i class="material-icons">edit</i>
-                    </a>
-                    <a class="btn-floating red darken-1 waves-effect waves-light tooltipped btn modal-trigger"
-                       data-position="top" data-delay="50" data-tooltip="删除" href="#delete-modal"
-                       th:onclick="'javascript:prepareForDeleting(\''+${item.id}+'\', \''+${item.name}+'\')'">
-                        <i class="material-icons">delete</i>
-                    </a>
+                    <div class="fixed-action-btn horizontal" style="position: relative; right: 0; top: 0;">
+                        <a class="btn-floating btn-large blue"><i class="material-icons">menu</i></a>
+                        <ul>
+                            <li>
+                                <a class="btn-floating blue waves-effect waves-light tooltipped btn modal-trigger"
+                                   data-position="top" data-delay="50" data-tooltip="查看详情" href="#detail-modal"
+                                   th:onmouseover="'javascript:detail(\''+*{item.id}+'\')'">
+                                    <i class="material-icons">more_horiz</i>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="btn-floating yellow waves-effect waves-light tooltipped btn modal-trigger"
+                                   data-position="top" data-delay="50" data-tooltip="上传新图片/视频"
+                                   th:onclick="'javascript:openUploadModal(\''+${item.id}+'\')'"
+                                   href="#upload-new-image-or-video">
+                                    <i class="material-icons">file_upload</i>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="btn-floating green waves-effect waves-light tooltipped"
+                                   data-position="top" data-delay="50" data-tooltip="编辑"
+                                   th:href="@{${adminPath}+'/advertisement/form?id='+${item.id}}">
+                                    <i class="material-icons">edit</i>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="btn-floating red darken-1 waves-effect waves-light tooltipped btn modal-trigger"
+                                   data-position="top" data-delay="50" data-tooltip="删除" href="#delete-modal"
+                                   th:onclick="'javascript:prepareForDeleting(\''+${item.id}+'\', \''+${item.name}+'\')'">
+                                    <i class="material-icons">delete</i>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
                 </td>
                 <td class="hide-on-large-only" id="mobile-table-item-buttons">
-                    <a class="btn-floating blue waves-effect waves-light tooltipped btn modal-trigger"
-                       data-position="top" data-delay="50" data-tooltip="查看详情" href="#detail-modal"
-                       th:onclick="'javascript:detail(\''+*{item.id}+'\')'">
-                        <i class="material-icons">more_horiz</i>
-                    </a>
-                    <a class="btn-floating yellow waves-effect waves-light tooltipped btn modal-trigger"
-                       data-position="top" data-delay="50" data-tooltip="上传新图片/视频"
-                       th:onclick="'javascript:openUploadModal(\''+${item.id}+'\')'" href="#upload-new-image-or-video">
-                        <i class="material-icons">file_upload</i>
-                    </a>
-                    <br/>
-                    <a class="btn-floating green waves-effect waves-light tooltipped"
-                       data-position="top" data-delay="50" data-tooltip="编辑"
-                       th:href="@{${adminPath}+'/advertisement/form?id='+${item.id}}">
-                        <i class="material-icons">edit</i>
-                    </a>
-                    <a class="btn-floating red darken-1 waves-effect waves-light tooltipped btn modal-trigger"
-                       data-position="top" data-delay="50" data-tooltip="删除" href="#delete-modal"
-                       th:onclick="'javascript:prepareForDeleting(\''+${item.id}+'\', \''+${item.name}+'\')'">
-                        <i class="material-icons">delete</i>
-                    </a>
+                    <div class="fixed-action-btn click-to-toggle center-align"
+                         style="position: relative; left: 0; top: 0;">
+                        <a class="btn-floating blue"><i class="material-icons">menu</i></a>
+                        <ul>
+                            <li>
+                                <a class="btn-floating blue waves-effect waves-light tooltipped btn modal-trigger"
+                                   data-position="top" data-delay="50" data-tooltip="查看详情" href="#detail-modal"
+                                   th:onclick="'javascript:detail(\''+*{item.id}+'\')'">
+                                    <i class="material-icons">more_horiz</i>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="btn-floating yellow waves-effect waves-light tooltipped btn modal-trigger"
+                                   data-position="top" data-delay="50" data-tooltip="上传新图片/视频"
+                                   th:onclick="'javascript:openUploadModal(\''+${item.id}+'\')'"
+                                   href="#upload-new-image-or-video">
+                                    <i class="material-icons">file_upload</i>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="btn-floating green waves-effect waves-light tooltipped"
+                                   data-position="top" data-delay="50" data-tooltip="编辑"
+                                   th:href="@{${adminPath}+'/advertisement/form?id='+${item.id}}">
+                                    <i class="material-icons">edit</i>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="btn-floating red darken-1 waves-effect waves-light tooltipped btn modal-trigger"
+                                   data-position="top" data-delay="50" data-tooltip="删除" href="#delete-modal"
+                                   th:onclick="'javascript:prepareForDeleting(\''+${item.id}+'\', \''+${item.name}+'\')'">
+                                    <i class="material-icons">delete</i>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
                 </td>
             </tr>
             </tbody>
@@ -333,15 +361,12 @@
         $("#upload-new-image-or-video").modal();
         $("#delete-modal").modal();
         $("#machineID").material_select();
-        var message = '[[${message}]]';
-        if (message !== '') {
-            Materialize.toast(message, 5000);
-        }
+        toast('[[${message}]]');
     });
 
     function detail(id) {
-        var url = '[[${adminPath}]]' + "/advertisement/detail/" + id;
-        var request_url = '[[${adminPath}]]' + "/advertisement/media/" + id;
+        var url = '[[${adminPath}]]/advertisement/detail/' + id;
+        var request_url = '[[${adminPath}]]/advertisement/media/' + id;
         $.ajax({
             url: url,
             type: "GET",
@@ -374,11 +399,11 @@
     function uploadImageOrVideo() {
         var file = $("#url").val();
         if (file === '') {
-            Materialize.toast("没有选择文件，该广告的图片/视频没有更新。", 5000);
+            toast("没有选择文件，该广告的图片/视频没有更新。");
             return false;
         } else {
             var id = $("#upload-target-id").val();
-            var url = '[[${adminPath}]]' + '/advertisement/uploadMedia/' + id;
+            var url = '[[${adminPath}]]/advertisement/uploadMedia/' + id;
             $("#upload-image-or-video-form").attr('action', url);
             $("#upload-image-or-video-form").submit();
             return true;
@@ -406,7 +431,7 @@
     function hasMachine() {
         var machines = parseInt('[[${machines}]]');
         if (machines === 0) {
-            Materialize.toast('没有可用的广告机', 5000);
+            toast("没有可用的广告机");
             return false;
         } else {
             return true;

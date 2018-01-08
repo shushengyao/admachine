@@ -182,10 +182,7 @@
         if (roleID === '1') {
             $("#userID").material_select();
         }
-        var message = '[[${message}]]';
-        if (message !== '') {
-            Materialize.toast(message, 5000);
-        }
+        toast('[[${message}]]');
     });
 </script>
 </body>

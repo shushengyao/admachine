@@ -175,10 +175,7 @@
         });
         $("#userID").material_select();
         $("#userID-ro").material_select();
-        var message = '[[${message}]]';
-        if (message !== '') {
-            Materialize.toast(message, 5000);
-        }
+        toast('[[${message}]]');
     });
 </script>
 </body>

@@ -16,3 +16,9 @@ function checkNumber() {
         return true;
     }
 }
+
+function toast(msg) {
+    if (msg !== '') {
+        Materialize.toast(msg, 5000);
+    }
+}

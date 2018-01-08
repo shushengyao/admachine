@@ -155,7 +155,16 @@ class UserController extends BaseController {
     @RequestMapping(value = '/chgrp/{id}')
     @ResponseBody
     String chgrp(@PathVariable String id, int roleID) {
-
+        int responseCode = service.chgrp(id, roleID)
+        if (responseCode == ROOT_ADMIN_CAN_NOT_CHANGE_ROLE) {
+            return "ROOT管理员不能修改角色"
+        }
+        if (responseCode == ROLE_IS_NOT_EXISTS) {
+            return "指定的角色不存在"
+        }
+        if (responseCode == DONE) {
+            return "修改用户角色完成"
+        }
     }
 
 }

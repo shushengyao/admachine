@@ -139,39 +139,61 @@
                     <td th:if="${item.id==count.id}" th:text="${count.count}"></td>
                 </th:block>
                 <td class="right-align hide-on-med-and-down">
-                    <a class="btn-floating blue waves-effect waves-light tooltipped btn modal-trigger"
-                       data-position="top" data-delay="50" data-tooltip="查看详情" href="#detail-modal"
-                       th:onmouseover="'javascript:detail(\''+*{item.id}+'\')'">
-                        <i class="material-icons">more_horiz</i>
-                    </a>
-                    <a class="btn-floating green waves-effect waves-light tooltipped" data-position="top"
-                       data-delay="50" data-tooltip="编辑"
-                       th:href="@{${adminPath}+'/advertisementMachine/form?id='+${item.id}}">
-                        <i class="material-icons">edit</i>
-                    </a>
-                    <a class="btn-floating red darken-1 waves-effect waves-light tooltipped" data-position="top"
-                       data-delay="50" data-tooltip="删除"
-                       th:href="@{${adminPath}+'/advertisementMachine/delete?id='+${item.id}}">
-                        <i class="material-icons">delete</i>
-                    </a>
+                    <div class="fixed-action-btn horizontal" style="position: relative; right: 0; top: 0;">
+                        <a class="btn-floating btn-large blue"><i class="material-icons">menu</i></a>
+                        <ul>
+                            <li>
+                                <a class="btn-floating blue waves-effect waves-light tooltipped btn modal-trigger"
+                                   data-position="top" data-delay="50" data-tooltip="查看详情" href="#detail-modal"
+                                   th:onmouseover="'javascript:detail(\''+*{item.id}+'\')'">
+                                    <i class="material-icons">more_horiz</i>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="btn-floating green waves-effect waves-light tooltipped" data-position="top"
+                                   data-delay="50" data-tooltip="编辑"
+                                   th:href="@{${adminPath}+'/advertisementMachine/form?id='+${item.id}}">
+                                    <i class="material-icons">edit</i>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="btn-floating red darken-1 waves-effect waves-light tooltipped"
+                                   data-position="top" data-delay="50" data-tooltip="删除"
+                                   th:href="@{${adminPath}+'/advertisementMachine/delete?id='+${item.id}}">
+                                    <i class="material-icons">delete</i>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
                 </td>
                 <td class="hide-on-large-only" id="mobile-table-item-buttons">
-                    <a class="btn-floating blue waves-effect waves-light tooltipped btn modal-trigger"
-                       data-position="top" data-delay="50" data-tooltip="查看详情" href="#detail-modal"
-                       th:onclick="'javascript:detail(\''+*{item.id}+'\')'">
-                        <i class="material-icons">more_horiz</i>
-                    </a>
-                    <br/>
-                    <a class="btn-floating green waves-effect waves-light tooltipped" data-position="top"
-                       data-delay="50" data-tooltip="编辑"
-                       th:href="@{${adminPath}+'/advertisementMachine/form?id='+${item.id}}">
-                        <i class="material-icons">edit</i>
-                    </a>
-                    <a class="btn-floating red darken-1 waves-effect waves-light tooltipped" data-position="top"
-                       data-delay="50" data-tooltip="删除"
-                       th:href="@{${adminPath}+'/advertisementMachine/delete?id='+${item.id}}">
-                        <i class="material-icons">delete</i>
-                    </a>
+                    <div class="fixed-action-btn click-to-toggle center-align"
+                         style="position: relative; left: 0; top: 0;">
+                        <a class="btn-floating blue"><i class="material-icons">menu</i></a>
+                        <ul>
+                            <li>
+                                <a class="btn-floating blue waves-effect waves-light tooltipped btn modal-trigger"
+                                   data-position="top" data-delay="50" data-tooltip="查看详情" href="#detail-modal"
+                                   th:onclick="'javascript:detail(\''+*{item.id}+'\')'">
+                                    <i class="material-icons">more_horiz</i>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="btn-floating green waves-effect waves-light tooltipped" data-position="top"
+                                   data-delay="50" data-tooltip="编辑"
+                                   th:href="@{${adminPath}+'/advertisementMachine/form?id='+${item.id}}">
+                                    <i class="material-icons">edit</i>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="btn-floating red darken-1 waves-effect waves-light tooltipped"
+                                   data-position="top" data-delay="50" data-tooltip="删除"
+                                   th:href="@{${adminPath}+'/advertisementMachine/delete?id='+${item.id}}">
+                                    <i class="material-icons">delete</i>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
                 </td>
             </tr>
             </tbody>
@@ -265,14 +287,11 @@
             closeOnSelect: true
         });
         $("#detail-modal").modal();
-        var message = '[[${message}]]';
-        if (message !== '') {
-            Materialize.toast(message, 5000);
-        }
+        toast('[[${message}]]');
     });
 
     function detail(id) {
-        var url = '[[${adminPath}]]' + "/advertisementMachine/detail/" + id;
+        var url = '[[${adminPath}]]/advertisementMachine/detail/' + id;
         $.ajax({
             url: url,
             type: "GET",

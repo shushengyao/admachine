@@ -204,21 +204,18 @@
             closeOnSelect: true
         });
         $("#roleID").material_select();
-        var message = '[[${message}]]';
-        if (message !== '') {
-            Materialize.toast(message, 5000);
-        }
+        toast('[[${message}]]');
     });
 
     function save() {
         // pass check
         if ($("#password").val() !== $("#confirmPassword").val()) {
-            Materialize.toast("确认密码输入不匹配登录密码", 5000);
+            toast("确认密码输入不匹配登录密码");
             return false;
         }
         // Phone validate
         if (!(/^((86)|(\+86))?(\-)?1[3|4|5|7|8][0-9]\d{8}$/.test($("#phone").val()))) {
-            Materialize.toast("手机号格式不正确", 5000);
+            toast("手机号格式不正确");
             return false;
         }
         return true;

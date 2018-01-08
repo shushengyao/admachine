@@ -125,41 +125,63 @@
                 </th:block>
                 <td th:text="*{#strings.abbreviate(item.remark,50)}"></td>
                 <td class="right-align hide-on-med-and-down">
-                    <a class="btn-floating blue waves-effect waves-light tooltipped btn modal-trigger"
-                       data-position="top" data-delay="50" data-tooltip="查看详情" href="#detail-modal"
-                       th:onmouseover="'javascript:detail(\''+*{item.id}+'\')'">
-                        <i class="material-icons">more_horiz</i>
-                    </a>
-                    <a class="btn-floating green waves-effect waves-light tooltipped"
-                       data-position="top" data-delay="50" data-tooltip="编辑"
-                       th:href="@{${adminPath}+'/role/form?id='+${item.id}}">
-                        <i class="material-icons">edit</i>
-                    </a>
-                    <a class="btn-floating red darken-1 waves-effect waves-light tooltipped btn modal-trigger"
-                       data-position="top" data-delay="50" data-tooltip="删除" href="#delete-modal"
-                       th:onclick="'javascript:prepareForDeleting(\''+${item.id}+'\',\''+${item.name}+'\')'"
-                       th:if="${item.id!=adminRoleID}">
-                        <i class="material-icons">delete</i>
-                    </a>
+                    <div class="fixed-action-btn horizontal" style="position: relative; right: 0; top: 0;">
+                        <a class="btn-floating btn-large blue"><i class="material-icons">menu</i></a>
+                        <ul>
+                            <li>
+                                <a class="btn-floating blue waves-effect waves-light tooltipped btn modal-trigger"
+                                   data-position="top" data-delay="50" data-tooltip="查看详情" href="#detail-modal"
+                                   th:onmouseover="'javascript:detail(\''+*{item.id}+'\')'">
+                                    <i class="material-icons">more_horiz</i>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="btn-floating green waves-effect waves-light tooltipped"
+                                   data-position="top" data-delay="50" data-tooltip="编辑"
+                                   th:href="@{${adminPath}+'/role/form?id='+${item.id}}">
+                                    <i class="material-icons">edit</i>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="btn-floating red darken-1 waves-effect waves-light tooltipped btn modal-trigger"
+                                   data-position="top" data-delay="50" data-tooltip="删除" href="#delete-modal"
+                                   th:onclick="'javascript:prepareForDeleting(\''+${item.id}+'\',\''+${item.name}+'\')'"
+                                   th:if="${item.id!=adminRoleID}">
+                                    <i class="material-icons">delete</i>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
                 </td>
                 <td class="hide-on-large-only" id="mobile-table-item-buttons">
-                    <a class="btn-floating blue waves-effect waves-light tooltipped btn modal-trigger"
-                       data-position="top" data-delay="50" data-tooltip="查看详情" href="#detail-modal"
-                       th:onclick="'javascript:detail(\''+*{item.id}+'\')'">
-                        <i class="material-icons">more_horiz</i>
-                    </a>
-                    <br/>
-                    <a class="btn-floating green waves-effect waves-light tooltipped"
-                       data-position="top" data-delay="50" data-tooltip="编辑"
-                       th:href="@{${adminPath}+'/role/form?id='+${item.id}}">
-                        <i class="material-icons">edit</i>
-                    </a>
-                    <a class="btn-floating red darken-1 waves-effect waves-light tooltipped btn modal-trigger"
-                       data-position="top" data-delay="50" data-tooltip="删除" href="#delete-modal"
-                       th:onclick="'javascript:prepareForDeleting(\''+${item.id}+'\',\''+${item.name}+'\')'"
-                       th:if="${item.id!=adminRoleID}">
-                        <i class="material-icons">delete</i>
-                    </a>
+                    <div class="fixed-action-btn click-to-toggle center-align"
+                         style="position: relative; left: 0; top: 0;">
+                        <a class="btn-floating blue"><i class="material-icons">menu</i></a>
+                        <ul>
+                            <li>
+                                <a class="btn-floating blue waves-effect waves-light tooltipped btn modal-trigger"
+                                   data-position="top" data-delay="50" data-tooltip="查看详情" href="#detail-modal"
+                                   th:onclick="'javascript:detail(\''+*{item.id}+'\')'">
+                                    <i class="material-icons">more_horiz</i>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="btn-floating green waves-effect waves-light tooltipped"
+                                   data-position="top" data-delay="50" data-tooltip="编辑"
+                                   th:href="@{${adminPath}+'/role/form?id='+${item.id}}">
+                                    <i class="material-icons">edit</i>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="btn-floating red darken-1 waves-effect waves-light tooltipped btn modal-trigger"
+                                   data-position="top" data-delay="50" data-tooltip="删除" href="#delete-modal"
+                                   th:onclick="'javascript:prepareForDeleting(\''+${item.id}+'\',\''+${item.name}+'\')'"
+                                   th:if="${item.id!=adminRoleID}">
+                                    <i class="material-icons">delete</i>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
                 </td>
             </tr>
             </tbody>
@@ -206,7 +228,7 @@
     </div>
 
     <!-- <editor-fold desc="Modal"> -->
-    <div id="detail-modal" class="modal modal-fixed-footer">
+    <div id="detail-modal" class="modal">
         <div class="modal-content">
             <h4>详情</h4>
             <h6 class="green-text text-darken-2">角色编号</h6>
@@ -263,14 +285,11 @@
         $("#detail-modal").modal();
         $("#delete-modal").modal();
         $("#roleID").material_select();
-        var message = '[[${message}]]';
-        if (message !== '') {
-            Materialize.toast(message, 5000);
-        }
+        toast('[[${message}]]');
     });
 
     function detail(id) {
-        var url = '[[${adminPath}]]' + "/role/detail/" + id;
+        var url = '[[${adminPath}]]/role/detail/' + id;
         $.ajax({
             url: url,
             type: "GET",

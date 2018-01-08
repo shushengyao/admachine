@@ -141,8 +141,6 @@
                 <th>角色</th>
                 <th>广告机数</th>
                 <th>地址</th>
-                <!--<th class="hide-on-med-and-down"></th>-->
-                <!--<th class="hide-on-large-only"></th>-->
             </tr>
             </thead>
             <tbody class="card">
@@ -176,6 +174,13 @@
                                 </a>
                             </li>
                             <li>
+                                <a class="btn-floating cyan waves-effect waves-light tooltipped btn modal-trigger"
+                                   data-position="top" data-delay="50" data-tooltip="更改角色" href="#chgrp-modal"
+                                   th:onclick="'javascript:prepareForChgrp(\''+${item.id}+'\')'">
+                                    <i class="material-icons">group</i>
+                                </a>
+                            </li>
+                            <li>
                                 <a class="btn-floating yellow waves-effect waves-light tooltipped btn modal-trigger"
                                    data-position="top" data-delay="50" data-tooltip="修改密码" href="#passwd-modal"
                                    th:onclick="'javascript:prepareForPasswd(\''+${item.id}+'\', \''+${item.roleID}+'\')'">
@@ -205,10 +210,17 @@
                                 </a>
                             </li>
                             <li>
-                                <a class="btn-floating green waves-effect waves-light tooltipped"
-                                   data-position="top" data-delay="50" data-tooltip="编辑"
+                                <a class="btn-floating green waves-effect waves-light tooltipped" data-position="top"
+                                   data-delay="50" data-tooltip="编辑"
                                    th:href="@{${adminPath}+'/user/form?id='+${item.id}}">
                                     <i class="material-icons">edit</i>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="btn-floating cyan waves-effect waves-light tooltipped btn modal-trigger"
+                                   data-position="top" data-delay="50" data-tooltip="更改角色" href="#chgrp-modal"
+                                   th:onclick="'javascript:prepareForChgrp(\''+${item.id}+'\')'">
+                                    <i class="material-icons">group</i>
                                 </a>
                             </li>
                             <li>
@@ -333,6 +345,25 @@
             <a href="#" onclick="passwd()" class="modal-action modal-close waves-effect btn-flat">确认修改</a>
         </div>
     </div>
+
+    <div id="chgrp-modal" class="modal">
+        <div class="modal-content">
+            <h4>更改用户角色</h4>
+            <input id="chgrp-id" name="id" type="hidden">
+            <div class="row">
+                <div class="input-field col s12 m12 l12">
+                    <select id="chgrp-roleID" name="roleID">
+                        <option th:each="item:${roleList}" th:value="*{item.id}" th:text="*{item.name}"></option>
+                    </select>
+                    <label for="chgrp-roleID">按角色</label>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <a href="#" class="modal-action modal-close waves-effect waves-green btn-flat">放弃更改</a>
+            <a href="#" onclick="chgrp()" class="modal-action modal-close waves-effect btn-flat">确认更改</a>
+        </div>
+    </div>
     <!-- </editor-fold> -->
 
 </main>
@@ -380,15 +411,14 @@
                 $("#re-passwd").val(null);
             }
         });
+        $("#chgrp-modal").modal();
         $("#roleID").material_select();
-        var message = '[[${message}]]';
-        if (message !== '') {
-            Materialize.toast(message, 5000);
-        }
+        $("#chgrp-roleID").material_select();
+        toast('[[${message}]]');
     });
 
     function detail(id) {
-        var url = '[[${adminPath}]]' + "/user/detail/" + id;
+        var url = '[[${adminPath}]]/user/detail/' + id;
         $.ajax({
             url: url,
             type: "GET",
@@ -416,8 +446,8 @@
         $("#passwd-id").val(id);
     }
 
-    function toast(msg) {
-        Materialize.toast(msg, 5000);
+    function prepareForChgrp(id) {
+        $("#chgrp-id").val(id);
     }
 
     function passwd() {
@@ -425,7 +455,7 @@
         var oldPasswd = $("#old-passwd").val();
         var newPasswd = $("#new-passwd").val();
         var rePasswd = $("#re-passwd").val();
-        var url = '[[${adminPath}]]' + "/user/passwd/" + id;
+        var url = '[[${adminPath}]]/user/passwd/' + id;
         $.ajax({
             url: url,
             type: "POST",
@@ -436,12 +466,31 @@
                 toast(msg);
             },
             error: function () {
+                toast("修改失败，系统繁忙，或是网络不通畅");
             }
         })
     }
 
     function chgrp() {
-
+        var id = $("#chgrp-id").val();
+        var roleID = $("#chgrp-roleID").val();
+        var url = '[[${adminPath}]]/user/chgrp/' + id;
+        $.ajax({
+            url: url,
+            type: "POST",
+            data: {"id": id, "roleID": roleID},
+            dataType: "json",
+            cache: false,
+            success: function (msg) {
+                toast(msg);
+                setTimeout(function () {
+                    location.reload()
+                }, 3000);
+            },
+            error: function () {
+                toast("更改失败，系统繁忙，或是网络不通畅");
+            }
+        })
     }
 </script>
 </body>

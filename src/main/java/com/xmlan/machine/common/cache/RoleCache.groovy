@@ -46,7 +46,7 @@ class RoleCache {
     }
 
     static Role get(String id) {
-        List<Role> list = getRoleList()
+        List<Role> list = roleList
         for (role in list) {
             if (StringUtils.equals(role.id.toString(), id)) {
                 return role
@@ -61,7 +61,7 @@ class RoleCache {
      * @return
      */
     static int getUserCountInRole(int roleID) {
-        List<User> list = UserCache.getUserList()
+        List<User> list = UserCache.userList
         int count = 0
         list.each {
             if (it.roleID == roleID) {
@@ -69,6 +69,20 @@ class RoleCache {
             }
         }
         return count
+    }
+
+    /**
+     * 判断是否存在角色
+     * @param roleID
+     * @return
+     */
+    static boolean isExists(int roleID) {
+        for (role in roleList) {
+            if (role.id == roleID) {
+                return true
+            }
+        }
+        return false
     }
 
 }

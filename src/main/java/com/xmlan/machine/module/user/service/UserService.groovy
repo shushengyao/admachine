@@ -2,6 +2,7 @@ package com.xmlan.machine.module.user.service
 
 import com.xmlan.machine.common.base.BaseService
 import com.xmlan.machine.common.cache.AdvertisementMachineCache
+import com.xmlan.machine.common.cache.RoleCache
 import com.xmlan.machine.common.util.EncryptUtils
 import com.xmlan.machine.common.util.StringUtils
 import com.xmlan.machine.module.advertisementMachine.dao.AdvertisementMachineDAO
@@ -48,7 +49,6 @@ class UserService extends BaseService<User, UserDAO> {
                 if (StringUtils.equals(user.password, oldPasswd)) {
                     user.password = EncryptUtils.SHA256ForTenTimes(newPasswd)
                     dao.changePassword(user)
-                    cacheManager.clearAll()
                     return ADMIN_DONE
                 } else {
                     return INCORRECT_OLD_PASSWD
@@ -56,11 +56,23 @@ class UserService extends BaseService<User, UserDAO> {
             } else {
                 user.password = EncryptUtils.SHA256ForTenTimes(newPasswd)
                 dao.changePassword(user)
-                cacheManager.clearAll()
                 return DONE
             }
         } else {
             return INCORRECT_REPEAT_PASSWD
+        }
+    }
+
+    int chgrp(String id, int roleID) {
+        User user = dao.get(id)
+        if (user.id == ROOT_ADMIN_ID) {
+            return ROOT_ADMIN_CAN_NOT_CHANGE_ROLE
+        } else if (RoleCache.isExists(roleID)) {
+            user.roleID = roleID
+            dao.changeRoleID(user)
+            return DONE
+        } else {
+            return ROLE_IS_NOT_EXISTS
         }
     }
 
