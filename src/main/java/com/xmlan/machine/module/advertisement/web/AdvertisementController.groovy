@@ -84,7 +84,11 @@ class AdvertisementController extends BaseController {
         model.addAttribute "machineID", advertisement.machineID
         model.addAttribute "time", advertisement.time
         model.addAttribute "addTime", advertisement.addTime
-        model.addAttribute "machines", AdvertisementMachineCache.getMachineCount(SessionUtils.GetAdmin(request).id)
+        if (SessionUtils.GetAdmin(request).roleID != ADMIN_ROLE_ID) {
+            model.addAttribute "machines", AdvertisementMachineCache.getMachineCount(SessionUtils.GetAdmin(request).id)
+        } else {
+            model.addAttribute "machines", PASS
+        }
         // endregion
 
         return "advertisement/advertisementList"

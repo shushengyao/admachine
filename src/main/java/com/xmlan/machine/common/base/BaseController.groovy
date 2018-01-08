@@ -38,6 +38,8 @@ abstract class BaseController extends BaseBean {
     public String adminPath
     @Value('${servicePath}')
     public String servicePath
+    @Value('${mobilePath}')
+    public String mobilePath
 
     @ModelAttribute('adminPath')
     String adminPath() {
@@ -47,6 +49,11 @@ abstract class BaseController extends BaseBean {
     @ModelAttribute('servicePath')
     String servicePath() {
         return servicePath
+    }
+
+    @ModelAttribute('mobilePath')
+    String mobilePath() {
+        return mobilePath
     }
 
     @ModelAttribute('adminRoleID')

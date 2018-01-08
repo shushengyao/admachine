@@ -28,13 +28,13 @@ class AdvertisementServiceProvider extends BaseController {
     @Autowired
     private AdvertisementMachineService machineService
 
-    @RequestMapping('/get/{id}')
+    @RequestMapping(value = '/get/{id}', produces = "application/json; charset=utf-8")
     @ResponseBody
     Advertisement get(@PathVariable String id) {
         service.get id
     }
 
-    @RequestMapping('/find/{codeNumber}')
+    @RequestMapping(value = '/find/{codeNumber}', produces = "application/json; charset=utf-8")
     @ResponseBody
     List<Advertisement> findList(@PathVariable String codeNumber) {
         AdvertisementMachine machine = machineService.getByCodeNumber(codeNumber)

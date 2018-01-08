@@ -11,7 +11,7 @@ import com.xmlan.machine.module.advertisement.entity.Advertisement
  * Created by ayakurayuki on 2017/12/26-14:28.
  * Package: com.xmlan.machine.common.cache
  */
-class AdvertisementCache {
+final class AdvertisementCache {
 
     private static final def CACHE_NAME = "advertisementCache"
     private static final def MAP_NAME = "adCacheMap"

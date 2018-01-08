@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional
 class BaseBean {
 
     public static final int DONE = 0
+    public static final int PASS = 1
     public static final int DATABASE_DO_NOTHING = -1
     public static final int NEW_INSERT_ID = -2
     public static final int FAILURE = -3

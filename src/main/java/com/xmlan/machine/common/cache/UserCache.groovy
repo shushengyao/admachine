@@ -13,7 +13,7 @@ import com.xmlan.machine.module.user.entity.User
  * Created by ayakurayuki on 2017/12/26-11:14.
  * Package: com.xmlan.machine.common.cache
  */
-class UserCache {
+final class UserCache {
 
     private static final def CACHE_NAME = "userCache"
     private static final def MAP_NAME = "userCacheMap"

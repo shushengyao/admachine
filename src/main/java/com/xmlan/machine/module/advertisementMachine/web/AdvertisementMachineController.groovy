@@ -102,6 +102,12 @@ class AdvertisementMachineController extends BaseController {
         if (!beanValidator(model, advertisementMachine)) {
             return form(advertisementMachine, model)
         }
+        if (StringUtils.isBlank(advertisementMachine.longitude)) {
+            advertisementMachine.longitude = "0.0"
+        }
+        if (StringUtils.isBlank(advertisementMachine.latitude)) {
+            advertisementMachine.latitude = "0.0"
+        }
         advertisementMachine.addTime = "${advertisementMachine.addTime} ${DateUtils.GetTime()}"
         if (StringUtils.equals(id, NEW_INSERT_ID.toString())) {
             service.insert advertisementMachine

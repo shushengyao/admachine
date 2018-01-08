@@ -13,7 +13,7 @@ import com.xmlan.machine.module.advertisementMachine.entity.SimpleAdvertisementM
  * Created by ayakurayuki on 2017/12/29-10:35.
  * Package: com.xmlan.machine.common.cache
  */
-class AdvertisementMachineCache {
+final class AdvertisementMachineCache {
 
     private static final def CACHE_NAME = "advertisementMachineCache"
     private static final def MAP_NAME = "adMachineCacheMap"
