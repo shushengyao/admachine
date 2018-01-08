@@ -58,7 +58,7 @@ class AdvertisementMachineCache {
      * @param userID
      * @return
      */
-    static int getUserOwnMachineCount(int userID) {
+    static int getMachineCount(int userID) {
         List<AdvertisementMachine> list = advertisementMachineList
         int count = 0
         list.forEach({
@@ -98,17 +98,6 @@ class AdvertisementMachineCache {
             }
         }
         return StringUtils.EMPTY
-    }
-
-    static int getMachineCountByUserID(int id) {
-        List<AdvertisementMachine> list = advertisementMachineList
-        int count = 0
-        list.each {
-            if (it.userID == id) {
-                count++
-            }
-        }
-        return count
     }
 
 }

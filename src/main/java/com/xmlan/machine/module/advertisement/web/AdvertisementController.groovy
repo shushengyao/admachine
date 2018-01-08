@@ -6,21 +6,18 @@ import com.xmlan.machine.common.base.BaseController
 import com.xmlan.machine.common.cache.AdvertisementCache
 import com.xmlan.machine.common.cache.AdvertisementMachineCache
 import com.xmlan.machine.common.cache.UserCache
-import com.xmlan.machine.common.config.Global
 import com.xmlan.machine.common.util.DateUtils
 import com.xmlan.machine.common.util.MediaUtils
 import com.xmlan.machine.common.util.SessionUtils
 import com.xmlan.machine.common.util.StringUtils
 import com.xmlan.machine.module.advertisement.entity.Advertisement
 import com.xmlan.machine.module.advertisement.service.AdvertisementService
-import com.xmlan.machine.module.advertisementMachine.service.AdvertisementMachineService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.servlet.mvc.support.RedirectAttributes
 
-import javax.servlet.ServletOutputStream
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
@@ -59,12 +56,6 @@ class AdvertisementController extends BaseController {
         return data
     }
 
-    @RequestMapping(value = "/count", produces = "application/json; charset=utf-8")
-    @ResponseBody
-    int count() {
-        AdvertisementMachineCache.getMachineCountByUserID(SessionUtils.GetAdmin(request).id)
-    }
-
     @RequestMapping(value = "/list/{pageNo}")
     String list(Advertisement advertisement, @PathVariable int pageNo, Model model) {
         // region 格式化查询条件
@@ -93,6 +84,7 @@ class AdvertisementController extends BaseController {
         model.addAttribute "machineID", advertisement.machineID
         model.addAttribute "time", advertisement.time
         model.addAttribute "addTime", advertisement.addTime
+        model.addAttribute "machines", AdvertisementMachineCache.getMachineCount(SessionUtils.GetAdmin(request).id)
         // endregion
 
         return "advertisement/advertisementList"

@@ -23,7 +23,7 @@ class AdvertisementMachineService extends BaseService<AdvertisementMachine, Adve
         list.each {
             AdvertisementMachineCount count = new AdvertisementMachineCount()
             count.id = it.id
-            count.count = AdvertisementMachineCache.getMachineCountByUserID(it.id)
+            count.count = AdvertisementMachineCache.getMachineCount(it.id)
             counts.add(count)
         }
         return counts

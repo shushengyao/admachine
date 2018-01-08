@@ -35,7 +35,7 @@ class UserService extends BaseService<User, UserDAO> {
         if (entity.id == ADMIN_ROLE_ID) {
             return DATABASE_DO_NOTHING
         }
-        if (AdvertisementMachineCache.getUserOwnMachineCount(entity.id) != 0) {
+        if (AdvertisementMachineCache.getMachineCount(entity.id) != 0) {
             return USER_HAVE_SOME_MACHINES
         }
         return super.delete(entity)

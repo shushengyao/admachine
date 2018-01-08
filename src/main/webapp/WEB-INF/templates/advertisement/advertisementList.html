@@ -404,21 +404,13 @@
     }
 
     function hasMachine() {
-        var url = '[[${adminPath}]]' + "/advertisement/count";
-        $.ajax({
-            url: url,
-            type: "GET",
-            success: function (count) {
-                if (count === 0) {
-                    Materialize.toast("没有可用的广告机", 5000);
-                    return false;
-                } else {
-                    return true;
-                }
-            },
-            error: function () {
-            }
-        })
+        var machines = parseInt('[[${machines}]]');
+        if (machines === 0) {
+            Materialize.toast('没有可用的广告机', 5000);
+            return false;
+        } else {
+            return true;
+        }
     }
 </script>
 </body>
