@@ -152,4 +152,10 @@ class UserController extends BaseController {
         }
     }
 
+    @RequestMapping(value = '/chgrp/{id}')
+    @ResponseBody
+    String chgrp(@PathVariable String id, int roleID) {
+
+    }
+
 }

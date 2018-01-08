@@ -82,7 +82,7 @@ class RoleController extends BaseController {
         int responseCode = service.delete(role)
         if (responseCode == DATABASE_DO_NOTHING) {
             addMessage redirectAttributes, "什么都没有删除"
-        } else if (responseCode == RoleService.ROLE_HAVE_SOME_USERS) {
+        } else if (responseCode == ROLE_HAVE_SOME_USERS) {
             addMessage redirectAttributes, "这个角色有从属用户，不能删除"
         } else {
             addMessage redirectAttributes, "删除角色成功"

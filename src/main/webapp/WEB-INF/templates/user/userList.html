@@ -141,8 +141,8 @@
                 <th>角色</th>
                 <th>广告机数</th>
                 <th>地址</th>
-                <th class="hide-on-med-and-down"></th>
-                <th class="hide-on-large-only"></th>
+                <!--<th class="hide-on-med-and-down"></th>-->
+                <!--<th class="hide-on-large-only"></th>-->
             </tr>
             </thead>
             <tbody class="card">
@@ -158,49 +158,75 @@
                 </th:block>
                 <td th:text="*{item.address}">address</td>
                 <td class="right-align hide-on-med-and-down">
-                    <a class="btn-floating blue waves-effect waves-light tooltipped btn modal-trigger"
-                       data-position="top" data-delay="50" data-tooltip="查看详情" href="#detail-modal"
-                       th:onmouseover="'javascript:detail(\''+*{item.id}+'\')'">
-                        <i class="material-icons">more_horiz</i>
-                    </a>
-                    <a class="btn-floating green waves-effect waves-light tooltipped"
-                       data-position="top" data-delay="50" data-tooltip="编辑"
-                       th:href="@{${adminPath}+'/user/form?id='+${item.id}}">
-                        <i class="material-icons">edit</i>
-                    </a>
-                    <a class="btn-floating yellow waves-effect waves-light tooltipped btn modal-trigger"
-                       data-position="top" data-delay="50" data-tooltip="修改密码" href="#passwd-modal"
-                       th:onclick="'javascript:prepareForPasswd(\''+${item.id}+'\', \''+${item.roleID}+'\')'">
-                        <i class="material-icons">lock_outline</i>
-                    </a>
-                    <a class="btn-floating red darken-1 waves-effect waves-light tooltipped btn modal-trigger"
-                       data-position="top" data-delay="50" data-tooltip="删除" href="#delete-modal"
-                       th:onclick="'javascript:prepareForDeleting(\''+${item.id}+'\', \''+${item.username}+'\')'">
-                        <i class="material-icons">delete</i>
-                    </a>
+                    <div class="fixed-action-btn horizontal" style="position: relative; right: 0; top: 0;">
+                        <a class="btn-floating btn-large blue"><i class="material-icons">menu</i></a>
+                        <ul>
+                            <li>
+                                <a class="btn-floating blue waves-effect waves-light tooltipped btn modal-trigger"
+                                   data-position="top" data-delay="50" data-tooltip="查看详情" href="#detail-modal"
+                                   th:onmouseover="'javascript:detail(\''+*{item.id}+'\')'">
+                                    <i class="material-icons">more_horiz</i>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="btn-floating green waves-effect waves-light tooltipped"
+                                   data-position="top" data-delay="50" data-tooltip="编辑"
+                                   th:href="@{${adminPath}+'/user/form?id='+${item.id}}">
+                                    <i class="material-icons">edit</i>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="btn-floating yellow waves-effect waves-light tooltipped btn modal-trigger"
+                                   data-position="top" data-delay="50" data-tooltip="修改密码" href="#passwd-modal"
+                                   th:onclick="'javascript:prepareForPasswd(\''+${item.id}+'\', \''+${item.roleID}+'\')'">
+                                    <i class="material-icons">lock_outline</i>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="btn-floating red darken-1 waves-effect waves-light tooltipped btn modal-trigger"
+                                   data-position="top" data-delay="50" data-tooltip="删除" href="#delete-modal"
+                                   th:onclick="'javascript:prepareForDeleting(\''+${item.id}+'\', \''+${item.username}+'\')'">
+                                    <i class="material-icons">delete</i>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
                 </td>
                 <td class="hide-on-large-only" id="mobile-table-item-buttons">
-                    <a class="btn-floating blue waves-effect waves-light tooltipped btn modal-trigger"
-                       data-position="top" data-delay="50" data-tooltip="查看详情" href="#detail-modal"
-                       th:onclick="'javascript:detail(\''+*{item.id}+'\')'">
-                        <i class="material-icons">more_horiz</i>
-                    </a>
-                    <a class="btn-floating green waves-effect waves-light tooltipped"
-                       data-position="top" data-delay="50" data-tooltip="编辑"
-                       th:href="@{${adminPath}+'/user/form?id='+${item.id}}">
-                        <i class="material-icons">edit</i>
-                    </a>
-                    <br/>
-                    <a class="btn-floating yellow waves-effect waves-light tooltipped btn modal-trigger"
-                       data-position="top" data-delay="50" data-tooltip="修改密码" href="#passwd-modal"
-                       th:onclick="'javascript:prepareForPasswd(\''+${item.id}+'\')'">
-                        <i class="material-icons">lock_outline</i>
-                    </a>
-                    <a class="btn-floating red darken-1 waves-effect waves-light tooltipped btn modal-trigger"
-                       data-position="top" data-delay="50" data-tooltip="删除" href="#delete-modal"
-                       th:onclick="'javascript:prepareForDeleting(\''+${item.id}+'\', \''+${item.username}+'\')'">
-                        <i class="material-icons">delete</i>
-                    </a>
+                    <div class="fixed-action-btn click-to-toggle center-align"
+                         style="position: relative; left: 0; top: 0;">
+                        <a class="btn-floating blue"><i class="material-icons">menu</i></a>
+                        <ul>
+                            <li>
+                                <a class="btn-floating blue waves-effect waves-light tooltipped btn modal-trigger"
+                                   data-position="top" data-delay="50" data-tooltip="查看详情" href="#detail-modal"
+                                   th:onclick="'javascript:detail(\''+*{item.id}+'\')'">
+                                    <i class="material-icons">more_horiz</i>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="btn-floating green waves-effect waves-light tooltipped"
+                                   data-position="top" data-delay="50" data-tooltip="编辑"
+                                   th:href="@{${adminPath}+'/user/form?id='+${item.id}}">
+                                    <i class="material-icons">edit</i>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="btn-floating yellow waves-effect waves-light tooltipped btn modal-trigger"
+                                   data-position="top" data-delay="50" data-tooltip="修改密码" href="#passwd-modal"
+                                   th:onclick="'javascript:prepareForPasswd(\''+${item.id}+'\')'">
+                                    <i class="material-icons">lock_outline</i>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="btn-floating red darken-1 waves-effect waves-light tooltipped btn modal-trigger"
+                                   data-position="top" data-delay="50" data-tooltip="删除" href="#delete-modal"
+                                   th:onclick="'javascript:prepareForDeleting(\''+${item.id}+'\', \''+${item.username}+'\')'">
+                                    <i class="material-icons">delete</i>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
                 </td>
             </tr>
             </tbody>
@@ -386,7 +412,7 @@
         $("#delete-name").text(name);
     }
 
-    function prepareForPasswd(id, role) {
+    function prepareForPasswd(id) {
         $("#passwd-id").val(id);
     }
 
@@ -412,6 +438,10 @@
             error: function () {
             }
         })
+    }
+
+    function chgrp() {
+
     }
 </script>
 </body>
