@@ -1,12 +1,15 @@
 package com.xmlan.machine.module.advertisement.web
 
+import cn.jiguang.common.ClientConfig
 import cn.jpush.api.JPushClient
+import cn.jpush.api.push.PushResult
 import com.github.pagehelper.PageInfo
 import com.google.common.collect.Maps
 import com.xmlan.machine.common.base.BaseController
 import com.xmlan.machine.common.cache.AdvertisementCache
 import com.xmlan.machine.common.cache.AdvertisementMachineCache
 import com.xmlan.machine.common.cache.UserCache
+import com.xmlan.machine.common.config.Global
 import com.xmlan.machine.common.util.DateUtils
 import com.xmlan.machine.common.util.MediaUtils
 import com.xmlan.machine.common.util.SessionUtils
@@ -138,6 +141,8 @@ class AdvertisementController extends BaseController {
     String uploadMedia(@PathVariable String id, HttpServletRequest httpServletRequest, RedirectAttributes attributes) {
         def responseCode = service.uploadMedia(id, httpServletRequest)
         if (responseCode == DONE) {
+            JPushClient pushClient = new JPushClient(Global.masterSecret, Global.appKey, null, ClientConfig.getInstance())
+
             addMessage attributes, "上传成功"
         }
         if (responseCode == FAILURE) {

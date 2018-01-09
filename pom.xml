@@ -41,6 +41,7 @@
         <dbcp.version>1.4</dbcp.version>
         <validator.version>5.2.4.Final</validator.version>
         <thymeleaf.version>3.0.9.RELEASE</thymeleaf.version>
+        <groovy.version>2.4.13</groovy.version>
     </properties>
 
     <dependencies>
@@ -48,7 +49,7 @@
         <dependency>
             <groupId>org.codehaus.groovy</groupId>
             <artifactId>groovy-all</artifactId>
-            <version>2.4.13</version>
+            <version>${groovy.version}</version>
         </dependency>
         <!-- </editor-fold> -->
 
@@ -448,7 +449,16 @@
                     <source>1.8</source>
                     <target>1.8</target>
                     <encoding>utf-8</encoding>
+                    <compilerId>groovy-eclipse-compiler</compilerId>
+                    <verbose>true</verbose>
                 </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.codehaus.groovy</groupId>
+                        <artifactId>groovy-eclipse-compiler</artifactId>
+                        <version>2.7.0-01</version>
+                    </dependency>
+                </dependencies>
             </plugin>
         </plugins>
     </build>

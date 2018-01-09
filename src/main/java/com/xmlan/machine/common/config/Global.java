@@ -9,7 +9,7 @@ import java.util.Map;
 /**
  * Created by Ayakura Yuki on 2017/7/11.
  */
-public class Global {
+public final class Global {
 
     /**
      * 当前对象实例
@@ -30,6 +30,30 @@ public class Global {
      * session管理员标记
      */
     public static final String USER = "managementUser";
+
+    /**
+     * 极光推送Master Secret
+     */
+    public static String getMasterSecret() {
+        String masterSecret = getConfig("masterSecret");
+        if (StringUtils.isNotBlank(masterSecret)) {
+            return masterSecret;
+        } else {
+            return "";
+        }
+    }
+
+    /**
+     * 极光推送APP Key
+     */
+    public static String getAppKey() {
+        String appKey = getConfig("appKey");
+        if (StringUtils.isNotBlank(appKey)) {
+            return appKey;
+        } else {
+            return "";
+        }
+    }
 
     /**
      * 获取当前对象实例
