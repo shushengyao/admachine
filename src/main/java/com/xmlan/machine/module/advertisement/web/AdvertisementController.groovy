@@ -142,7 +142,12 @@ class AdvertisementController extends BaseController {
         def responseCode = service.uploadMedia(id, httpServletRequest)
         if (responseCode == DONE) {
             JPushClient pushClient = new JPushClient(Global.masterSecret, Global.appKey, null, ClientConfig.getInstance())
-
+            PushResult result = pushClient.sendAndroidMessageWithAlias(
+                    "New media uploaded",
+                    "A new advertisement media has been uploaded.",
+                    "[\"id\": \"${id}\"]"
+            )
+            logger.trace(result)
             addMessage attributes, "上传成功"
         }
         if (responseCode == FAILURE) {
