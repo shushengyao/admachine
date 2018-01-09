@@ -39,7 +39,7 @@ public final class Global {
         if (StringUtils.isNotBlank(masterSecret)) {
             return masterSecret;
         } else {
-            return "";
+            return StringUtils.EMPTY;
         }
     }
 
@@ -51,7 +51,7 @@ public final class Global {
         if (StringUtils.isNotBlank(appKey)) {
             return appKey;
         } else {
-            return "";
+            return StringUtils.EMPTY;
         }
     }
 
