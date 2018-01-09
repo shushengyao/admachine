@@ -161,7 +161,6 @@ class EncodeUtils {
      * @return
      */
     static String urlDecode(String part) {
-
         try {
             return URLDecoder.decode(part, DEFAULT_URL_ENCODING)
         } catch (UnsupportedEncodingException e) {
