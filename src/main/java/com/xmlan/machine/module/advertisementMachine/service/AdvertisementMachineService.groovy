@@ -33,4 +33,35 @@ class AdvertisementMachineService extends BaseService<AdvertisementMachine, Adve
         return dao.getByCodeNumber(codeNumber)
     }
 
+    // provider support
+    static List<AdvertisementMachine> findForProvider(AdvertisementMachine advertisementMachine) {
+        List<AdvertisementMachine> machineList = AdvertisementMachineCache.advertisementMachineList
+        List<AdvertisementMachine> filteredList = Lists.newArrayList()
+        machineList.each {
+            if (it.userID == advertisementMachine.userID) {
+                filteredList.add(it)
+            }
+        }
+        return filteredList
+    }
+
+    static List<AdvertisementMachine> positionQuery(String minLongitude, String maxLongitude, String minLatitude, String maxLatitude) {
+        List<AdvertisementMachine> list = AdvertisementMachineCache.advertisementMachineList
+        // 根据经纬度排序，先排经度再排纬度。这里采用List双条件排序。
+        list.sort { l, r ->
+            if (l.longitude.toDouble() < r.longitude.toDouble()) {
+                return -1
+            } else if (l.longitude.toDouble() == r.longitude.toDouble()) {
+                l.latitude.toDouble() <=> r.latitude.toDouble()
+            } else {
+                return 1
+            }
+        }
+        list.each {
+            if (it.longitude.toDouble() < minLongitude.toDouble()) {
+
+            }
+        }
+    }
+
 }

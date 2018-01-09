@@ -1,5 +1,6 @@
 package com.xmlan.machine.module.advertisement.web
 
+import cn.jpush.api.JPushClient
 import com.github.pagehelper.PageInfo
 import com.google.common.collect.Maps
 import com.xmlan.machine.common.base.BaseController

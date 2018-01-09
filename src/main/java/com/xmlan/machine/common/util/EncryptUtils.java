@@ -1,6 +1,6 @@
 package com.xmlan.machine.common.util;
 
-import com.xmlan.machine.common.object.AlgorithmEnum;
+import com.xmlan.machine.common.base.AlgorithmEnum;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;

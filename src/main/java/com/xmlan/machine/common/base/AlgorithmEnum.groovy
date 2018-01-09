@@ -1,4 +1,4 @@
-package com.xmlan.machine.common.object
+package com.xmlan.machine.common.base
 
 enum AlgorithmEnum {
 
