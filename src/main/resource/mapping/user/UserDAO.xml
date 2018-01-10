@@ -73,35 +73,35 @@
 
     <insert id="insert" parameterType="com.xmlan.machine.module.user.entity.User">
         insert into `user` (
-            id,
-            username,
-            authname,
-            password,
-            roleID,
-            address,
-            addTime,
-            phone,
-            remark
+        id,
+        username,
+        authname,
+        password,
+        roleID,
+        address,
+        addTime,
+        phone,
+        remark
         ) values (
-            id,
-            #{username},
-            #{authname},
-            #{password},
-            #{roleID},
-            #{address},
-            #{addTime},
-            #{phone},
-            #{remark}
+        id,
+        #{username},
+        #{authname},
+        #{password},
+        #{roleID},
+        #{address},
+        #{addTime},
+        #{phone},
+        #{remark}
         );
     </insert>
 
     <update id="update" parameterType="com.xmlan.machine.module.user.entity.User">
         update `user`
         set
-            username = #{username},
-            address  = #{address},
-            phone    = #{phone},
-            remark   = #{remark}
+        username = #{username},
+        address = #{address},
+        phone = #{phone},
+        remark = #{remark}
         where id = #{id}
     </update>
 

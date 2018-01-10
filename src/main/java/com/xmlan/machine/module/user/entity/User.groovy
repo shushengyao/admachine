@@ -1,6 +1,5 @@
 package com.xmlan.machine.module.user.entity
 
-import org.apache.ibatis.type.Alias
 import org.hibernate.validator.constraints.Length
 
 import javax.validation.constraints.NotNull

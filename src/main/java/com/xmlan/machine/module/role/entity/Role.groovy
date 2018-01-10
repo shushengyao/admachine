@@ -1,7 +1,5 @@
 package com.xmlan.machine.module.role.entity
 
-import org.apache.ibatis.type.Alias
-
 import javax.validation.constraints.NotNull
 
 /**
