@@ -5,7 +5,8 @@
 
 <mapper namespace="com.xmlan.machine.module.advertisementMachine.dao.AdvertisementMachineDAO">
 
-    <resultMap id="advertisementMachineResultMap" type="AdvertisementMachine">
+    <resultMap id="advertisementMachineResultMap"
+               type="com.xmlan.machine.module.advertisementMachine.entity.AdvertisementMachine">
         <id column="id" property="id"/>
         <result column="userID" property="userID"/>
         <result column="name" property="name"/>
@@ -29,7 +30,6 @@
         t.remark as "remark"
     </sql>
 
-    <!-- <editor-fold desc="BaseDAO functions">  -->
     <select id="get" parameterType="java.lang.String" resultMap="advertisementMachineResultMap">
         select
         <include refid="columns"/>
@@ -44,7 +44,8 @@
         order by t.addTime, convert(t.name using gbk) asc
     </select>
 
-    <select id="findList" parameterType="AdvertisementMachine" resultMap="advertisementMachineResultMap">
+    <select id="findList" parameterType="com.xmlan.machine.module.advertisementMachine.entity.AdvertisementMachine"
+            resultMap="advertisementMachineResultMap">
         select
         <include refid="columns"/>
         from advertisement_machine t
@@ -81,47 +82,45 @@
         </choose>
     </select>
 
-    <insert id="insert" parameterType="AdvertisementMachine">
+    <insert id="insert" parameterType="com.xmlan.machine.module.advertisementMachine.entity.AdvertisementMachine">
         insert into advertisement_machine (
-        id,
-        userID,
-        name,
-        address,
-        longitude,
-        latitude,
-        addTime,
-        codeNumber,
-        remark
+            id,
+            userID,
+            name,
+            address,
+            longitude,
+            latitude,
+            addTime,
+            codeNumber,
+            remark
         ) values (
-        id,
-        #{userID},
-        #{name},
-        #{address},
-        #{longitude},
-        #{latitude},
-        #{addTime},
-        #{codeNumber},
-        #{remark}
+            id,
+            #{userID},
+            #{name},
+            #{address},
+            #{longitude},
+            #{latitude},
+            #{addTime},
+            #{codeNumber},
+            #{remark}
         );
     </insert>
 
-    <update id="update" parameterType="AdvertisementMachine">
+    <update id="update" parameterType="com.xmlan.machine.module.advertisementMachine.entity.AdvertisementMachine">
         update advertisement_machine
         set
-        userID = #{userID},
-        name = #{name},
-        address = #{address},
-        remark = #{remark}
+            userID  = #{userID},
+            name    = #{name},
+            address = #{address},
+            remark  = #{remark}
         where id = #{id}
     </update>
 
-    <delete id="delete" parameterType="AdvertisementMachine">
+    <delete id="delete" parameterType="com.xmlan.machine.module.advertisementMachine.entity.AdvertisementMachine">
         delete from advertisement_machine
         where id = #{id}
     </delete>
-    <!-- </editor-fold> -->
 
-    <!-- <editor-fold desc="Custom DAO functions"> -->
     <select id="findAllADMachineByUser" resultMap="advertisementMachineResultMap">
         select
         <include refid="columns"/>
@@ -135,6 +134,5 @@
         from advertisement_machine
         where codeNumber = #{codeNumber}
     </select>
-    <!-- </editor-fold> -->
 
 </mapper>

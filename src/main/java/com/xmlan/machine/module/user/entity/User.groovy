@@ -9,7 +9,6 @@ import javax.validation.constraints.NotNull
  * Created by ayakurayuki on 2017/12/12-10:46.
  * Package: com.xmlan.machine.module.user.entity
  */
-@Alias("User")
 class User implements Serializable {
 
     private int id

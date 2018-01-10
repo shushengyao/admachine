@@ -8,7 +8,6 @@ import javax.validation.constraints.NotNull
  * Created by ayakurayuki on 2017/12/12-11:01.
  * Package: com.xmlan.machine.module.role.entity
  */
-@Alias("Role")
 class Role implements Serializable {
 
     private int id

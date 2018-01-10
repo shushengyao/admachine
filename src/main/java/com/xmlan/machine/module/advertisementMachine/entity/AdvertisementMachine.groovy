@@ -1,14 +1,11 @@
 package com.xmlan.machine.module.advertisementMachine.entity
 
-import org.apache.ibatis.type.Alias
-
 import javax.validation.constraints.NotNull
 
 /**
  * Created by ayakurayuki on 2017/12/12-11:18.
  * Package: com.xmlan.machine.module.advertisementMachine.entity
  */
-@Alias("AdvertisementMachine")
 class AdvertisementMachine implements Serializable {
 
     private int id

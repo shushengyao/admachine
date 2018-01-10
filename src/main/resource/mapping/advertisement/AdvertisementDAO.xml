@@ -5,7 +5,7 @@
 
 <mapper namespace="com.xmlan.machine.module.advertisement.dao.AdvertisementDAO">
 
-    <resultMap id="advertisementResultMap" type="Advertisement">
+    <resultMap id="advertisementResultMap" type="com.xmlan.machine.module.advertisement.entity.Advertisement">
         <id column="id" property="id"/>
         <result column="name" property="name"/>
         <result column="url" property="url"/>
@@ -27,7 +27,6 @@
         t.remark as "remark"
     </sql>
 
-    <!-- <editor-fold desc="BaseDAO functions">  -->
     <select id="get" parameterType="java.lang.String" resultMap="advertisementResultMap">
         select
         <include refid="columns"/>
@@ -42,7 +41,8 @@
         order by t.addTime, convert(t.name using gbk) asc
     </select>
 
-    <select id="findList" parameterType="Advertisement" resultMap="advertisementResultMap">
+    <select id="findList" parameterType="com.xmlan.machine.module.advertisement.entity.Advertisement"
+            resultMap="advertisementResultMap">
         select
         <include refid="columns"/>
         from advertisement t
@@ -73,48 +73,43 @@
         </choose>
     </select>
 
-    <insert id="insert" parameterType="Advertisement">
+    <insert id="insert" parameterType="com.xmlan.machine.module.advertisement.entity.Advertisement">
         insert into advertisement (
-        id,
-        name,
-        url,
-        time,
-        addTime,
-        machineID,
-        userID,
-        remark
+            id,
+            name,
+            url,
+            time,
+            addTime,
+            machineID,
+            userID,
+            remark
         ) values (
-        id,
-        #{name},
-        #{url},
-        #{time},
-        #{addTime},
-        #{machineID},
-        #{userID},
-        #{remark}
+            id,
+            #{name},
+            #{url},
+            #{time},
+            #{addTime},
+            #{machineID},
+            #{userID},
+            #{remark}
         );
     </insert>
 
-    <update id="update" parameterType="Advertisement">
+    <update id="update" parameterType="com.xmlan.machine.module.advertisement.entity.Advertisement">
         update advertisement
         set
-        name = #{name},
-        url = #{url},
-        time = #{time},
-        machineID = #{machineID},
-        userID = #{userID},
-        remark = #{remark}
+            name      = #{name},
+            url       = #{url},
+            time      = #{time},
+            machineID = #{machineID},
+            userID    = #{userID},
+            remark    = #{remark}
         where id = #{id}
     </update>
 
-    <delete id="delete" parameterType="Advertisement">
+    <delete id="delete" parameterType="com.xmlan.machine.module.advertisement.entity.Advertisement">
         delete from advertisement
         where id = #{id}
     </delete>
-    <!-- </editor-fold> -->
-
-    <!-- <editor-fold desc="Custom DAO functions"> -->
-
-    <!-- </editor-fold> -->
 
 </mapper>

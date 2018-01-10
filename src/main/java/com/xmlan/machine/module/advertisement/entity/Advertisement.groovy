@@ -9,7 +9,6 @@ import javax.validation.constraints.NotNull
  * Created by ayakurayuki on 2017/12/13-08:55.
  * Package: com.xmlan.machine.module.advertisement.entity
  */
-@Alias("Advertisement")
 class Advertisement implements Serializable {
 
     private int id

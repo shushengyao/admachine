@@ -5,7 +5,7 @@
 
 <mapper namespace="com.xmlan.machine.module.advertisementMachine.dao.MachineSensorDAO">
 
-    <resultMap id="machineSensorResultMap" type="MachineSensor">
+    <resultMap id="machineSensorResultMap" type="com.xmlan.machine.module.advertisementMachine.entity.MachineSensor">
         <id column="id" property="id"/>
         <result column="temperature" property="temperature"/>
         <result column="humidity" property="humidity"/>
@@ -37,7 +37,8 @@
         order by t.codeNumber, t.id asc
     </select>
 
-    <select id="findList" parameterType="MachineSensor" resultMap="machineSensorResultMap">
+    <select id="findList" parameterType="com.xmlan.machine.module.advertisementMachine.entity.MachineSensor"
+            resultMap="machineSensorResultMap">
         select
         <include refid="columns"/>
         from machine_sensor t
@@ -65,35 +66,35 @@
         </choose>
     </select>
 
-    <insert id="insert" parameterType="MachineSensor">
+    <insert id="insert" parameterType="com.xmlan.machine.module.advertisementMachine.entity.MachineSensor">
         insert into machine_sensor (
-        id,
-        temperature,
-        humidity,
-        pm25,
-        pm10,
-        codeNumber
+            id,
+            temperature,
+            humidity,
+            pm25,
+            pm10,
+            codeNumber
         ) values (
-        id,
-        #{temperature},
-        #{humidity},
-        #{pm25},
-        #{pm10},
-        #{codeNumber}
+            id,
+            #{temperature},
+            #{humidity},
+            #{pm25},
+            #{pm10},
+            #{codeNumber}
         );
     </insert>
 
-    <update id="update" parameterType="MachineSensor">
+    <update id="update" parameterType="com.xmlan.machine.module.advertisementMachine.entity.MachineSensor">
         update machine_sensor
         set
-        temperature = #{temperature},
-        humidity = #{humidity},
-        pm25 = #{pm25},
-        pm25 = #{pm25}
+            temperature = #{temperature},
+            humidity    = #{humidity},
+            pm25        = #{pm25},
+            pm25        = #{pm25}
         where codeNumber = #{codeNumber}
     </update>
 
-    <delete id="delete" parameterType="MachineSensor">
+    <delete id="delete" parameterType="com.xmlan.machine.module.advertisementMachine.entity.MachineSensor">
         delete from machine_sensor
         where codeNumber = #{codeNumber}
     </delete>

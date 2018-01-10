@@ -5,7 +5,7 @@
 
 <mapper namespace="com.xmlan.machine.module.user.dao.UserDAO">
 
-    <resultMap id="userResultMap" type="User">
+    <resultMap id="userResultMap" type="com.xmlan.machine.module.user.entity.User">
         <id column="id" property="id"/>
         <result column="username" property="username"/>
         <result column="authname" property="authname"/>
@@ -29,7 +29,6 @@
         t.remark as "remark"
     </sql>
 
-    <!-- <editor-fold desc="BaseDAO functions"> -->
     <select id="get" parameterType="java.lang.String" resultMap="userResultMap">
         select
         <include refid="columns"/>
@@ -44,7 +43,7 @@
         order by t.addTime, convert(t.username using gbk) asc
     </select>
 
-    <select id="findList" parameterType="User" resultMap="userResultMap">
+    <select id="findList" parameterType="com.xmlan.machine.module.user.entity.User" resultMap="userResultMap">
         select
         <include refid="columns"/>
         from `user` t
@@ -72,54 +71,52 @@
         </choose>
     </select>
 
-    <insert id="insert" parameterType="User">
+    <insert id="insert" parameterType="com.xmlan.machine.module.user.entity.User">
         insert into `user` (
-        id,
-        username,
-        authname,
-        password,
-        roleID,
-        address,
-        addTime,
-        phone,
-        remark
+            id,
+            username,
+            authname,
+            password,
+            roleID,
+            address,
+            addTime,
+            phone,
+            remark
         ) values (
-        id,
-        #{username},
-        #{authname},
-        #{password},
-        #{roleID},
-        #{address},
-        #{addTime},
-        #{phone},
-        #{remark}
+            id,
+            #{username},
+            #{authname},
+            #{password},
+            #{roleID},
+            #{address},
+            #{addTime},
+            #{phone},
+            #{remark}
         );
     </insert>
 
-    <update id="update" parameterType="User">
+    <update id="update" parameterType="com.xmlan.machine.module.user.entity.User">
         update `user`
         set
-        username = #{username},
-        address = #{address},
-        phone = #{phone},
-        remark = #{remark}
+            username = #{username},
+            address  = #{address},
+            phone    = #{phone},
+            remark   = #{remark}
         where id = #{id}
     </update>
 
-    <delete id="delete" parameterType="User">
+    <delete id="delete" parameterType="com.xmlan.machine.module.user.entity.User">
         delete from `user`
         where id = #{id}
     </delete>
-    <!-- </editor-fold> -->
 
-    <!-- <editor-fold desc="Custom DAO functions"> -->
-    <update id="changeRoleID" parameterType="User">
+    <update id="changeRoleID" parameterType="com.xmlan.machine.module.user.entity.User">
         update `user`
         set roleID = #{roleID}
         where id = #{id}
     </update>
 
-    <update id="changePassword" parameterType="User">
+    <update id="changePassword" parameterType="com.xmlan.machine.module.user.entity.User">
         update `user`
         set password = #{password}
         where id = #{id}
@@ -131,6 +128,5 @@
         from `user` t
         where t.authname = #{authname} and t.password = #{password}
     </select>
-    <!-- </editor-fold> -->
 
 </mapper>

@@ -5,7 +5,7 @@
 
 <mapper namespace="com.xmlan.machine.module.role.dao.RoleDAO">
 
-    <resultMap id="roleResultMap" type="Role">
+    <resultMap id="roleResultMap" type="com.xmlan.machine.module.role.entity.Role">
         <id column="id" property="id"/>
         <result column="name" property="name"/>
         <result column="remark" property="remark"/>
@@ -17,7 +17,6 @@
         t.remark as "remark"
     </sql>
 
-    <!-- <editor-fold desc="BaseDAO functions">  -->
     <select id="get" parameterType="java.lang.String" resultMap="roleResultMap">
         select
         <include refid="columns"/>
@@ -32,7 +31,7 @@
         order by t.id asc
     </select>
 
-    <select id="findList" parameterType="Role" resultMap="roleResultMap">
+    <select id="findList" parameterType="com.xmlan.machine.module.role.entity.Role" resultMap="roleResultMap">
         select
         <include refid="columns"/>
         from `role` t
@@ -51,34 +50,29 @@
         </choose>
     </select>
 
-    <insert id="insert" parameterType="Role">
+    <insert id="insert" parameterType="com.xmlan.machine.module.role.entity.Role">
         insert into `role` (
-        id,
-        name,
-        remark
+            id,
+            name,
+            remark
         ) values (
-        id,
-        #{name},
-        #{remark}
+            id,
+            #{name},
+            #{remark}
         );
     </insert>
 
-    <update id="update" parameterType="Role">
+    <update id="update" parameterType="com.xmlan.machine.module.role.entity.Role">
         update `role`
         set
-        name = #{name},
-        remark = #{remark}
+            name   = #{name},
+            remark = #{remark}
         where id = #{id}
     </update>
 
-    <delete id="delete" parameterType="Role">
+    <delete id="delete" parameterType="com.xmlan.machine.module.role.entity.Role">
         delete from `role`
         where id = #{id}
     </delete>
-    <!-- </editor-fold> -->
-
-    <!-- <editor-fold desc="Custom DAO functions"> -->
-
-    <!-- </editor-fold> -->
 
 </mapper>
