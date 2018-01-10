@@ -86,19 +86,17 @@
           p:maxUploadSize="1048576000"
           p:defaultEncoding="UTF-8"/>
 
-    <bean id="templateResolver" class="org.thymeleaf.spring4.templateresolver.SpringResourceTemplateResolver">
-        <property name="prefix" value="/WEB-INF/templates/"/>
-        <property name="suffix" value=".html"/>
-        <property name="cacheable" value="false"/>
-        <property name="templateMode" value="HTML5"/>
-    </bean>
-    <bean id="templateEngine" class="org.thymeleaf.spring4.SpringTemplateEngine">
-        <property name="templateResolver" ref="templateResolver"/>
-    </bean>
-    <bean class="org.thymeleaf.spring4.view.ThymeleafViewResolver">
-        <property name="templateEngine" ref="templateEngine"/>
-        <property name="characterEncoding" value="UTF-8"/>
-    </bean>
+    <bean id="templateResolver" class="org.thymeleaf.spring4.templateresolver.SpringResourceTemplateResolver"
+          p:prefix="/WEB-INF/templates/"
+          p:suffix=".html"
+          p:templateMode="HTML5"
+          p:characterEncoding="UTF-8"
+          p:cacheable="false"/>
+    <bean id="templateEngine" class="org.thymeleaf.spring4.SpringTemplateEngine"
+          p:templateResolver-ref="templateResolver"/>
+    <bean class="org.thymeleaf.spring4.view.ThymeleafViewResolver"
+          p:templateEngine-ref="templateEngine"
+          p:characterEncoding="UTF-8"/>
     <!-- </editor-fold> -->
 
     <!-- <editor-fold desc="Task"> -->
