@@ -11,15 +11,24 @@ import javax.validation.constraints.NotNull
 @Alias("AdvertisementMachine")
 class AdvertisementMachine implements Serializable {
 
-    private int id // 广告机ID
-    private int userID // 用户ID
-    private String name // 广告机名称
-    private String address // 地址
-    private String longitude // 经度
-    private String latitude // 纬度
-    private String addTime // 加入时间
-    private String codeNumber // 机器标识码(注册码)
-    private String remark // 备注
+    private int id
+    // 广告机ID
+    private int userID
+    // 用户ID
+    private String name
+    // 广告机名称
+    private String address
+    // 地址
+    private String longitude
+    // 经度
+    private String latitude
+    // 纬度
+    private String addTime
+    // 加入时间
+    private String codeNumber
+    // 机器标识码(注册码)
+    private String remark
+    // 备注
 
     int getId() {
         return id

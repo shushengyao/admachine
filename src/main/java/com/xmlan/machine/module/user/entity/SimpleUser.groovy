@@ -9,7 +9,9 @@ import org.apache.ibatis.type.Alias
 @Alias("SimpleUser")
 class SimpleUser implements Serializable {
 
-    int id // 用户ID
-    String username // 用户名
+    int id
+    // 用户ID
+    String username
+    // 用户名
 
 }

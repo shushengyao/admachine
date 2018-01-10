@@ -1,7 +1,6 @@
 package com.xmlan.machine.mobile.provider
 
 import com.xmlan.machine.common.base.BaseController
-import com.xmlan.machine.common.cache.AdvertisementMachineCache
 import com.xmlan.machine.common.util.StringUtils
 import com.xmlan.machine.module.advertisementMachine.entity.AdvertisementMachine
 import com.xmlan.machine.module.advertisementMachine.service.AdvertisementMachineService

@@ -8,8 +8,6 @@ import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.servlet.mvc.support.RedirectAttributes
 
-import javax.servlet.http.HttpServletRequest
-
 /**
  * Created by ayakurayuki on 2017/12/13-15:49.
  * Package: com.xmlan.machine.module.system.web

@@ -11,9 +11,12 @@ import javax.validation.constraints.NotNull
 @Alias("Role")
 class Role implements Serializable {
 
-    private int id // 角色ID
-    private String name // 角色名称
-    private String remark // 备注
+    private int id
+    // 角色ID
+    private String name
+    // 角色名称
+    private String remark
+    // 备注
 
     int getId() {
         return id

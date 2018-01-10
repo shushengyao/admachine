@@ -27,6 +27,11 @@ public class SpringContextUtils implements ApplicationContextAware, DisposableBe
         return applicationContext;
     }
 
+    @Override
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+        SpringContextUtils.applicationContext = applicationContext;
+    }
+
     /**
      * 从静态变量applicationContext中取得Bean, 自动转型为所赋值对象的类型.
      */
@@ -58,11 +63,6 @@ public class SpringContextUtils implements ApplicationContextAware, DisposableBe
             logger.debug("清除SpringContextHolder中的ApplicationContext: " + applicationContext);
         }
         applicationContext = null;
-    }
-
-    @Override
-    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-        SpringContextUtils.applicationContext = applicationContext;
     }
 
 }

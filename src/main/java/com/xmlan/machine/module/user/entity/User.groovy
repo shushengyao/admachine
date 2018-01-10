@@ -12,15 +12,24 @@ import javax.validation.constraints.NotNull
 @Alias("User")
 class User implements Serializable {
 
-    private int id // 用户ID
-    private String username // 用户名
-    private String authname // 登录账号
-    private String password // 密码, 建议SHA-256 x 10
-    private int roleID // 角色ID
-    private String address // 地址
-    private String addTime // 加入时间
-    private String phone // 联系电话
-    private String remark // 备注
+    private int id
+    // 用户ID
+    private String username
+    // 用户名
+    private String authname
+    // 登录账号
+    private String password
+    // 密码, 建议SHA-256 x 10
+    private int roleID
+    // 角色ID
+    private String address
+    // 地址
+    private String addTime
+    // 加入时间
+    private String phone
+    // 联系电话
+    private String remark
+    // 备注
 
     int getId() {
         return id

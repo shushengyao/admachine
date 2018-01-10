@@ -43,8 +43,10 @@ class RoleController extends BaseController {
 
     @RequestMapping(value = "/list/{pageNo}")
     String list(Role role, @PathVariable int pageNo, Model model) {
-        List<Role> list = service.findList role, pageNo // 查询
-        PageInfo<Role> page = new PageInfo<>(list) // 处理分页数据
+        List<Role> list = service.findList role, pageNo
+        // 查询
+        PageInfo<Role> page = new PageInfo<>(list)
+        // 处理分页数据
         model.addAttribute "page", page
         model.addAttribute "userCount", service.getUserCount(list)
         model.addAttribute "name", role.name

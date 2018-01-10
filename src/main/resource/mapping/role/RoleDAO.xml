@@ -53,21 +53,21 @@
 
     <insert id="insert" parameterType="Role">
         insert into `role` (
-            id,
-            name,
-            remark
+        id,
+        name,
+        remark
         ) values (
-            id,
-            #{name},
-            #{remark}
+        id,
+        #{name},
+        #{remark}
         );
     </insert>
 
     <update id="update" parameterType="Role">
         update `role`
         set
-            name   = #{name},
-            remark = #{remark}
+        name = #{name},
+        remark = #{remark}
         where id = #{id}
     </update>
 

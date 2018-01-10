@@ -1,8 +1,6 @@
 package com.xmlan.machine.common.util
 
-import com.xmlan.machine.common.cache.AdvertisementCache
 import com.xmlan.machine.common.config.Global
-import com.xmlan.machine.module.advertisement.entity.Advertisement
 
 import javax.servlet.ServletOutputStream
 import javax.servlet.http.HttpServletResponse

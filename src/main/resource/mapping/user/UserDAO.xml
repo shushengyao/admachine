@@ -74,35 +74,35 @@
 
     <insert id="insert" parameterType="User">
         insert into `user` (
-            id,
-            username,
-            authname,
-            password,
-            roleID,
-            address,
-            addTime,
-            phone,
-            remark
+        id,
+        username,
+        authname,
+        password,
+        roleID,
+        address,
+        addTime,
+        phone,
+        remark
         ) values (
-            id,
-            #{username},
-            #{authname},
-            #{password},
-            #{roleID},
-            #{address},
-            #{addTime},
-            #{phone},
-            #{remark}
+        id,
+        #{username},
+        #{authname},
+        #{password},
+        #{roleID},
+        #{address},
+        #{addTime},
+        #{phone},
+        #{remark}
         );
     </insert>
 
     <update id="update" parameterType="User">
         update `user`
         set
-            username = #{username},
-            address  = #{address},
-            phone    = #{phone},
-            remark   = #{remark}
+        username = #{username},
+        address = #{address},
+        phone = #{phone},
+        remark = #{remark}
         where id = #{id}
     </update>
 

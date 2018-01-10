@@ -67,29 +67,29 @@
 
     <insert id="insert" parameterType="MachineSensor">
         insert into machine_sensor (
-            id,
-            temperature,
-            humidity,
-            pm25,
-            pm10,
-            codeNumber
+        id,
+        temperature,
+        humidity,
+        pm25,
+        pm10,
+        codeNumber
         ) values (
-            id,
-            #{temperature},
-            #{humidity},
-            #{pm25},
-            #{pm10},
-            #{codeNumber}
+        id,
+        #{temperature},
+        #{humidity},
+        #{pm25},
+        #{pm10},
+        #{codeNumber}
         );
     </insert>
 
     <update id="update" parameterType="MachineSensor">
         update machine_sensor
         set
-            temperature = #{temperature},
-            humidity    = #{humidity},
-            pm25        = #{pm25},
-            pm25        = #{pm25}
+        temperature = #{temperature},
+        humidity = #{humidity},
+        pm25 = #{pm25},
+        pm25 = #{pm25}
         where codeNumber = #{codeNumber}
     </update>
 

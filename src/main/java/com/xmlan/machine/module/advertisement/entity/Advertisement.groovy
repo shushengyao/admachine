@@ -12,14 +12,22 @@ import javax.validation.constraints.NotNull
 @Alias("Advertisement")
 class Advertisement implements Serializable {
 
-    private int id // 广告ID
-    private String name // 广告名称
-    private String url // 图片或视频地址
-    private int time // 播放时间
-    private String addTime // 加入时间
-    private int machineID // 机器识别码
-    private int userID // 用户ID
-    private String remark // 备注
+    private int id
+    // 广告ID
+    private String name
+    // 广告名称
+    private String url
+    // 图片或视频地址
+    private int time
+    // 播放时间
+    private String addTime
+    // 加入时间
+    private int machineID
+    // 机器识别码
+    private int userID
+    // 用户ID
+    private String remark
+    // 备注
 
     int getId() {
         return id

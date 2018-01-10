@@ -30,18 +30,23 @@ class UploadUtils {
         Map<String, List<String>> json = Maps.newHashMap()
         List<String> fileList = Lists.newArrayList()
         CommonsMultipartResolver resolver = new CommonsMultipartResolver(request.session.servletContext)
-        if (resolver.isMultipart(request)) { // 检查form中是否带有 enctype="multipart/form-data"
+        if (resolver.isMultipart(request)) {
+            // 检查form中是否带有 enctype="multipart/form-data"
             // 转化normal-request为multipart-request
             MultipartHttpServletRequest multiRequest = (MultipartHttpServletRequest) request
-            Iterator iterator = multiRequest.fileNames // 获取multiRequest的全部文件名
-            int i = 1 // 编号计数器
-            while (iterator.hasNext()) { // 遍历所有文件
+            Iterator iterator = multiRequest.fileNames
+            // 获取multiRequest的全部文件名
+            int i = 1
+            // 编号计数器
+            while (iterator.hasNext()) {
+                // 遍历所有文件
                 MultipartFile file = multiRequest.getFile(iterator.next().toString())
                 try {
                     String extension = file.originalFilename.substring(file.originalFilename.lastIndexOf('.'))
                     if (file != null && isMedia(file.originalFilename)) {
                         String filename = "${DateUtils.GetDate('yyyy-MM-dd_HH-mm-ss')}_No${i}${extension}"
-                        try { // 存储文件
+                        try {
+                            // 存储文件
                             if (isImage(extension)) {
                                 file.transferTo(new File("${Global.mediaPath}/${Global.imageTag}/${filename}"))
                                 fileList.add "${Global.imageTag}/${filename}".toString()

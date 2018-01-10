@@ -12,24 +12,21 @@ import java.util.Map;
 public final class Global {
 
     /**
+     * session管理员标记
+     */
+    public static final String USER = "managementUser";
+    /**
      * 当前对象实例
      */
     private static Global global = new Global();
-
     /**
      * 保存全局属性值
      */
     private static Map<String, String> map = Maps.newHashMap();
-
     /**
      * 属性文件加载对象
      */
     private static PropertiesUtils loader = new PropertiesUtils("machine.properties");
-
-    /**
-     * session管理员标记
-     */
-    public static final String USER = "managementUser";
 
     /**
      * 极光推送Master Secret
