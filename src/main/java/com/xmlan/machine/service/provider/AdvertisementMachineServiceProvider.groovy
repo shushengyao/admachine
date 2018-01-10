@@ -1,6 +1,7 @@
 package com.xmlan.machine.service.provider
 
 import com.xmlan.machine.common.base.BaseController
+import com.xmlan.machine.common.cache.AdvertisementMachineCache
 import com.xmlan.machine.common.util.DateUtils
 import com.xmlan.machine.common.util.StringUtils
 import com.xmlan.machine.module.advertisementMachine.entity.AdvertisementMachine
@@ -23,10 +24,10 @@ class AdvertisementMachineServiceProvider extends BaseController {
     @Autowired
     private AdvertisementMachineService service
 
-    @RequestMapping(value = '/get/{id}', produces = "application/json; charset=utf-8")
+    @RequestMapping(value = '/get/{codeNumber}', produces = "application/json; charset=utf-8")
     @ResponseBody
-    AdvertisementMachine get(@PathVariable String id) {
-        service.get id
+    AdvertisementMachine get(@PathVariable String codeNumber) {
+        AdvertisementMachineCache.get(codeNumber)
     }
 
     @RequestMapping(value = '/register', produces = "application/json; charset=utf-8")

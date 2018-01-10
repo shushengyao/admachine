@@ -18,6 +18,20 @@ import org.springframework.transaction.annotation.Transactional
 @Transactional(readOnly = true)
 class AdvertisementMachineService extends BaseService<AdvertisementMachine, AdvertisementMachineDAO> {
 
+    private static final String longitude = "longitude"
+    private static final String latitude = "latitude"
+
+    private static boolean isInArea(String flag, String value, LinkedHashMap<String, String> area) {
+        switch (flag) {
+            case longitude:
+                return value.toDouble() >= area.minLon.toDouble() && value.toDouble() <= area.maxLon.toDouble()
+            case latitude:
+                return value.toDouble() >= area.minLat.toDouble() && value.toDouble() <= area.maxLat.toDouble()
+            default:
+                return false
+        }
+    }
+
     static List<AdvertisementMachineCount> getMachineCountByUserID(List<User> list) {
         List<AdvertisementMachineCount> counts = Lists.newArrayList()
         list.each {
@@ -45,10 +59,28 @@ class AdvertisementMachineService extends BaseService<AdvertisementMachine, Adve
         return filteredList
     }
 
-    static List<AdvertisementMachine> positionQuery(String minLongitude, String maxLongitude, String minLatitude, String maxLatitude) {
+    /**
+     * 根据两点确定范围内的广告机位置
+     * @param minLon min longitude
+     * @param maxLon max longitude
+     * @param minLat min latitude
+     * @param maxLat max latitude
+     * @return 返回过滤后的广告机列表
+     */
+    static List<AdvertisementMachine> positionQuery(String minLon, String maxLon, String minLat, String maxLat) {
         List<AdvertisementMachine> list = AdvertisementMachineCache.advertisementMachineList
+        // 根据范围条件过滤选中广告机。
+        List<AdvertisementMachine> filteredList = Lists.newArrayList()
+        list.each {
+            def area = ["minLon": minLon, "minLat": minLat, "maxLon": maxLon, "maxLat": maxLat]
+            if (isInArea(longitude, it.longitude, area)) {
+                if (isInArea(latitude, it.latitude, area)) {
+                    filteredList.add(it)
+                }
+            }
+        }
         // 根据经纬度排序，先排经度再排纬度。这里采用List双条件排序。
-        list.sort { l, r ->
+        filteredList.sort { l, r ->
             if (l.longitude.toDouble() < r.longitude.toDouble()) {
                 return -1
             } else if (l.longitude.toDouble() == r.longitude.toDouble()) {
@@ -57,11 +89,7 @@ class AdvertisementMachineService extends BaseService<AdvertisementMachine, Adve
                 return 1
             }
         }
-        list.each {
-            if (it.longitude.toDouble() < minLongitude.toDouble()) {
-
-            }
-        }
+        return filteredList
     }
 
 }

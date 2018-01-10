@@ -100,4 +100,19 @@ final class AdvertisementMachineCache {
         return StringUtils.EMPTY
     }
 
+    /**
+     * 根据机器码获取广告机
+     * @param codeNumber 机器码
+     * @return
+     */
+    static AdvertisementMachine get(String codeNumber) {
+        List<AdvertisementMachine> list = advertisementMachineList
+        for (item in list) {
+            if (item.codeNumber == codeNumber) {
+                return item
+            }
+        }
+        return null
+    }
+
 }

@@ -40,10 +40,8 @@ drop table if exists `advertisement_machine`;
 create table `advertisement_machine` (
   id         int auto_increment not null
   comment '广告机ID',
-  userID     int                not null
-  comment '用户ID',
-  name       varchar(128)       not null
-  comment '广告机名称',
+  userID     int comment '用户ID',
+  name       varchar(128) comment '广告机名称',
   address    varchar(8192) comment '广告机地址',
   longitude  double comment '经度',
   latitude   double comment '纬度',
