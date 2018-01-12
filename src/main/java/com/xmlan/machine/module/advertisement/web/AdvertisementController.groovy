@@ -2,7 +2,6 @@ package com.xmlan.machine.module.advertisement.web
 
 import cn.jiguang.common.ClientConfig
 import cn.jpush.api.JPushClient
-import cn.jpush.api.push.PushResult
 import com.github.pagehelper.PageInfo
 import com.google.common.collect.Maps
 import com.xmlan.machine.common.base.BaseController
@@ -10,10 +9,7 @@ import com.xmlan.machine.common.cache.AdvertisementCache
 import com.xmlan.machine.common.cache.AdvertisementMachineCache
 import com.xmlan.machine.common.cache.UserCache
 import com.xmlan.machine.common.config.Global
-import com.xmlan.machine.common.util.DateUtils
-import com.xmlan.machine.common.util.MediaUtils
-import com.xmlan.machine.common.util.SessionUtils
-import com.xmlan.machine.common.util.StringUtils
+import com.xmlan.machine.common.util.*
 import com.xmlan.machine.module.advertisement.entity.Advertisement
 import com.xmlan.machine.module.advertisement.service.AdvertisementService
 import org.springframework.beans.factory.annotation.Autowired
@@ -141,13 +137,14 @@ class AdvertisementController extends BaseController {
     String uploadMedia(@PathVariable String id, HttpServletRequest httpServletRequest, RedirectAttributes attributes) {
         def responseCode = service.uploadMedia(id, httpServletRequest)
         if (responseCode == DONE) {
-            JPushClient pushClient = new JPushClient(Global.masterSecret, Global.appKey, null, ClientConfig.getInstance())
-            PushResult result = pushClient.sendAndroidMessageWithAlias(
-                    "New media uploaded",
-                    "A new advertisement media has been uploaded.",
-                    "[\"id\": \"${id}\"]"
-            )
+            def map = Maps.newHashMap()
+            map['id'] = id
+
+            def pushClient = new JPushClient(Global.masterSecret, Global.appKey, null, ClientConfig.instance)
+            def payload = PushUtils.buildPayload(id, "New ad media.", JsonUtils.toJsonString(map))
+            def result = pushClient.sendPush(payload)
             logger.trace(result)
+
             addMessage attributes, "上传成功"
         }
         if (responseCode == FAILURE) {

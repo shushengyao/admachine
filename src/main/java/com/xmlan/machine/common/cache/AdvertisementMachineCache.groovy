@@ -115,4 +115,19 @@ final class AdvertisementMachineCache {
         return null
     }
 
+    /**
+     * 根据ID获取广告机
+     * @param id 系统内的ID
+     * @return
+     */
+    static AdvertisementMachine get(int id) {
+        def list = advertisementMachineList
+        for (item in list) {
+            if (item.id == id) {
+                return item
+            }
+        }
+        return null
+    }
+
 }

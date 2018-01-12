@@ -38,8 +38,10 @@ class AdvertisementMachineServiceProvider extends BaseController {
         }
         int result = service.insert advertisementMachine
         def map = Maps.newHashMap()
-        map['responseCode'] = "${result}"
+        map['responseCode'] = result
+        map['id'] = "${service.getByCodeNumber(advertisementMachine.codeNumber).id}"
         return map
     }
+
 
 }
