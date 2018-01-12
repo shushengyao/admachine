@@ -23,7 +23,9 @@ class UserMobileProvider extends BaseController {
     @RequestMapping(value = '/self', produces = "application/json; charset=utf-8")
     @ResponseBody
     User self(String id, String token) {
-        UserCache.get(id)
+        def user = UserCache.get(id)
+        user.password = ""
+        return user
     }
 
 }
