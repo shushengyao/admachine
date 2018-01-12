@@ -48,7 +48,13 @@ create table `advertisement_machine` (
   addTime    datetime comment '添加时间',
   codeNumber varchar(512)       not null
   comment '机器标识码(注册码)',
+  light      int comment '灯开关, 1 开灯, 0 关灯',
+  charge     int comment '充电状态, 1 充电, 0 闲置',
+  checked    int comment '选中',
   remark     text comment '备注',
+  check (light in (0, 1)),
+  check (charge in (0, 1)),
+  check (checked in (0, 1)),
   primary key (id)
 )
   char set utf8

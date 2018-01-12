@@ -24,6 +24,12 @@ class AdvertisementMachine implements Serializable {
     // 加入时间
     private String codeNumber
     // 机器标识码(注册码)
+    private int light
+    // 灯开关, 1 开灯, 0 关灯
+    private int charge
+    // 充电状态, 1 充电, 0 闲置
+    private int checked
+    // 选中, 1 选中, 0 未选中
     private String remark
     // 备注
 
@@ -90,6 +96,30 @@ class AdvertisementMachine implements Serializable {
 
     void setCodeNumber(String codeNumber) {
         this.codeNumber = codeNumber
+    }
+
+    int getLight() {
+        return light
+    }
+
+    void setLight(int light) {
+        this.light = light
+    }
+
+    int getCharge() {
+        return charge
+    }
+
+    void setCharge(int charge) {
+        this.charge = charge
+    }
+
+    int getChecked() {
+        return checked
+    }
+
+    void setChecked(int checked) {
+        this.checked = checked
     }
 
     String getRemark() {

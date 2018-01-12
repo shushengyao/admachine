@@ -15,6 +15,9 @@
         <result column="latitude" property="latitude"/>
         <result column="addTime" property="addTime"/>
         <result column="codeNumber" property="codeNumber"/>
+        <result column="light" property="light"/>
+        <result column="charge" property="charge"/>
+        <result column="checked" property="checked"/>
         <result column="remark" property="remark"/>
     </resultMap>
 
@@ -27,6 +30,9 @@
         t.latitude as "latitude",
         date_format(t.addTime, '%Y-%m-%d %H:%i:%s') as "addTime",
         t.codeNumber as "codeNumber",
+        t.light as "light",
+        t.charge as "charge",
+        t.checked as "checked",
         t.remark as "remark"
     </sql>
 
@@ -84,25 +90,31 @@
 
     <insert id="insert" parameterType="com.xmlan.machine.module.advertisementMachine.entity.AdvertisementMachine">
         insert into advertisement_machine (
-        id,
-        userID,
-        name,
-        address,
-        longitude,
-        latitude,
-        addTime,
-        codeNumber,
-        remark
+            id,
+            userID,
+            name,
+            address,
+            longitude,
+            latitude,
+            addTime,
+            codeNumber,
+            light,
+            charge,
+            checked,
+            remark
         ) values (
-        id,
-        #{userID},
-        #{name},
-        #{address},
-        #{longitude},
-        #{latitude},
-        #{addTime},
-        #{codeNumber},
-        #{remark}
+            id,
+            #{userID},
+            #{name},
+            #{address},
+            #{longitude},
+            #{latitude},
+            #{addTime},
+            #{codeNumber},
+            0,
+            0,
+            0,
+            #{remark}
         );
     </insert>
 
