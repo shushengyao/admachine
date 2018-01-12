@@ -39,4 +39,8 @@ class LoginService {
         }
     }
 
+    User loginForMobile(String authname, String password) {
+        return userDAO.login(authname, password)
+    }
+
 }

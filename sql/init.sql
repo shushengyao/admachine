@@ -36,6 +36,17 @@ create table `user` (
   char set utf8
   comment '用户表';
 
+drop table if exists `user_token`;
+create table `user_token` (
+  id    int  not null
+  comment '用户ID',
+  token text not null
+  comment 'Token',
+  primary key (id)
+)
+  char set utf8
+  comment 'Token';
+
 drop table if exists `advertisement_machine`;
 create table `advertisement_machine` (
   id         int auto_increment not null

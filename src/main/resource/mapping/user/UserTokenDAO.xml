@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.xmlan.machine.module.user.dao.UserTokenDAO">
+
+    <resultMap id="tokenResultMap" type="com.xmlan.machine.module.user.entity.UserToken">
+        <id column="id" property="id"/>
+        <result column="token" property="token"/>
+    </resultMap>
+
+    <sql id="columns">
+        t.id as "id",
+        t.token as "token"
+    </sql>
+
+    <select id="get" parameterType="java.lang.String" resultMap="tokenResultMap">
+        select
+        <include refid="columns"/>
+        from user_token t
+        where t.id = #{id}
+    </select>
+
+    <select id="findAll" resultMap="tokenResultMap">
+        select
+        <include refid="columns"/>
+        from user_token t
+        order by t.id
+    </select>
+
+    <select id="findList" parameterType="com.xmlan.machine.module.user.entity.UserToken" resultMap="tokenResultMap">
+        select
+        <include refid="columns"/>
+        from user_token t
+        where t.token = #{token}
+        order by t.id
+    </select>
+
+    <insert id="insert" parameterType="com.xmlan.machine.module.user.entity.UserToken">
+        insert into user_token (
+            id,
+            token
+        ) values (
+            #{id},
+            #{token}
+        )
+    </insert>
+
+    <update id="update" parameterType="com.xmlan.machine.module.user.entity.UserToken">
+        update user_token
+        set
+            token = #{token}
+        where id = #{id}
+    </update>
+
+    <delete id="delete" parameterType="com.xmlan.machine.module.user.entity.UserToken">
+        delete from user_token
+        where id = #{id}
+    </delete>
+
+</mapper>
