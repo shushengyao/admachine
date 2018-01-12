@@ -1,5 +1,6 @@
 package com.xmlan.machine.service.provider
 
+import com.google.common.collect.Maps
 import com.xmlan.machine.common.base.BaseController
 import com.xmlan.machine.common.cache.AdvertisementMachineCache
 import com.xmlan.machine.common.util.DateUtils
@@ -31,11 +32,14 @@ class AdvertisementMachineServiceProvider extends BaseController {
 
     @RequestMapping(value = '/register', produces = "application/json; charset=utf-8")
     @ResponseBody
-    String register(AdvertisementMachine advertisementMachine) {
+    HashMap register(AdvertisementMachine advertisementMachine) {
         if (StringUtils.isBlank(advertisementMachine.addTime)) {
             advertisementMachine.addTime = DateUtils.GetDateTime()
         }
-        service.insert advertisementMachine
+        int result = service.insert advertisementMachine
+        def map = Maps.newHashMap()
+        map['responseCode'] = "${result}"
+        return map
     }
 
 }

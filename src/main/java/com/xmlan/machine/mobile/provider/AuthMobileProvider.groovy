@@ -31,13 +31,16 @@ class AuthMobileProvider extends BaseController {
         User user = loginService.loginForMobile(authname, password)
         // 采用客户端记录的方式，回传用户ID和Token
         if (user != null) {
+            def info = Maps.newHashMap()
+            info['authname'] = user.authname
+            info['password'] = user.password
+            def token = tokenService.get("${user.id}".toString())
             def map = Maps.newHashMap()
             map['id'] = user.id
-            def token = tokenService.get("${user.id}".toString())
             if (token != null) {
                 map['token'] = token.token
             } else {
-                map['token'] = EncodeUtils.encodeBase64(JsonUtils.toJsonString(user))
+                map['token'] = EncodeUtils.encodeBase64(JsonUtils.toJsonString(info))
             }
             return map
         } else {
