@@ -22,28 +22,49 @@ public class CacheAspect {
     @Autowired
     public CacheManager cacheManager;
 
+    /**
+     * 切入insert()方法
+     */
     @AfterReturning("execution(* insert*(..)) ")
     public void afterInsert() {
-        cacheManager.clearAll();
+        cacheManager.clearAll(); // 插入操作完成后执行缓存刷新
         logger.info("Cache refreshed after insert.");
     }
 
+    /**
+     * 切入update()方法
+     */
     @AfterReturning("execution(* update*(..))")
     public void afterUpdate() {
-        cacheManager.clearAll();
+        cacheManager.clearAll(); // 更新操作完成后执行缓存刷新
         logger.info("Cache refreshed after update.");
     }
 
+    /**
+     * 切入delete()方法
+     */
     @AfterReturning("execution(* delete*(..))")
     public void afterDelete() {
-        cacheManager.clearAll();
+        cacheManager.clearAll(); // 删除操作完成后执行缓存刷新
         logger.info("Cache refreshed after delete.");
     }
 
+    /**
+     * 切入passwd()方法
+     */
     @AfterReturning("execution(* passwd(..))")
     public void afterPasswd() {
-        cacheManager.clearAll();
+        cacheManager.clearAll(); // 修改密码后执行缓存刷新
         logger.info("Cache refreshed after passwd.");
+    }
+
+    /**
+     * 切入chgrp()方法
+     */
+    @AfterReturning("execution(* chgrp(..))")
+    public void afterChgrp() {
+        cacheManager.clearAll(); // 修改角色后执行缓存刷新
+        logger.info("Cache refreshed after chgrp.");
     }
 
 }

@@ -17,17 +17,27 @@ import javax.validation.ConstraintViolationException
 import javax.validation.Validator
 
 /**
- * Created by ayakurayuki on 2017/12/11-14:41.
- * Package: com.xmlan.machine.common.base
+ * Created by ayakurayuki on 2017/12/11-14:41. <br/>
+ * Package: com.xmlan.machine.common.base <br/>
+ * Controller基类 <br/>
  */
 abstract class BaseController extends BaseBean {
 
     protected Logger logger = LogManager.getLogger(getClass())
 
+    /**
+     * Bean校验器
+     */
     @Autowired
     protected Validator validator
+    /**
+     * 通用的request
+     */
     @Autowired
     protected HttpServletRequest request
+    /**
+     * 通用的response
+     */
     @Autowired
     protected HttpServletResponse response
 
@@ -36,40 +46,34 @@ abstract class BaseController extends BaseBean {
      */
     @Value('${adminPath}')
     public String adminPath
+    /**
+     * 配置的广告机平台访问根路径
+     */
     @Value('${servicePath}')
     public String servicePath
+    /**
+     * 配置的手机端平台访问根路径
+     */
     @Value('${mobilePath}')
     public String mobilePath
 
     @ModelAttribute('adminPath')
-    String adminPath() {
-        return adminPath
-    }
+    String adminPath() { return adminPath }
 
     @ModelAttribute('servicePath')
-    String servicePath() {
-        return servicePath
-    }
+    String servicePath() { return servicePath }
 
     @ModelAttribute('mobilePath')
-    String mobilePath() {
-        return mobilePath
-    }
+    String mobilePath() { return mobilePath }
 
     @ModelAttribute('adminRoleID')
-    int adminRoleID() {
-        return ADMIN_ROLE_ID
-    }
+    int adminRoleID() { return ADMIN_ROLE_ID }
 
     @ModelAttribute('newEntityID')
-    int newEntityID() {
-        return NEW_INSERT_ID
-    }
+    int newEntityID() { return NEW_INSERT_ID }
 
     @ModelAttribute('loginUser')
-    User loginUser(HttpServletRequest request) {
-        return SessionUtils.GetAdmin(request)
-    }
+    User loginUser(HttpServletRequest request) { return SessionUtils.GetAdmin(request) }
 
     /**
      * 添加临时消息
