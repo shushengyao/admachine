@@ -125,6 +125,8 @@
                 <th>加入时间</th>
                 <th>机器识别码</th>
                 <th>广告数</th>
+                <th>灯</th>
+                <th>充电状态</th>
                 <th class="hide-on-med-and-down"></th>
                 <th class="hide-on-large-only"></th>
             </tr>
@@ -137,6 +139,14 @@
                 <td th:text="*{#strings.abbreviate(item.codeNumber,15)}">codeNumber</td>
                 <th:block th:each="count:${adCount}">
                     <td th:if="${item.id==count.id}" th:text="${count.count}"></td>
+                </th:block>
+                <th:block>
+                    <td th:if="${item.light==1}" th:text="开"></td>
+                    <td th:if="${item.light==0}" th:text="关"></td>
+                </th:block>
+                <th:block>
+                    <td th:if="${item.charge==1}" th:text="充电"></td>
+                    <td th:if="${item.charge==0}" th:text="闲置"></td>
                 </th:block>
                 <td class="right-align hide-on-med-and-down">
                     <div class="fixed-action-btn horizontal" style="position: relative; right: 0; top: 0;">

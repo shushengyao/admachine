@@ -32,6 +32,10 @@ class AdvertisementMachineService extends BaseService<AdvertisementMachine, Adve
         }
     }
 
+    private static boolean checkOperate(int operate) {
+        return operate == 0 ? true : operate == 1
+    }
+
     static List<AdvertisementMachineCount> getMachineCountByUserID(List<User> list) {
         List<AdvertisementMachineCount> counts = Lists.newArrayList()
         list.each {
@@ -90,6 +94,45 @@ class AdvertisementMachineService extends BaseService<AdvertisementMachine, Adve
             }
         }
         return filteredList
+    }
+
+    int lightControl(int id, int operate) {
+        if (null == AdvertisementMachineCache.get("${id}")) {
+            return NO_SUCH_ROW
+        }
+        if (!checkOperate(operate)) {
+            return ERROR_REQUEST
+        }
+        def machine = AdvertisementMachineCache.get("${id}")
+        machine.light = operate
+        dao.lightControl(id, operate)
+        return DONE
+    }
+
+    int chargeControl(int id, int operate) {
+        if (null == AdvertisementMachineCache.get("${id}")) {
+            return NO_SUCH_ROW
+        }
+        if (!checkOperate(operate)) {
+            return ERROR_REQUEST
+        }
+        def machine = AdvertisementMachineCache.get("${id}")
+        machine.charge = operate
+        dao.chargeControl(id, operate)
+        return DONE
+    }
+
+    int checkedControl(int id, int operate) {
+        if (null == AdvertisementMachineCache.get("${id}")) {
+            return NO_SUCH_ROW
+        }
+        if (!checkOperate(operate)) {
+            return ERROR_REQUEST
+        }
+        def machine = AdvertisementMachineCache.get("${id}")
+        machine.checked = operate
+        dao.checkedControl(id, operate)
+        return DONE
     }
 
 }

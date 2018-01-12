@@ -21,4 +21,10 @@ interface AdvertisementMachineDAO extends BaseDAO<AdvertisementMachine> {
 
     AdvertisementMachine getByCodeNumber(@Param("codeNumber") String codeNumber)
 
+    int lightControl(@Param("id") int id, @Param("operate") int operate)
+
+    int chargeControl(@Param("id") int id, @Param("operate") int operate)
+
+    int checkedControl(@Param("id") int id, @Param("operate") int operate)
+
 }

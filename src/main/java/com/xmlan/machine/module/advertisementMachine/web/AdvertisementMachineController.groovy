@@ -43,6 +43,9 @@ class AdvertisementMachineController extends BaseController {
             entity = new AdvertisementMachine()
             entity.id = NEW_INSERT_ID
             entity.addTime = StringUtils.SPACE
+            entity.light = 0
+            entity.charge = 0
+            entity.checked = 0
         }
         return entity
     }

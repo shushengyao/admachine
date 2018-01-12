@@ -14,6 +14,8 @@ class BaseBean {
     public static final int DATABASE_DO_NOTHING = -1
     public static final int NEW_INSERT_ID = -2
     public static final int FAILURE = -3
+    public static final int NO_SUCH_ROW = -4
+    public static final int ERROR_REQUEST = -5
 
     public static final int ADMIN_ROLE_ID = 1
     public static final int ROOT_ADMIN_ID = 1

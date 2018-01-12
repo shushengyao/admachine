@@ -147,4 +147,22 @@
         where codeNumber = #{codeNumber}
     </select>
 
+    <update id="lightControl">
+        update advertisement_machine
+        set light = #{operate}
+        where id = #{id}
+    </update>
+
+    <update id="chargeControl">
+        update advertisement_machine
+        set charge = #{operate}
+        where id = #{id}
+    </update>
+
+    <update id="checkedControl">
+        update advertisement_machine
+        set checked = #{operate}
+        where id = #{id}
+    </update>
+
 </mapper>
