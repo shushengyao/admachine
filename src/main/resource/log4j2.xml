@@ -5,8 +5,8 @@
     </Properties>
     <Appenders>
         <Console name="Console" target="SYSTEM_OUT" ignoreExceptions="false">
-            <PatternLayout charset="UTF-8"
-                           pattern="%highlight{%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %M %-5level %logger{36} - %msg%n}{FATAL=Bright Red, ERROR=Bright Magenta, WARN=Bright Yellow, INFO=Bright Green, DEBUG=Bright Cyan, TRACE=Bright White}"/>
+            <PatternLayout
+                    pattern="%highlight{%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %M %-5level %logger{36} - %msg%n}{FATAL=Bright Red, ERROR=Bright Magenta, WARN=Bright Yellow, INFO=Bright Green, DEBUG=Bright Cyan, TRACE=Bright White}"/>
         </Console>
         <RollingFile name="DailyRollingFile" fileName="${log_path}/webApp.log"
                      filePattern="${log_path}/delivery-%d{yyyy-MM-dd}.log.zip">
