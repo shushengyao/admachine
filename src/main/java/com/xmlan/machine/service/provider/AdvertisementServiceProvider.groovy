@@ -5,7 +5,6 @@ import com.xmlan.machine.common.cache.AdvertisementCache
 import com.xmlan.machine.common.util.MediaUtils
 import com.xmlan.machine.module.advertisement.entity.Advertisement
 import com.xmlan.machine.module.advertisement.service.AdvertisementService
-import com.xmlan.machine.module.advertisementMachine.entity.AdvertisementMachine
 import com.xmlan.machine.module.advertisementMachine.service.AdvertisementMachineService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Controller
@@ -30,24 +29,24 @@ class AdvertisementServiceProvider extends BaseController {
 
     @RequestMapping(value = '/get/{id}', produces = "application/json; charset=utf-8")
     @ResponseBody
-    Advertisement get(@PathVariable String id) {
-        service.get id
+    Advertisement get(@PathVariable int id) {
+        AdvertisementCache.get(id)
     }
 
     @RequestMapping(value = '/find/{codeNumber}', produces = "application/json; charset=utf-8")
     @ResponseBody
     List<Advertisement> findList(@PathVariable String codeNumber) {
-        AdvertisementMachine machine = machineService.getByCodeNumber(codeNumber)
-        Advertisement advertisement = new Advertisement()
+        def machine = machineService.getByCodeNumber(codeNumber)
+        def advertisement = new Advertisement()
         advertisement.machineID = machine.id
-        List<Advertisement> list = service.findList advertisement
+        def list = service.findList advertisement
         return list
     }
 
     @RequestMapping('/media/{id}')
     @ResponseBody
     void media(@PathVariable String id, HttpServletResponse response) {
-        Advertisement advertisement = AdvertisementCache.get(id.toInteger())
+        def advertisement = AdvertisementCache.get(id.toInteger())
         MediaUtils.mediaTransfer advertisement.url, response
     }
 

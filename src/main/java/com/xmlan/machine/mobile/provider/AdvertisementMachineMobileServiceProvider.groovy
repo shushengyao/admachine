@@ -45,7 +45,7 @@ class AdvertisementMachineMobileServiceProvider extends BaseController {
 
     @RequestMapping(value = '/find/{userID}', produces = "application/json; charset=utf-8")
     @ResponseBody
-    List<AdvertisementMachine> find(@PathVariable int userID) {
+    List<AdvertisementMachine> find(@PathVariable int userID, String token) {
         def machine = new AdvertisementMachine()
         machine.userID = userID
         return service.findForProvider(machine)
@@ -67,7 +67,7 @@ class AdvertisementMachineMobileServiceProvider extends BaseController {
         def map = Maps.newHashMap()
         map['responseCode'] = responseCode
         if (responseCode == NO_SUCH_ROW) {
-            map['message'] = "目标广告机不存在"
+            map['message'] = "目标路灯不存在"
         } else if (responseCode == ERROR_REQUEST) {
             map['message'] = "操作码不正确"
         } else if (responseCode == DONE) {
