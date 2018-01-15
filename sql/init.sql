@@ -87,7 +87,7 @@ create table `machine_sensor` (
   humidity    varchar(64) comment '湿度',
   pm25        varchar(64) comment 'PM2.5',
   pm10        varchar(64) comment 'PM10',
-  codeNumber  varchar(512)       not null
+  machineID   int                not null
   comment '机器标识码(注册码)',
   primary key (id)
 )
@@ -105,19 +105,8 @@ insert into user values (
   now(),
   '',
   ''
-), (
-  id,
-  '希梦3117',
-  'ximon3117',
-  '4dae3c427732469187d806fa83470313a21e6a827b35d831a6b70f420cff97fd',
-  1,
-  '',
-  now(),
-  '',
-  ''
 );
 -- d6afefbaa8389a98c03e37035bc4cd264776bb784993b877afda72e20d8d5865 -> yuki6261
--- 4dae3c427732469187d806fa83470313a21e6a827b35d831a6b70f420cff97fd -> zhxm2512209
 
 -- 防止删除管理员角色
 create trigger `ROLE_DELETE_CHECK_TRIGGER`
@@ -132,7 +121,8 @@ create trigger `ROLE_DELETE_CHECK_TRIGGER`
     where id = 1;
     if count != 1
     then
-      insert into role (id, name, remark) values (OLD.id, OLD.name, OLD.remark);
+      insert into role (id, name, remark)
+      values (OLD.id, OLD.name, OLD.remark);
     end if;
   end;
 
@@ -142,13 +132,42 @@ create trigger `NULL_ROLE_CHECK_TRIGGER`
   on role
   for each row
   begin
-    declare count int;
+    declare count int default 0;
     select count(*)
     into count
     from user
     where roleID = OLD.id;
     if count != 0
     then
-      insert into role (id, name, remark) values (OLD.id, OLD.name, OLD.remark);
+      insert into role (id, name, remark)
+      values (OLD.id, OLD.name, OLD.remark);
+    end if;
+  end;
+
+-- 防止删除ROOT管理员
+create trigger `ROOT_ADMIN_PROTECTION`
+  after delete
+  on user
+  for each row
+  begin
+    declare count int default 0;
+    select count(*)
+    into count
+    from user
+    where id = 1;
+    if count != 1
+    then
+      insert into user (id, username, authname, password, roleID, address, addTime, phone, remark)
+      values (
+        OLD.id,
+        OLD.username,
+        OLD.authname,
+        OLD.password,
+        OLD.roleID,
+        OLD.address,
+        OLD.addTime,
+        OLD.phone,
+        OLD.remark
+      );
     end if;
   end;

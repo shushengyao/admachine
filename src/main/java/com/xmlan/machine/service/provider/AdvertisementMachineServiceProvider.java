@@ -6,7 +6,9 @@ import com.xmlan.machine.common.cache.AdvertisementMachineCache;
 import com.xmlan.machine.common.util.DateUtils;
 import com.xmlan.machine.common.util.StringUtils;
 import com.xmlan.machine.module.advertisementMachine.entity.AdvertisementMachine;
+import com.xmlan.machine.module.advertisementMachine.entity.MachineSensor;
 import com.xmlan.machine.module.advertisementMachine.service.AdvertisementMachineService;
+import com.xmlan.machine.module.advertisementMachine.service.MachineSensorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,6 +28,8 @@ public class AdvertisementMachineServiceProvider extends BaseController {
 
     @Autowired
     private AdvertisementMachineService service;
+    @Autowired
+    private MachineSensorService machineSensorService;
 
     @RequestMapping(value = "/get/{id}", produces = "application/json; charset=utf-8")
     @ResponseBody
@@ -62,6 +66,26 @@ public class AdvertisementMachineServiceProvider extends BaseController {
             map.put("message", "系统繁忙");
         }
         return map;
+    }
+
+    @RequestMapping(value = "/environment/status/{machineID}", produces = "application/json; charset=utf-8")
+    @ResponseBody
+    public MachineSensor currentEnvironmentStatus(@PathVariable("machineID") String machineID) {
+        return machineSensorService.getByMachineID(machineID);
+    }
+
+    @RequestMapping(value = "/environment/update/{machineID}", produces = "application/json; charset=utf-8")
+    @ResponseBody
+    public HashMap<String, Object> updateEnvironmentStatus(@PathVariable("machineID") String machineID, String temperature, String humidity, String pm25, String pm10) {
+        MachineSensor data = machineSensorService.getByMachineID(machineID);
+        data.setTemperature(temperature);
+        data.setHumidity(humidity);
+        data.setPm25(pm25);
+        data.setPm10(pm10);
+        HashMap<String, Object> info = Maps.newHashMap();
+        info.put("id", data.getId());
+        info.put("response", machineSensorService.update(data));
+        return info;
     }
 
 }

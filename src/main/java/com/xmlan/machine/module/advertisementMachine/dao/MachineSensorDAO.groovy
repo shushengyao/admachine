@@ -2,6 +2,7 @@ package com.xmlan.machine.module.advertisementMachine.dao
 
 import com.xmlan.machine.common.base.BaseDAO
 import com.xmlan.machine.module.advertisementMachine.entity.MachineSensor
+import org.apache.ibatis.annotations.Param
 import org.springframework.stereotype.Repository
 
 /**
@@ -10,4 +11,7 @@ import org.springframework.stereotype.Repository
  */
 @Repository
 interface MachineSensorDAO extends BaseDAO<MachineSensor> {
+
+    MachineSensor getByMachineID(@Param("machineID") String machineID)
+
 }

@@ -11,7 +11,7 @@
         <result column="humidity" property="humidity"/>
         <result column="pm25" property="pm25"/>
         <result column="pm10" property="pm10"/>
-        <result column="codeNumber" property="codeNumber"/>
+        <result column="machineID" property="machineID"/>
     </resultMap>
 
     <sql id="columns">
@@ -20,7 +20,7 @@
         t.humidity as "humidity",
         t.pm25 as "pm25",
         t.pm10 as "pm10",
-        t.codeNumber as "codeNumber"
+        t.machineID as "machineID"
     </sql>
 
     <select id="get" parameterType="java.lang.String" resultMap="machineSensorResultMap">
@@ -34,7 +34,7 @@
         select
         <include refid="columns"/>
         from machine_sensor t
-        order by t.codeNumber, t.id asc
+        order by t.machineID, t.id asc
     </select>
 
     <select id="findList" parameterType="com.xmlan.machine.module.advertisementMachine.entity.MachineSensor"
@@ -55,8 +55,8 @@
             <if test="pm10 != null and pm10 != ''">
                 and t.pm10 = #{pm10}
             </if>
-            <if test="codeNumber != null and codeNumber != ''">
-                and t.codeNumber = #{codeNumber}
+            <if test="machineID != null and machineID != ''">
+                and t.machineID = #{machineID}
             </if>
         </where>
         <choose>
@@ -73,14 +73,14 @@
             humidity,
             pm25,
             pm10,
-            codeNumber
+            machineID
         ) values (
             id,
             #{temperature},
             #{humidity},
             #{pm25},
             #{pm10},
-            #{codeNumber}
+            #{machineID}
         );
     </insert>
 
@@ -91,13 +91,19 @@
             humidity    = #{humidity},
             pm25        = #{pm25},
             pm25        = #{pm25}
-        where codeNumber = #{codeNumber}
+        where machineID = #{machineID}
     </update>
 
     <delete id="delete" parameterType="com.xmlan.machine.module.advertisementMachine.entity.MachineSensor">
         delete from machine_sensor
-        where codeNumber = #{codeNumber}
+        where machineID = #{machineID}
     </delete>
 
+    <select id="getByMachineID" resultMap="machineSensorResultMap">
+        select
+        <include refid="columns"/>
+        from machine_sensor t
+        where t.machineID = #{machineID}
+    </select>
 
 </mapper>

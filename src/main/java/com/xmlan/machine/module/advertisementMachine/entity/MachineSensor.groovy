@@ -11,6 +11,6 @@ class MachineSensor implements Serializable {
     String humidity
     String pm25
     String pm10
-    String codeNumber
+    String machineID
 
 }

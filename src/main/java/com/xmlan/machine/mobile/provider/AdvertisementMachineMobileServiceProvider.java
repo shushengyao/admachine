@@ -13,7 +13,9 @@ import com.xmlan.machine.common.util.JsonUtils;
 import com.xmlan.machine.common.util.PushUtils;
 import com.xmlan.machine.common.util.StringUtils;
 import com.xmlan.machine.module.advertisementMachine.entity.AdvertisementMachine;
+import com.xmlan.machine.module.advertisementMachine.entity.MachineSensor;
 import com.xmlan.machine.module.advertisementMachine.service.AdvertisementMachineService;
+import com.xmlan.machine.module.advertisementMachine.service.MachineSensorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -34,6 +36,8 @@ public class AdvertisementMachineMobileServiceProvider extends BaseController {
 
     @Autowired
     private AdvertisementMachineService service;
+    @Autowired
+    private MachineSensorService machineSensorService;
 
     private static boolean isNotBlank(String... args) {
         for (String string : args) {
@@ -94,6 +98,12 @@ public class AdvertisementMachineMobileServiceProvider extends BaseController {
             map.put("message", "系统繁忙");
         }
         return map;
+    }
+
+    @RequestMapping(value = "/environment/status/{machineID}", produces = "application/json; charset=utf-8")
+    @ResponseBody
+    public MachineSensor currentEnvironmentStatus(@PathVariable("machineID") String machineID) {
+        return machineSensorService.getByMachineID(machineID);
     }
 
 }
