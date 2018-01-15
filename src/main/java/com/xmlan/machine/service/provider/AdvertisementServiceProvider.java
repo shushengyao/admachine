@@ -47,8 +47,8 @@ public class AdvertisementServiceProvider extends BaseController {
 
     @RequestMapping("/media/{id}")
     @ResponseBody
-    public void media(@PathVariable String id, HttpServletResponse response) {
-        Advertisement advertisement = AdvertisementCache.get(StringGroovyMethods.toInteger(id));
+    public void media(@PathVariable int id, HttpServletResponse response) {
+        Advertisement advertisement = AdvertisementCache.get(id);
         MediaUtils.mediaTransfer(advertisement.getUrl(), response);
     }
 
