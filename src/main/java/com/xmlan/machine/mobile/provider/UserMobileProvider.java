@@ -6,6 +6,7 @@ import com.xmlan.machine.common.util.StringUtils;
 import com.xmlan.machine.common.util.TokenUtils;
 import com.xmlan.machine.module.user.entity.User;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -17,11 +18,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @RequestMapping("${mobilePath}/user")
 public class UserMobileProvider extends BaseController {
 
-    @RequestMapping(value = "/self", produces = "application/json; charset=utf-8")
+    @RequestMapping(value = "/self/{id}/{token}", produces = "application/json; charset=utf-8")
     @ResponseBody
-    public User self(String id, String token) {
+    public User self(@PathVariable("id") String id, @PathVariable("token") String token) {
         if (TokenUtils.validateToken(token)) {
-            // TODO: "Validate user request."
+            // TODO: validate token
             System.out.println(true);
         }
         User user = UserCache.get(id);

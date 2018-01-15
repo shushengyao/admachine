@@ -6,7 +6,9 @@ import com.xmlan.machine.common.cache.AdvertisementMachineCache
 import com.xmlan.machine.module.advertisementMachine.dao.AdvertisementMachineDAO
 import com.xmlan.machine.module.advertisementMachine.entity.AdvertisementMachine
 import com.xmlan.machine.module.advertisementMachine.entity.AdvertisementMachineCount
+import com.xmlan.machine.module.advertisementMachine.entity.MachineSensor
 import com.xmlan.machine.module.user.entity.User
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -20,6 +22,9 @@ class AdvertisementMachineService extends BaseService<AdvertisementMachine, Adve
 
     private static final String longitude = "longitude"
     private static final String latitude = "latitude"
+
+    @Autowired
+    private MachineSensorService machineSensorService
 
     private static boolean isInArea(String flag, String value, LinkedHashMap<String, String> area) {
         switch (flag) {
@@ -36,6 +41,65 @@ class AdvertisementMachineService extends BaseService<AdvertisementMachine, Adve
         return operate == 0 ? true : operate == 1
     }
 
+    @Override
+    int insert(AdvertisementMachine machine) {
+        def responseCode = super.insert(machine)
+        def sensorData = new MachineSensor()
+        sensorData.machineID = machine.id
+        machineSensorService.insert(sensorData)
+        return responseCode
+    }
+
+    @Override
+    int delete(AdvertisementMachine machine) {
+        def sensorData = machineSensorService.getByMachineID(machine.id.toString())
+        machineSensorService.delete(sensorData)
+        return super.delete(machine)
+    }
+
+    AdvertisementMachine getByCodeNumber(String codeNumber) {
+        return dao.getByCodeNumber(codeNumber)
+    }
+
+    int lightControl(int id, int operate) {
+        if (null == AdvertisementMachineCache.get(id)) {
+            return NO_SUCH_ROW
+        }
+        if (!checkOperate(operate)) {
+            return ERROR_REQUEST
+        }
+        def machine = AdvertisementMachineCache.get(id)
+        machine.light = operate
+        dao.lightControl(id, operate)
+        return DONE
+    }
+
+    int chargeControl(int id, int operate) {
+        if (null == AdvertisementMachineCache.get(id)) {
+            return NO_SUCH_ROW
+        }
+        if (!checkOperate(operate)) {
+            return ERROR_REQUEST
+        }
+        def machine = AdvertisementMachineCache.get(id)
+        machine.charge = operate
+        dao.chargeControl(id, operate)
+        return DONE
+    }
+
+    int checkedControl(int id, int operate) {
+        if (null == AdvertisementMachineCache.get(id)) {
+            return NO_SUCH_ROW
+        }
+        if (!checkOperate(operate)) {
+            return ERROR_REQUEST
+        }
+        def machine = AdvertisementMachineCache.get(id)
+        machine.checked = operate
+        dao.checkedControl(id, operate)
+        return DONE
+    }
+
     static List<AdvertisementMachineCount> getMachineCountByUserID(List<User> list) {
         List<AdvertisementMachineCount> counts = Lists.newArrayList()
         list.each {
@@ -45,10 +109,6 @@ class AdvertisementMachineService extends BaseService<AdvertisementMachine, Adve
             counts.add(count)
         }
         return counts
-    }
-
-    AdvertisementMachine getByCodeNumber(String codeNumber) {
-        return dao.getByCodeNumber(codeNumber)
     }
 
     // provider support
@@ -94,45 +154,6 @@ class AdvertisementMachineService extends BaseService<AdvertisementMachine, Adve
             }
         }
         return filteredList
-    }
-
-    int lightControl(int id, int operate) {
-        if (null == AdvertisementMachineCache.get(id)) {
-            return NO_SUCH_ROW
-        }
-        if (!checkOperate(operate)) {
-            return ERROR_REQUEST
-        }
-        def machine = AdvertisementMachineCache.get(id)
-        machine.light = operate
-        dao.lightControl(id, operate)
-        return DONE
-    }
-
-    int chargeControl(int id, int operate) {
-        if (null == AdvertisementMachineCache.get(id)) {
-            return NO_SUCH_ROW
-        }
-        if (!checkOperate(operate)) {
-            return ERROR_REQUEST
-        }
-        def machine = AdvertisementMachineCache.get(id)
-        machine.charge = operate
-        dao.chargeControl(id, operate)
-        return DONE
-    }
-
-    int checkedControl(int id, int operate) {
-        if (null == AdvertisementMachineCache.get(id)) {
-            return NO_SUCH_ROW
-        }
-        if (!checkOperate(operate)) {
-            return ERROR_REQUEST
-        }
-        def machine = AdvertisementMachineCache.get(id)
-        machine.checked = operate
-        dao.checkedControl(id, operate)
-        return DONE
     }
 
 }
