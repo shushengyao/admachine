@@ -84,14 +84,11 @@ class UploadUtils {
 
     private static void tinyImage(String filename) {
         try {
-            String[] args = ["python3", "tinyimages.py", "${Global.imagePath}/${filename}"] as String[]
-            Process process = Runtime.getRuntime().exec(args)
-            BufferedReader input = new BufferedReader(new InputStreamReader(process.getInputStream()))
-            String line
-            while ((line = input.readLine()) != null) {
-                System.out.println(line)
+            String[] args = ["python3", "tinyimages.py", "${Global.mediaPath}/${Global.imageTag}/${filename}"] as String[]
+            def process = Runtime.runtime.exec args
+            process.inputStream.eachLine { line ->
+                println(line)
             }
-            input.close()
         } catch (IOException e) {
             e.printStackTrace()
         }

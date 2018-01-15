@@ -1,8 +1,9 @@
 package com.xmlan.machine.common.base
 
 /**
- * Created by ayakurayuki on 2017/12/11-14:24.
- * Package: com.xmlan.machine.common.base
+ * Created by ayakurayuki on 2017/12/11-14:24. <br/>
+ * Package: com.xmlan.machine.common.base <br/>
+ * DAO基类 <br/>
  */
 interface BaseDAO<T> {
 

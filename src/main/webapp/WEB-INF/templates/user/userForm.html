@@ -93,38 +93,32 @@
                 </div>
                 <div class="input-field col s6 m3 l3">
                     <i class="material-icons prefix">account_circle</i>
-                    <th:block th:switch="${user.id}">
-                        <input th:case="${newEntityID}" id="authname" name="authname" th:value="${user.authname}"
-                               type="text"
-                               class="text" placeholder="输入登录账号" required="required"/>
-                        <label th:case="${newEntityID}" for="authname">登录名</label>
-                        <input th:case="*" id="authname-ro" name="authname" th:value="${user.authname}" type="text"
-                               class="text" readonly="readonly" placeholder="输入登录账号" required="required"/>
-                        <label th:case="*" for="authname-ro">登录名</label>
-                    </th:block>
+                    <input th:if="${user.id==newEntityID}" id="authname" name="authname" th:value="${user.authname}"
+                           type="text" class="text" placeholder="输入登录账号" required="required"/>
+                    <label th:if="${user.id==newEntityID}" for="authname" th:text="登录名"></label>
+                    <input th:if="${user.id!=newEntityID}" id="authname-ro" name="authname" th:value="${user.authname}"
+                           type="text" class="text" readonly="readonly" placeholder="输入登录账号" required="required"/>
+                    <label th:if="${user.id!=newEntityID}" for="authname-ro" th:text="登录名"></label>
                 </div>
                 <div class="input-field col s6 m3 l3">
                     <i class="material-icons prefix">lock_outline</i>
-                    <th:block th:switch="${user.id}">
-                        <input th:case="${newEntityID}" id="password" name="password" th:value="${user.password}"
-                               type="password" class="text" placeholder="输入登录密码" required="required"/>
-                        <label th:case="${newEntityID}" for="password">登录密码</label>
-                        <input th:case="*" id="password-ro" name="password" th:value="${user.password}" type="password"
-                               class="text" placeholder="输入登录密码" required="required" readonly="readonly"/>
-                        <label th:case="*" for="password-ro">登录密码</label>
-                    </th:block>
+                    <input th:if="${user.id==newEntityID}" id="password" name="password" th:value="${user.password}"
+                           type="password" class="text" placeholder="输入登录密码" required="required"/>
+                    <label th:if="${user.id==newEntityID}" for="password" th:text="登录密码"></label>
+                    <input th:if="${user.id!=newEntityID}" id="password-ro" name="password" th:value="${user.password}"
+                           type="password" class="text" placeholder="输入登录密码" required="required" readonly="readonly"/>
+                    <label th:if="${user.id!=newEntityID}" for="password-ro" th:text="登录密码"></label>
                 </div>
                 <div class="input-field col s6 m3 l3">
                     <i class="material-icons prefix">lock</i>
-                    <th:block th:switch="${user.id}">
-                        <input th:case="${newEntityID}" id="confirmPassword" name="confirmPassword" required="required"
-                               th:value="${user.password}" type="password" class="text" placeholder="重新确认密码"/>
-                        <label th:case="${newEntityID}" for="confirmPassword">确认密码</label>
-                        <input th:case="*" id="confirmPassword-ro" name="confirmPassword" th:value="${user.password}"
-                               type="password" class="text" placeholder="重新确认密码" required="required"
-                               readonly="readonly"/>
-                        <label th:case="*" for="confirmPassword-ro">确认密码</label>
-                    </th:block>
+                    <input th:if="${user.id==newEntityID}" id="confirmPassword" name="confirmPassword"
+                           required="required" th:value="${user.password}" type="password" class="text"
+                           placeholder="重新确认密码"/>
+                    <label th:if="${user.id==newEntityID}" for="confirmPassword" th:text="确认密码"></label>
+                    <input th:if="${user.id!=newEntityID}" id="confirmPassword-ro" name="confirmPassword"
+                           th:value="${user.password}" type="password" class="text" placeholder="重新确认密码"
+                           required="required" readonly="readonly"/>
+                    <label th:if="${user.id!=newEntityID}" for="confirmPassword-ro" th:text="确认密码"></label>
                 </div>
 
                 <div class="input-field col s12 m3 l3">
@@ -134,9 +128,12 @@
                 </div>
                 <div class="input-field col s12 m3 l3">
                     <i class="material-icons prefix">date_range</i>
-                    <input id="addTime" name="addTime" th:value="${user.addTime}" type="text" class="date-picker"
-                           placeholder="选择加入时间"/>
-                    <label for="addTime">加入时间</label>
+                    <input th:if="${user.id==newEntityID}" id="addTime" name="addTime" th:value="${user.addTime}"
+                           type="text" class="date-picker" placeholder="选择加入时间"/>
+                    <label th:if="${user.id==newEntityID}" for="addTime" th:text="加入时间"></label>
+                    <input th:if="${user.id!=newEntityID}" id="addTime-ro" name="addTime" th:value="${user.addTime}"
+                           type="text" placeholder="选择加入时间" readonly="readonly"/>
+                    <label th:if="${user.id!=newEntityID}" for="addTime-ro" th:text="加入时间"></label>
                 </div>
                 <div class="input-field col s12 m3 l3">
                     <i class="material-icons prefix">group</i>
@@ -158,8 +155,8 @@
 
                 <div class="input-field col s12 m12 l12">
                     <i class="material-icons prefix">insert_comment</i>
-                    <textarea id="remark" name="remark" th:text="${user.remark}" class="materialize-textarea"
-                              placeholder=""></textarea>
+                    <textarea id="remark" name="remark" th:text="${user.remark}"
+                              class="materialize-textarea"></textarea>
                     <label for="remark">备注</label>
                 </div>
             </div>

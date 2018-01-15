@@ -14,7 +14,9 @@ enum AlgorithmEnum {
 
     MD5("MD5"), SHA1("SHA-1"), SHA256("SHA-256")
 
-    // 类型所使用的值，调用枚举时所用
+    /**
+     * 类型所使用的值，调用枚举时使用
+     */
     private final String type
 
     AlgorithmEnum(String type) {

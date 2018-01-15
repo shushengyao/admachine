@@ -91,7 +91,7 @@ abstract class BaseController extends BaseBean {
     }
 
     /**
-     * 添加临时消息
+     * 添加消息
      *
      * @param model model
      * @param messages 消息（任意个数的对象）

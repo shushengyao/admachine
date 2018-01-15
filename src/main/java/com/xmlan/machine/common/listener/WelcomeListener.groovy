@@ -39,11 +39,11 @@ class WelcomeListener implements ServletContextListener {
     }
 
     private void initialization() {
-        URL url = getClass().getClassLoader().getResource("requirements.txt")
+        def url = getClass().getClassLoader().getResource("requirements.txt")
         if (null != url) {
             new File(url.getFile()).eachLine { requirement ->
-                def process = Runtime.getRuntime().exec "pip3 install ${requirement}"
-                process.inputStream.eachLine { response ->
+                def pip3 = Runtime.runtime.exec "pip3 install ${requirement}"
+                pip3.inputStream.eachLine { response ->
                     println response
                 }
             }

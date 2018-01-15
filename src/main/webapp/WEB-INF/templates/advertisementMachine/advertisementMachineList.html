@@ -127,8 +127,6 @@
                 <th>广告数</th>
                 <th>灯</th>
                 <th>充电状态</th>
-                <th class="hide-on-med-and-down"></th>
-                <th class="hide-on-large-only"></th>
             </tr>
             </thead>
             <tbody class="card">
@@ -261,6 +259,10 @@
             <p id="detail-item-user-id">userID -> username</p>
             <h6 class="green-text text-darken-2">机器识别码</h6>
             <p id="detail-item-code-number">codeNumber</p>
+            <h6 class="green-text text-darken-2">广告数</h6>
+            <p id="detail-item-ads">ads count</p>
+            <h6 class="green-text text-darken-2">状态 (灯/充电)</h6>
+            <p id="detail-item-status">status</p>
             <h6 class="green-text text-darken-2">地址</h6>
             <p id="detail-item-address">address</p>
             <h6 class="green-text text-darken-2">备注</h6>
@@ -311,6 +313,8 @@
                 $("#detail-item-add-time").text(data['machine'].addTime);
                 $("#detail-item-user-id").text(data['owner']);
                 $("#detail-item-code-number").text(data['machine'].codeNumber);
+                $("#detail-item-ads").text(data['ads']);
+                $("#detail-item-status").text(data['status']);
                 $("#detail-item-address").text(data['machine'].address);
                 $("#detail-item-remark").text(data['machine'].remark);
             },

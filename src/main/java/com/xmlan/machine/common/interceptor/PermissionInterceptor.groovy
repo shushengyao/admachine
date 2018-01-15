@@ -11,8 +11,8 @@ import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
 /**
- * Created by ayakurayuki on 2017/12/26-14:03.
- * Package: com.xmlan.machine.common.interceptor
+ * Created by ayakurayuki on 2017/12/26-14:03. <br/>
+ * Package: com.xmlan.machine.common.interceptor <br/>
  */
 class PermissionInterceptor extends BaseBean implements HandlerInterceptor {
 

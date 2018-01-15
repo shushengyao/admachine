@@ -11,14 +11,18 @@ import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Component
 
 /**
- * Created by ayakurayuki on 2017/12/26-12:00.
- * Package: com.xmlan.machine.common.task
+ * Created by ayakurayuki on 2017/12/26-12:00. <br/>
+ * Package: com.xmlan.machine.common.task <br/>
  */
 @Component
 class CacheTask {
 
     private Logger logger = LogManager.getLogger(CacheTask.class)
 
+    /**
+     * 定时刷新缓存, 周期为30分钟
+     * @return
+     */
     @Scheduled(fixedRate = 1800000L)
     def refreshCache() {
         CacheUtils.cacheManager.clearAll()

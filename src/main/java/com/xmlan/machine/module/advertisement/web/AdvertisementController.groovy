@@ -1,6 +1,7 @@
 package com.xmlan.machine.module.advertisement.web
 
 import cn.jiguang.common.ClientConfig
+import cn.jiguang.common.resp.APIRequestException
 import cn.jpush.api.JPushClient
 import com.github.pagehelper.PageInfo
 import com.google.common.collect.Maps
@@ -51,8 +52,8 @@ class AdvertisementController extends BaseController {
     Map<String, Object> detail(@PathVariable String id) {
         Map<String, Object> data = Maps.newHashMap()
         Advertisement advertisement = AdvertisementCache.get(id.toInteger())
-        data.put "ad", advertisement
-        data.put "machine", AdvertisementMachineCache.getMachineNameByID(advertisement.machineID)
+        data["ad"] = advertisement
+        data["machine"] = AdvertisementMachineCache.getMachineNameByID(advertisement.machineID)
         return data
     }
 
@@ -142,8 +143,12 @@ class AdvertisementController extends BaseController {
 
             def pushClient = new JPushClient(Global.masterSecret, Global.appKey, null, ClientConfig.instance)
             def payload = PushUtils.buildPayload(id, "New ad media.", JsonUtils.toJsonString(map))
-            def result = pushClient.sendPush(payload)
-            logger.trace(result)
+            try {
+                def result = pushClient.sendPush(payload)
+                logger.trace(result)
+            } catch (APIRequestException e) {
+                logger.error "API exception with: ${e.message}"
+            }
 
             addMessage attributes, "上传成功"
         }

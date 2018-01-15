@@ -8,8 +8,8 @@ import javax.validation.ConstraintViolationException
 import javax.validation.Validator
 
 /**
- * Created by ayakurayuki on 2017/12/13-14:03.
- * Package: com.xmlan.machine.common.util
+ * Created by ayakurayuki on 2017/12/13-14:03. <br/>
+ * Package: com.xmlan.machine.common.util <br/>
  */
 class BeanValidator {
 
@@ -48,7 +48,7 @@ class BeanValidator {
      * 辅助方法, 转换ConstraintViolationException中的Set<ConstraintViolations>为Map<property, message>.
      */
     static Map<String, String> extractPropertyAndMessage(ConstraintViolationException e) {
-        return extractPropertyAndMessage(e.getConstraintViolations())
+        return extractPropertyAndMessage(e.constraintViolations)
     }
 
     /**
@@ -58,7 +58,7 @@ class BeanValidator {
     static Map<String, String> extractPropertyAndMessage(Set<? extends ConstraintViolation> constraintViolations) {
         Map<String, String> errorMessages = Maps.newHashMap()
         for (ConstraintViolation violation : constraintViolations) {
-            errorMessages.put(violation.getPropertyPath().toString(), violation.getMessage())
+            errorMessages.put(violation.propertyPath.toString(), violation.message)
         }
         return errorMessages
     }
@@ -67,7 +67,7 @@ class BeanValidator {
      * 辅助方法, 转换ConstraintViolationException中的Set<ConstraintViolations>为List<propertyPath message>.
      */
     static List<String> extractPropertyAndMessageAsList(ConstraintViolationException e) {
-        return extractPropertyAndMessageAsList(e.getConstraintViolations(), " ")
+        return extractPropertyAndMessageAsList(e.constraintViolations, " ")
     }
 
     /**
@@ -82,7 +82,7 @@ class BeanValidator {
      * 辅助方法, 转换ConstraintViolationException中的Set<ConstraintViolations>为List<propertyPath +separator+ message>.
      */
     static List<String> extractPropertyAndMessageAsList(ConstraintViolationException e, String separator) {
-        return extractPropertyAndMessageAsList(e.getConstraintViolations(), separator)
+        return extractPropertyAndMessageAsList(e.constraintViolations, separator)
     }
 
     /**
@@ -92,8 +92,8 @@ class BeanValidator {
     static List<String> extractPropertyAndMessageAsList(Set<? extends ConstraintViolation> constraintViolations,
                                                         String separator) {
         List<String> errorMessages = Lists.newArrayList()
-        for (ConstraintViolation violation : constraintViolations) {
-            errorMessages.add(violation.getPropertyPath().toString() + separator + violation.getMessage())
+        for (violation in constraintViolations) {
+            errorMessages.add(violation.propertyPath.toString() + separator + violation.message)
         }
         return errorMessages
     }

@@ -23,8 +23,8 @@ import javax.servlet.http.HttpServletRequest
 class AdvertisementService extends BaseService<Advertisement, AdvertisementDAO> {
 
     int uploadMedia(String id, HttpServletRequest request) {
-        Advertisement advertisement = dao.get(id)
-        String jsonString = UploadUtils.uploadImages(request)
+        def advertisement = dao.get(id)
+        def jsonString = UploadUtils.uploadImages(request)
         if (jsonString == '[]') {
             return FAILURE
         }
@@ -38,7 +38,7 @@ class AdvertisementService extends BaseService<Advertisement, AdvertisementDAO> 
     static List<AdvertisementCount> getAdvertisementCount(List<AdvertisementMachine> list) {
         List<AdvertisementCount> counts = Lists.newArrayList()
         list.each {
-            AdvertisementCount count = new AdvertisementCount()
+            def count = new AdvertisementCount()
             count.id = it.id
             count.count = AdvertisementCache.getAdvertisementCountByMachineID(it.id)
             counts.add(count)

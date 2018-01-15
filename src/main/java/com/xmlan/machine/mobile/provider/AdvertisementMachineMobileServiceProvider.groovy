@@ -1,6 +1,7 @@
 package com.xmlan.machine.mobile.provider
 
 import cn.jiguang.common.ClientConfig
+import cn.jiguang.common.resp.APIRequestException
 import cn.jpush.api.JPushClient
 import com.google.common.collect.Maps
 import com.xmlan.machine.common.base.BaseController
@@ -76,8 +77,12 @@ class AdvertisementMachineMobileServiceProvider extends BaseController {
             command['operate'] = operate
             def pushClient = new JPushClient(Global.masterSecret, Global.appKey, null, ClientConfig.instance)
             def payload = PushUtils.buildPayload("${id}", "Light switch.", JsonUtils.toJsonString(command))
-            def result = pushClient.sendPush(payload)
-            logger.trace(result)
+            try {
+                def result = pushClient.sendPush(payload)
+                logger.trace(result)
+            } catch (APIRequestException e) {
+                logger.error "API exception with: ${e.message}"
+            }
         } else {
             map['message'] = "系统繁忙"
         }

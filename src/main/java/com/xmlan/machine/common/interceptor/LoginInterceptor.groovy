@@ -10,8 +10,8 @@ import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
 /**
- * Created by ayakurayuki on 2017/12/22-14:42.
- * Package: com.xmlan.machine.common.interceptor
+ * Created by ayakurayuki on 2017/12/22-14:42. <br/>
+ * Package: com.xmlan.machine.common.interceptor <br/>
  */
 class LoginInterceptor implements HandlerInterceptor {
 

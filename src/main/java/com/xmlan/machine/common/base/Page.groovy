@@ -3,21 +3,32 @@ package com.xmlan.machine.common.base
 import com.xmlan.machine.common.config.Global
 
 /**
- * Created by Ayakura Yuki on 2017/7/24.
+ * Created by Ayakura Yuki on 2017/7/24. <br/>
+ * Package: com.xmlan.machine.common.base <br/>
+ * 分页用基类 <br/>
  */
 class Page<T> {
 
+    /**
+     * 当前页, 默认为第1页
+     */
     private int pageNo = 1
-    // 当前页, 默认为第1页
+    /**
+     * 每页记录数
+     */
     private int pageSize = Global.pageSize
-    // 每页记录数
+    /**
+     * 总记录数, 默认为-1, 表示需要查询
+     */
     private long totalRecord = -1
-    // 总记录数, 默认为-1, 表示需要查询
+    /**
+     * 总页数, 默认为-1, 表示需要计算
+     */
     private int totalPage = -1
-    // 总页数, 默认为-1, 表示需要计算
-
+    /**
+     * 当前页记录List形式
+     */
     protected List<T> list
-    // 当前页记录List形式
 
     int getPageNo() {
         return pageNo

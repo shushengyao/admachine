@@ -3,6 +3,7 @@ package com.xmlan.machine.module.advertisementMachine.web
 import com.github.pagehelper.PageInfo
 import com.google.common.collect.Maps
 import com.xmlan.machine.common.base.BaseController
+import com.xmlan.machine.common.cache.AdvertisementCache
 import com.xmlan.machine.common.cache.UserCache
 import com.xmlan.machine.common.util.DateUtils
 import com.xmlan.machine.common.util.IDUtils
@@ -54,8 +55,11 @@ class AdvertisementMachineController extends BaseController {
     @ResponseBody
     Map<String, Object> detail(@PathVariable String id) {
         Map<String, Object> data = Maps.newHashMap()
-        data.put("machine", service.get(id))
-        data.put("owner", userService.get(service.get(id).userID.toString()).username)
+        def machine = service.get(id)
+        data["machine"] = machine
+        data["owner"] = userService.get(service.get(id).userID.toString()).username
+        data["ads"] = AdvertisementCache.getAdvertisementCountByMachineID(id.toInteger())
+        data["status"] = "${machine.light == 1 ? '灯亮️' : '灯灭'}/${machine.charge == 1 ? '充电' : '闲置'}".toString()
         return data
     }
 

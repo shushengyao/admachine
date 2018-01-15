@@ -310,10 +310,10 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
     public static String jsGetVal(String objectString) {
         StringBuilder result = new StringBuilder();
         StringBuilder val = new StringBuilder();
-        String[] vals = split(objectString, ".");
-        for (String value : vals) {
-            val.append("." + value);
-            result.append("!" + (val.substring(1)) + "?'':");
+        String[] values = split(objectString, ".");
+        for (String value : values) {
+            val.append(".").append(value);
+            result.append("!").append(val.substring(1)).append("?'':");
         }
         result.append(val.substring(1));
         return result.toString();
