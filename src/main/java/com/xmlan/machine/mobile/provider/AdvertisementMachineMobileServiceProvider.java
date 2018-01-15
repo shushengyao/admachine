@@ -32,7 +32,7 @@ import java.util.Map;
  * Package: com.xmlan.machine.mobile.provider
  */
 @Controller
-@RequestMapping("${mobilePath}/advertisementMachine")
+@RequestMapping("${mobilePath}/machine")
 public class AdvertisementMachineMobileServiceProvider extends BaseController {
 
     @Autowired
@@ -84,9 +84,9 @@ public class AdvertisementMachineMobileServiceProvider extends BaseController {
         return null;
     }
 
-    @RequestMapping(value = "/light/{token}", produces = "application/json; charset=utf-8")
+    @RequestMapping(value = "/light/{id}/{operate}", produces = "application/json; charset=utf-8")
     @ResponseBody
-    public Map light(int id, int operate, @PathVariable("token") String token) {
+    public Map light(@PathVariable("id") int id, @PathVariable("operate") int operate, String token) {
         if (TokenUtils.validateToken(token)) {
             // TODO: validate token
             System.out.println(true);
@@ -117,9 +117,9 @@ public class AdvertisementMachineMobileServiceProvider extends BaseController {
         return map;
     }
 
-    @RequestMapping(value = "/environment/status/{machineID}/{token}", produces = "application/json; charset=utf-8")
+    @RequestMapping(value = "/environment/{machineID}", produces = "application/json; charset=utf-8")
     @ResponseBody
-    public MachineSensor currentEnvironmentStatus(@PathVariable("machineID") String machineID, @PathVariable("token") String token) {
+    public MachineSensor currentEnvironmentStatus(@PathVariable("machineID") String machineID, String token) {
         if (TokenUtils.validateToken(token)) {
             // TODO: validate token
             System.out.println(true);
