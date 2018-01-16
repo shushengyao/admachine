@@ -165,9 +165,9 @@
                                 </a>
                             </li>
                             <li>
-                                <a class="btn-floating red darken-1 waves-effect waves-light tooltipped"
-                                   data-position="top" data-delay="50" data-tooltip="删除"
-                                   th:href="@{${adminPath}+'/advertisementMachine/delete?id='+${item.id}}">
+                                <a class="btn-floating red darken-1 waves-effect waves-light tooltipped btn modal-trigger"
+                                   data-position="top" data-delay="50" data-tooltip="删除" href="#delete-modal"
+                                   th:onclick="'javascript:prepareForDeleting(\''+${item.id}+'\',\''+${item.name}+'\')'">
                                     <i class="material-icons">delete</i>
                                 </a>
                             </li>
@@ -194,9 +194,9 @@
                                 </a>
                             </li>
                             <li>
-                                <a class="btn-floating red darken-1 waves-effect waves-light tooltipped"
-                                   data-position="top" data-delay="50" data-tooltip="删除"
-                                   th:href="@{${adminPath}+'/advertisementMachine/delete?id='+${item.id}}">
+                                <a class="btn-floating red darken-1 waves-effect waves-light tooltipped btn modal-trigger"
+                                   data-position="top" data-delay="50" data-tooltip="删除" href="#delete-modal"
+                                   th:onclick="'javascript:prepareForDeleting(\''+${item.id}+'\',\''+${item.name}+'\')'">
                                     <i class="material-icons">delete</i>
                                 </a>
                             </li>
@@ -273,6 +273,20 @@
         </div>
     </div>
 
+    <div id="delete-modal" class="modal">
+        <form th:action="@{${adminPath}+'/advertisementMachine/delete'}">
+            <div class="modal-content">
+                <h4>注意！</h4>
+                <input id="delete-confirm-id" name="id" type="hidden"/>
+                <p>是否要删除广告机 <span id="delete-name"></span> ?</p>
+            </div>
+            <div class="modal-footer">
+                <a href="#" class="modal-action modal-close waves-effect waves-green btn-flat">不是</a>
+                <button type="submit" class="modal-action modal-close waves-effect btn-flat">是</button>
+            </div>
+        </form>
+    </div>
+
 </main>
 
 <footer class="page-footer hide-on-med-and-down blue-grey darken-4" style="z-index: 1;">
@@ -299,6 +313,7 @@
             closeOnSelect: true
         });
         $("#detail-modal").modal();
+        $("#delete-modal").modal();
         toast('[[${message}]]');
     });
 
@@ -321,6 +336,11 @@
             error: function () {
             }
         });
+    }
+
+    function prepareForDeleting(id, name) {
+        $("#delete-confirm-id").val(id);
+        $("#delete-name").text(name);
     }
 </script>
 </body>
