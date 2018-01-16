@@ -115,7 +115,8 @@ class AdvertisementMachineController extends BaseController {
         if (StringUtils.isBlank(advertisementMachine.latitude)) {
             advertisementMachine.latitude = "0.0"
         }
-        advertisementMachine.addTime = "${advertisementMachine.addTime} ${DateUtils.GetTime()}"
+        advertisementMachine.addTime = "${advertisementMachine.addTime} ${DateUtils.GetTime()}".toString()
+
         if (StringUtils.equals(id, NEW_INSERT_ID.toString())) {
             service.insert advertisementMachine
             addMessage redirectAttributes, "创建广告机成功"

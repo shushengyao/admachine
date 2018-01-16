@@ -39,10 +39,23 @@ public class AdvertisementMachineServiceProvider extends BaseController {
 
     @RequestMapping(value = "/register", produces = "application/json; charset=utf-8")
     @ResponseBody
-    public HashMap register(final AdvertisementMachine advertisementMachine) {
+    public HashMap register(AdvertisementMachine advertisementMachine) {
+        AdvertisementMachine temp = AdvertisementMachineCache.get(advertisementMachine.getCodeNumber());
+        if (temp != null) {
+            HashMap<String, Object> map = Maps.newHashMap();
+            map.put("responseCode", DATABASE_DO_NOTHING);
+            map.put("errorMessage", "Exists machine with the same code number.");
+            return map;
+        }
         if (StringUtils.isBlank(advertisementMachine.getAddTime())) {
             advertisementMachine.setAddTime(DateUtils.GetDateTime());
         }
+        advertisementMachine.setUserID(-2);
+        advertisementMachine.setLongitude("0.0");
+        advertisementMachine.setLatitude("0.0");
+        advertisementMachine.setLight(0);
+        advertisementMachine.setCharge(0);
+        advertisementMachine.setChecked(0);
         int result = service.insert(advertisementMachine);
         HashMap<String, Object> map = Maps.newHashMap();
         map.put("responseCode", result);

@@ -115,10 +115,14 @@ class AdvertisementController extends BaseController {
         advertisement.addTime = "${advertisement.addTime} ${DateUtils.GetTime()}"
         if (StringUtils.equals(id, NEW_INSERT_ID.toString())) {
             service.insert advertisement
+            // 推送
+            push(advertisement.machineID, advertisement.id, "New advertisement.")
             addMessage redirectAttributes, "创建广告成功"
         } else {
             advertisement.id = id.toInteger()
             service.update advertisement
+            // 推送
+            push(advertisement.machineID, advertisement.id, "An advertisement updated.")
             addMessage redirectAttributes, "修改广告成功"
         }
         "redirect:$adminPath/advertisement/list/1"
@@ -138,18 +142,9 @@ class AdvertisementController extends BaseController {
     String uploadMedia(@PathVariable String id, HttpServletRequest httpServletRequest, RedirectAttributes attributes) {
         def responseCode = service.uploadMedia(id, httpServletRequest)
         if (responseCode == DONE) {
-            def map = Maps.newHashMap()
-            map['id'] = id
-
-            def pushClient = new JPushClient(Global.masterSecret, Global.appKey, null, ClientConfig.instance)
-            def payload = PushUtils.buildPayload(id, "New ad media.", JsonUtils.toJsonString(map))
-            try {
-                def result = pushClient.sendPush(payload)
-                logger.trace(result)
-            } catch (APIRequestException e) {
-                logger.error "API exception with: ${e.message}"
-            }
-
+            def ad = AdvertisementCache.get(id.toInteger())
+            // 推送
+            push(ad.machineID, id.toInteger(), "New advertisement media.")
             addMessage attributes, "上传成功"
         }
         if (responseCode == FAILURE) {
@@ -163,6 +158,21 @@ class AdvertisementController extends BaseController {
     void media(@PathVariable String id, HttpServletResponse response) {
         Advertisement advertisement = AdvertisementCache.get(id.toInteger())
         MediaUtils.mediaTransfer advertisement.url, response
+    }
+
+    private def push = { int machineID, int advertisementID, String message ->
+        logger.trace "New push task with machine-No.${machineID}, ad-No.${advertisementID}, message-${message}"
+        def machine = AdvertisementMachineCache.get(machineID)
+        def map = Maps.newHashMap()
+        map['advertisementID'] = advertisementID
+        def pushClient = new JPushClient(Global.masterSecret, Global.appKey, null, ClientConfig.instance)
+        def payload = PushUtils.buildPayload(machine.toString(), message, JsonUtils.toJsonString(map))
+        try {
+            def result = pushClient.sendPush(payload)
+            logger.trace result
+        } catch (APIRequestException e) {
+            logger.error "API exception with: ${e.message}"
+        }
     }
 
 }
