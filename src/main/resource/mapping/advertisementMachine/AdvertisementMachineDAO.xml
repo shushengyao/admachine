@@ -68,7 +68,7 @@
             <if test='addTime != null and addTime != "" and addTime != " "'>
                 and t.addTime between #{addTime} and concat(left(#{addTime}, 10), ' 23:59:59')
             </if>
-            <if test="codeNumber != null and codeNumber != ''">
+            <if test='codeNumber != null and codeNumber != ""'>
                 and t.codeNumber = #{codeNumber}
             </if>
             <if test="remark != null and remark != ''">
@@ -136,14 +136,14 @@
     <select id="findAllADMachineByUser" resultMap="advertisementMachineResultMap">
         select
         <include refid="columns"/>
-        from advertisement_machine
+        from advertisement_machine t
         where userID = #{userID}
     </select>
 
     <select id="getByCodeNumber" resultMap="advertisementMachineResultMap">
         select
         <include refid="columns"/>
-        from advertisement_machine
+        from advertisement_machine t
         where codeNumber = #{codeNumber}
     </select>
 
