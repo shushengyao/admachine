@@ -6,7 +6,9 @@ import com.xmlan.machine.common.util.CacheUtils
 import com.xmlan.machine.common.util.SpringContextUtils
 import com.xmlan.machine.common.util.StringUtils
 import com.xmlan.machine.module.advertisementMachine.dao.AdvertisementMachineDAO
+import com.xmlan.machine.module.advertisementMachine.dao.MachineSensorDAO
 import com.xmlan.machine.module.advertisementMachine.entity.AdvertisementMachine
+import com.xmlan.machine.module.advertisementMachine.entity.MachineSensor
 import com.xmlan.machine.module.advertisementMachine.entity.SimpleAdvertisementMachine
 
 /**
@@ -18,8 +20,10 @@ final class AdvertisementMachineCache {
     private static final def CACHE_NAME = "advertisementMachineCache"
     private static final def MAP_NAME = "adMachineCacheMap"
     private static final def AD_MACHINE_LIST_NAME = "advertisementMachineList"
+    private static final def MACHINE_SENSOR_LIST_NAME = "machineSensorList"
 
     private static def advertisementMachineDAO = SpringContextUtils.getBean(AdvertisementMachineDAO.class)
+    private static def machineSensorDAO = SpringContextUtils.getBean(MachineSensorDAO.class)
 
     /**
      * 初始化
@@ -31,6 +35,8 @@ final class AdvertisementMachineCache {
             map = Maps.newHashMap()
             List<AdvertisementMachine> advertisementMachineList = advertisementMachineDAO.findAll()
             map.put AD_MACHINE_LIST_NAME, advertisementMachineList
+            List<MachineSensor> machineSensorList = machineSensorDAO.findAll()
+            map.put MACHINE_SENSOR_LIST_NAME, machineSensorList
         }
         CacheUtils.put(CACHE_NAME, MAP_NAME, map)
         return map
@@ -51,6 +57,14 @@ final class AdvertisementMachineCache {
      */
     static List<AdvertisementMachine> getAdvertisementMachineList() {
         return getList(AD_MACHINE_LIST_NAME)
+    }
+
+    /**
+     * 获取完整的传感器信息列表
+     * @return 完整的传感器信息列表
+     */
+    static List<MachineSensor> getMachineSensorList() {
+        return getList(MACHINE_SENSOR_LIST_NAME)
     }
 
     /**
@@ -124,6 +138,21 @@ final class AdvertisementMachineCache {
         def list = advertisementMachineList
         for (item in list) {
             if (item.id == id) {
+                return item
+            }
+        }
+        return null
+    }
+
+    /**
+     *
+     * @param machineID
+     * @return
+     */
+    static MachineSensor getSensorInfo(int machineID) {
+        def list = machineSensorList
+        for (item in list) {
+            if (item.machineID == machineID.toString()) {
                 return item
             }
         }
