@@ -38,7 +38,8 @@ public class AdvertisementServiceProvider extends BaseController {
 
     @PostMapping(value = "/find", produces = "application/json; charset=utf-8")
     @ResponseBody
-    public List<Advertisement> findList(String id) {
+    public List<Advertisement> findList() {
+        String id = request.getParameter("id");
         AdvertisementMachine machine = machineService.get(id);
         Advertisement advertisement = new Advertisement();
         advertisement.setMachineID(machine.getId());
