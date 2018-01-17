@@ -45,7 +45,7 @@ class AdvertisementMachineService extends BaseService<AdvertisementMachine, Adve
     int insert(AdvertisementMachine machine) {
         def responseCode = super.insert(machine)
         def sensorData = new MachineSensor()
-        sensorData.machineID = machine.id
+        sensorData.machineID = getByCodeNumber(machine.codeNumber).id
         machineSensorService.insert(sensorData)
         return responseCode
     }
