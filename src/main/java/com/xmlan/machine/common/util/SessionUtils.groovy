@@ -11,14 +11,55 @@ import javax.servlet.http.HttpServletRequest
  */
 class SessionUtils {
 
-    static void SetAdmin(HttpServletRequest request, User user) {
-        request.getSession().setAttribute(Global.USER, user == null ? null : GetNoSecretInfoUser(user))
+    /**
+     * 设置Token到session
+     * @param request
+     * @param token
+     */
+    static void setToken(HttpServletRequest request, String token) {
+        request.session.setAttribute(Global.FORM_TOKEN, token)
     }
 
-    static User GetAdmin(HttpServletRequest request) {
+    /**
+     * 获取Token
+     * @param request
+     * @return
+     */
+    static String getToken(HttpServletRequest request) {
+        return request.session.getAttribute(Global.FORM_TOKEN) as String
+    }
+
+    /**
+     * 移除Token
+     * @param request
+     */
+    static void removeToken(HttpServletRequest request) {
+        request.session.removeAttribute(Global.FORM_TOKEN)
+    }
+
+    /**
+     * 设置登录用户到Session中
+     * @param request 请求
+     * @param user 登录的用户对象
+     */
+    static void setAdmin(HttpServletRequest request, User user) {
+        request.session.setAttribute(Global.USER, user == null ? null : GetNoSecretInfoUser(user))
+    }
+
+    /**
+     * 从Session中拿到用户对象
+     * @param request 请求
+     * @return 用户对象
+     */
+    static User getAdmin(HttpServletRequest request) {
         return request.session.getAttribute(Global.USER) as User
     }
 
+    /**
+     * 获取排除敏感信息的用户对象
+     * @param user
+     * @return
+     */
     static User GetNoSecretInfoUser(User user) {
         def obj = new User()
         obj.id = user.id

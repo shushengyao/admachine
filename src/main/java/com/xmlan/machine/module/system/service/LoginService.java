@@ -32,7 +32,7 @@ public class LoginService {
         password = EncryptUtils.SHA256ForTenTimes(password);
         User user = userDAO.login(authname, password);
         if (user != null) {
-            SessionUtils.SetAdmin(request, user);
+            SessionUtils.setAdmin(request, user);
             return true;
         } else {
             return false;

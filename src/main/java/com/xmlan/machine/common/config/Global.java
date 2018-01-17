@@ -16,6 +16,11 @@ public final class Global {
      */
     public static final String USER = "managementUser";
     /**
+     * 表单验证Session标记
+     */
+    public static final String FORM_TOKEN = "FORM_TOKEN";
+
+    /**
      * 当前对象实例
      */
     private static Global global = new Global();

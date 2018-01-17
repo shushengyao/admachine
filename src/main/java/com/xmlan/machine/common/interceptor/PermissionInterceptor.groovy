@@ -18,7 +18,7 @@ class PermissionInterceptor extends BaseBean implements HandlerInterceptor {
 
     @Override
     boolean preHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o) throws Exception {
-        User user = SessionUtils.GetAdmin(httpServletRequest)
+        User user = SessionUtils.getAdmin(httpServletRequest)
         if (user.roleID == ADMIN_ROLE_ID) {
             return true
         }

@@ -69,8 +69,8 @@ class AdvertisementMachineController extends BaseController {
         if (StringUtils.isNotBlank(advertisementMachine.addTime) && advertisementMachine.addTime != StringUtils.SPACE) {
             advertisementMachine.addTime = "${advertisementMachine.addTime.substring(0, 10)} 00:00:00".toString()
         }
-        if (SessionUtils.GetAdmin(request).roleID != ADMIN_ROLE_ID) {
-            advertisementMachine.userID = SessionUtils.GetAdmin(request).id
+        if (SessionUtils.getAdmin(request).roleID != ADMIN_ROLE_ID) {
+            advertisementMachine.userID = SessionUtils.getAdmin(request).id
         }
         if (advertisementMachine.addTime == StringUtils.SPACE) {
             advertisementMachine.addTime = ''

@@ -7,10 +7,10 @@ import com.xmlan.machine.module.advertisement.entity.Advertisement;
 import com.xmlan.machine.module.advertisement.service.AdvertisementService;
 import com.xmlan.machine.module.advertisementMachine.entity.AdvertisementMachine;
 import com.xmlan.machine.module.advertisementMachine.service.AdvertisementMachineService;
-import org.codehaus.groovy.runtime.StringGroovyMethods;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -36,10 +36,10 @@ public class AdvertisementServiceProvider extends BaseController {
         return AdvertisementCache.get(id);
     }
 
-    @RequestMapping(value = "/find/{codeNumber}", produces = "application/json; charset=utf-8")
+    @PostMapping(value = "/find", produces = "application/json; charset=utf-8")
     @ResponseBody
-    public List<Advertisement> findList(@PathVariable String codeNumber) {
-        AdvertisementMachine machine = machineService.getByCodeNumber(codeNumber);
+    public List<Advertisement> findList(String id) {
+        AdvertisementMachine machine = machineService.get(id);
         Advertisement advertisement = new Advertisement();
         advertisement.setMachineID(machine.getId());
         return service.findList(advertisement);

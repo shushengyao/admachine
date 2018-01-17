@@ -25,7 +25,7 @@ public class IndexController extends BaseController {
 
     @RequestMapping({"${adminPath}", "${adminPath}/main", "${adminPath}/login"})
     public String main() {
-        if (SessionUtils.GetAdmin(request) != null) {
+        if (SessionUtils.getAdmin(request) != null) {
             return "system/main";
         } else {
             return "system/login";
@@ -45,7 +45,7 @@ public class IndexController extends BaseController {
 
     @RequestMapping("${adminPath}/logout")
     public String logout(RedirectAttributes redirectAttributes) {
-        SessionUtils.SetAdmin(request, null);
+        SessionUtils.setAdmin(request, null);
         addMessage(redirectAttributes, "退出成功");
         return "system/login";
     }

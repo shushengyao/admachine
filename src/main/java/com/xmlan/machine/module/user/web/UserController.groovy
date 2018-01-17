@@ -7,6 +7,7 @@ import com.xmlan.machine.common.cache.RoleCache
 import com.xmlan.machine.common.cache.UserCache
 import com.xmlan.machine.common.util.DateUtils
 import com.xmlan.machine.common.util.StringUtils
+import com.xmlan.machine.common.util.TokenUtils
 import com.xmlan.machine.module.advertisementMachine.service.AdvertisementMachineService
 import com.xmlan.machine.module.role.service.RoleService
 import com.xmlan.machine.module.user.entity.User
@@ -82,12 +83,14 @@ class UserController extends BaseController {
     String form(User user, Model model) {
         model.addAttribute "user", user
         model.addAttribute "roleList", RoleCache.roleList
+        model.addAttribute "token", TokenUtils.getFormToken(request)
         "user/userForm"
     }
 
     @RequestMapping(value = '/save/{id}')
     String save(User user,
                 @PathVariable String id, HttpServletRequest request, Model model, RedirectAttributes redirectAttributes) {
+
         if (!beanValidator(model, user)) {
             return form(user, model)
         }

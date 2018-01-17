@@ -5,6 +5,8 @@ import com.xmlan.machine.module.system.service.LoginService
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
 
+import javax.servlet.http.HttpServletRequest
+
 /**
  * Created by ayakurayuki on 2018/1/15-10:47. <br/>
  * Package: com.xmlan.machine.common.util <br/>
@@ -35,6 +37,35 @@ final class TokenUtils {
         def info = JsonUtils.fromJsonString(decode, HashMap.class) as HashMap<String, String>
         def user = loginService.loginForMobile(info[authname], info[password])
         return user != null
+    }
+
+    /**
+     * 表单验证：获取Token
+     * @param request
+     * @return
+     */
+    static String getFormToken(HttpServletRequest request) {
+        def characteristic = IDUtils.randomBase62(10)
+        def token = EncodeUtils.encodeBase64(characteristic)
+        SessionUtils.setToken(request, token)
+        return token
+    }
+
+    /**
+     * 表单验证：验证Token
+     * @param request
+     * @param token
+     * @return
+     */
+    static boolean validateFormToken(HttpServletRequest request, String token) {
+        def tokenInSession = SessionUtils.getToken(request)
+        if (token != tokenInSession) {
+            SessionUtils.removeToken(request)
+            return false
+        } else {
+            SessionUtils.removeToken(request)
+            return true
+        }
     }
 
 }

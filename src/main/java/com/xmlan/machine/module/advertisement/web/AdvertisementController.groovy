@@ -42,7 +42,7 @@ class AdvertisementController extends BaseController {
         if (null == entity) {
             entity = new Advertisement()
             entity.id = NEW_INSERT_ID
-            entity.userID = SessionUtils.GetAdmin(request).id
+            entity.userID = SessionUtils.getAdmin(request).id
         }
         return entity
     }
@@ -66,8 +66,8 @@ class AdvertisementController extends BaseController {
         if (StringUtils.isNotBlank(advertisement.addTime)) {
             advertisement.addTime = "${advertisement.addTime.substring(0, 10)} 00:00:00".toString()
         }
-        if (SessionUtils.GetAdmin(request).roleID != ADMIN_ROLE_ID) {
-            advertisement.userID = SessionUtils.GetAdmin(request).id
+        if (SessionUtils.getAdmin(request).roleID != ADMIN_ROLE_ID) {
+            advertisement.userID = SessionUtils.getAdmin(request).id
         } else {
             advertisement.userID = 0
         }
@@ -85,8 +85,8 @@ class AdvertisementController extends BaseController {
         model.addAttribute "machineID", advertisement.machineID
         model.addAttribute "time", advertisement.time
         model.addAttribute "addTime", advertisement.addTime
-        if (SessionUtils.GetAdmin(request).roleID != ADMIN_ROLE_ID) {
-            model.addAttribute "machines", AdvertisementMachineCache.getMachineCount(SessionUtils.GetAdmin(request).id)
+        if (SessionUtils.getAdmin(request).roleID != ADMIN_ROLE_ID) {
+            model.addAttribute "machines", AdvertisementMachineCache.getMachineCount(SessionUtils.getAdmin(request).id)
         } else {
             model.addAttribute "machines", PASS
         }
@@ -109,8 +109,8 @@ class AdvertisementController extends BaseController {
         if (!beanValidator(model, advertisement)) {
             return form(advertisement, model)
         }
-        if (SessionUtils.GetAdmin(request).roleID != ADMIN_ROLE_ID) {
-            advertisement.userID = SessionUtils.GetAdmin(request).id
+        if (SessionUtils.getAdmin(request).roleID != ADMIN_ROLE_ID) {
+            advertisement.userID = SessionUtils.getAdmin(request).id
         }
         if (StringUtils.equals(id, NEW_INSERT_ID.toString())) {
             advertisement.addTime = DateUtils.GetDateTime()

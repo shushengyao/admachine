@@ -73,7 +73,7 @@ abstract class BaseController extends BaseBean {
     int newEntityID() { return NEW_INSERT_ID }
 
     @ModelAttribute('loginUser')
-    User loginUser(HttpServletRequest request) { return SessionUtils.GetAdmin(request) }
+    User loginUser(HttpServletRequest request) { return SessionUtils.getAdmin(request) }
 
     /**
      * 添加临时消息
