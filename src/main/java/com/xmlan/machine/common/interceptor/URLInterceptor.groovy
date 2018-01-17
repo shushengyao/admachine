@@ -17,7 +17,7 @@ class URLInterceptor implements HandlerInterceptor {
     boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
         ColorPrintUtils.Println(
                 ColorPrintUtils.PURPLE,
-                "%-22s%-7s%s",
+                "%-26s%-7s%s",
                 DateUtils.GetDate('yyyy-MM-dd HH:mm:ss.SSS'),
                 request.method,
                 request.requestURL
