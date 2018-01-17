@@ -117,14 +117,14 @@ public class AdvertisementMachineMobileServiceProvider extends BaseController {
         return map;
     }
 
-    @RequestMapping(value = "/environment/{machineID}", produces = "application/json; charset=utf-8")
+    @RequestMapping(value = "/environment/{id}", produces = "application/json; charset=utf-8")
     @ResponseBody
-    public MachineSensor currentEnvironmentStatus(@PathVariable("machineID") int machineID, String token) {
+    public MachineSensor currentEnvironmentStatus(@PathVariable("id") int id, String token) {
         if (TokenUtils.validateToken(token)) {
             // TODO: validate token
             System.out.println(true);
         }
-        return machineSensorService.getByMachineID(machineID);
+        return machineSensorService.getByMachineID(id);
     }
 
 }

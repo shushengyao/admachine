@@ -51,7 +51,9 @@ public class AdvertisementMachineServiceProvider extends BaseController {
         if (StringUtils.isBlank(advertisementMachine.getAddTime())) {
             advertisementMachine.setAddTime(DateUtils.GetDateTime());
         }
+        advertisementMachine.setName(StringUtils.EMPTY);
         advertisementMachine.setUserID(-2);
+        advertisementMachine.setAddress(StringUtils.EMPTY);
         advertisementMachine.setLongitude("0.0");
         advertisementMachine.setLatitude("0.0");
         advertisementMachine.setLight(0);
@@ -82,16 +84,16 @@ public class AdvertisementMachineServiceProvider extends BaseController {
         return map;
     }
 
-    @RequestMapping(value = "/environment/status/{machineID}", produces = "application/json; charset=utf-8")
+    @RequestMapping(value = "/environment/status/{id}", produces = "application/json; charset=utf-8")
     @ResponseBody
-    public MachineSensor currentEnvironmentStatus(@PathVariable("machineID") int machineID) {
-        return machineSensorService.getByMachineID(machineID);
+    public MachineSensor currentEnvironmentStatus(@PathVariable("id") int id) {
+        return machineSensorService.getByMachineID(id);
     }
 
-    @RequestMapping(value = "/environment/update/{machineID}", produces = "application/json; charset=utf-8")
+    @RequestMapping(value = "/environment/update/{id}", produces = "application/json; charset=utf-8")
     @ResponseBody
-    public HashMap<String, Object> updateEnvironmentStatus(@PathVariable("machineID") int machineID, String temperature, String humidity, String pm25, String pm10) {
-        MachineSensor data = machineSensorService.getByMachineID(machineID);
+    public HashMap<String, Object> updateEnvironmentStatus(@PathVariable("id") int id, String temperature, String humidity, String pm25, String pm10) {
+        MachineSensor data = machineSensorService.getByMachineID(id);
         data.setTemperature(temperature);
         data.setHumidity(humidity);
         data.setPm25(pm25);
