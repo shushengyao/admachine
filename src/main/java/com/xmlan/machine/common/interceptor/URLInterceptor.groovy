@@ -16,8 +16,11 @@ class URLInterceptor implements HandlerInterceptor {
     @Override
     boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
         ColorPrintUtils.Println(
-                ColorPrintUtils.WHITE,
-                "${DateUtils.GetDateTime()} - ${request.getMethod()} - ${request.getRequestURL()}"
+                ColorPrintUtils.PURPLE,
+                "%-22s%-7s%s",
+                DateUtils.GetDate('yyyy-MM-dd HH:mm:ss.SSS'),
+                request.method,
+                request.requestURL
         )
         return true
     }

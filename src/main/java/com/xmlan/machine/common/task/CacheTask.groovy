@@ -21,16 +21,15 @@ class CacheTask {
 
     /**
      * 定时刷新缓存, 周期为30分钟
-     * @return
      */
     @Scheduled(fixedRate = 1800000L)
-    def refreshCache() {
+    void refreshCache() {
         CacheUtils.cacheManager.clearAll()
         AdvertisementMachineCache.initialCacheMap()
         AdvertisementCache.initialCacheMap()
         UserCache.initialCacheMap()
         RoleCache.initialCacheMap()
-        logger.info "Cache refreshed."
+        logger.info "缓存刷新"
     }
 
 }
