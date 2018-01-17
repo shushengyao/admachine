@@ -9,12 +9,8 @@ import com.xmlan.machine.module.advertisementMachine.entity.AdvertisementMachine
 import com.xmlan.machine.module.advertisementMachine.service.AdvertisementMachineService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
@@ -37,10 +33,9 @@ public class AdvertisementServiceProvider extends BaseController {
         return AdvertisementCache.get(id);
     }
 
-    @PostMapping(value = "/find", produces = "application/json; charset=utf-8")
+    @RequestMapping(value = "/find", method = RequestMethod.POST, produces = "application/json; charset=utf-8")
     @ResponseBody
-    public List<Advertisement> findList(HttpServletRequest request) {
-        String id = request.getParameter("id");
+    public List<Advertisement> findList(String id) {
         AdvertisementMachine machine = machineService.get(id);
         Advertisement advertisement = new Advertisement();
         advertisement.setMachineID(machine.getId());
