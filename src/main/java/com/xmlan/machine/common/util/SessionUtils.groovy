@@ -14,27 +14,30 @@ class SessionUtils {
     /**
      * 设置Token到session
      * @param request
+     * @param flag
      * @param token
      */
-    static void setToken(HttpServletRequest request, String token) {
-        request.session.setAttribute(Global.FORM_TOKEN, token)
+    protected static void setFormToken(HttpServletRequest request, String flag, String token) {
+        request.session.setAttribute(flag, token)
     }
 
     /**
      * 获取Token
      * @param request
+     * @param flag
      * @return
      */
-    static String getToken(HttpServletRequest request) {
-        return request.session.getAttribute(Global.FORM_TOKEN) as String
+    protected static String getFormToken(HttpServletRequest request, String flag) {
+        return request.session.getAttribute(flag) as String
     }
 
     /**
      * 移除Token
      * @param request
+     * @param flag
      */
-    static void removeToken(HttpServletRequest request) {
-        request.session.removeAttribute(Global.FORM_TOKEN)
+    protected static void removeFormToken(HttpServletRequest request, String flag) {
+        request.session.removeAttribute(flag)
     }
 
     /**

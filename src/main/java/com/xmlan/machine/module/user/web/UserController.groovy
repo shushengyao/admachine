@@ -76,6 +76,10 @@ class UserController extends BaseController {
         model.addAttribute "authname", user.authname
         model.addAttribute "addTime", user.addTime
         model.addAttribute "roleID", user.roleID.toString()
+
+        model.addAttribute "deleteToken", TokenUtils.getFormToken(request, "deleteToken")
+        model.addAttribute "passwdToken", TokenUtils.getFormToken(request, "passwdToken")
+        model.addAttribute "chgrpToken", TokenUtils.getFormToken(request, "chgrpToken")
         "user/userList"
     }
 
@@ -90,7 +94,10 @@ class UserController extends BaseController {
     @RequestMapping(value = '/save/{id}')
     String save(User user,
                 @PathVariable String id, HttpServletRequest request, Model model, RedirectAttributes redirectAttributes) {
-
+        if (!TokenUtils.validateFormToken(request, request.getParameter("token"))) {
+            addMessage redirectAttributes, "本次提交的表单验证失败"
+            return "redirect:$adminPath/user/list/1"
+        }
         if (!beanValidator(model, user)) {
             return form(user, model)
         }
@@ -116,6 +123,10 @@ class UserController extends BaseController {
 
     @RequestMapping(value = '/delete')
     String delete(User user, RedirectAttributes redirectAttributes) {
+        if (!TokenUtils.validateFormToken(request, "deleteToken", request.getParameter("deleteToken"))) {
+            addMessage redirectAttributes, "本次提交的表单验证失败"
+            return "redirect:$adminPath/user/list/1"
+        }
         int responseCode = service.delete(user)
         if (responseCode == DATABASE_DO_NOTHING) {
             addMessage redirectAttributes, "这个操作没有删除任何用户"
@@ -130,6 +141,9 @@ class UserController extends BaseController {
     @RequestMapping(value = '/passwd/{id}')
     @ResponseBody
     String passwd(@PathVariable String id, String oldPasswd, String newPasswd, String rePasswd) {
+        if (!TokenUtils.validateFormToken(request, "passwdToken", request.getParameter("passwdToken"))) {
+            return "本次提交的表单验证失败"
+        }
         if (StringUtils.isBlank(newPasswd)) {
             return "没有输入新密码"
         }
@@ -158,6 +172,9 @@ class UserController extends BaseController {
     @RequestMapping(value = '/chgrp/{id}')
     @ResponseBody
     String chgrp(@PathVariable String id, int roleID) {
+        if (!TokenUtils.validateFormToken(request, "chgrpToken", request.getParameter("chgrpToken"))) {
+            return "本次提交的表单验证失败"
+        }
         int responseCode = service.chgrp(id, roleID)
         if (responseCode == ROOT_ADMIN_CAN_NOT_CHANGE_ROLE) {
             return "ROOT管理员不能修改角色"

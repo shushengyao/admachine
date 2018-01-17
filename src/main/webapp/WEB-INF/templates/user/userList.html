@@ -22,6 +22,9 @@
 <!--/*@thymesVar id="authname" type="java.lang.String"*/-->
 <!--/*@thymesVar id="addTime" type="java.lang.String"*/-->
 <!--/*@thymesVar id="roleID" type="java.lang.String"*/-->
+<!--/*@thymesVar id="chgrpToken" type="java.lang.String"*/-->
+<!--/*@thymesVar id="passwdToken" type="java.lang.String"*/-->
+<!--/*@thymesVar id="deleteToken" type="java.lang.String"*/-->
 <!--/* </editor-fold> */-->
 
 <body>
@@ -312,6 +315,7 @@
             <div class="modal-content">
                 <h4>注意！</h4>
                 <input id="delete-confirm-id" name="id" type="hidden"/>
+                <input name="deleteToken" type="hidden" th:value="${deleteToken}">
                 <p>是否要删除用户 <span id="delete-name"></span> ?</p>
             </div>
             <div class="modal-footer">
@@ -325,6 +329,7 @@
         <div class="modal-content">
             <h4>修改密码</h4>
             <input id="passwd-id" name="id" type="hidden">
+            <input name="passwdToken" type="hidden" th:value="${passwdToken}">
             <div class="row">
                 <div class="input-field col s12 m12 l12">
                     <input id="old-passwd" name="oldPasswd" placeholder="角色是管理员则必填" type="password" class="validate">
@@ -350,6 +355,7 @@
         <div class="modal-content">
             <h4>更改用户角色</h4>
             <input id="chgrp-id" name="id" type="hidden">
+            <input name="chgrpToken" type="hidden" th:value="${chgrpToken}">
             <div class="row">
                 <div class="input-field col s12 m12 l12">
                     <select id="chgrp-roleID" name="roleID">

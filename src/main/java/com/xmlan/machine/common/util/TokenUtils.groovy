@@ -1,6 +1,7 @@
 package com.xmlan.machine.common.util
 
 import com.google.common.collect.Maps
+import com.xmlan.machine.common.config.Global
 import com.xmlan.machine.module.system.service.LoginService
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
@@ -45,9 +46,19 @@ final class TokenUtils {
      * @return
      */
     static String getFormToken(HttpServletRequest request) {
+        return getFormToken(request, Global.FORM_TOKEN)
+    }
+
+    /**
+     * 获取Token
+     * @param request
+     * @param flag
+     * @return
+     */
+    static String getFormToken(HttpServletRequest request, String flag) {
         def characteristic = IDUtils.randomBase62(10)
         def token = EncodeUtils.encodeBase64(characteristic)
-        SessionUtils.setToken(request, token)
+        SessionUtils.setFormToken(request, flag, token)
         return token
     }
 
@@ -58,12 +69,23 @@ final class TokenUtils {
      * @return
      */
     static boolean validateFormToken(HttpServletRequest request, String token) {
-        def tokenInSession = SessionUtils.getToken(request)
+        validateFormToken(request, Global.FORM_TOKEN, token)
+    }
+
+    /**
+     * 表单验证：验证Token
+     * @param request
+     * @param flag
+     * @param token
+     * @return
+     */
+    static boolean validateFormToken(HttpServletRequest request, String flag, String token) {
+        def tokenInSession = SessionUtils.getFormToken(request, flag)
         if (token != tokenInSession) {
-            SessionUtils.removeToken(request)
+            SessionUtils.removeFormToken(request, flag)
             return false
         } else {
-            SessionUtils.removeToken(request)
+            SessionUtils.removeFormToken(request, flag)
             return true
         }
     }
