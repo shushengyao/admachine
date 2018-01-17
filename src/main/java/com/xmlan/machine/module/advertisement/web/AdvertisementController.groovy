@@ -112,8 +112,8 @@ class AdvertisementController extends BaseController {
         if (SessionUtils.GetAdmin(request).roleID != ADMIN_ROLE_ID) {
             advertisement.userID = SessionUtils.GetAdmin(request).id
         }
-        advertisement.addTime = "${advertisement.addTime} ${DateUtils.GetTime()}"
         if (StringUtils.equals(id, NEW_INSERT_ID.toString())) {
+            advertisement.addTime = DateUtils.GetDateTime()
             service.insert advertisement
             // 推送
             push(advertisement.machineID, advertisement.id, "New advertisement.")

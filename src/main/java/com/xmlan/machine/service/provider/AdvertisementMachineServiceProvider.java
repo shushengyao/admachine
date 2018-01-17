@@ -40,6 +40,7 @@ public class AdvertisementMachineServiceProvider extends BaseController {
     @RequestMapping(value = "/register", produces = "application/json; charset=utf-8")
     @ResponseBody
     public HashMap register(AdvertisementMachine advertisementMachine) {
+        // 程序判断是否有存在的条目
         AdvertisementMachine temp = AdvertisementMachineCache.get(advertisementMachine.getCodeNumber());
         if (temp != null) {
             HashMap<String, Object> map = Maps.newHashMap();
@@ -83,13 +84,13 @@ public class AdvertisementMachineServiceProvider extends BaseController {
 
     @RequestMapping(value = "/environment/status/{machineID}", produces = "application/json; charset=utf-8")
     @ResponseBody
-    public MachineSensor currentEnvironmentStatus(@PathVariable("machineID") String machineID) {
+    public MachineSensor currentEnvironmentStatus(@PathVariable("machineID") int machineID) {
         return machineSensorService.getByMachineID(machineID);
     }
 
     @RequestMapping(value = "/environment/update/{machineID}", produces = "application/json; charset=utf-8")
     @ResponseBody
-    public HashMap<String, Object> updateEnvironmentStatus(@PathVariable("machineID") String machineID, String temperature, String humidity, String pm25, String pm10) {
+    public HashMap<String, Object> updateEnvironmentStatus(@PathVariable("machineID") int machineID, String temperature, String humidity, String pm25, String pm10) {
         MachineSensor data = machineSensorService.getByMachineID(machineID);
         data.setTemperature(temperature);
         data.setHumidity(humidity);

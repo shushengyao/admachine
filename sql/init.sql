@@ -87,7 +87,7 @@ create table `machine_sensor` (
   humidity    varchar(64) comment '湿度',
   pm25        varchar(64) comment 'PM2.5',
   pm10        varchar(64) comment 'PM10',
-  machineID   int                not null
+  machineID   int                not null unique
   comment '机器标识码(注册码)',
   primary key (id)
 )

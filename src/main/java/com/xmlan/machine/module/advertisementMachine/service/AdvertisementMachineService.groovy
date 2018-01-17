@@ -52,7 +52,7 @@ class AdvertisementMachineService extends BaseService<AdvertisementMachine, Adve
 
     @Override
     int delete(AdvertisementMachine machine) {
-        def sensorData = machineSensorService.getByMachineID(machine.id.toString())
+        def sensorData = machineSensorService.getByMachineID(machine.id)
         machineSensorService.delete(sensorData)
         return super.delete(machine)
     }

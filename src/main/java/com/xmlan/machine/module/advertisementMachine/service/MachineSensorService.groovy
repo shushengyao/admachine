@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service
 @Service("MachineSensorService")
 class MachineSensorService extends BaseService<MachineSensor, MachineSensorDAO> {
 
-    MachineSensor getByMachineID(String id) {
+    MachineSensor getByMachineID(int id) {
         return dao.getByMachineID(id)
     }
 

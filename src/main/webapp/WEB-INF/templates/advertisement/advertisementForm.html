@@ -86,6 +86,7 @@
             <input id="url" name="url" th:value="${advertisement.url}" type="hidden" class="validate"/>
             <input id="userID-ro" name="userID" th:value="${advertisement.userID}" type="hidden" class="validate"
                    required="required" th:if="${loginUser.roleID!=adminRoleID}"/>
+            <input id="addTime" name="addTime" th:value="${advertisement.addTime}" type="hidden" class="validate"/>
 
             <div class="row">
                 <div class="input-field col s6 m6 l6">
@@ -102,16 +103,6 @@
                 </div>
 
                 <div class="input-field col s6 m6 l6">
-                    <i class="material-icons prefix">date_range</i>
-                    <input id="addTime" name="addTime" th:value="${advertisement.addTime}" type="text"
-                           class="date-picker" placeholder="选择加入时间" th:if="${advertisement.addTime==''}"/>
-                    <label for="addTime" th:if="${advertisement.addTime==''}">加入时间</label>
-                    <input id="addTime-ro" name="addTime" th:value="${advertisement.addTime}" type="text"
-                           readonly="readonly" class="date-picker" placeholder="选择加入时间"
-                           th:if="${advertisement.addTime!=''}"/>
-                    <label for="addTime-ro" th:if="${advertisement.addTime!=''}">加入时间</label>
-                </div>
-                <div class="input-field col s6 m6 l6">
                     <i class="material-icons prefix">personal_video</i>
                     <select id="machineID" name="machineID">
                         <option th:each="item:${machineList}" th:value="${item.id}" th:text="${item.name}"
@@ -120,8 +111,7 @@
                     </select>
                     <label for="machineID">所属广告机</label>
                 </div>
-
-                <div class="input-field col s12 m12 l12" th:if="${loginUser.roleID==adminRoleID}">
+                <div class="input-field col s6 m6 l6" th:if="${loginUser.roleID==adminRoleID}">
                     <i class="material-icons prefix">account_circle</i>
                     <select id="userID" name="userID">
                         <option th:each="item:${userList}" th:value="*{item.id}" th:text="*{item.username}"

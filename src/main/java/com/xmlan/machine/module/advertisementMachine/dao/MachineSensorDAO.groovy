@@ -12,6 +12,6 @@ import org.springframework.stereotype.Repository
 @Repository
 interface MachineSensorDAO extends BaseDAO<MachineSensor> {
 
-    MachineSensor getByMachineID(@Param("machineID") String machineID)
+    MachineSensor getByMachineID(@Param("machineID") int machineID)
 
 }
