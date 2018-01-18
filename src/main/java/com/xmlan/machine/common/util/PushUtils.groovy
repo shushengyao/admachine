@@ -13,13 +13,13 @@ class PushUtils {
 
     static PushPayload buildPayload(String alias, String message, String... data) {
         def builder = PushPayload.newBuilder()
-        builder.platform = Platform.all()
-        builder.audience = Audience.alias(alias)
-        builder.message = {
-            def msgBuilder = Message.newBuilder()
-            msgBuilder.msgContent = message
+        builder.platform = Platform.all()               // 推送平台
+        builder.audience = Audience.alias(alias)        // 推送目标
+        builder.message = {                             // 推送消息
+            def msgBuilder = Message.newBuilder()       // 创建Message.Builder
+            msgBuilder.msgContent = message             // 添加message
             if (data.size() != 0) {
-                msgBuilder.addExtra('data', data[0])
+                msgBuilder.addExtra('data', data[0])    // 如果有数据，添加到EXTRA_MESSAGE
             }
             return msgBuilder.build()
         }()

@@ -52,9 +52,8 @@ public class AdvertisementMachineMobileServiceProvider extends BaseController {
     @RequestMapping(value = "/get/{id}/{token}", produces = "application/json; charset=utf-8")
     @ResponseBody
     public AdvertisementMachine get(@PathVariable String id, @PathVariable("token") String token) {
-        if (TokenUtils.validateToken(token)) {
-            // TODO: validate token
-            System.out.println(true);
+        if (!TokenUtils.validateToken(token)) {
+            return null;
         }
         return service.get(id);
     }
@@ -62,9 +61,8 @@ public class AdvertisementMachineMobileServiceProvider extends BaseController {
     @RequestMapping(value = "/find/{userID}/{token}", produces = "application/json; charset=utf-8")
     @ResponseBody
     public List<AdvertisementMachine> find(@PathVariable int userID, @PathVariable("token") String token) {
-        if (TokenUtils.validateToken(token)) {
-            // TODO: validate token
-            System.out.println(true);
+        if (!TokenUtils.validateToken(token)) {
+            return null;
         }
         AdvertisementMachine machine = new AdvertisementMachine();
         machine.setUserID(userID);
@@ -74,9 +72,8 @@ public class AdvertisementMachineMobileServiceProvider extends BaseController {
     @RequestMapping(value = "/position/query/{token}", produces = "application/json; charset=utf-8")
     @ResponseBody
     public List<AdvertisementMachine> positionQuery(String minLongitude, String maxLongitude, String minLatitude, String maxLatitude, @PathVariable("token") String token) {
-        if (TokenUtils.validateToken(token)) {
-            // TODO: validate token
-            System.out.println(true);
+        if (!TokenUtils.validateToken(token)) {
+            return null;
         }
         if (isNotBlank(minLongitude, maxLongitude, minLatitude, maxLatitude)) {
             return AdvertisementMachineService.positionQuery(minLongitude, maxLongitude, minLatitude, maxLatitude);
@@ -87,12 +84,13 @@ public class AdvertisementMachineMobileServiceProvider extends BaseController {
     @RequestMapping(value = "/light/{id}/{operate}", produces = "application/json; charset=utf-8")
     @ResponseBody
     public Map light(@PathVariable("id") int id, @PathVariable("operate") int operate, String token) {
-        if (TokenUtils.validateToken(token)) {
-            // TODO: validate token
-            System.out.println(true);
+        HashMap<String, Object> map = Maps.newHashMap();
+        if (!TokenUtils.validateToken(token)) {
+            map.put("responseCode", FAILURE);
+            map.put("message", "身份校验失败");
+            return map;
         }
         int responseCode = service.lightControl(id, operate);
-        HashMap<String, Object> map = Maps.newHashMap();
         map.put("responseCode", responseCode);
         if (responseCode == NO_SUCH_ROW) {
             map.put("message", "目标路灯不存在");
@@ -120,9 +118,8 @@ public class AdvertisementMachineMobileServiceProvider extends BaseController {
     @RequestMapping(value = "/environment/{id}", produces = "application/json; charset=utf-8")
     @ResponseBody
     public MachineSensor currentEnvironmentStatus(@PathVariable("id") int id, String token) {
-        if (TokenUtils.validateToken(token)) {
-            // TODO: validate token
-            System.out.println(true);
+        if (!TokenUtils.validateToken(token)) {
+            return null;
         }
         return machineSensorService.getByMachineID(id);
     }

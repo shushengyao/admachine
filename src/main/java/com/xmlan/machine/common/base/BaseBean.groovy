@@ -40,6 +40,10 @@ class BaseBean {
      * 错误请求
      */
     public static final int ERROR_REQUEST = -5
+    /**
+     * 默认
+     */
+    public static final int DEFAULT = -6
 
     // ========================= 标记类 ========================= //
     /**

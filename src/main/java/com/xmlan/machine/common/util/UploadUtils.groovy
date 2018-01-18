@@ -21,7 +21,7 @@ class UploadUtils {
 
     public static final String MEDIA_KEY = "media"
 
-    static String uploadImages(HttpServletRequest request) {
+    static String uploadImages(Object request) {
         def imagePath = new File("${Global.mediaPath}/${Global.imageTag}".toString())
         if (!imagePath.exists()) imagePath.mkdirs()
         def videoPath = new File("${Global.mediaPath}/${Global.videoTag}".toString())
@@ -29,40 +29,65 @@ class UploadUtils {
 
         Map<String, List<String>> json = Maps.newHashMap()
         List<String> fileList = Lists.newArrayList()
-        CommonsMultipartResolver resolver = new CommonsMultipartResolver(request.session.servletContext)
-        if (resolver.isMultipart(request)) {
-            // 检查form中是否带有 enctype="multipart/form-data"
-            // 转化normal-request为multipart-request
-            MultipartHttpServletRequest multiRequest = (MultipartHttpServletRequest) request
-            Iterator iterator = multiRequest.fileNames
-            // 获取multiRequest的全部文件名
-            int i = 1
-            // 编号计数器
-            while (iterator.hasNext()) {
-                // 遍历所有文件
-                MultipartFile file = multiRequest.getFile(iterator.next().toString())
-                try {
-                    String extension = file.originalFilename.substring(file.originalFilename.lastIndexOf('.'))
-                    if (file != null && isMedia(file.originalFilename)) {
-                        String filename = "${DateUtils.GetDate('yyyy-MM-dd_HH-mm-ss')}_No${i}${extension}"
-                        try {
-                            // 存储文件
-                            if (isImage(extension)) {
-                                file.transferTo(new File("${Global.mediaPath}/${Global.imageTag}/${filename}"))
-                                fileList.add "${Global.imageTag}/${filename}".toString()
-                            } else if (isVideo(extension)) {
-                                file.transferTo(new File("${Global.mediaPath}/${Global.videoTag}/${filename}"))
-                                fileList.add "${Global.videoTag}/${filename}".toString()
+        if (request instanceof HttpServletRequest) {
+            CommonsMultipartResolver resolver = new CommonsMultipartResolver(request.session.servletContext)
+            if (resolver.isMultipart(request)) {
+                // 检查form中是否带有 enctype="multipart/form-data"
+                // 转化normal-request为multipart-request
+                MultipartHttpServletRequest multiRequest = (MultipartHttpServletRequest) request
+                Iterator iterator = multiRequest.fileNames
+                // 获取multiRequest的全部文件名
+                int i = 1
+                // 编号计数器
+                while (iterator.hasNext()) {
+                    // 遍历所有文件
+                    MultipartFile file = multiRequest.getFile(iterator.next().toString())
+                    try {
+                        String extension = file.originalFilename.substring(file.originalFilename.lastIndexOf('.'))
+                        if (file != null && isMedia(file.originalFilename)) {
+                            String filename = "${DateUtils.GetDate('yyyy-MM-dd_HH-mm-ss')}_No${i}${extension}"
+                            try {
+                                // 存储文件
+                                if (isImage(extension)) {
+                                    file.transferTo(new File("${Global.mediaPath}/${Global.imageTag}/${filename}"))
+                                    fileList.add "${Global.imageTag}/${filename}".toString()
+                                } else if (isVideo(extension)) {
+                                    file.transferTo(new File("${Global.mediaPath}/${Global.videoTag}/${filename}"))
+                                    fileList.add "${Global.videoTag}/${filename}".toString()
+                                }
+                            } catch (IOException e) {
+                                logger.debug e
                             }
-                        } catch (IOException e) {
-                            logger.debug e
+                            i++
+                            logger.trace "Added media: ${filename}"
                         }
-                        i++
-                        logger.trace "Added media: ${filename}"
+                    } catch (StringIndexOutOfBoundsException ignored) {
+                        logger.info "没有选中文件！"
                     }
-                } catch (StringIndexOutOfBoundsException ignored) {
-                    logger.info "没有选中文件！"
                 }
+            }
+        }
+        if (request instanceof MultipartFile) {
+            try {
+                String extension = request.originalFilename.substring(request.originalFilename.lastIndexOf('.'))
+                if (request != null && isMedia(request.originalFilename)) {
+                    String filename = "${DateUtils.GetDate('yyyy-MM-dd_HH-mm-ss_SSS')}_${extension}"
+                    try {
+                        // 存储文件
+                        if (isImage(extension)) {
+                            request.transferTo(new File("${Global.mediaPath}/${Global.imageTag}/${filename}"))
+                            fileList.add "${Global.imageTag}/${filename}".toString()
+                        } else if (isVideo(extension)) {
+                            request.transferTo(new File("${Global.mediaPath}/${Global.videoTag}/${filename}"))
+                            fileList.add "${Global.videoTag}/${filename}".toString()
+                        }
+                    } catch (IOException e) {
+                        logger.debug e
+                    }
+                    logger.trace "Added media: ${filename}"
+                }
+            } catch (StringIndexOutOfBoundsException ignored) {
+                logger.info "没有选中文件！"
             }
         }
         json.put MEDIA_KEY, fileList

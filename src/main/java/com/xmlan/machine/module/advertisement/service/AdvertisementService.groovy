@@ -11,6 +11,7 @@ import com.xmlan.machine.module.advertisement.entity.AdvertisementCount
 import com.xmlan.machine.module.advertisementMachine.entity.AdvertisementMachine
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import org.springframework.web.multipart.MultipartFile
 
 import javax.servlet.http.HttpServletRequest
 
@@ -25,6 +26,19 @@ class AdvertisementService extends BaseService<Advertisement, AdvertisementDAO> 
     int uploadMedia(String id, HttpServletRequest request) {
         def advertisement = dao.get(id)
         def jsonString = UploadUtils.uploadImages(request)
+        if (jsonString == '[]') {
+            return FAILURE
+        }
+        def json = JsonUtils.fromJsonString(jsonString, Map.class) as Map
+        def list = json.get(UploadUtils.MEDIA_KEY) as List<String>
+        advertisement.url = list.get(0)
+        update(advertisement)
+        return DONE
+    }
+
+    int uploadMedia(String id, MultipartFile file) {
+        def advertisement = dao.get(id)
+        def jsonString = UploadUtils.uploadImages(file)
         if (jsonString == '[]') {
             return FAILURE
         }

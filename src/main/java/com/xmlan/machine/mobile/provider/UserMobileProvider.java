@@ -21,9 +21,8 @@ public class UserMobileProvider extends BaseController {
     @RequestMapping(value = "/self/{id}/{token}", produces = "application/json; charset=utf-8")
     @ResponseBody
     public User self(@PathVariable("id") String id, @PathVariable("token") String token) {
-        if (TokenUtils.validateToken(token)) {
-            // TODO: validate token
-            System.out.println(true);
+        if (!TokenUtils.validateToken(token)) {
+            return null;
         }
         User user = UserCache.get(id);
         user.setPassword(StringUtils.EMPTY);
