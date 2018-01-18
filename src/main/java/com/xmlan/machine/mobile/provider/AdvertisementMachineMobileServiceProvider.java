@@ -115,11 +115,16 @@ public class AdvertisementMachineMobileServiceProvider extends BaseController {
         return map;
     }
 
-    @RequestMapping(value = "/charge", produces = "application/json; charset=utf-8")
+    @RequestMapping(value = "/charge/{id}/{operate}", produces = "application/json; charset=utf-8")
     @ResponseBody
-    public Map charge(int id, int operate) {
-        int responseCode = service.chargeControl(id, operate);
+    public Map charge(@PathVariable("id") int id, @PathVariable("operate") int operate, String token) {
         HashMap<String, Object> map = Maps.newHashMap();
+        if (!TokenUtils.validateToken(token)) {
+            map.put("responseCode", FAILURE);
+            map.put("message", "身份校验失败");
+            return map;
+        }
+        int responseCode = service.chargeControl(id, operate);
         map.put("responseCode", responseCode);
         if (responseCode == NO_SUCH_ROW) {
             map.put("message", "目标充电桩不存在");

@@ -69,7 +69,7 @@ public class AdvertisementMobileServiceProvider extends BaseController {
             return map;
         }
         int responseCode = advertisementService.uploadMedia(StringUtils.EMPTY + id, file);
-        return push(id, responseCode, "新广告媒体");
+        return pushUpdate(id, responseCode, "新广告媒体");
     }
 
     @RequestMapping(value = "/manualPush", method = RequestMethod.POST, produces = "application/json; charset=utf-8")
@@ -81,7 +81,7 @@ public class AdvertisementMobileServiceProvider extends BaseController {
             map.put("message", "身份校验失败");
             return map;
         }
-        return push(id, DEFAULT, "手动推送");
+        return pushUpdate(id, DEFAULT, "手动推送");
     }
 
     @RequestMapping(value = "/delete", method = RequestMethod.POST, produces = "application/json; charset=utf-8")
@@ -111,7 +111,7 @@ public class AdvertisementMobileServiceProvider extends BaseController {
      * @param id 广告ID
      * @return 处理结果数据
      */
-    private Map push(int id, int responseCode, String message) {
+    private Map pushUpdate(int id, int responseCode, String message) {
         // 获取广告对象
         Advertisement advertisement = AdvertisementCache.get(id);
         // 获取广告机对象
