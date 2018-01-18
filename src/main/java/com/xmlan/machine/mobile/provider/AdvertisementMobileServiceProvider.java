@@ -11,7 +11,6 @@ import com.xmlan.machine.common.base.BaseController;
 import com.xmlan.machine.common.cache.AdvertisementCache;
 import com.xmlan.machine.common.cache.AdvertisementMachineCache;
 import com.xmlan.machine.common.config.Global;
-import com.xmlan.machine.common.util.JsonUtils;
 import com.xmlan.machine.common.util.PushUtils;
 import com.xmlan.machine.common.util.StringUtils;
 import com.xmlan.machine.common.util.TokenUtils;
@@ -119,12 +118,10 @@ public class AdvertisementMobileServiceProvider extends BaseController {
         AdvertisementMachine machine = AdvertisementMachineCache.get(advertisement.getMachineID());
         HashMap<String, Integer> pushData = Maps.newHashMap();      // 封装推送体数据
         pushData.put("advertisementID", advertisement.getId());     // 添加推送体数据内容（广告ID）
-        JPushClient client = new JPushClient(                       // 创建推送客户端
-                Global.getMasterSecret(), Global.getAppKey(), null, ClientConfig.getInstance()
-        );
-        PushPayload payload = PushUtils.buildPayload(               // 创建预处理推送体
-                StringUtils.EMPTY + machine.getId(), message, JsonUtils.toJsonString(pushData)
-        );
+        // 创建推送客户端
+        JPushClient client = new JPushClient(Global.getMasterSecret(), Global.getAppKey(), null, ClientConfig.getInstance());
+        // 创建预处理推送体
+        PushPayload payload = PushUtils.buildPayload(String.valueOf(machine.getId()), message, pushData);
         PushResult result;
         HashMap<String, Object> map = Maps.newHashMap();
         try {

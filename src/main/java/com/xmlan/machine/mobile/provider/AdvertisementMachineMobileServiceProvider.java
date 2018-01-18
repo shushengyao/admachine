@@ -102,7 +102,7 @@ public class AdvertisementMachineMobileServiceProvider extends BaseController {
             command.put("id", id);
             command.put("operate", operate);
             JPushClient pushClient = new JPushClient(Global.getMasterSecret(), Global.getAppKey(), null, ClientConfig.getInstance());
-            PushPayload payload = PushUtils.buildPayload(String.valueOf(id), "Light switch.", JsonUtils.toJsonString(command));
+            PushPayload payload = PushUtils.buildPayload(String.valueOf(id), "Light switch.", command);
             try {
                 PushResult result = pushClient.sendPush(payload);
                 logger.trace(result);

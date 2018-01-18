@@ -163,10 +163,10 @@ class AdvertisementController extends BaseController {
     private def push = { int machineID, int advertisementID, String message ->
         logger.trace "New push task with machine-No.${machineID}, ad-No.${advertisementID}, message-${message}"
         def machine = AdvertisementMachineCache.get(machineID)
-        def map = Maps.newHashMap()
+        HashMap<String, Integer> map = Maps.newHashMap()
         map['advertisementID'] = advertisementID
         def pushClient = new JPushClient(Global.masterSecret, Global.appKey, null, ClientConfig.instance)
-        def payload = PushUtils.buildPayload(machine.toString(), message, JsonUtils.toJsonString(map))
+        def payload = PushUtils.buildPayload(machine.toString(), message, map)
         try {
             def result = pushClient.sendPush(payload)
             logger.trace result
