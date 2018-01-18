@@ -165,6 +165,7 @@ class AdvertisementController extends BaseController {
         def machine = AdvertisementMachineCache.get(machineID)
         HashMap<String, Integer> map = Maps.newHashMap()
         map['advertisementID'] = advertisementID
+        map['type'] = TYPE_MEDIA_UPDATE
         def pushClient = new JPushClient(Global.masterSecret, Global.appKey, null, ClientConfig.instance)
         def payload = PushUtils.buildPayload(machine.toString(), message, map)
         try {

@@ -110,4 +110,17 @@ class BaseBean {
      */
     public static final boolean FALSE = false
 
+    /**
+     * 类型：灯
+     */
+    public static final int TYPE_LIGHT = 54448
+    /**
+     * 类型：充电
+     */
+    public static final int TYPE_CHARGE = 242743
+    /**
+     * 类型：广告媒体更新
+     */
+    public static final int TYPE_MEDIA_UPDATE = 63342
+
 }

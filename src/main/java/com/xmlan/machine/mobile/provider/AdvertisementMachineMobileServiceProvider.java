@@ -9,7 +9,6 @@ import cn.jpush.api.push.model.PushPayload;
 import com.google.common.collect.Maps;
 import com.xmlan.machine.common.base.BaseController;
 import com.xmlan.machine.common.config.Global;
-import com.xmlan.machine.common.util.JsonUtils;
 import com.xmlan.machine.common.util.PushUtils;
 import com.xmlan.machine.common.util.StringUtils;
 import com.xmlan.machine.common.util.TokenUtils;
@@ -101,8 +100,39 @@ public class AdvertisementMachineMobileServiceProvider extends BaseController {
             HashMap<String, Integer> command = Maps.newHashMap();
             command.put("id", id);
             command.put("operate", operate);
+            command.put("type", TYPE_LIGHT);
             JPushClient pushClient = new JPushClient(Global.getMasterSecret(), Global.getAppKey(), null, ClientConfig.getInstance());
             PushPayload payload = PushUtils.buildPayload(String.valueOf(id), "Light switch.", command);
+            try {
+                PushResult result = pushClient.sendPush(payload);
+                logger.trace(result);
+            } catch (APIRequestException | APIConnectionException e) {
+                logger.error("API exception with: " + e.getMessage());
+            }
+        } else {
+            map.put("message", "系统繁忙");
+        }
+        return map;
+    }
+
+    @RequestMapping(value = "/charge", produces = "application/json; charset=utf-8")
+    @ResponseBody
+    public Map charge(int id, int operate) {
+        int responseCode = service.chargeControl(id, operate);
+        HashMap<String, Object> map = Maps.newHashMap();
+        map.put("responseCode", responseCode);
+        if (responseCode == NO_SUCH_ROW) {
+            map.put("message", "目标充电桩不存在");
+        } else if (responseCode == ERROR_REQUEST) {
+            map.put("message", "操作码不正确");
+        } else if (responseCode == DONE) {
+            map.put("message", operate == 1 ? "正在充电！" : "充电结束，闲置中。");
+            HashMap<String, Integer> command = Maps.newHashMap();
+            command.put("id", id);
+            command.put("operate", operate + 2);
+            command.put("type", TYPE_CHARGE);
+            JPushClient pushClient = new JPushClient(Global.getMasterSecret(), Global.getAppKey(), null, ClientConfig.getInstance());
+            PushPayload payload = PushUtils.buildPayload(String.valueOf(id), "Charge switch.", command);
             try {
                 PushResult result = pushClient.sendPush(payload);
                 logger.trace(result);

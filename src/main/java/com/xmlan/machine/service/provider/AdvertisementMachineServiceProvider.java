@@ -66,24 +66,6 @@ public class AdvertisementMachineServiceProvider extends BaseController {
         return map;
     }
 
-    @RequestMapping(value = "/charge", produces = "application/json; charset=utf-8")
-    @ResponseBody
-    public Map charge(int id, int operate) {
-        int responseCode = service.chargeControl(id, operate);
-        HashMap<String, Object> map = Maps.newHashMap();
-        map.put("responseCode", responseCode);
-        if (responseCode == NO_SUCH_ROW) {
-            map.put("message", "目标充电桩不存在");
-        } else if (responseCode == ERROR_REQUEST) {
-            map.put("message", "操作码不正确");
-        } else if (responseCode == DONE) {
-            map.put("message", operate == 1 ? "正在充电！" : "充电结束，闲置中。");
-        } else {
-            map.put("message", "系统繁忙");
-        }
-        return map;
-    }
-
     @RequestMapping(value = "/environment/status/{id}", produces = "application/json; charset=utf-8")
     @ResponseBody
     public MachineSensor currentEnvironmentStatus(@PathVariable("id") int id) {
