@@ -32,9 +32,9 @@ public class AdvertisementServiceProvider extends BaseController {
 
     /**
      * 获取广告对象信息
-     * <p>
+     *
      * URL: /serv/advertisement/get/{id}
-     * <p>
+     *
      * Method: Get
      *
      * @param id int | 广告ID
@@ -48,9 +48,9 @@ public class AdvertisementServiceProvider extends BaseController {
 
     /**
      * 查询广告列表
-     * <p>
+     *
      * URL: /serv/advertisement/find
-     * <p>
+     *
      * Method: POST
      *
      * @param machineID String | 广告机ID
@@ -67,9 +67,9 @@ public class AdvertisementServiceProvider extends BaseController {
 
     /**
      * 访问媒体资源
-     * <p>
+     *
      * URL: /serv/advertisement/media/{id}
-     * <p>
+     *
      * Method: Get
      *
      * @param id       int | 广告ID

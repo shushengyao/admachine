@@ -20,9 +20,9 @@ public class UserMobileProvider extends BaseController {
 
     /**
      * 获取登录用户的信息
-     * <p>
+     *
      * URL: /mob/user/self/{id}/{token}
-     * <p>
+     *
      * Method: Get
      *
      * @param id    int | 用户ID

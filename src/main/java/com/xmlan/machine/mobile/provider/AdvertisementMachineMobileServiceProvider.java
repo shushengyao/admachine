@@ -13,7 +13,6 @@ import com.xmlan.machine.common.util.PushUtils;
 import com.xmlan.machine.common.util.StringUtils;
 import com.xmlan.machine.common.util.TokenUtils;
 import com.xmlan.machine.module.advertisementMachine.entity.AdvertisementMachine;
-import com.xmlan.machine.module.advertisementMachine.entity.MachineSensor;
 import com.xmlan.machine.module.advertisementMachine.service.AdvertisementMachineService;
 import com.xmlan.machine.module.advertisementMachine.service.MachineSensorService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,10 +23,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by ayakurayuki on 2018/1/9-14:44.
+ *
  * Package: com.xmlan.machine.mobile.provider
  */
 @Controller
@@ -57,6 +56,10 @@ public class AdvertisementMachineMobileServiceProvider extends BaseController {
     /**
      * 通过ID获取广告机对象信息
      *
+     * URL: /mob/machine/get/{id}/{token}
+     *
+     * Method: Get
+     *
      * @param id    广告机ID
      * @param token 用户鉴权用的token
      * @return 广告机对象信息，token验证通过则返回对象，不通过则返回null
@@ -72,6 +75,10 @@ public class AdvertisementMachineMobileServiceProvider extends BaseController {
 
     /**
      * 通过userID查询用户拥有的广告机列表
+     *
+     * URL: /mob/machine/find/{userID}/{token}
+     *
+     * Method: Get
      *
      * @param userID 用户ID
      * @param token  用户鉴权用的token
@@ -91,12 +98,16 @@ public class AdvertisementMachineMobileServiceProvider extends BaseController {
     /**
      * 通过最大经纬度和最小经纬度查询区域内的广告机
      *
-     * @param minLongitude
-     * @param maxLongitude
-     * @param minLatitude
-     * @param maxLatitude
-     * @param token
-     * @return
+     * URL: /mob/machine/position/query/{token}
+     *
+     * Method: Get/Post
+     *
+     * @param minLongitude  String | 最小经度
+     * @param maxLongitude  String | 最大经度
+     * @param minLatitude   String | 最小纬度
+     * @param maxLatitude   String | 最大纬度
+     * @param token         String | token身份验证
+     * @return 查询列表
      */
     @RequestMapping(value = "/position/query/{token}", produces = "application/json; charset=utf-8")
     @ResponseBody
@@ -110,9 +121,21 @@ public class AdvertisementMachineMobileServiceProvider extends BaseController {
         return null;
     }
 
+    /**
+     * 开关灯
+     * <p>
+     * URL: /mob/machine/light/{id}/{operate}
+     * <p>
+     * Method: Get/Post
+     *
+     * @param id      int | 广告机ID
+     * @param operate int | 操作码：0/1
+     * @param token   String | token身份验证
+     * @return 操作结果
+     */
     @RequestMapping(value = "/light/{id}/{operate}", produces = "application/json; charset=utf-8")
     @ResponseBody
-    public Map light(@PathVariable("id") int id, @PathVariable("operate") int operate, String token) {
+    public HashMap<String, Object> light(@PathVariable("id") int id, @PathVariable("operate") int operate, String token) {
         HashMap<String, Object> map = Maps.newHashMap();
         if (!TokenUtils.validateToken(token)) {
             map.put("responseCode", FAILURE);
@@ -145,9 +168,21 @@ public class AdvertisementMachineMobileServiceProvider extends BaseController {
         return map;
     }
 
+    /**
+     * 充电开关
+     * <p>
+     * URL: /mob/machine/light/{id}/{operate}
+     * <p>
+     * Method: Get/Post
+     *
+     * @param id      int | 广告机ID
+     * @param operate int | 操作码：0/1
+     * @param token   String | token身份验证
+     * @return 操作结果
+     */
     @RequestMapping(value = "/charge/{id}/{operate}", produces = "application/json; charset=utf-8")
     @ResponseBody
-    public Map charge(@PathVariable("id") int id, @PathVariable("operate") int operate, String token) {
+    public HashMap<String, Object> charge(@PathVariable("id") int id, @PathVariable("operate") int operate, String token) {
         HashMap<String, Object> map = Maps.newHashMap();
         if (!TokenUtils.validateToken(token)) {
             map.put("responseCode", FAILURE);
@@ -178,15 +213,6 @@ public class AdvertisementMachineMobileServiceProvider extends BaseController {
             map.put("message", "系统繁忙");
         }
         return map;
-    }
-
-    @RequestMapping(value = "/environment/{id}", produces = "application/json; charset=utf-8")
-    @ResponseBody
-    public MachineSensor currentEnvironmentStatus(@PathVariable("id") int id, String token) {
-        if (!TokenUtils.validateToken(token)) {
-            return null;
-        }
-        return machineSensorService.getByMachineID(id);
     }
 
 }

@@ -19,9 +19,9 @@ public class SensorMobileServiceProvider extends BaseController {
 
     /**
      * 通过广告机ID获取天气信息
-     * <p>
+     *
      * URL: /mob/sensor/info
-     * <p>
+     *
      * Method: Post
      *
      * @param machineID int | 广告机ID

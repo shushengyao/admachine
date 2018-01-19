@@ -26,9 +26,9 @@ class SensorServiceProvider extends BaseController {
 
     /**
      * 获取广告机传感器天气数据
-     * <p>
+     *
      * URL: /serv/sensor/status
-     * <p>
+     *
      * Method: POST
      *
      * @param id int | 广告机ID
@@ -42,9 +42,9 @@ class SensorServiceProvider extends BaseController {
 
     /**
      * 更新广告机传感器天气数据
-     * <p>
+     *
      * URL: /serv/sensor/update
-     * <p>
+     *
      * Method: POST
      *
      * @param id          int | 广告机ID

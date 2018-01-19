@@ -42,9 +42,9 @@ public class AdvertisementMobileServiceProvider extends BaseController {
 
     /**
      * 获取广告对象
-     * <p>
+     *
      * URL: /mob/ad/get
-     * <p>
+     *
      * Method: Post
      *
      * @param id    int | 广告ID
@@ -62,9 +62,9 @@ public class AdvertisementMobileServiceProvider extends BaseController {
 
     /**
      * 通过广告机ID获取广告列表
-     * <p>
+     *
      * URL: /mob/ad/find
-     * <p>
+     *
      * Method: Post
      *
      * @param machineID int | 广告机ID
@@ -84,9 +84,9 @@ public class AdvertisementMobileServiceProvider extends BaseController {
 
     /**
      * 新增广告
-     * <p>
+     *
      * URL: /mob/ad/newAD
-     * <p>
+     *
      * Method: Post
      *
      * @param machineID int | 广告机ID
@@ -120,9 +120,9 @@ public class AdvertisementMobileServiceProvider extends BaseController {
 
     /**
      * 更新广告，上传媒体文件，并向广告机发送推送
-     * <p>
+     *
      * URL: /mob/ad/uploadMedia
-     * <p>
+     *
      * Method: Post
      *
      * @param id    int | 广告ID
@@ -146,9 +146,9 @@ public class AdvertisementMobileServiceProvider extends BaseController {
 
     /**
      * 手动推送通知广告机有更新
-     * <p>
+     *
      * URL: /mob/ad/manualPush
-     * <p>
+     *
      * Method: Post
      *
      * @param id    int | 广告ID
@@ -169,9 +169,9 @@ public class AdvertisementMobileServiceProvider extends BaseController {
 
     /**
      * 删除广告
-     * <p>
+     *
      * URL: /mob/ad/delete
-     * <p>
+     *
      * Method: Post
      *
      * @param id    int | 广告ID
