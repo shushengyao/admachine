@@ -47,9 +47,9 @@ public class AdvertisementMobileServiceProvider extends BaseController {
      *
      * Method: Post
      *
-     * @param id    int | 广告ID
-     * @param token String | token身份验证
-     * @return
+     * @param id    int 广告ID
+     * @param token String token身份验证
+     * @return 广告对象
      */
     @RequestMapping(value = "/get", method = RequestMethod.POST, produces = "application/json; charset=utf-8")
     @ResponseBody
@@ -67,8 +67,8 @@ public class AdvertisementMobileServiceProvider extends BaseController {
      *
      * Method: Post
      *
-     * @param machineID int | 广告机ID
-     * @param token     String | token身份验证
+     * @param machineID int 广告机ID
+     * @param token     String token身份验证
      * @return 广告列表
      */
     @RequestMapping(value = "/find", method = RequestMethod.POST, produces = "application/json; charset=utf-8")
@@ -89,11 +89,11 @@ public class AdvertisementMobileServiceProvider extends BaseController {
      *
      * Method: Post
      *
-     * @param machineID int | 广告机ID
-     * @param name      String | 广告名称
-     * @param time      int | 播放时间（秒）
-     * @param token     String | token身份验证
-     * @param file      File | 媒体文件
+     * @param machineID int 广告机ID
+     * @param name      String 广告名称
+     * @param time      int 播放时间（秒）
+     * @param token     String token身份验证
+     * @param file      File 媒体文件
      * @return 推送结果
      */
     @RequestMapping(value = "/newAD", method = RequestMethod.POST, produces = "application/json; charset=utf-8")
@@ -125,10 +125,10 @@ public class AdvertisementMobileServiceProvider extends BaseController {
      *
      * Method: Post
      *
-     * @param id    int | 广告ID
-     * @param time  int | 播放时间（秒）
-     * @param token String | token身份验证
-     * @param file  File | 文件
+     * @param id    int 广告ID
+     * @param time  int 播放时间（秒）
+     * @param token String token身份验证
+     * @param file  File 文件
      * @return 更新结果
      */
     @RequestMapping(value = "/uploadMedia", method = RequestMethod.POST, produces = "application/json; charset=utf-8")
@@ -151,8 +151,8 @@ public class AdvertisementMobileServiceProvider extends BaseController {
      *
      * Method: Post
      *
-     * @param id    int | 广告ID
-     * @param token String | token身份验证
+     * @param id    int 广告ID
+     * @param token String token身份验证
      * @return 推送结果
      */
     @RequestMapping(value = "/manualPush", method = RequestMethod.POST, produces = "application/json; charset=utf-8")
@@ -174,8 +174,8 @@ public class AdvertisementMobileServiceProvider extends BaseController {
      *
      * Method: Post
      *
-     * @param id    int | 广告ID
-     * @param token String | token身份验证
+     * @param id    int 广告ID
+     * @param token String token身份验证
      * @return 更新结果
      */
     @RequestMapping(value = "/delete", method = RequestMethod.POST, produces = "application/json; charset=utf-8")
@@ -229,7 +229,11 @@ public class AdvertisementMobileServiceProvider extends BaseController {
             }
             map.put("message", message);
             logger.trace(result.getOriginalContent());
-        } catch (APIConnectionException | APIRequestException e) {
+        } catch (APIConnectionException e) {
+            map.put("message", "Push connect error.");
+            logger.error("API exception with: " + e.getMessage());
+        } catch (APIRequestException e) {
+            map.put("message", "Push request error.");
             logger.error("API exception with: " + e.getMessage());
         }
         return map;

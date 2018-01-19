@@ -35,8 +35,8 @@ public class AdvertisementMachineServiceProvider extends BaseController {
      *
      * Method: Get
      *
-     * @param id int | 广告机ID
-     * @return AdvertisementMachine | 广告机对象
+     * @param id int 广告机ID
+     * @return AdvertisementMachine 广告机对象
      */
     @RequestMapping(value = "/get/{id}", produces = "application/json; charset=utf-8")
     @ResponseBody
@@ -51,7 +51,7 @@ public class AdvertisementMachineServiceProvider extends BaseController {
      *
      * Method: POST
      *
-     * @param advertisementMachine AdvertisementMachine | 广告机对象
+     * @param advertisementMachine AdvertisementMachine 广告机对象
      * @return 注册后的结果
      */
     @RequestMapping(value = "/register", method = RequestMethod.POST, produces = "application/json; charset=utf-8")
@@ -89,9 +89,9 @@ public class AdvertisementMachineServiceProvider extends BaseController {
      *
      * Method: Get
      *
-     * @param id        int | 广告机ID
-     * @param longitude String | 经度
-     * @param latitude  String | 纬度
+     * @param id        int 广告机ID
+     * @param longitude String 经度
+     * @param latitude  String 纬度
      * @return 更新结果
      */
     @RequestMapping(value = "/gps/update/{id}", produces = "application/json; charset=utf-8")

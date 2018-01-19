@@ -31,8 +31,8 @@ class SensorServiceProvider extends BaseController {
      *
      * Method: POST
      *
-     * @param id int | 广告机ID
-     * @return MachineSensor | 天气数据对象
+     * @param id int 广告机ID
+     * @return MachineSensor 天气数据对象
      */
     @RequestMapping(value = "/status", method = RequestMethod.POST, produces = "application/json; charset=utf-8")
     @ResponseBody
@@ -47,12 +47,12 @@ class SensorServiceProvider extends BaseController {
      *
      * Method: POST
      *
-     * @param id          int | 广告机ID
-     * @param temperature String | 气温
-     * @param humidity    String | 湿度
-     * @param pm25        String | PM2.5
-     * @param pm10        String | PM10
-     * @return JSON | 更新结果
+     * @param id          int 广告机ID
+     * @param temperature String 气温
+     * @param humidity    String 湿度
+     * @param pm25        String PM2.5
+     * @param pm10        String PM10
+     * @return JSON 更新结果
      */
     @RequestMapping(value = "/update", method = RequestMethod.POST, produces = "application/json; charset=utf-8")
     @ResponseBody

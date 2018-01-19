@@ -37,8 +37,8 @@ public class AdvertisementServiceProvider extends BaseController {
      *
      * Method: Get
      *
-     * @param id int | 广告ID
-     * @return Advertisement | 广告对象
+     * @param id int 广告ID
+     * @return Advertisement 广告对象
      */
     @RequestMapping(value = "/get/{id}", produces = "application/json; charset=utf-8")
     @ResponseBody
@@ -53,8 +53,8 @@ public class AdvertisementServiceProvider extends BaseController {
      *
      * Method: POST
      *
-     * @param machineID String | 广告机ID
-     * @return List: Advertisement | 广告列表
+     * @param machineID String 广告机ID
+     * @return List: Advertisement 广告列表
      */
     @RequestMapping(value = "/find", method = RequestMethod.POST, produces = "application/json; charset=utf-8")
     @ResponseBody
@@ -72,8 +72,8 @@ public class AdvertisementServiceProvider extends BaseController {
      *
      * Method: Get
      *
-     * @param id       int | 广告ID
-     * @param response HttpServletResponse | 跳转对象，不需要带入参数
+     * @param id       int 广告ID
+     * @param response HttpServletResponse 跳转对象，不需要带入参数
      */
     @RequestMapping("/media/{id}")
     @ResponseBody

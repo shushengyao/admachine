@@ -24,8 +24,8 @@ public class SensorMobileServiceProvider extends BaseController {
      *
      * Method: Post
      *
-     * @param machineID int | 广告机ID
-     * @param token     String | token身份验证
+     * @param machineID int 广告机ID
+     * @param token     String token身份验证
      * @return 传感器天气信息对象，身份验证不通过则返回null
      */
     @RequestMapping(value = "/info", method = RequestMethod.POST, produces = "application/json; charset=utf-8")

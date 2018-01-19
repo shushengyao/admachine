@@ -25,8 +25,8 @@ public class UserMobileProvider extends BaseController {
      *
      * Method: Get
      *
-     * @param id    int | 用户ID
-     * @param token String | token身份验证
+     * @param id    int 用户ID
+     * @param token String token身份验证
      * @return 不包括用户密码的用户对象
      */
     @RequestMapping(value = "/self/{id}/{token}", produces = "application/json; charset=utf-8")

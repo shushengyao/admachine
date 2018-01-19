@@ -99,11 +99,11 @@ public class AdvertisementMachineMobileServiceProvider extends BaseController {
      *
      * Method: Get/Post
      *
-     * @param minLongitude  String | 最小经度
-     * @param maxLongitude  String | 最大经度
-     * @param minLatitude   String | 最小纬度
-     * @param maxLatitude   String | 最大纬度
-     * @param token         String | token身份验证
+     * @param minLongitude  String 最小经度
+     * @param maxLongitude  String 最大经度
+     * @param minLatitude   String 最小纬度
+     * @param maxLatitude   String 最大纬度
+     * @param token         String token身份验证
      * @return 查询列表
      */
     @RequestMapping(value = "/position/query/{token}", produces = "application/json; charset=utf-8")
@@ -125,9 +125,9 @@ public class AdvertisementMachineMobileServiceProvider extends BaseController {
      * <p>
      * Method: Get/Post
      *
-     * @param id      int | 广告机ID
-     * @param operate int | 操作码：0/1
-     * @param token   String | token身份验证
+     * @param id      int 广告机ID
+     * @param operate int 操作码：0/1
+     * @param token   String token身份验证
      * @return 操作结果
      */
     @RequestMapping(value = "/light/{id}/{operate}", produces = "application/json; charset=utf-8")
@@ -156,7 +156,11 @@ public class AdvertisementMachineMobileServiceProvider extends BaseController {
             try {
                 PushResult result = pushClient.sendPush(payload);
                 logger.trace(result);
-            } catch (APIRequestException | APIConnectionException e) {
+            } catch (APIRequestException e) {
+                map.put("message", "Push request error.");
+                logger.error("API exception with: " + e.getMessage());
+            } catch (APIConnectionException e) {
+                map.put("message", "Push connect error.");
                 logger.error("API exception with: " + e.getMessage());
             }
         } else {
@@ -172,9 +176,9 @@ public class AdvertisementMachineMobileServiceProvider extends BaseController {
      * <p>
      * Method: Get/Post
      *
-     * @param id      int | 广告机ID
-     * @param operate int | 操作码：0/1
-     * @param token   String | token身份验证
+     * @param id      int 广告机ID
+     * @param operate int 操作码：0/1
+     * @param token   String token身份验证
      * @return 操作结果
      */
     @RequestMapping(value = "/charge/{id}/{operate}", produces = "application/json; charset=utf-8")
@@ -203,7 +207,11 @@ public class AdvertisementMachineMobileServiceProvider extends BaseController {
             try {
                 PushResult result = pushClient.sendPush(payload);
                 logger.trace(result);
-            } catch (APIRequestException | APIConnectionException e) {
+            } catch (APIConnectionException e) {
+                map.put("message", "Push connect error.");
+                logger.error("API exception with: " + e.getMessage());
+            } catch (APIRequestException e) {
+                map.put("message", "Push request error.");
                 logger.error("API exception with: " + e.getMessage());
             }
         } else {
