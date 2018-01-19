@@ -14,7 +14,6 @@ import com.xmlan.machine.common.util.StringUtils;
 import com.xmlan.machine.common.util.TokenUtils;
 import com.xmlan.machine.module.advertisementMachine.entity.AdvertisementMachine;
 import com.xmlan.machine.module.advertisementMachine.service.AdvertisementMachineService;
-import com.xmlan.machine.module.advertisementMachine.service.MachineSensorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -35,8 +34,6 @@ public class AdvertisementMachineMobileServiceProvider extends BaseController {
 
     @Autowired
     private AdvertisementMachineService service;
-    @Autowired
-    private MachineSensorService machineSensorService;
 
     /**
      * 判断传来的不定数量的参数是否都不为空
