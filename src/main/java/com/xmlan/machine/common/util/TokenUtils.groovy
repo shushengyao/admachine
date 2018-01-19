@@ -3,6 +3,7 @@ package com.xmlan.machine.common.util
 import com.google.common.collect.Maps
 import com.xmlan.machine.common.config.Global
 import com.xmlan.machine.module.system.service.LoginService
+import com.xmlan.machine.module.user.entity.User
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
 
@@ -38,6 +39,12 @@ final class TokenUtils {
         def info = JsonUtils.fromJsonString(decode, HashMap.class) as HashMap<String, String>
         def user = loginService.loginForMobile(info[authname], info[password])
         return user != null
+    }
+
+    static User validateTokenGetUser(String token) {
+        def decode = EncodeUtils.decodeBase64String(token)
+        def info = JsonUtils.fromJsonString(decode, HashMap.class) as HashMap<String, String>
+        return loginService.loginForMobile(info[authname], info[password])
     }
 
     /**

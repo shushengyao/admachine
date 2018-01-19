@@ -11,11 +11,13 @@ import com.xmlan.machine.common.base.BaseController;
 import com.xmlan.machine.common.cache.AdvertisementCache;
 import com.xmlan.machine.common.cache.AdvertisementMachineCache;
 import com.xmlan.machine.common.config.Global;
+import com.xmlan.machine.common.util.DateUtils;
 import com.xmlan.machine.common.util.PushUtils;
 import com.xmlan.machine.common.util.TokenUtils;
 import com.xmlan.machine.module.advertisement.entity.Advertisement;
 import com.xmlan.machine.module.advertisement.service.AdvertisementService;
 import com.xmlan.machine.module.advertisementMachine.entity.AdvertisementMachine;
+import com.xmlan.machine.module.user.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -81,6 +83,42 @@ public class AdvertisementMobileServiceProvider extends BaseController {
     }
 
     /**
+     * 新增广告
+     * <p>
+     * URL: /mob/ad/newAD
+     * <p>
+     * Method: Post
+     *
+     * @param machineID int | 广告机ID
+     * @param name      String | 广告名称
+     * @param time      int | 播放时间（秒）
+     * @param token     String | token身份验证
+     * @param file      File | 媒体文件
+     * @return 推送结果
+     */
+    @RequestMapping(value = "/newAD", method = RequestMethod.POST, produces = "application/json; charset=utf-8")
+    @ResponseBody
+    public Map insertAD(int machineID, String name, int time, String token, MultipartFile file) {
+        HashMap<String, Object> map = Maps.newHashMap();
+        if (!TokenUtils.validateToken(token)) {
+            map.put("responseCode", FAILURE);
+            map.put("message", "身份校验失败");
+            return map;
+        }
+        User user = TokenUtils.validateTokenGetUser(token);
+        Advertisement advertisement = new Advertisement();
+        advertisement.setName(name);
+        advertisement.setTime(time);
+        advertisement.setUserID(user.getId());
+        advertisement.setMachineID(machineID);
+        advertisement.setAddTime(DateUtils.GetDateTime());
+        advertisementService.insert(advertisement);
+        int id = AdvertisementCache.getNewInserted(advertisement).getId();
+        advertisementService.uploadMedia(String.valueOf(id), time, file);
+        return uploadMedia(id, time, token, file);
+    }
+
+    /**
      * 更新广告，上传媒体文件，并向广告机发送推送
      * <p>
      * URL: /mob/ad/uploadMedia
@@ -88,7 +126,6 @@ public class AdvertisementMobileServiceProvider extends BaseController {
      * Method: Post
      *
      * @param id    int | 广告ID
-     * @param name  String | 广告名称
      * @param time  int | 播放时间（秒）
      * @param token String | token身份验证
      * @param file  File | 文件
@@ -96,15 +133,15 @@ public class AdvertisementMobileServiceProvider extends BaseController {
      */
     @RequestMapping(value = "/uploadMedia", method = RequestMethod.POST, produces = "application/json; charset=utf-8")
     @ResponseBody
-    public Map uploadMedia(int id, String name, int time, String token, MultipartFile file) {
+    public Map uploadMedia(int id, int time, String token, MultipartFile file) {
         if (!TokenUtils.validateToken(token)) {
             HashMap<String, Object> map = Maps.newHashMap();
             map.put("responseCode", FAILURE);
             map.put("message", "身份校验失败");
             return map;
         }
-        int responseCode = advertisementService.uploadMedia(String.valueOf(id), name, time, file);
-        return pushUpdate(id, responseCode, "新广告媒体");
+        int responseCode = advertisementService.uploadMedia(String.valueOf(id), time, file);
+        return pushUpdate(id, responseCode, "新广告");
     }
 
     /**

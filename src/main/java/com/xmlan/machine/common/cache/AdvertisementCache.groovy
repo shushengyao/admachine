@@ -82,4 +82,23 @@ final class AdvertisementCache {
         return count
     }
 
+    /**
+     * 获取新添加的条目
+     * @param ad
+     * @return
+     */
+    static Advertisement getNewInserted(Advertisement ad) {
+        def list = advertisementList
+        for (item in list) {
+            if (item.addTime == ad.addTime
+                    && item.name == ad.name
+                    && item.time == ad.time
+                    && item.machineID == ad.machineID
+                    && item.userID == ad.userID) {
+                return item
+            }
+        }
+        return null
+    }
+
 }
