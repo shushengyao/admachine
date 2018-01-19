@@ -75,35 +75,35 @@
 
     <insert id="insert" parameterType="com.xmlan.machine.module.advertisement.entity.Advertisement">
         insert into advertisement (
-            id,
-            name,
-            url,
-            time,
-            addTime,
-            machineID,
-            userID,
-            remark
+        id,
+        name,
+        url,
+        time,
+        addTime,
+        machineID,
+        userID,
+        remark
         ) values (
-            id,
-            #{name},
-            #{url},
-            #{time},
-            #{addTime},
-            #{machineID},
-            #{userID},
-            #{remark}
+        id,
+        #{name},
+        #{url},
+        #{time},
+        #{addTime},
+        #{machineID},
+        #{userID},
+        #{remark}
         );
     </insert>
 
     <update id="update" parameterType="com.xmlan.machine.module.advertisement.entity.Advertisement">
         update advertisement
         set
-            name      = #{name},
-            url       = #{url},
-            time      = #{time},
-            machineID = #{machineID},
-            userID    = #{userID},
-            remark    = #{remark}
+        name = #{name},
+        url = #{url},
+        time = #{time},
+        machineID = #{machineID},
+        userID = #{userID},
+        remark = #{remark}
         where id = #{id}
     </update>
 

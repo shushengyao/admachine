@@ -52,21 +52,21 @@
 
     <insert id="insert" parameterType="com.xmlan.machine.module.role.entity.Role">
         insert into `role` (
-            id,
-            name,
-            remark
+        id,
+        name,
+        remark
         ) values (
-            id,
-            #{name},
-            #{remark}
+        id,
+        #{name},
+        #{remark}
         );
     </insert>
 
     <update id="update" parameterType="com.xmlan.machine.module.role.entity.Role">
         update `role`
         set
-            name   = #{name},
-            remark = #{remark}
+        name = #{name},
+        remark = #{remark}
         where id = #{id}
     </update>
 

@@ -68,29 +68,29 @@
 
     <insert id="insert" parameterType="com.xmlan.machine.module.advertisementMachine.entity.MachineSensor">
         insert into machine_sensor (
-            id,
-            temperature,
-            humidity,
-            pm25,
-            pm10,
-            machineID
+        id,
+        temperature,
+        humidity,
+        pm25,
+        pm10,
+        machineID
         ) values (
-            id,
-            #{temperature},
-            #{humidity},
-            #{pm25},
-            #{pm10},
-            #{machineID}
+        id,
+        #{temperature},
+        #{humidity},
+        #{pm25},
+        #{pm10},
+        #{machineID}
         );
     </insert>
 
     <update id="update" parameterType="com.xmlan.machine.module.advertisementMachine.entity.MachineSensor">
         update machine_sensor
         set
-            temperature = #{temperature},
-            humidity    = #{humidity},
-            pm25        = #{pm25},
-            pm25        = #{pm25}
+        temperature = #{temperature},
+        humidity = #{humidity},
+        pm25 = #{pm25},
+        pm25 = #{pm25}
         where machineID = #{machineID}
     </update>
 

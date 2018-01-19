@@ -90,31 +90,31 @@
 
     <insert id="insert" parameterType="com.xmlan.machine.module.advertisementMachine.entity.AdvertisementMachine">
         insert into advertisement_machine (
-            id,
-            userID,
-            name,
-            address,
-            longitude,
-            latitude,
-            addTime,
-            codeNumber,
-            light,
-            charge,
-            checked,
-            remark
+        id,
+        userID,
+        name,
+        address,
+        longitude,
+        latitude,
+        addTime,
+        codeNumber,
+        light,
+        charge,
+        checked,
+        remark
         ) values (
-            id,
-            #{userID},
-            #{name},
-            #{address},
-            #{longitude},
-            #{latitude},
-            #{addTime},
-            #{codeNumber},
-            0,
-            0,
-            0,
-            #{remark}
+        id,
+        #{userID},
+        #{name},
+        #{address},
+        #{longitude},
+        #{latitude},
+        #{addTime},
+        #{codeNumber},
+        0,
+        0,
+        0,
+        #{remark}
         );
     </insert>
 

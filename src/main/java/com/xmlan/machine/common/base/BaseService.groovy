@@ -24,7 +24,7 @@ abstract class BaseService<T, DAO extends BaseDAO<T>> extends BaseBean {
     /**
      * 使用ID获取对象
      * @param id 对象ID
-     * @return 查找到的对象(或null)
+     * @return 查找到的对象 ( 或null )
      */
     T get(String id) {
         logger.trace "${this.class.name}: get(${id}).".toString()
@@ -33,7 +33,7 @@ abstract class BaseService<T, DAO extends BaseDAO<T>> extends BaseBean {
 
     /**
      * 查询全部条目
-     * @return 全部条目列表(或null)
+     * @return 全部条目列表 ( 或null )
      */
     List<T> findAll() {
         logger.trace "${this.class.name}: findAll().".toString()
@@ -44,7 +44,7 @@ abstract class BaseService<T, DAO extends BaseDAO<T>> extends BaseBean {
      * 条件查询
      * @param entity 控制条件所用的对象
      * @param pageNo 分页页数
-     * @return 查询到的条目列表(或null)
+     * @return 查询到的条目列表 ( 或null )
      */
     List<T> findList(T entity, int pageNo) {
         logger.trace "${this.class.name}: findList(${entity.toString()}).".toString()
