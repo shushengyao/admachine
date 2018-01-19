@@ -4,7 +4,6 @@ import com.google.common.collect.Lists
 import com.google.common.collect.Maps
 import com.xmlan.machine.common.util.CacheUtils
 import com.xmlan.machine.common.util.SpringContextUtils
-import com.xmlan.machine.common.util.StringUtils
 import com.xmlan.machine.module.user.dao.UserDAO
 import com.xmlan.machine.module.user.entity.SimpleUser
 import com.xmlan.machine.module.user.entity.User
@@ -74,10 +73,10 @@ final class UserCache {
      * @param id 查询ID
      * @return
      */
-    static User get(String id) {
+    static User get(int id) {
         List<User> list = getUserList()
         for (user in list) {
-            if (StringUtils.equals(user.id.toString(), id)) {
+            if (user.id == id) {
                 return user
             }
         }

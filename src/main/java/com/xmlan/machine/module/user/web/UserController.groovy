@@ -50,7 +50,7 @@ class UserController extends BaseController {
 
     @RequestMapping(value = "/detail/{id}", produces = "application/json; charset=utf-8")
     @ResponseBody
-    Map<String, Object> detail(@PathVariable String id) {
+    Map<String, Object> detail(@PathVariable int id) {
         Map<String, Object> data = Maps.newHashMap()
         data.put("user", UserCache.get(id))
         data.put("roleName", RoleCache.get(UserCache.get(id).roleID.toString()).name)

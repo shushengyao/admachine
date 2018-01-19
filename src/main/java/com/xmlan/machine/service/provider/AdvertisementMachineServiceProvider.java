@@ -6,17 +6,16 @@ import com.xmlan.machine.common.cache.AdvertisementMachineCache;
 import com.xmlan.machine.common.util.DateUtils;
 import com.xmlan.machine.common.util.StringUtils;
 import com.xmlan.machine.module.advertisementMachine.entity.AdvertisementMachine;
-import com.xmlan.machine.module.advertisementMachine.entity.MachineSensor;
 import com.xmlan.machine.module.advertisementMachine.service.AdvertisementMachineService;
-import com.xmlan.machine.module.advertisementMachine.service.MachineSensorService;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Created by ayakurayuki on 2018/1/8-15:43.
@@ -28,19 +27,36 @@ public class AdvertisementMachineServiceProvider extends BaseController {
 
     @Autowired
     private AdvertisementMachineService service;
-    @Autowired
-    private MachineSensorService machineSensorService;
 
+    /**
+     * 获取广告机对象信息
+     * <p>
+     * URL: /serv/advertisementMachine/get/{id}
+     * <p>
+     * Method: Get
+     *
+     * @param id int | 广告机ID
+     * @return AdvertisementMachine | 广告机对象
+     */
     @RequestMapping(value = "/get/{id}", produces = "application/json; charset=utf-8")
     @ResponseBody
-    public AdvertisementMachine get(@PathVariable int id) {
+    public AdvertisementMachine get(@PathVariable("id") int id) {
         return AdvertisementMachineCache.get(id);
     }
 
-    @RequestMapping(value = "/register", produces = "application/json; charset=utf-8")
+    /**
+     * 注册广告机
+     * <p>
+     * URL: /serv/advertisementMachine/register
+     * <p>
+     * Method: POST
+     *
+     * @param advertisementMachine AdvertisementMachine | 广告机对象
+     * @return 注册后的结果
+     */
+    @RequestMapping(value = "/register", method = RequestMethod.POST, produces = "application/json; charset=utf-8")
     @ResponseBody
-    public HashMap register(AdvertisementMachine advertisementMachine) {
-        // 程序判断是否有存在的条目
+    public HashMap<String, Object> register(AdvertisementMachine advertisementMachine) {
         AdvertisementMachine temp = AdvertisementMachineCache.get(advertisementMachine.getCodeNumber());
         if (temp != null) {
             HashMap<String, Object> map = Maps.newHashMap();
@@ -66,24 +82,43 @@ public class AdvertisementMachineServiceProvider extends BaseController {
         return map;
     }
 
-    @RequestMapping(value = "/environment/status/{id}", produces = "application/json; charset=utf-8")
+    /**
+     * 更新广告机的经纬坐标
+     * <p>
+     * URL: /serv/advertisementMachine/gps/update/{id}
+     * <p>
+     * Method: Get
+     *
+     * @param id        int | 广告机ID
+     * @param longitude String | 经度
+     * @param latitude  String | 纬度
+     * @return 更新结果
+     */
+    @RequestMapping(value = "/gps/update/{id}", produces = "application/json; charset=utf-8")
     @ResponseBody
-    public MachineSensor currentEnvironmentStatus(@PathVariable("id") int id) {
-        return machineSensorService.getByMachineID(id);
-    }
-
-    @RequestMapping(value = "/environment/update/{id}", produces = "application/json; charset=utf-8")
-    @ResponseBody
-    public HashMap<String, Object> updateEnvironmentStatus(@PathVariable("id") int id, String temperature, String humidity, String pm25, String pm10) {
-        MachineSensor data = machineSensorService.getByMachineID(id);
-        data.setTemperature(temperature);
-        data.setHumidity(humidity);
-        data.setPm25(pm25);
-        data.setPm10(pm10);
-        HashMap<String, Object> info = Maps.newHashMap();
-        info.put("id", data.getId());
-        info.put("response", machineSensorService.update(data));
-        return info;
+    public HashMap<String, Object> gpsUpdate(@PathVariable("id") int id, String longitude, String latitude) {
+        HashMap<String, Object> map = Maps.newHashMap();
+        AdvertisementMachine machine = AdvertisementMachineCache.get(id);
+        if (machine == null) {
+            map.put("responseCode", NO_SUCH_ROW);
+            map.put("message", "No ad machine selected.");
+            return map;
+        }
+        if (NumberUtils.isNumber(longitude) && NumberUtils.isNumber(latitude)) {
+            machine.setLongitude(longitude);
+            machine.setLatitude(latitude);
+            if (service.update(machine) != 0) {
+                map.put("responseCode", DONE);
+                map.put("message", "Updated!");
+            } else {
+                map.put("responseCode", FAILURE);
+                map.put("message", "Update failed!");
+            }
+        } else {
+            map.put("responseCode", DATABASE_DO_NOTHING);
+            map.put("message", "Longitude or Latitude is not a number.");
+        }
+        return map;
     }
 
 }

@@ -39,6 +39,12 @@ public class AdvertisementMachineMobileServiceProvider extends BaseController {
     @Autowired
     private MachineSensorService machineSensorService;
 
+    /**
+     * 判断传来的不定数量的参数是否都不为空
+     *
+     * @param args 不定长数组，数据类型为java.lang.String
+     * @return 数组内参数都不为空，返回true，否则返回false
+     */
     private static boolean isNotBlank(String... args) {
         for (String string : args) {
             if (StringUtils.isBlank(string)) {
@@ -48,6 +54,13 @@ public class AdvertisementMachineMobileServiceProvider extends BaseController {
         return true;
     }
 
+    /**
+     * 通过ID获取广告机对象信息
+     *
+     * @param id    广告机ID
+     * @param token 用户鉴权用的token
+     * @return 广告机对象信息，token验证通过则返回对象，不通过则返回null
+     */
     @RequestMapping(value = "/get/{id}/{token}", produces = "application/json; charset=utf-8")
     @ResponseBody
     public AdvertisementMachine get(@PathVariable String id, @PathVariable("token") String token) {
@@ -57,6 +70,13 @@ public class AdvertisementMachineMobileServiceProvider extends BaseController {
         return service.get(id);
     }
 
+    /**
+     * 通过userID查询用户拥有的广告机列表
+     *
+     * @param userID 用户ID
+     * @param token  用户鉴权用的token
+     * @return 广告机列表，token验证通过则返回列表，不通过则返回null
+     */
     @RequestMapping(value = "/find/{userID}/{token}", produces = "application/json; charset=utf-8")
     @ResponseBody
     public List<AdvertisementMachine> find(@PathVariable int userID, @PathVariable("token") String token) {
@@ -68,6 +88,16 @@ public class AdvertisementMachineMobileServiceProvider extends BaseController {
         return AdvertisementMachineService.findForProvider(machine);
     }
 
+    /**
+     * 通过最大经纬度和最小经纬度查询区域内的广告机
+     *
+     * @param minLongitude
+     * @param maxLongitude
+     * @param minLatitude
+     * @param maxLatitude
+     * @param token
+     * @return
+     */
     @RequestMapping(value = "/position/query/{token}", produces = "application/json; charset=utf-8")
     @ResponseBody
     public List<AdvertisementMachine> positionQuery(String minLongitude, String maxLongitude, String minLatitude, String maxLatitude, @PathVariable("token") String token) {

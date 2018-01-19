@@ -23,6 +23,17 @@ public class AuthMobileProvider extends BaseController {
     @Autowired
     private LoginService loginService;
 
+    /**
+     * 登录
+     * <p>
+     * URL: /mob/auth
+     * <p>
+     * Method: Get/Post
+     *
+     * @param authname String | 登录名
+     * @param password String | 密码
+     * @return 登录结果，包括用户ID和token
+     */
     @RequestMapping(value = "/auth", produces = "application/json; charset=utf-8")
     @ResponseBody
     public HashMap auth(String authname, String password) {

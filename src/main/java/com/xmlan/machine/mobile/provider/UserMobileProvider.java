@@ -18,9 +18,20 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @RequestMapping("${mobilePath}/user")
 public class UserMobileProvider extends BaseController {
 
+    /**
+     * 获取登录用户的信息
+     * <p>
+     * URL: /mob/user/self/{id}/{token}
+     * <p>
+     * Method: Get
+     *
+     * @param id    int | 用户ID
+     * @param token String | token身份验证
+     * @return 不包括用户密码的用户对象
+     */
     @RequestMapping(value = "/self/{id}/{token}", produces = "application/json; charset=utf-8")
     @ResponseBody
-    public User self(@PathVariable("id") String id, @PathVariable("token") String token) {
+    public User self(@PathVariable("id") int id, @PathVariable("token") String token) {
         if (!TokenUtils.validateToken(token)) {
             return null;
         }
