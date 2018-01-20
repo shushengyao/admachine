@@ -3,35 +3,36 @@ package com.xmlan.machine.module.advertisementMachine.entity
 import javax.validation.constraints.NotNull
 
 /**
- * Created by ayakurayuki on 2017/12/12-11:18.
- * Package: com.xmlan.machine.module.advertisementMachine.entity
+ * 广告机实体类 <br/>
+ * Created by ayakurayuki on 2017/12/12-11:18. <br/>
+ * Package: com.xmlan.machine.module.advertisementMachine.entity <br/>
  */
 class AdvertisementMachine implements Serializable {
 
-    private int id
     // 广告机ID
-    private int userID
+    private int id
     // 用户ID
-    private String name
+    private int userID
     // 广告机名称
-    private String address
+    private String name
     // 地址
-    private String longitude
+    private String address
     // 经度
-    private String latitude
+    private String longitude
     // 纬度
-    private String addTime
+    private String latitude
     // 加入时间
-    private String codeNumber
+    private String addTime
     // 机器标识码(注册码)
-    private int light
+    private String codeNumber
     // 灯开关, 1 开灯, 0 关灯
-    private int charge
+    private int light
     // 充电状态, 1 充电, 0 闲置
-    private int checked
+    private int charge
     // 选中, 1 选中, 0 未选中
-    private String remark
+    private int checked
     // 备注
+    private String remark
 
     int getId() {
         return id
