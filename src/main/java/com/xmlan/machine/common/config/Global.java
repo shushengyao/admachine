@@ -7,6 +7,8 @@ import com.xmlan.machine.common.util.StringUtils;
 import java.util.Map;
 
 /**
+ * 全局配置类
+ * <p>
  * Created by Ayakura Yuki on 2017/7/11.
  */
 public final class Global {
@@ -143,7 +145,7 @@ public final class Global {
     public static Object getConst(String field) {
         try {
             return Global.class.getField(field).get(null);
-        } catch (Exception ignore) { // 异常代表无配置，这里什么也不做
+        } catch (Exception ignore) {
         }
         return null;
     }

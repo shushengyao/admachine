@@ -33,6 +33,11 @@ class AdvertisementController extends BaseController {
     @Autowired
     private AdvertisementService service
 
+    /**
+     * 页面属性
+     * @param id 广告ID
+     * @return 获取到的实体类
+     */
     @ModelAttribute
     Advertisement get(@RequestParam(required = false) String id) {
         Advertisement entity = null
@@ -47,6 +52,11 @@ class AdvertisementController extends BaseController {
         return entity
     }
 
+    /**
+     * 广告详细信息
+     * @param id 广告ID
+     * @return JSON封装的广告对象
+     */
     @RequestMapping(value = "/detail/{id}", produces = "application/json; charset=utf-8")
     @ResponseBody
     Map<String, Object> detail(@PathVariable String id) {
@@ -57,44 +67,53 @@ class AdvertisementController extends BaseController {
         return data
     }
 
+    /**
+     * 列表和列表查询
+     * @param advertisement 查询条件实体
+     * @param pageNo 当前页面
+     * @param model 传参对象
+     * @return
+     */
     @RequestMapping(value = "/list/{pageNo}")
     String list(Advertisement advertisement, @PathVariable int pageNo, Model model) {
-        // region 格式化查询条件
         if (advertisement.name == 'null') advertisement.name = StringUtils.EMPTY
         if (advertisement.addTime == 'null') advertisement.addTime = StringUtils.EMPTY
-        if (advertisement.machineID < 1) advertisement.machineID = -2
+        if (advertisement.machineID < 1) advertisement.machineID = NEW_INSERT_ID
         if (StringUtils.isNotBlank(advertisement.addTime)) {
             advertisement.addTime = "${advertisement.addTime.substring(0, 10)} 00:00:00".toString()
         }
         if (SessionUtils.getAdmin(request).roleID != ADMIN_ROLE_ID) {
+            // 角色不是管理员则限定仅查询属于自己的广告
             advertisement.userID = SessionUtils.getAdmin(request).id
         } else {
             advertisement.userID = 0
         }
-        // endregion
-
-        // region 执行查询
+        // 分页
         List<Advertisement> list = service.findList advertisement, pageNo
         PageInfo<Advertisement> page = new PageInfo<>(list)
         model.addAttribute "page", page
         model.addAttribute "machineList", AdvertisementMachineCache.dropdownAdvertisementMachineList
-        // endregion
-
-        // region 搜索条件继承
         model.addAttribute "name", advertisement.name
         model.addAttribute "machineID", advertisement.machineID
         model.addAttribute "time", advertisement.time
         model.addAttribute "addTime", advertisement.addTime
         if (SessionUtils.getAdmin(request).roleID != ADMIN_ROLE_ID) {
+            // 添加广告判断，普通用户没有广告机的时候不能添加广告
             model.addAttribute "machines", AdvertisementMachineCache.getMachineCount(SessionUtils.getAdmin(request).id)
         } else {
-            model.addAttribute "machines", PASS
+            // 管理员则通过总的广告机数量判断可否添加广告
+            model.addAttribute "machines", AdvertisementMachineCache.machineCount
         }
-        // endregion
 
         return "advertisement/advertisementList"
     }
 
+    /**
+     * 表单编辑视图跳转
+     * @param advertisement 广告对象
+     * @param model 传参对象
+     * @return
+     */
     @RequestMapping(value = "/form")
     String form(Advertisement advertisement, Model model) {
         model.addAttribute "advertisement", advertisement
@@ -103,23 +122,30 @@ class AdvertisementController extends BaseController {
         "advertisement/advertisementForm"
     }
 
+    /**
+     * 表单保存
+     * @param advertisement 广告对象
+     * @param id 广告ID
+     * @param model 传参对象
+     * @param redirectAttributes 跳转属性
+     * @return
+     */
     @RequestMapping(value = "/save/{id}")
-    String save(Advertisement advertisement,
-                @PathVariable String id, Model model, RedirectAttributes redirectAttributes) {
+    String save(Advertisement advertisement, @PathVariable int id, Model model, RedirectAttributes redirectAttributes) {
         if (!beanValidator(model, advertisement)) {
             return form(advertisement, model)
         }
         if (SessionUtils.getAdmin(request).roleID != ADMIN_ROLE_ID) {
             advertisement.userID = SessionUtils.getAdmin(request).id
         }
-        if (StringUtils.equals(id, NEW_INSERT_ID.toString())) {
+        if (id == NEW_INSERT_ID) {
             advertisement.addTime = DateUtils.GetDateTime()
             service.insert advertisement
             // 推送
             push(advertisement.machineID, advertisement.id, "New advertisement.")
             addMessage redirectAttributes, "创建广告成功"
         } else {
-            advertisement.id = id.toInteger()
+            advertisement.id = id
             service.update advertisement
             // 推送
             push(advertisement.machineID, advertisement.id, "An advertisement updated.")
@@ -128,23 +154,36 @@ class AdvertisementController extends BaseController {
         "redirect:$adminPath/advertisement/list/1"
     }
 
+    /**
+     * 删除广告
+     * @param advertisement 广告对象
+     * @param attributes 跳转属性
+     * @return
+     */
     @RequestMapping(value = "/delete")
-    String delete(Advertisement advertisement, RedirectAttributes redirectAttributes) {
+    String delete(Advertisement advertisement, RedirectAttributes attributes) {
         if (service.delete(advertisement) == DATABASE_DO_NOTHING) {
-            addMessage redirectAttributes, "这个操作没有删除任何广告"
+            addMessage attributes, "这个操作没有删除任何广告"
         } else {
-            addMessage redirectAttributes, "删除广告成功"
+            addMessage attributes, "删除广告成功"
         }
         "redirect:$adminPath/advertisement/list/1"
     }
 
+    /**
+     * 上传媒体
+     * @param id 广告ID
+     * @param request 上传请求
+     * @param attributes 跳转属性
+     * @return
+     */
     @RequestMapping(value = '/uploadMedia/{id}')
-    String uploadMedia(@PathVariable String id, HttpServletRequest httpServletRequest, RedirectAttributes attributes) {
-        def responseCode = service.uploadMedia(id, httpServletRequest)
+    String uploadMedia(@PathVariable int id, HttpServletRequest request, RedirectAttributes attributes) {
+        def responseCode = service.uploadMedia(String.valueOf(id), request)
         if (responseCode == DONE) {
-            def ad = AdvertisementCache.get(id.toInteger())
+            def ad = AdvertisementCache.get(id)
             // 推送
-            push(ad.machineID, id.toInteger(), "New advertisement media.")
+            push(ad.machineID, id, "New advertisement media.")
             addMessage attributes, "上传成功"
         }
         if (responseCode == FAILURE) {
@@ -153,13 +192,21 @@ class AdvertisementController extends BaseController {
         "redirect:$adminPath/advertisement/list/1"
     }
 
+    /**
+     * 媒体请求
+     * @param id 广告ID
+     * @param response 输出流
+     */
     @RequestMapping('/media/{id}')
     @ResponseBody
-    void media(@PathVariable String id, HttpServletResponse response) {
-        Advertisement advertisement = AdvertisementCache.get(id.toInteger())
+    void media(@PathVariable int id, HttpServletResponse response) {
+        Advertisement advertisement = AdvertisementCache.get(id)
         MediaUtils.mediaTransfer advertisement.url, response
     }
 
+    /**
+     * 推送方法
+     */
     private def push = { int machineID, int advertisementID, String message ->
         logger.trace "New push task with machine-No.${machineID}, ad-No.${advertisementID}, message-${message}"
         def machine = AdvertisementMachineCache.get(machineID)

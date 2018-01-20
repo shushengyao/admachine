@@ -19,7 +19,10 @@ import java.util.List;
 
 /**
  * Created by ayakurayuki on 2018/1/8-09:19.
+ * <p>
  * Package: com.xmlan.machine.service.provider
+ * <p>
+ * 广告端 广告服务接口
  */
 @Controller
 @RequestMapping("${servicePath}/advertisement")
@@ -32,9 +35,9 @@ public class AdvertisementServiceProvider extends BaseController {
 
     /**
      * 获取广告对象信息
-     *
+     * <p>
      * URL: /serv/advertisement/get/{id}
-     *
+     * <p>
      * Method: Get
      *
      * @param id int 广告ID
@@ -48,9 +51,9 @@ public class AdvertisementServiceProvider extends BaseController {
 
     /**
      * 查询广告列表
-     *
+     * <p>
      * URL: /serv/advertisement/find
-     *
+     * <p>
      * Method: POST
      *
      * @param machineID String 广告机ID
@@ -67,9 +70,9 @@ public class AdvertisementServiceProvider extends BaseController {
 
     /**
      * 访问媒体资源
-     *
+     * <p>
      * URL: /serv/advertisement/media/{id}
-     *
+     * <p>
      * Method: Get
      *
      * @param id       int 广告ID

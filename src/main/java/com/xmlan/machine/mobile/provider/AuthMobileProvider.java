@@ -14,7 +14,10 @@ import java.util.HashMap;
 
 /**
  * Created by ayakurayuki on 2018/1/12-13:47.
+ * <p>
  * Package: com.xmlan.machine.mobile.provider
+ * <p>
+ * 手机端 登录接口
  */
 @Controller
 @RequestMapping("${mobilePath}")
@@ -25,9 +28,9 @@ public class AuthMobileProvider extends BaseController {
 
     /**
      * 登录
-     *
+     * <p>
      * URL: /mob/auth
-     *
+     * <p>
      * Method: Get/Post
      *
      * @param authname String 登录名

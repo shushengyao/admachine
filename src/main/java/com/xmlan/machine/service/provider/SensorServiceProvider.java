@@ -14,8 +14,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import java.util.HashMap;
 
 /**
- * Created by ayakurayuki on 2018/1/19-14:14. <br/>
- * Package: com.xmlan.machine.service.provider <br/>
+ * Created by ayakurayuki on 2018/1/19-14:14.
+ * <p>
+ * Package: com.xmlan.machine.service.provider
+ * <p>
+ * 广告端 天气传感器数据服务接口
  */
 @Controller
 @RequestMapping("${servicePath}/sensor")
@@ -26,9 +29,9 @@ class SensorServiceProvider extends BaseController {
 
     /**
      * 获取广告机传感器天气数据
-     *
+     * <p>
      * URL: /serv/sensor/status
-     *
+     * <p>
      * Method: POST
      *
      * @param id int 广告机ID
@@ -42,9 +45,9 @@ class SensorServiceProvider extends BaseController {
 
     /**
      * 更新广告机传感器天气数据
-     *
+     * <p>
      * URL: /serv/sensor/update
-     *
+     * <p>
      * Method: POST
      *
      * @param id          int 广告机ID

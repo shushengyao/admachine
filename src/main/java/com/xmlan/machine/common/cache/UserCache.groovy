@@ -10,6 +10,7 @@ import com.xmlan.machine.module.user.entity.User
 
 /**
  * Created by ayakurayuki on 2017/12/26-11:14.
+ * <p>
  * Package: com.xmlan.machine.common.cache
  */
 final class UserCache {
@@ -35,6 +36,11 @@ final class UserCache {
         return map
     }
 
+    /**
+     * 获取缓存中的list
+     * @param key
+     * @return
+     */
     static List getList(String key) {
         Map<String, List> map = initialCacheMap()
         List list = map.get(key)

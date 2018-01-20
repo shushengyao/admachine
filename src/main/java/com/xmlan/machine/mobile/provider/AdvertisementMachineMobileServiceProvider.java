@@ -25,8 +25,10 @@ import java.util.List;
 
 /**
  * Created by ayakurayuki on 2018/1/9-14:44.
- *
+ * <p>
  * Package: com.xmlan.machine.mobile.provider
+ * <p>
+ * 手机端 广告机服务接口
  */
 @Controller
 @RequestMapping("${mobilePath}/machine")
@@ -52,9 +54,9 @@ public class AdvertisementMachineMobileServiceProvider extends BaseController {
 
     /**
      * 通过ID获取广告机对象信息
-     *
+     * <p>
      * URL: /mob/machine/get/{id}/{token}
-     *
+     * <p>
      * Method: Get
      *
      * @param id    广告机ID
@@ -72,9 +74,9 @@ public class AdvertisementMachineMobileServiceProvider extends BaseController {
 
     /**
      * 通过userID查询用户拥有的广告机列表
-     *
+     * <p>
      * URL: /mob/machine/find/{userID}/{token}
-     *
+     * <p>
      * Method: Get
      *
      * @param userID 用户ID
@@ -94,9 +96,9 @@ public class AdvertisementMachineMobileServiceProvider extends BaseController {
 
     /**
      * 通过最大经纬度和最小经纬度查询区域内的广告机
-     *
+     * <p>
      * URL: /mob/machine/position/query/{token}
-     *
+     * <p>
      * Method: Get/Post
      *
      * @param minLongitude  String 最小经度

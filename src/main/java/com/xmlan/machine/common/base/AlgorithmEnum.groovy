@@ -3,12 +3,12 @@ package com.xmlan.machine.common.base
 /**
  * Created by ayakurayuki on 2018/1/12-18:24. <br/>
  * Package: com.xmlan.machine.common.base <br/>
- * 加密类型枚举类 <br/>
- * 支持使用
+ * 加密类型枚举类
+ * <p>
+ * 支持类型
  * <pre>MD5</pre>
  * <pre>SHA-1</pre>
  * <pre>SHA256</pre>
- * 三种类型
  */
 enum AlgorithmEnum {
 

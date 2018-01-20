@@ -4,13 +4,13 @@ import com.google.common.collect.Lists
 import com.google.common.collect.Maps
 import com.xmlan.machine.common.util.CacheUtils
 import com.xmlan.machine.common.util.SpringContextUtils
-import com.xmlan.machine.common.util.StringUtils
 import com.xmlan.machine.module.role.dao.RoleDAO
 import com.xmlan.machine.module.role.entity.Role
 import com.xmlan.machine.module.user.entity.User
 
 /**
  * Created by ayakurayuki on 2017/12/27-16:11.
+ * <p>
  * Package: com.xmlan.machine.common.cache
  */
 final class RoleCache {
@@ -21,6 +21,10 @@ final class RoleCache {
 
     private static def roleDAO = SpringContextUtils.getBean(RoleDAO.class)
 
+    /**
+     * 初始化
+     * @return 初始化的map
+     */
     static Map<String, List> initialCacheMap() {
         Map map = CacheUtils.get(CACHE_NAME, MAP_NAME) as Map<String, List>
         if (map == null) {
@@ -32,6 +36,11 @@ final class RoleCache {
         return map
     }
 
+    /**
+     * 获取缓存中的list
+     * @param key
+     * @return
+     */
     static List getList(String key) {
         Map<String, List> map = initialCacheMap()
         List list = map.get(key)
@@ -41,14 +50,23 @@ final class RoleCache {
         return list
     }
 
+    /**
+     * 获取角色列表
+     * @return
+     */
     static List<Role> getRoleList() {
         return getList(ROLE_LIST_NAME)
     }
 
-    static Role get(String id) {
+    /**
+     * 获取角色对象
+     * @param id 角色ID
+     * @return
+     */
+    static Role get(int id) {
         List<Role> list = roleList
         for (role in list) {
-            if (StringUtils.equals(role.id.toString(), id)) {
+            if (role.id == id) {
                 return role
             }
         }
@@ -57,7 +75,7 @@ final class RoleCache {
 
     /**
      * 获取角色拥有的用户数量
-     * @param roleID
+     * @param roleID 角色ID
      * @return
      */
     static int getUserCountInRole(int roleID) {
@@ -73,7 +91,7 @@ final class RoleCache {
 
     /**
      * 判断是否存在角色
-     * @param roleID
+     * @param roleID 角色ID
      * @return
      */
     static boolean isExists(int roleID) {

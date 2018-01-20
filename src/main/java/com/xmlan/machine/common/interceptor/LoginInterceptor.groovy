@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
 /**
+ * 登录验证拦截器 <br/>
  * Created by ayakurayuki on 2017/12/22-14:42. <br/>
  * Package: com.xmlan.machine.common.interceptor <br/>
  */

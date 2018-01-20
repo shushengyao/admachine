@@ -6,26 +6,29 @@ import javax.validation.constraints.NotNull
 
 /**
  * Created by ayakurayuki on 2017/12/13-08:55.
+ * <p>
  * Package: com.xmlan.machine.module.advertisement.entity
+ * <p>
+ * 广告实体类
  */
 class Advertisement implements Serializable {
 
-    private int id
     // 广告ID
-    private String name
+    private int id
     // 广告名称
-    private String url
+    private String name
     // 图片或视频地址
-    private int time
+    private String url
     // 播放时间
-    private String addTime
+    private int time
     // 加入时间
-    private int machineID
+    private String addTime
     // 机器识别码
-    private int userID
+    private int machineID
     // 用户ID
-    private String remark
+    private int userID
     // 备注
+    private String remark
 
     int getId() {
         return id

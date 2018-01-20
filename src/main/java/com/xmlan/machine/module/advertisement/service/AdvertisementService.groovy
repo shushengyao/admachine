@@ -17,12 +17,21 @@ import javax.servlet.http.HttpServletRequest
 
 /**
  * Created by ayakurayuki on 2017/12/13-08:57.
+ * <p>
  * Package: com.xmlan.machine.module.advertisement.service
+ * <p>
+ * 广告业务逻辑层
  */
 @Service("AdvertisementService")
 @Transactional(readOnly = true)
 class AdvertisementService extends BaseService<Advertisement, AdvertisementDAO> {
 
+    /**
+     * 页面上传广告媒体资源
+     * @param id 广告ID
+     * @param request
+     * @return 操作响应码
+     */
     int uploadMedia(String id, HttpServletRequest request) {
         def advertisement = dao.get(id)
         def jsonString = UploadUtils.uploadImages(request)
@@ -36,6 +45,13 @@ class AdvertisementService extends BaseService<Advertisement, AdvertisementDAO> 
         return DONE
     }
 
+    /**
+     * 移动终端上传广告媒体资源
+     * @param id 广告ID
+     * @param time 播放时间
+     * @param file 文件
+     * @return 操作响应码
+     */
     int uploadMedia(String id, int time, MultipartFile file) {
         def advertisement = dao.get(id)
         def jsonString = UploadUtils.uploadImages(file)
@@ -50,6 +66,11 @@ class AdvertisementService extends BaseService<Advertisement, AdvertisementDAO> 
         return DONE
     }
 
+    /**
+     * 获取广告数统计
+     * @param list 包含广告机的列表
+     * @return 包含统计数的列表
+     */
     static List<AdvertisementCount> getAdvertisementCount(List<AdvertisementMachine> list) {
         List<AdvertisementCount> counts = Lists.newArrayList()
         list.each {
@@ -61,6 +82,11 @@ class AdvertisementService extends BaseService<Advertisement, AdvertisementDAO> 
         return counts
     }
 
+    /**
+     * 移动终端无分页查询列表
+     * @param advertisement
+     * @return
+     */
     List<Advertisement> findList(Advertisement advertisement) {
         dao.findList advertisement
     }

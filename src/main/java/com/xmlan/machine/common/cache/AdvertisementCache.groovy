@@ -9,6 +9,7 @@ import com.xmlan.machine.module.advertisement.entity.Advertisement
 
 /**
  * Created by ayakurayuki on 2017/12/26-14:28.
+ * <p>
  * Package: com.xmlan.machine.common.cache
  */
 final class AdvertisementCache {
@@ -34,6 +35,11 @@ final class AdvertisementCache {
         return map
     }
 
+    /**
+     * 获取缓存中的list
+     * @param key
+     * @return
+     */
     static List getList(String key) {
         Map<String, List> map = initialCacheMap()
         List list = map.get(key)

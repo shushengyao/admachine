@@ -23,7 +23,7 @@ class ColorPrintUtils {
      * @param objects as String.format()'s objects
      * @return Message with color!
      */
-    private static String Format(String color, String message, Object... objects) {
+    public static String Format(String color, String message, Object... objects) {
         return color + (String.format(message, objects)) + WHITE
     }
 

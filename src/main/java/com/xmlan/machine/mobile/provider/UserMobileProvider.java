@@ -12,7 +12,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
  * Created by ayakurayuki on 2018/1/12-13:33.
+ * <p>
  * Package: com.xmlan.machine.mobile.provider
+ * <p>
+ * 手机端 用户数据服务接口
  */
 @Controller
 @RequestMapping("${mobilePath}/user")
@@ -20,9 +23,9 @@ public class UserMobileProvider extends BaseController {
 
     /**
      * 获取登录用户的信息
-     *
+     * <p>
      * URL: /mob/user/self/{id}/{token}
-     *
+     * <p>
      * Method: Get
      *
      * @param id    int 用户ID

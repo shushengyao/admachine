@@ -13,6 +13,7 @@ import com.xmlan.machine.module.advertisementMachine.entity.SimpleAdvertisementM
 
 /**
  * Created by ayakurayuki on 2017/12/29-10:35.
+ * <p>
  * Package: com.xmlan.machine.common.cache
  */
 final class AdvertisementMachineCache {
@@ -42,6 +43,11 @@ final class AdvertisementMachineCache {
         return map
     }
 
+    /**
+     * 获取缓存中的list
+     * @param key
+     * @return
+     */
     static List getList(String key) {
         Map<String, List> map = initialCacheMap()
         List list = map.get(key)
@@ -69,7 +75,7 @@ final class AdvertisementMachineCache {
 
     /**
      * 获取用户拥有的广告机数量
-     * @param userID
+     * @param userID 用户ID
      * @return
      */
     static int getMachineCount(int userID) {
@@ -81,6 +87,15 @@ final class AdvertisementMachineCache {
             }
         })
         return count
+    }
+
+    /**
+     * 管理员获取总的广告机数量
+     * @return
+     */
+    static int getMachineCount() {
+        List<AdvertisementMachine> list = advertisementMachineList
+        return list.size()
     }
 
     /**
@@ -101,7 +116,7 @@ final class AdvertisementMachineCache {
 
     /**
      * 根据ID获取名称
-     * @param id
+     * @param id 广告机ID
      * @return
      */
     static String getMachineNameByID(int id) {
@@ -131,7 +146,7 @@ final class AdvertisementMachineCache {
 
     /**
      * 根据ID获取广告机
-     * @param id 系统内的ID
+     * @param id 广告机ID
      * @return
      */
     static AdvertisementMachine get(int id) {
@@ -145,8 +160,8 @@ final class AdvertisementMachineCache {
     }
 
     /**
-     *
-     * @param machineID
+     * 获取传感器对象
+     * @param machineID 广告机ID
      * @return
      */
     static MachineSensor getSensorInfo(int machineID) {

@@ -11,6 +11,7 @@ import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Component
 
 /**
+ * 缓存刷新调度任务 <br/>
  * Created by ayakurayuki on 2017/12/26-12:00. <br/>
  * Package: com.xmlan.machine.common.task <br/>
  */

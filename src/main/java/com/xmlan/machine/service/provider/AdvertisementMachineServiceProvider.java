@@ -19,7 +19,10 @@ import java.util.HashMap;
 
 /**
  * Created by ayakurayuki on 2018/1/8-15:43.
+ * <p>
  * Package: com.xmlan.machine.service.provider
+ * <p>
+ * 广告端 广告机服务接口
  */
 @Controller
 @RequestMapping("${servicePath}/advertisementMachine")
@@ -30,9 +33,9 @@ public class AdvertisementMachineServiceProvider extends BaseController {
 
     /**
      * 获取广告机对象信息
-     *
+     * <p>
      * URL: /serv/advertisementMachine/get/{id}
-     *
+     * <p>
      * Method: Get
      *
      * @param id int 广告机ID
@@ -46,9 +49,9 @@ public class AdvertisementMachineServiceProvider extends BaseController {
 
     /**
      * 注册广告机
-     *
+     * <p>
      * URL: /serv/advertisementMachine/register
-     *
+     * <p>
      * Method: POST
      *
      * @param advertisementMachine AdvertisementMachine 广告机对象
@@ -84,9 +87,9 @@ public class AdvertisementMachineServiceProvider extends BaseController {
 
     /**
      * 更新广告机的经纬坐标
-     *
+     * <p>
      * URL: /serv/advertisementMachine/gps/update/{id}
-     *
+     * <p>
      * Method: Get
      *
      * @param id        int 广告机ID

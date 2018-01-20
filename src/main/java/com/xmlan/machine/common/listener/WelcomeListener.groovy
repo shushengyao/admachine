@@ -5,6 +5,9 @@ import com.xmlan.machine.common.util.ColorPrintUtils
 import javax.servlet.ServletContextEvent
 import javax.servlet.ServletContextListener
 
+/**
+ * WebServer启动初始化
+ */
 class WelcomeListener implements ServletContextListener {
 
     @Override
@@ -39,9 +42,9 @@ class WelcomeListener implements ServletContextListener {
     }
 
     private void initialization() {
-        def url = getClass().getClassLoader().getResource("requirements.txt")
+        def url = getClass().classLoader.getResource("requirements.txt")
         if (null != url) {
-            new File(url.getFile()).eachLine { requirement ->
+            new File(url.file).eachLine { requirement ->
                 def pip3 = Runtime.runtime.exec "pip3 install ${requirement}"
                 pip3.inputStream.eachLine { response ->
                     println response

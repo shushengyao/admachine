@@ -6,12 +6,18 @@ import org.apache.ibatis.annotations.Param
 import org.springframework.stereotype.Repository
 
 /**
- * Created by ayakurayuki on 2018/1/5-15:31.
- * Package: com.xmlan.machine.module.advertisementMachine.dao
+ * 天气传感器DAO <br/>
+ * Created by ayakurayuki on 2018/1/5-15:31. <br/>
+ * Package: com.xmlan.machine.module.advertisementMachine.dao <br/>
  */
 @Repository
 interface MachineSensorDAO extends BaseDAO<MachineSensor> {
 
+    /**
+     * 通过广告机ID获取天气信息
+     * @param machineID 广告机ID
+     * @return
+     */
     MachineSensor getByMachineID(@Param("machineID") int machineID)
 
 }

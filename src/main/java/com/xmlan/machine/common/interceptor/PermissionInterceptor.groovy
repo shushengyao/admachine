@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
 /**
+ * 权限拦截器 <br/>
  * Created by ayakurayuki on 2017/12/26-14:03. <br/>
  * Package: com.xmlan.machine.common.interceptor <br/>
  */

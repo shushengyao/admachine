@@ -10,9 +10,9 @@ import org.springframework.stereotype.Component;
 
 /**
  * 切面刷新缓存
- *
+ * <p>
  * Created by ayakurayuki on 2018/1/3-10:34.
- *
+ * <p>
  * Package: com.xmlan.machine.common.aspect
  */
 @Component
@@ -21,8 +21,12 @@ public class CacheAspect {
 
     private static final Logger logger = LogManager.getLogger(CacheAspect.class);
 
+    private final CacheManager cacheManager;
+
     @Autowired
-    public CacheManager cacheManager;
+    public CacheAspect(CacheManager cacheManager) {
+        this.cacheManager = cacheManager;
+    }
 
     /**
      * 切入insert()方法

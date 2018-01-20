@@ -52,8 +52,8 @@ class UserController extends BaseController {
     @ResponseBody
     Map<String, Object> detail(@PathVariable int id) {
         Map<String, Object> data = Maps.newHashMap()
-        data.put("user", UserCache.get(id))
-        data.put("roleName", RoleCache.get(UserCache.get(id).roleID.toString()).name)
+        data['user'] = UserCache.get(id)
+        data['roleName'] = RoleCache.get(UserCache.get(id).roleID).name
         return data
     }
 
