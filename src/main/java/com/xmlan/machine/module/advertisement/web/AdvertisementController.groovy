@@ -213,6 +213,7 @@ class AdvertisementController extends BaseController {
         HashMap<String, Integer> map = Maps.newHashMap()
         map['advertisementID'] = advertisementID
         map['type'] = TYPE_MEDIA_UPDATE
+        map['needUpdate'] = YES
         def pushClient = new JPushClient(Global.masterSecret, Global.appKey, null, ClientConfig.instance)
         def payload = PushUtils.buildPayload(machine.toString(), message, map)
         try {

@@ -217,6 +217,7 @@ public class AdvertisementMobileServiceProvider extends BaseController {
         HashMap<String, Integer> pushData = Maps.newHashMap();      // 封装推送体数据
         pushData.put("advertisementID", advertisement.getId());     // 添加推送体数据内容（广告ID）
         pushData.put("type", TYPE_MEDIA_UPDATE);
+        pushData.put("needUpdate", YES);
         // 创建推送客户端
         JPushClient client = new JPushClient(Global.getMasterSecret(), Global.getAppKey(), null, ClientConfig.getInstance());
         // 创建预处理推送体
