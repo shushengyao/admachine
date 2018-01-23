@@ -65,6 +65,7 @@ public class AdvertisementMachineServiceProvider extends BaseController {
             HashMap<String, Object> map = Maps.newHashMap();
             map.put("responseCode", DATABASE_DO_NOTHING);
             map.put("errorMessage", "Exists machine with the same code number.");
+            map.put("machineID", temp.getId());
             return map;
         }
         if (StringUtils.isBlank(advertisementMachine.getAddTime())) {
