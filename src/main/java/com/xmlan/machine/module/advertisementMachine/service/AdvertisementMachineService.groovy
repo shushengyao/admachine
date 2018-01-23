@@ -57,6 +57,15 @@ class AdvertisementMachineService extends BaseService<AdvertisementMachine, Adve
         return super.delete(machine)
     }
 
+    int updateLocation(int id, String longitude, String latitude) {
+        if (AdvertisementMachineCache.get(id) != null) {
+            dao.updateLocation(id, longitude, latitude)
+            return DONE
+        } else {
+            return NO_SUCH_ROW
+        }
+    }
+
     AdvertisementMachine getByCodeNumber(String codeNumber) {
         return dao.getByCodeNumber(codeNumber)
     }
@@ -111,7 +120,11 @@ class AdvertisementMachineService extends BaseService<AdvertisementMachine, Adve
         return counts
     }
 
-    // provider support
+    /**
+     * 提供给服务接口的列表查询
+     * @param advertisementMachine 查询条件，条件是按照用户ID查询
+     * @return 查询列表
+     */
     static List<AdvertisementMachine> findForProvider(AdvertisementMachine advertisementMachine) {
         List<AdvertisementMachine> machineList = AdvertisementMachineCache.advertisementMachineList
         List<AdvertisementMachine> filteredList = Lists.newArrayList()

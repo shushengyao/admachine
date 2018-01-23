@@ -147,6 +147,14 @@
         where codeNumber = #{codeNumber}
     </select>
 
+    <update id="updateLocation">
+        update advertisement_machine
+        set
+            longitude = #{longitude},
+            latitude  = #{latitude}
+        where id = #{id}
+    </update>
+
     <update id="lightControl">
         update advertisement_machine
         set light = #{operate}

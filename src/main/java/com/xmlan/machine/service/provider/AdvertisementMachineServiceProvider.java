@@ -91,7 +91,7 @@ public class AdvertisementMachineServiceProvider extends BaseController {
      * <p>
      * URL: /serv/advertisementMachine/gps/update/{id}
      * <p>
-     * Method: Get
+     * Method: Get/Post
      *
      * @param id        int 广告机ID
      * @param longitude String 经度
@@ -102,20 +102,13 @@ public class AdvertisementMachineServiceProvider extends BaseController {
     @ResponseBody
     public HashMap<String, Object> gpsUpdate(@PathVariable("id") int id, String longitude, String latitude) {
         HashMap<String, Object> map = Maps.newHashMap();
-        AdvertisementMachine machine = AdvertisementMachineCache.get(id);
-        if (machine == null) {
-            map.put("responseCode", NO_SUCH_ROW);
-            map.put("message", "No ad machine selected.");
-            return map;
-        }
         if (NumberUtils.isNumber(longitude) && NumberUtils.isNumber(latitude)) {
-            machine.setLongitude(longitude);
-            machine.setLatitude(latitude);
-            if (service.update(machine) != 0) {
+            int responseCode = service.updateLocation(id, longitude, latitude);
+            if (responseCode == DONE) {
                 map.put("responseCode", DONE);
                 map.put("message", "Updated!");
             } else {
-                map.put("responseCode", FAILURE);
+                map.put("responseCode", responseCode);
                 map.put("message", "Update failed!");
             }
         } else {
