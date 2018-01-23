@@ -148,6 +148,53 @@ public class AdvertisementMobileServiceProvider extends BaseController {
     }
 
     /**
+     * 手动推送通知广告机需要更新列表
+     * <p>
+     * URL: /mob/ad/manualUpdate
+     * <p>
+     * Method: Post
+     *
+     * @param machineID int 广告机ID
+     * @param token     String token身份验证
+     * @return 推送结果
+     */
+    @RequestMapping(value = "/manualUpdate", method = RequestMethod.POST, produces = "application/json; charset=utf-8")
+    @ResponseBody
+    public HashMap<String, Object> manualUpdate(int machineID, String token) {
+        HashMap<String, Object> map = Maps.newHashMap();
+        if (!TokenUtils.validateToken(token)) {
+            map.put("responseCode", FAILURE);
+            map.put("message", "身份校验失败");
+            return map;
+        }
+        // 获取广告机
+        AdvertisementMachine machine = AdvertisementMachineCache.get(machineID);
+        HashMap<String, Integer> pushData = Maps.newHashMap();      // 封装推送体数据
+        pushData.put("type", TYPE_MEDIA_UPDATE);
+        pushData.put("needUpdate", YES);
+        // 创建推送客户端
+        JPushClient client = new JPushClient(Global.getMasterSecret(), Global.getAppKey(), null, ClientConfig.getInstance());
+        // 创建预处理推送体
+        PushPayload payload = PushUtils.buildPayload(String.valueOf(machine.getId()), "广告列表需要更新", pushData);
+        PushResult result;
+        try {
+            result = client.sendPush(payload);
+            map.put("responseCode", result.statusCode);
+            map.put("message", "手动推送更新");
+            logger.trace(result.getOriginalContent());
+        } catch (APIConnectionException e) {
+            map.put("responseCode", ERROR_API_CONNECTION_EXCEPTION);
+            map.put("message", "Push connect error.");
+            logger.error("API exception with: " + e.getMessage());
+        } catch (APIRequestException e) {
+            map.put("responseCode", ERROR_API_REQUEST_EXCEPTION);
+            map.put("message", "Push request error.");
+            logger.error("API exception with: " + e.getMessage());
+        }
+        return map;
+    }
+
+    /**
      * 手动推送通知广告机有更新
      * <p>
      * URL: /mob/ad/manualPush
@@ -160,7 +207,7 @@ public class AdvertisementMobileServiceProvider extends BaseController {
      */
     @RequestMapping(value = "/manualPush", method = RequestMethod.POST, produces = "application/json; charset=utf-8")
     @ResponseBody
-    public Map manualPush(int id, String token) {
+    public HashMap<String, Object> manualPush(int id, String token) {
         HashMap<String, Object> map = Maps.newHashMap();
         if (!TokenUtils.validateToken(token)) {
             map.put("responseCode", FAILURE);
@@ -209,7 +256,7 @@ public class AdvertisementMobileServiceProvider extends BaseController {
      * @param id 广告ID
      * @return 处理结果数据
      */
-    private Map pushUpdate(int id, int responseCode, String message) {
+    private HashMap<String, Object> pushUpdate(int id, int responseCode, String message) {
         // 获取广告对象
         Advertisement advertisement = AdvertisementCache.get(id);
         // 获取广告机对象
@@ -234,9 +281,11 @@ public class AdvertisementMobileServiceProvider extends BaseController {
             map.put("message", message);
             logger.trace(result.getOriginalContent());
         } catch (APIConnectionException e) {
+            map.put("responseCode", ERROR_API_CONNECTION_EXCEPTION);
             map.put("message", "Push connect error.");
             logger.error("API exception with: " + e.getMessage());
         } catch (APIRequestException e) {
+            map.put("responseCode", ERROR_API_REQUEST_EXCEPTION);
             map.put("message", "Push request error.");
             logger.error("API exception with: " + e.getMessage());
         }

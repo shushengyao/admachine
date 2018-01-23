@@ -81,6 +81,14 @@ class BaseBean {
      * ROOT管理员不能被修改到其他角色
      */
     public static final int ROOT_ADMIN_CAN_NOT_CHANGE_ROLE = -202
+    /**
+     * 极光APIConnectionException
+     */
+    public static final int ERROR_API_CONNECTION_EXCEPTION = -301
+    /**
+     * 极光APIRequestException
+     */
+    public static final int ERROR_API_REQUEST_EXCEPTION = -302
 
     // ========================= 其他类 ========================= //
     /**
