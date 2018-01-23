@@ -68,7 +68,6 @@ class BaseBean {
      * 错误的原密码
      */
     public static final int INCORRECT_OLD_PASSWD = 102
-
     /**
      * 角色下还有所属用户
      */
