@@ -1,7 +1,6 @@
 package com.xmlan.machine.common.interceptor
 
 import com.xmlan.machine.common.util.ColorPrintUtils
-import com.xmlan.machine.common.util.DateUtils
 import org.apache.logging.log4j.LogManager
 import org.springframework.web.servlet.HandlerInterceptor
 import org.springframework.web.servlet.ModelAndView
@@ -21,10 +20,7 @@ class URLInterceptor implements HandlerInterceptor {
     boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
         logger.trace(ColorPrintUtils.Format(
                 ColorPrintUtils.PURPLE,
-                "%-26s%-7s%s",
-                DateUtils.GetDate('yyyy-MM-dd HH:mm:ss.SSS'),
-                request.method,
-                request.requestURL
+                "${request.method} - ${request.requestURL}"
         ))
         return true
     }
