@@ -321,7 +321,7 @@
             <div class="modal-content">
                 <h4>注意！</h4>
                 <input id="delete-confirm-id" name="id" type="hidden"/>
-                <p>是否要删除用户 <span id="delete-name"></span> ?</p>
+                <p>是否要删除广告 <span id="delete-name"></span> ?</p>
             </div>
             <div class="modal-footer">
                 <a href="#" class="modal-action modal-close waves-effect waves-green btn-flat">不是</a>
@@ -357,7 +357,12 @@
         });
         $("#detail-modal").modal();
         $("#upload-new-image-or-video").modal();
-        $("#delete-modal").modal();
+        $("#delete-modal").modal({
+            complete: function () {
+                $("#delete-confirm-id").val(-2);
+                $("#delete-name").text(null);
+            }
+        });
         $("#machineID").material_select();
         toast('[[${message}]]');
     });
