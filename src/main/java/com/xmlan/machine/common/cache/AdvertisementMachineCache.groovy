@@ -137,7 +137,7 @@ final class AdvertisementMachineCache {
     static AdvertisementMachine get(String codeNumber) {
         List<AdvertisementMachine> list = advertisementMachineList
         for (item in list) {
-            if (item.codeNumber == codeNumber) {
+            if (StringUtils.equals(item.codeNumber, codeNumber)) {
                 return item
             }
         }
