@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.HashMap;
@@ -55,17 +56,17 @@ public class AdvertisementMachineMobileServiceProvider extends BaseController {
     /**
      * 通过ID获取广告机对象信息
      * <p>
-     * URL: /mob/machine/get/{id}/{token}
+     * URL: /mob/machine/get
      * <p>
-     * Method: Get
+     * Method: Post
      *
      * @param id    广告机ID
      * @param token 用户鉴权用的token
      * @return 广告机对象信息，token验证通过则返回对象，不通过则返回null
      */
-    @RequestMapping(value = "/get/{id}/{token}", produces = "application/json; charset=utf-8")
+    @RequestMapping(value = "/get", method = RequestMethod.POST, produces = "application/json; charset=utf-8")
     @ResponseBody
-    public AdvertisementMachine get(@PathVariable String id, @PathVariable("token") String token) {
+    public AdvertisementMachine get(String id, String token) {
         if (!TokenUtils.validateToken(token)) {
             return null;
         }
@@ -75,17 +76,17 @@ public class AdvertisementMachineMobileServiceProvider extends BaseController {
     /**
      * 通过userID查询用户拥有的广告机列表
      * <p>
-     * URL: /mob/machine/find/{userID}/{token}
+     * URL: /mob/machine/find
      * <p>
-     * Method: Get
+     * Method: Post
      *
      * @param userID 用户ID
      * @param token  用户鉴权用的token
      * @return 广告机列表，token验证通过则返回列表，不通过则返回null
      */
-    @RequestMapping(value = "/find/{userID}/{token}", produces = "application/json; charset=utf-8")
+    @RequestMapping(value = "/find", method = RequestMethod.POST, produces = "application/json; charset=utf-8")
     @ResponseBody
-    public List<AdvertisementMachine> find(@PathVariable int userID, @PathVariable("token") String token) {
+    public List<AdvertisementMachine> find(int userID, String token) {
         if (!TokenUtils.validateToken(token)) {
             return null;
         }
@@ -97,9 +98,9 @@ public class AdvertisementMachineMobileServiceProvider extends BaseController {
     /**
      * 通过最大经纬度和最小经纬度查询区域内的广告机
      * <p>
-     * URL: /mob/machine/position/query/{token}
+     * URL: /mob/machine/position/query
      * <p>
-     * Method: Get/Post
+     * Method: Post
      *
      * @param minLongitude  String 最小经度
      * @param maxLongitude  String 最大经度
@@ -108,9 +109,9 @@ public class AdvertisementMachineMobileServiceProvider extends BaseController {
      * @param token         String token身份验证
      * @return 查询列表
      */
-    @RequestMapping(value = "/position/query/{token}", produces = "application/json; charset=utf-8")
+    @RequestMapping(value = "/position/query", produces = "application/json; charset=utf-8")
     @ResponseBody
-    public List<AdvertisementMachine> positionQuery(String minLongitude, String maxLongitude, String minLatitude, String maxLatitude, @PathVariable("token") String token) {
+    public List<AdvertisementMachine> positionQuery(String token, String minLongitude, String maxLongitude, String minLatitude, String maxLatitude) {
         if (!TokenUtils.validateToken(token)) {
             return null;
         }
