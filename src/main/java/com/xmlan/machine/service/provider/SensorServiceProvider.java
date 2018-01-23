@@ -22,7 +22,7 @@ import java.util.HashMap;
  */
 @Controller
 @RequestMapping("${servicePath}/sensor")
-class SensorServiceProvider extends BaseController {
+public class SensorServiceProvider extends BaseController {
 
     @Autowired
     private MachineSensorService sensorService;
