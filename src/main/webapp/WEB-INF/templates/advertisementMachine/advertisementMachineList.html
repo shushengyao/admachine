@@ -167,7 +167,7 @@
                             <li>
                                 <a class="btn-floating red darken-1 waves-effect waves-light tooltipped btn modal-trigger"
                                    data-position="top" data-delay="50" data-tooltip="删除" href="#delete-modal"
-                                   th:onclick="'javascript:prepareForDeleting(\''+${item.id}+'\',\''+${item.name}+'\')'">
+                                   th:onclick="'javascript:prepareForDeleting(\''+${item.id}+'\')'">
                                     <i class="material-icons">delete</i>
                                 </a>
                             </li>
@@ -196,7 +196,7 @@
                             <li>
                                 <a class="btn-floating red darken-1 waves-effect waves-light tooltipped btn modal-trigger"
                                    data-position="top" data-delay="50" data-tooltip="删除" href="#delete-modal"
-                                   th:onclick="'javascript:prepareForDeleting(\''+${item.id}+'\',\''+${item.name}+'\')'">
+                                   th:onclick="'javascript:prepareForDeleting(\''+${item.id}+'\')'">
                                     <i class="material-icons">delete</i>
                                 </a>
                             </li>
@@ -338,9 +338,15 @@
         });
     }
 
-    function prepareForDeleting(id, name) {
+    function prepareForDeleting(id) {
         $("#delete-confirm-id").val(id);
-        $("#delete-name").text(name);
+        $.ajax({
+            url: '[[${adminPath}]]/advertisementMachine/detail/' + id,
+            type: "GET",
+            success: function (data) {
+                $("#delete-name").text(data['ad'].name);
+            }
+        })
     }
 </script>
 </body>
