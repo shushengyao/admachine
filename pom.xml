@@ -7,7 +7,7 @@
     <groupId>com.xmlan</groupId>
     <artifactId>admachine</artifactId>
     <packaging>war</packaging>
-    <version>1.03-SNAPSHOT</version>
+    <version>1.04-SNAPSHOT</version>
     <name>AD_Machine</name>
 
     <repositories>

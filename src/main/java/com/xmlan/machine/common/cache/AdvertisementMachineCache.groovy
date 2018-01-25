@@ -167,7 +167,7 @@ final class AdvertisementMachineCache {
     static MachineSensor getSensorInfo(int machineID) {
         def list = machineSensorList
         for (item in list) {
-            if (item.machineID == machineID.toString()) {
+            if (StringUtils.equals(item.machineID, machineID.toString())) {
                 return item
             }
         }
