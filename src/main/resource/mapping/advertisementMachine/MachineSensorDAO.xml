@@ -10,7 +10,7 @@
         <result column="temperature" property="temperature"/>
         <result column="humidity" property="humidity"/>
         <result column="pm25" property="pm25"/>
-        <result column="pm10" property="pm10"/>
+        <result column="brightness" property="brightness"/>
         <result column="machineID" property="machineID"/>
     </resultMap>
 
@@ -19,7 +19,7 @@
         t.temperature as "temperature",
         t.humidity as "humidity",
         t.pm25 as "pm25",
-        t.pm10 as "pm10",
+        t.brightness as "brightness",
         t.machineID as "machineID"
     </sql>
 
@@ -52,8 +52,8 @@
             <if test="pm25 != null and pm25 != ''">
                 and t.pm25 = #{pm25}
             </if>
-            <if test="pm10 != null and pm10 != ''">
-                and t.pm10 = #{pm10}
+            <if test="brightness != null and brightness != ''">
+                and t.brightness = #{brightness}
             </if>
             <if test="machineID != null and machineID != ''">
                 and t.machineID = #{machineID}
@@ -72,14 +72,14 @@
         temperature,
         humidity,
         pm25,
-        pm10,
+        brightness,
         machineID
         ) values (
         id,
         #{temperature},
         #{humidity},
         #{pm25},
-        #{pm10},
+        #{brightness},
         #{machineID}
         );
     </insert>
@@ -90,7 +90,7 @@
         temperature = #{temperature},
         humidity = #{humidity},
         pm25 = #{pm25},
-        pm25 = #{pm25}
+        brightness = #{brightness}
         where machineID = #{machineID}
     </update>
 
