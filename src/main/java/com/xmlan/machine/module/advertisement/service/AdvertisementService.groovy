@@ -27,16 +27,20 @@ import javax.servlet.http.HttpServletRequest
 @Transactional(readOnly = true)
 class AdvertisementService extends BaseService<Advertisement, AdvertisementDAO> {
 
-    @Override
-    int delete(Advertisement entity) {
-        def fileURL = entity.url
-        super.delete(entity)
-        if (UploadUtils.isMedia(fileURL)) {
-            new File("${Global.mediaPath}/${fileURL}").delete()
+    private static int deleteMedia(Advertisement entity) {
+        if (UploadUtils.isMedia(entity.url)) {
+            new File("${Global.mediaPath}/${entity.url}").delete()
             return DONE
         } else {
             return LOST_MEDIA_RESOURCE_WHEN_DELETE
         }
+    }
+
+    @Override
+    int delete(Advertisement entity) {
+        def result = deleteMedia(entity) // 删除条目前删除媒体文件
+        super.delete(entity)
+        return result
     }
 
     /**
@@ -47,6 +51,7 @@ class AdvertisementService extends BaseService<Advertisement, AdvertisementDAO> 
      */
     int uploadMedia(String id, HttpServletRequest request) {
         def advertisement = dao.get(id)
+        deleteMedia(advertisement) // 更新前删除旧的媒体文件
         def jsonString = UploadUtils.uploadImages(request)
         if (jsonString == '[]') {
             return FAILURE
@@ -67,6 +72,7 @@ class AdvertisementService extends BaseService<Advertisement, AdvertisementDAO> 
      */
     int uploadMedia(String id, int time, MultipartFile file) {
         def advertisement = dao.get(id)
+        deleteMedia(advertisement) // 更新前删除旧的媒体文件
         def jsonString = UploadUtils.uploadImages(file)
         if (jsonString == '[]') {
             return FAILURE
