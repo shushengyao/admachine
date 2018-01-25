@@ -47,7 +47,7 @@ abstract class BaseService<T, DAO extends BaseDAO<T>> extends BaseBean {
      * @return 查询到的条目列表 ( 或null )
      */
     List<T> findList(T entity, int pageNo) {
-        logger.trace "${this.class.name}: findList(${entity.toString()}).".toString()
+        logger.trace "${this.class.name}: findList(${entity.class.name}).".toString()
         PageHelper.startPage pageNo, pageSize
         dao.findList entity
     }
@@ -58,7 +58,7 @@ abstract class BaseService<T, DAO extends BaseDAO<T>> extends BaseBean {
      * @return
      */
     int insert(T entity) {
-        logger.trace "${this.class.name}: insert(${entity.toString()}).".toString()
+        logger.trace "${this.class.name}: insert(${entity.class.name}).".toString()
         dao.insert entity
     }
 
@@ -68,7 +68,7 @@ abstract class BaseService<T, DAO extends BaseDAO<T>> extends BaseBean {
      * @return
      */
     int update(T entity) {
-        logger.trace "${this.class.name}: update(${entity.toString()}).".toString()
+        logger.trace "${this.class.name}: update(${entity.class.name}).".toString()
         dao.update entity
     }
 
@@ -78,7 +78,7 @@ abstract class BaseService<T, DAO extends BaseDAO<T>> extends BaseBean {
      * @return
      */
     int delete(T entity) {
-        logger.trace "${this.class.name}: delete(${entity.toString()}).".toString()
+        logger.trace "${this.class.name}: delete(${entity.class.name}).".toString()
         dao.delete entity
     }
 

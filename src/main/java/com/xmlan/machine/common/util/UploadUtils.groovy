@@ -95,15 +95,15 @@ class UploadUtils {
         return fileList.isEmpty() ? "[]" : JsonUtils.toJsonString(json)
     }
 
-    private static boolean isMedia(String extension) {
+    static boolean isMedia(String extension) {
         return extension.toLowerCase() ==~ /[\s\S]*\.(png|jpg|jpeg|bmp|git|tif|tiff|mp4|wmv|avi|flv|3gp|mkv)/
     }
 
-    private static boolean isVideo(String extension) {
+    static boolean isVideo(String extension) {
         return extension.toLowerCase() ==~ /[\s\S]*\.(mp4|wmv|avi|flv|3gp|mkv)/
     }
 
-    private static boolean isImage(String extension) {
+    static boolean isImage(String extension) {
         return extension.toLowerCase() ==~ /[\s\S]*\.(png|jpg|jpeg|bmp|git|tif|tiff)/
     }
 

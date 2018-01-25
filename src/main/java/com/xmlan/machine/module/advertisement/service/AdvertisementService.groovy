@@ -3,6 +3,7 @@ package com.xmlan.machine.module.advertisement.service
 import com.google.common.collect.Lists
 import com.xmlan.machine.common.base.BaseService
 import com.xmlan.machine.common.cache.AdvertisementCache
+import com.xmlan.machine.common.config.Global
 import com.xmlan.machine.common.util.JsonUtils
 import com.xmlan.machine.common.util.UploadUtils
 import com.xmlan.machine.module.advertisement.dao.AdvertisementDAO
@@ -25,6 +26,18 @@ import javax.servlet.http.HttpServletRequest
 @Service("AdvertisementService")
 @Transactional(readOnly = true)
 class AdvertisementService extends BaseService<Advertisement, AdvertisementDAO> {
+
+    @Override
+    int delete(Advertisement entity) {
+        def fileURL = entity.url
+        super.delete(entity)
+        if (UploadUtils.isMedia(fileURL)) {
+            new File("${Global.mediaPath}/${fileURL}").delete()
+            return DONE
+        } else {
+            return LOST_MEDIA_RESOURCE_WHEN_DELETE
+        }
+    }
 
     /**
      * 页面上传广告媒体资源

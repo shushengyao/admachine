@@ -44,6 +44,10 @@ class BaseBean {
      * 默认
      */
     public static final int DEFAULT = -6
+    /**
+     * 媒体文件缺失
+     */
+    public static final int LOST_MEDIA_RESOURCE_WHEN_DELETE = -7
 
     // ========================= 标记类 ========================= //
     /**
