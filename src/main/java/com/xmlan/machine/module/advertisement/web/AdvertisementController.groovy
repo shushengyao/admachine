@@ -183,7 +183,7 @@ class AdvertisementController extends BaseController {
         if (responseCode == DONE) {
             def ad = AdvertisementCache.get(id)
             // 推送
-            push(ad.machineID, id, "New advertisement media.")
+            push(ad.machineID, id, "New ad media.")
             addMessage attributes, "上传成功"
         }
         if (responseCode == FAILURE) {
