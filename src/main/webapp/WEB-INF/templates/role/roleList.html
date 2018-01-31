@@ -18,6 +18,7 @@
 <!--/*@thymesVar id="page" type="com.github.pagehelper.PageInfo<com.xmlan.machine.module.role.entity.Role>"*/-->
 <!--/*@thymesVar id="name" type="java.lang.String"*/-->
 <!--/*@thymesVar id="userCount" type="java.util.List<com.xmlan.machine.module.role.entity.RoleCount>"*/-->
+<!--/*@thymesVar id="deleteToken" type="java.lang.String"*/-->
 <!--/* </editor-fold> */-->
 
 <body>
@@ -246,6 +247,7 @@
             <div class="modal-content">
                 <h4>注意！</h4>
                 <input id="delete-confirm-id" name="id" type="hidden"/>
+                <input name="deleteToken" type="hidden" th:value="${deleteToken}">
                 <p>是否要删除角色 <span id="delete-name"></span> ?</p>
             </div>
             <div class="modal-footer">
@@ -308,6 +310,9 @@
             type: "GET",
             success: function (data) {
                 $("#delete-name").text(data['ad'].name);
+                setTimeout(function () {
+                    location.reload()
+                }, 3000);
             }
         })
     }

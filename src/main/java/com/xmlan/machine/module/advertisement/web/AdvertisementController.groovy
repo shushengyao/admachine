@@ -104,6 +104,8 @@ class AdvertisementController extends BaseController {
             // 管理员则通过总的广告机数量判断可否添加广告
             model.addAttribute "machines", AdvertisementMachineCache.machineCount
         }
+        model.addAttribute "deleteToken", TokenUtils.getFormToken(request, "deleteToken")
+        model.addAttribute "uploadToken", TokenUtils.getFormToken(request, "uploadToken")
 
         return "advertisement/advertisementList"
     }
@@ -119,6 +121,7 @@ class AdvertisementController extends BaseController {
         model.addAttribute "advertisement", advertisement
         model.addAttribute "machineList", AdvertisementMachineCache.dropdownAdvertisementMachineList
         model.addAttribute "userList", UserCache.dropdownUserList
+        model.addAttribute "token", TokenUtils.getFormToken(request)
         "advertisement/advertisementForm"
     }
 
@@ -131,7 +134,12 @@ class AdvertisementController extends BaseController {
      * @return
      */
     @RequestMapping(value = "/save/{id}")
-    String save(Advertisement advertisement, @PathVariable int id, Model model, RedirectAttributes redirectAttributes) {
+    String save(Advertisement advertisement,
+                @PathVariable int id, HttpServletRequest request, Model model, RedirectAttributes redirectAttributes) {
+        if (!TokenUtils.validateFormToken(request, request.getParameter("token"))) {
+            addMessage redirectAttributes, "本次提交的表单验证失败"
+            return "redirect:$adminPath/advertisement/list/1"
+        }
         if (!beanValidator(model, advertisement)) {
             return form(advertisement, model)
         }
@@ -161,7 +169,11 @@ class AdvertisementController extends BaseController {
      * @return
      */
     @RequestMapping(value = "/delete")
-    String delete(Advertisement advertisement, RedirectAttributes attributes) {
+    String delete(Advertisement advertisement, HttpServletRequest request, RedirectAttributes attributes) {
+        if (!TokenUtils.validateFormToken(request, "deleteToken", request.getParameter("deleteToken"))) {
+            addMessage attributes, "本次提交的表单验证失败"
+            return "redirect:$adminPath/advertisement/list/1"
+        }
         if (service.delete(advertisement) == DATABASE_DO_NOTHING) {
             addMessage attributes, "这个操作没有删除任何广告"
         } else {
@@ -179,6 +191,10 @@ class AdvertisementController extends BaseController {
      */
     @RequestMapping(value = '/uploadMedia/{id}')
     String uploadMedia(@PathVariable int id, HttpServletRequest request, RedirectAttributes attributes) {
+        if (!TokenUtils.validateFormToken(request, "uploadToken", request.getParameter("uploadToken"))) {
+            addMessage attributes, "本次提交的表单验证失败"
+            return "redirect:$adminPath/advertisement/list/1"
+        }
         def responseCode = service.uploadMedia(String.valueOf(id), request)
         if (responseCode == DONE) {
             def ad = AdvertisementCache.get(id)

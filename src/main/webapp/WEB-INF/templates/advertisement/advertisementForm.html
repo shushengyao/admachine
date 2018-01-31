@@ -19,6 +19,7 @@
 <!--/*@thymesVar id="advertisement" type="com.xmlan.machine.module.advertisement.entity.Advertisement"*/-->
 <!--/*@thymesVar id="machineList" type="java.util.List<com.xmlan.machine.module.advertisementMachine.entity.SimpleAdvertisementMachine>"*/-->
 <!--/*@thymesVar id="userList" type="java.util.List<com.xmlan.machine.module.user.entity.SimpleUser>"*/-->
+<!--/*@thymesVar id="token" type="java.lang.String"*/-->
 <!--/* </editor-fold> */-->
 
 <body>
@@ -82,6 +83,7 @@
     <br/>
     <div id="main-content" class="container">
         <form th:action="@{${adminPath}+'/advertisement/save/'+${advertisement.id}}" method="post">
+            <input name="token" th:value="${token}" type="hidden"/>
             <input id="id" name="id" th:value="${advertisement.id}" type="hidden" class="validate" required="required"/>
             <input id="url" name="url" th:value="${advertisement.url}" type="hidden" class="validate"/>
             <input id="userID-ro" name="userID" th:value="${advertisement.userID}" type="hidden" class="validate"

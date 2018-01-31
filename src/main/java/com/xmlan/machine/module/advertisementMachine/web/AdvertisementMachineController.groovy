@@ -5,10 +5,7 @@ import com.google.common.collect.Maps
 import com.xmlan.machine.common.base.BaseController
 import com.xmlan.machine.common.cache.AdvertisementCache
 import com.xmlan.machine.common.cache.UserCache
-import com.xmlan.machine.common.util.DateUtils
-import com.xmlan.machine.common.util.IDUtils
-import com.xmlan.machine.common.util.SessionUtils
-import com.xmlan.machine.common.util.StringUtils
+import com.xmlan.machine.common.util.*
 import com.xmlan.machine.module.advertisement.service.AdvertisementService
 import com.xmlan.machine.module.advertisementMachine.entity.AdvertisementMachine
 import com.xmlan.machine.module.advertisementMachine.service.AdvertisementMachineService
@@ -18,6 +15,8 @@ import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.servlet.mvc.support.RedirectAttributes
+
+import javax.servlet.http.HttpServletRequest
 
 /**
  * Created by ayakurayuki on 2017/12/13-17:31.
@@ -88,6 +87,7 @@ class AdvertisementMachineController extends BaseController {
         model.addAttribute "name", advertisementMachine.name
         model.addAttribute "codeNumber", advertisementMachine.codeNumber
         model.addAttribute "addTime", advertisementMachine.addTime
+        model.addAttribute "deleteToken", TokenUtils.getFormToken(request, "deleteToken")
         // endregion
 
         "advertisementMachine/advertisementMachineList"
@@ -100,12 +100,17 @@ class AdvertisementMachineController extends BaseController {
         }
         model.addAttribute "userList", UserCache.dropdownUserList
         model.addAttribute "machine", advertisementMachine
+        model.addAttribute "token", TokenUtils.getFormToken(request)
         "advertisementMachine/advertisementMachineForm"
     }
 
     @RequestMapping(value = "/save/{id}")
     String save(AdvertisementMachine advertisementMachine,
-                @PathVariable String id, Model model, RedirectAttributes redirectAttributes) {
+                @PathVariable String id, HttpServletRequest request, Model model, RedirectAttributes redirectAttributes) {
+        if (!TokenUtils.validateFormToken(request, request.getParameter("token"))) {
+            addMessage redirectAttributes, "本次提交的表单验证失败"
+            return "redirect:$adminPath/advertisementMachine/list/1"
+        }
         if (!beanValidator(model, advertisementMachine)) {
             return form(advertisementMachine, model)
         }
@@ -128,7 +133,11 @@ class AdvertisementMachineController extends BaseController {
     }
 
     @RequestMapping(value = "/delete")
-    String delete(AdvertisementMachine advertisementMachine, RedirectAttributes redirectAttributes) {
+    String delete(AdvertisementMachine advertisementMachine, HttpServletRequest request, RedirectAttributes redirectAttributes) {
+        if (!TokenUtils.validateFormToken(request, "deleteToken", request.getParameter("deleteToken"))) {
+            addMessage redirectAttributes, "本次提交的表单验证失败"
+            return "redirect:$adminPath/advertisementMachine/list/1"
+        }
         if (service.delete(advertisementMachine) == DATABASE_DO_NOTHING) {
             addMessage redirectAttributes, "这个操作没有删除任何广告机"
         } else {

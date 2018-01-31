@@ -3,6 +3,7 @@ package com.xmlan.machine.module.role.web
 import com.github.pagehelper.PageInfo
 import com.xmlan.machine.common.base.BaseController
 import com.xmlan.machine.common.util.StringUtils
+import com.xmlan.machine.common.util.TokenUtils
 import com.xmlan.machine.module.role.entity.Role
 import com.xmlan.machine.module.role.service.RoleService
 import org.springframework.beans.factory.annotation.Autowired
@@ -10,6 +11,8 @@ import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.servlet.mvc.support.RedirectAttributes
+
+import javax.servlet.http.HttpServletRequest
 
 /**
  * Created by ayakurayuki on 2017/12/13-11:09.
@@ -50,17 +53,24 @@ class RoleController extends BaseController {
         model.addAttribute "page", page
         model.addAttribute "userCount", service.getUserCount(list)
         model.addAttribute "name", role.name
+        model.addAttribute "deleteToken", TokenUtils.getFormToken(request, "deleteToken")
         "role/roleList"
     }
 
     @RequestMapping(value = "/form")
     String form(Role role, Model model) {
         model.addAttribute "role", role
+        model.addAttribute "token", TokenUtils.getFormToken(request)
         "role/roleForm"
     }
 
     @RequestMapping(value = "/save/{id}")
-    String save(Role role, @PathVariable String id, Model model, RedirectAttributes redirectAttributes) {
+    String save(Role role,
+                @PathVariable String id, HttpServletRequest request, Model model, RedirectAttributes redirectAttributes) {
+        if (!TokenUtils.validateFormToken(request, request.getParameter("token"))) {
+            addMessage redirectAttributes, "本次提交的表单验证失败"
+            return "redirect:$adminPath/role/list/1"
+        }
         if (!beanValidator(model, role)) {
             return form(role, model)
         }
@@ -80,7 +90,11 @@ class RoleController extends BaseController {
     }
 
     @RequestMapping(value = "/delete")
-    String delete(Role role, RedirectAttributes redirectAttributes) {
+    String delete(Role role, String deleteToken, RedirectAttributes redirectAttributes) {
+        if (!TokenUtils.validateFormToken(request, "deleteToken", deleteToken)) {
+            addMessage redirectAttributes, "表单验证失败"
+            return "redirect:$adminPath/role/list/1"
+        }
         int responseCode = service.delete(role)
         if (responseCode == DATABASE_DO_NOTHING) {
             addMessage redirectAttributes, "什么都没有删除"

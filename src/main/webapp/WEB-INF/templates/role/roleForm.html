@@ -17,6 +17,7 @@
 <!--/*@thymesVar id="newEntityID" type="java.lang.Integer"*/-->
 <!--/*@thymesVar id="loginUser" type="com.xmlan.machine.module.user.entity.User"*/-->
 <!--/*@thymesVar id="role" type="com.xmlan.machine.module.role.entity.Role"*/-->
+<!--/*@thymesVar id="token" type="java.lang.String"*/-->
 <!--/* </editor-fold> */-->
 
 <body>
@@ -81,6 +82,7 @@
     <div id="main-content" class="container">
         <form th:action="@{${adminPath}+'/role/save/'+${role.id}}" method="post">
             <input id="id" name="id" type="hidden" th:value="${role.id}" class="validate" required="required"/>
+            <input name="token" th:value="${token}" type="hidden"/>
 
             <div class="row">
                 <div class="input-field col s6 m3 l3">

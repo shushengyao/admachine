@@ -20,6 +20,7 @@
 <!--/*@thymesVar id="name" type="java.lang.String"*/-->
 <!--/*@thymesVar id="codeNumber" type="java.lang.String"*/-->
 <!--/*@thymesVar id="addTime" type="java.lang.String"*/-->
+<!--/*@thymesVar id="deleteToken" type="java.lang.String"*/-->
 <!--/* </editor-fold> */-->
 
 <body>
@@ -277,6 +278,7 @@
         <form th:action="@{${adminPath}+'/advertisementMachine/delete'}">
             <div class="modal-content">
                 <h4>注意！</h4>
+                <input name="deleteToken" type="hidden" th:value="${deleteToken}">
                 <input id="delete-confirm-id" name="id" type="hidden"/>
                 <p>是否要删除广告机 <span id="delete-name"></span> ?</p>
             </div>

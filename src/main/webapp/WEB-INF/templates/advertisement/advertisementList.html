@@ -21,6 +21,8 @@
 <!--/*@thymesVar id="machineID" type="java.lang.Integer"*/-->
 <!--/*@thymesVar id="time" type="java.lang.Integer"*/-->
 <!--/*@thymesVar id="addTime" type="java.lang.String"*/-->
+<!--/*@thymesVar id="deleteToken" type="java.lang.String"*/-->
+<!--/*@thymesVar id="uploadToken" type="java.lang.String"*/-->
 <!--/* </editor-fold> */-->
 
 <body>
@@ -294,6 +296,7 @@
         <input id="upload-target-id" type="hidden"/>
         <form id="upload-image-or-video-form" method="post" enctype="multipart/form-data" action="#"
               onsubmit="return uploadImageOrVideo();">
+            <input name="uploadToken" type="hidden" th:value="${uploadToken}">
             <div class="modal-content">
                 <h4>上传</h4>
                 <div class="col s12 m12 l12">
@@ -320,6 +323,7 @@
         <form th:action="@{${adminPath}+'/advertisement/delete'}">
             <div class="modal-content">
                 <h4>注意！</h4>
+                <input name="deleteToken" type="hidden" th:value="${deleteToken}">
                 <input id="delete-confirm-id" name="id" type="hidden"/>
                 <p>是否要删除广告 <span id="delete-name"></span> ?</p>
             </div>
