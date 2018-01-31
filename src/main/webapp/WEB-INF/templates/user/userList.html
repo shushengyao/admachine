@@ -329,7 +329,7 @@
         <div class="modal-content">
             <h4>修改密码</h4>
             <input id="passwd-id" name="id" type="hidden">
-            <input name="passwdToken" type="hidden" th:value="${passwdToken}">
+            <input name="passwdToken" id="pto" type="hidden" th:value="${passwdToken}">
             <div class="row">
                 <div class="input-field col s12 m12 l12">
                     <input id="old-passwd" name="oldPasswd" placeholder="角色是管理员则必填" type="password" class="validate">
@@ -355,7 +355,7 @@
         <div class="modal-content">
             <h4>更改用户角色</h4>
             <input id="chgrp-id" name="id" type="hidden">
-            <input name="chgrpToken" type="hidden" th:value="${chgrpToken}">
+            <input name="chgrpToken" id="cto" type="hidden" th:value="${chgrpToken}">
             <div class="row">
                 <div class="input-field col s12 m12 l12">
                     <select id="chgrp-roleID" name="roleID">
@@ -467,15 +467,19 @@
         var oldPasswd = $("#old-passwd").val();
         var newPasswd = $("#new-passwd").val();
         var rePasswd = $("#re-passwd").val();
+        var p = $("#pto").val();
         var url = '[[${adminPath}]]/user/passwd/' + id;
         $.ajax({
             url: url,
             type: "POST",
-            data: {"oldPasswd": oldPasswd, "newPasswd": newPasswd, "rePasswd": rePasswd},
+            data: {"oldPasswd": oldPasswd, "newPasswd": newPasswd, "rePasswd": rePasswd, "pto": p},
             dataType: "json",
             cache: false,
             success: function (msg) {
                 toast(msg);
+                setTimeout(function () {
+                    location.reload()
+                }, 3000);
             },
             error: function () {
                 toast("修改失败，系统繁忙，或是网络不通畅");
@@ -486,11 +490,12 @@
     function chgrp() {
         var id = $("#chgrp-id").val();
         var roleID = $("#chgrp-roleID").val();
+        var c = $("#cto").val();
         var url = '[[${adminPath}]]/user/chgrp/' + id;
         $.ajax({
             url: url,
             type: "POST",
-            data: {"id": id, "roleID": roleID},
+            data: {"id": id, "roleID": roleID, "cto": c},
             dataType: "json",
             cache: false,
             success: function (msg) {

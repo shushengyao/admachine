@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletRequest
  */
 final class TokenUtils {
 
-    private Logger logger = LogManager.getLogger(TokenUtils.class)
+    private static Logger logger = LogManager.getLogger(TokenUtils.class)
     private static String authname = 'authname'
     private static String password = 'password'
 
@@ -66,6 +66,7 @@ final class TokenUtils {
         def characteristic = IDUtils.randomBase62(10)
         def token = EncodeUtils.encodeBase64(characteristic)
         SessionUtils.setFormToken(request, flag, token)
+        logger.trace token
         return token
     }
 

@@ -140,8 +140,8 @@ class UserController extends BaseController {
 
     @RequestMapping(value = '/passwd/{id}')
     @ResponseBody
-    String passwd(@PathVariable String id, String oldPasswd, String newPasswd, String rePasswd) {
-        if (!TokenUtils.validateFormToken(request, "passwdToken", request.getParameter("passwdToken"))) {
+    String passwd(@PathVariable String id, String oldPasswd, String newPasswd, String rePasswd, String pto) {
+        if (!TokenUtils.validateFormToken(request, "passwdToken", pto)) {
             return "本次提交的表单验证失败"
         }
         if (StringUtils.isBlank(newPasswd)) {
@@ -171,8 +171,8 @@ class UserController extends BaseController {
 
     @RequestMapping(value = '/chgrp/{id}')
     @ResponseBody
-    String chgrp(@PathVariable String id, int roleID) {
-        if (!TokenUtils.validateFormToken(request, "chgrpToken", request.getParameter("chgrpToken"))) {
+    String chgrp(@PathVariable String id, int roleID, String cto) {
+        if (!TokenUtils.validateFormToken(request, "chgrpToken", cto)) {
             return "本次提交的表单验证失败"
         }
         int responseCode = service.chgrp(id, roleID)

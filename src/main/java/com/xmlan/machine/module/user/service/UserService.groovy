@@ -46,7 +46,7 @@ class UserService extends BaseService<User, UserDAO> {
         User user = dao.get(id)
         if (StringUtils.equals(newPasswd, rePasswd)) {
             if (user.roleID == 1) {
-                if (StringUtils.equals(user.password, oldPasswd)) {
+                if (StringUtils.equals(user.password, EncryptUtils.SHA256ForTenTimes(oldPasswd))) {
                     user.password = EncryptUtils.SHA256ForTenTimes(newPasswd)
                     dao.changePassword(user)
                     return ADMIN_DONE
