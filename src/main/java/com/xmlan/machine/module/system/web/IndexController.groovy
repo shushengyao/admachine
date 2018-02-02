@@ -5,6 +5,9 @@ import com.xmlan.machine.common.util.SessionUtils
 import com.xmlan.machine.module.system.service.LoginService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Controller
+import org.springframework.ui.Model
+import org.springframework.web.bind.annotation.ControllerAdvice
+import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.servlet.mvc.support.RedirectAttributes
 
@@ -13,6 +16,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes
  * Package: com.xmlan.machine.module.system.web
  */
 @Controller
+@ControllerAdvice
 class IndexController extends BaseController {
 
     @Autowired
@@ -60,8 +64,10 @@ class IndexController extends BaseController {
         "errorPage/400"
     }
 
+    @ExceptionHandler
     @RequestMapping("/500")
-    def systemBusy() {
+    def systemBusy(Exception e, Model model) {
+        model.addAttribute "exception", e.message
         "errorPage/500"
     }
 

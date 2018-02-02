@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8"/>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
@@ -10,6 +10,7 @@
     <link rel="shoutcut icon" type="image/x-icon" href="favicon.ico" media="all"/>
     <title>系统繁忙</title>
 </head>
+<!--/*@thymesVar id="exception" type="java.lang.String"*/-->
 <body>
 <nav class="nav-extended nav-full-header z-depth-0">
     <div class="nav-background" style="background-color: #37474f;opacity: 1;">
@@ -29,6 +30,7 @@
             </div>
             <div class="card-content">
                 <p>系统内部正在进行一些准备，您可以返回上一页，再尝试进行操作。</p>
+                <p style="font-size: 10px" th:text="'消息：'+${exception.length() > 30 ? exception.substring(0, 29) : exception}"></p>
             </div>
             <div class="card-action">
                 <a class="waves-effect waves-light btn" onclick="history.go(-1)">
