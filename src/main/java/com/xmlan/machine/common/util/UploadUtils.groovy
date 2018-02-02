@@ -3,6 +3,7 @@ package com.xmlan.machine.common.util
 import com.google.common.collect.Lists
 import com.google.common.collect.Maps
 import com.xmlan.machine.common.config.Global
+import com.xmlan.machine.common.config.TinyImage
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
 import org.springframework.web.multipart.MultipartFile
@@ -77,6 +78,9 @@ class UploadUtils {
                         if (isImage(extension)) {
                             request.transferTo(new File("${Global.mediaPath}/${Global.imageTag}/${filename}"))
                             fileList.add "${Global.imageTag}/${filename}".toString()
+                            if (TinyImage.instance.isActivated()) {
+                                tinyImage filename
+                            }
                         } else if (isVideo(extension)) {
                             request.transferTo(new File("${Global.mediaPath}/${Global.videoTag}/${filename}"))
                             fileList.add "${Global.videoTag}/${filename}".toString()
@@ -108,14 +112,28 @@ class UploadUtils {
     }
 
     private static void tinyImage(String filename) {
-        try {
-            String[] args = ["python3", "tinyimages.py", "${Global.mediaPath}/${Global.imageTag}/${filename}"] as String[]
-            def process = Runtime.runtime.exec args
-            process.inputStream.eachLine { line ->
-                println(line)
+        if (TinyImage.instance.isEnable()) {
+            try {
+                def args = ["python3", "tinyimages.py", "${Global.mediaPath}/${Global.imageTag}/${filename}"] as String[]
+                processTinyImage(args)
+            } catch (IOException e) {
+                logger.info "Python3未安装，或默认Python3而链接到了python，现尝试使用python运行。消息：${e.message}"
+                try {
+                    def args = ["python", "tinyimages.py", "${Global.mediaPath}/${Global.imageTag}/${filename}"] as String[]
+                    processTinyImage(args)
+                } catch (IOException ex) {
+                    logger.error "缩图失败，平台未安装Python。建议使用Python3，请安装。消息：${ex.message}"
+                }
             }
-        } catch (IOException e) {
-            e.printStackTrace()
+        } else {
+            logger.info("缩图功能尚未配置成功，不能执行缩图操作。")
+        }
+    }
+
+    private static def processTinyImage = { String[] args ->
+        def process = Runtime.runtime.exec args
+        process.inputStream.eachLine { line ->
+            logger.info line
         }
     }
 

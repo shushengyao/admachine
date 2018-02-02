@@ -78,7 +78,7 @@ public final class Global {
     /**
      * 获取单页最大条目数，如果配置不正确，默认返回10
      *
-     * @return
+     * @return 单页最大条目数，或默认值10
      */
     public static int getPageSize() {
         String pageSizeConfig = getConfig("pageSize");
@@ -92,7 +92,7 @@ public final class Global {
     /**
      * 获取媒体路径
      *
-     * @return
+     * @return 配置的路径，如未配置则返回默认路径
      */
     public static String getMediaPath() {
         String mediaPath = getConfig("mediaPath");
@@ -103,6 +103,11 @@ public final class Global {
         }
     }
 
+    /**
+     * 获取图片标记
+     *
+     * @return 配置的标记，如未配置则返回默认标记
+     */
     public static String getImageTag() {
         String imageTag = getConfig("imageTag");
         if (StringUtils.isNoneBlank(imageTag)) {
@@ -112,6 +117,11 @@ public final class Global {
         }
     }
 
+    /**
+     * 获取视频标记
+     *
+     * @return 配置的标记，如未配置则返回默认标记
+     */
     public static String getVideoTag() {
         String videoTag = getConfig("videoTag");
         if (StringUtils.isNoneBlank(videoTag)) {
@@ -124,8 +134,8 @@ public final class Global {
     /**
      * 获取配置
      *
-     * @param key
-     * @return
+     * @param key 键
+     * @return 对应的值或空字符串
      */
     public static String getConfig(String key) {
         String value = map.get(key);
@@ -139,8 +149,8 @@ public final class Global {
     /**
      * 页面获取常量
      *
-     * @param field
-     * @return
+     * @param field 键
+     * @return 常量或null
      */
     public static Object getConst(String field) {
         try {
