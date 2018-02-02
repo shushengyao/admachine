@@ -7,7 +7,7 @@
     <groupId>com.xmlan</groupId>
     <artifactId>admachine</artifactId>
     <packaging>war</packaging>
-    <version>1.05-SNAPSHOT</version>
+    <version>1.06-SNAPSHOT</version>
     <name>AD_Machine</name>
 
     <repositories>
@@ -439,9 +439,7 @@
             <resource>
                 <directory>src/main/resource</directory>
                 <includes>
-                    <include>**/*.xml</include>
-                    <include>**/*.properties</include>
-                    <include>**/*.txt</include>
+                    <include>**/*.*</include>
                 </includes>
             </resource>
         </resources>
