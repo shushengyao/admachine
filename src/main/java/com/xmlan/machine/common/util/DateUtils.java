@@ -9,7 +9,7 @@ import java.util.Date;
  * <p>
  * Created by Ayakura Yuki on 2017/4/24.
  */
-public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
+public class DateUtils {
     /**
      * 获取当前日期：返回格式为 yyyy-MM-dd 的日期
      *
