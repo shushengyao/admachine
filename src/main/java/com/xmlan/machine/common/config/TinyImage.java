@@ -19,7 +19,7 @@ public class TinyImage {
 
     private static final Logger logger = LogManager.getLogger(TinyImage.class);
     private Properties properties;
-    private String path = "Py.properties";
+    private String path = "TinyImage.properties";
     private String tinyImageEnableKey = "tinyImage.enable";
     private String tinyImageActivateKey = "tinyImage.activate";
 
@@ -49,18 +49,22 @@ public class TinyImage {
         }
     }
 
+    private boolean valueOf(String key) {
+        if (properties.containsKey(key)) {
+            String value = properties.getProperty(key);
+            return Boolean.valueOf(value);
+        } else {
+            return false;
+        }
+    }
+
     /**
      * 是否启动缩图功能
      *
      * @return 配置的值
      */
     public boolean isActivated() {
-        if (properties.containsKey(tinyImageActivateKey)) {
-            String value = properties.getProperty(tinyImageActivateKey);
-            return Boolean.valueOf(value);
-        } else {
-            return false;
-        }
+        return valueOf(tinyImageActivateKey);
     }
 
     /**
@@ -78,12 +82,7 @@ public class TinyImage {
      * @return 配置的值
      */
     public boolean isEnable() {
-        if (properties.containsKey(tinyImageEnableKey)) {
-            String value = properties.getProperty(tinyImageEnableKey);
-            return Boolean.valueOf(value);
-        } else {
-            return false;
-        }
+        return valueOf(tinyImageEnableKey);
     }
 
     /**

@@ -80,6 +80,8 @@ class UploadUtils {
                             fileList.add "${Global.imageTag}/${filename}".toString()
                             if (TinyImage.instance.isActivated()) {
                                 tinyImage filename
+                            } else {
+                                logger.info "当前未启动缩图功能，将原图保存"
                             }
                         } else if (isVideo(extension)) {
                             request.transferTo(new File("${Global.mediaPath}/${Global.videoTag}/${filename}"))
