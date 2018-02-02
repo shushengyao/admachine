@@ -102,11 +102,11 @@ public class AdvertisementMachineMobileServiceProvider extends BaseController {
      * <p>
      * Method: Post
      *
-     * @param minLongitude  String 最小经度
-     * @param maxLongitude  String 最大经度
-     * @param minLatitude   String 最小纬度
-     * @param maxLatitude   String 最大纬度
-     * @param token         String token身份验证
+     * @param minLongitude String 最小经度
+     * @param maxLongitude String 最大经度
+     * @param minLatitude  String 最小纬度
+     * @param maxLatitude  String 最大纬度
+     * @param token        String token身份验证
      * @return 查询列表
      */
     @RequestMapping(value = "/position/query", produces = "application/json; charset=utf-8")

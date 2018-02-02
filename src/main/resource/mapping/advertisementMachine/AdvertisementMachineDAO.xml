@@ -150,8 +150,8 @@
     <update id="updateLocation">
         update advertisement_machine
         set
-            longitude = #{longitude},
-            latitude  = #{latitude}
+        longitude = #{longitude},
+        latitude = #{latitude}
         where id = #{id}
     </update>
 
