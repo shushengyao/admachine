@@ -41,14 +41,12 @@ class WelcomeListener implements ServletContextListener {
         ColorPrintUtils.Println(ColorPrintUtils.GREEN, "See you next time.")
     }
 
-    private void initialization() {
-        def url = getClass().classLoader.getResource("requirements.txt")
-        if (null != url) {
-            new File(url.file).eachLine { requirement ->
-                def pip3 = Runtime.runtime.exec "pip3 install ${requirement}"
-                pip3.inputStream.eachLine { response ->
-                    println response
-                }
+    private static void initialization() {
+        def requirements = ["pillow"]
+        requirements.each { requirement ->
+            def pip3 = Runtime.runtime.exec "pip3 install ${requirement}"
+            pip3.inputStream.eachLine { response ->
+                println response
             }
         }
     }
