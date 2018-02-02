@@ -2,6 +2,8 @@ package com.xmlan.machine.common.listener
 
 import com.xmlan.machine.common.config.Global
 import com.xmlan.machine.common.util.ColorPrintUtils
+import org.apache.logging.log4j.LogManager
+import org.apache.logging.log4j.Logger
 
 import javax.servlet.ServletContextEvent
 import javax.servlet.ServletContextListener
@@ -10,6 +12,8 @@ import javax.servlet.ServletContextListener
  * WebServer启动初始化
  */
 class WelcomeListener implements ServletContextListener {
+
+    private static final Logger logger = LogManager.getLogger(WelcomeListener.class)
 
     @Override
     void contextInitialized(ServletContextEvent servletContextEvent) {
@@ -34,7 +38,17 @@ class WelcomeListener implements ServletContextListener {
                             :;rTyii2CESWWGG8NB88GNWWSEj7r;.                            
         """
         ColorPrintUtils.Println(ColorPrintUtils.BLUE, logo)
-        initialization()
+
+        try {
+            initialization('pip3')
+        } catch (Exception e) {
+            logger.trace(e.message)
+            try {
+                initialization('pip')
+            } catch (Exception ex) {
+                logger.trace(ex.message)
+            }
+        }
     }
 
     @Override
@@ -42,11 +56,11 @@ class WelcomeListener implements ServletContextListener {
         ColorPrintUtils.Println(ColorPrintUtils.GREEN, "See you next time.")
     }
 
-    private static void initialization() {
+    private static void initialization(String bin) {
         def requirementsText = Global.getConfig('python.requirements')
         def requirements = requirementsText.split(',')
         requirements.each { requirement ->
-            def pip3 = Runtime.runtime.exec "pip3 install ${requirement}"
+            def pip3 = Runtime.runtime.exec "${bin} install ${requirement}"
             pip3.inputStream.eachLine { response ->
                 println response
             }
