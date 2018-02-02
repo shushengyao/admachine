@@ -1,5 +1,6 @@
 package com.xmlan.machine.common.listener
 
+import com.xmlan.machine.common.config.Global
 import com.xmlan.machine.common.util.ColorPrintUtils
 
 import javax.servlet.ServletContextEvent
@@ -42,7 +43,8 @@ class WelcomeListener implements ServletContextListener {
     }
 
     private static void initialization() {
-        def requirements = ["pillow"]
+        def requirementsText = Global.getConfig('python.requirements')
+        def requirements = requirementsText.split(',')
         requirements.each { requirement ->
             def pip3 = Runtime.runtime.exec "pip3 install ${requirement}"
             pip3.inputStream.eachLine { response ->
