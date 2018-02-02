@@ -39,14 +39,17 @@ class WelcomeListener implements ServletContextListener {
         """
         ColorPrintUtils.Println(ColorPrintUtils.BLUE, logo)
 
-        try {
-            initialization('pip3')
-        } catch (Exception e) {
-            logger.trace(e.message)
+        // 本程序不涉及实时Python调用，所以可以异步安装requirements
+        Thread.start {
             try {
-                initialization('pip')
-            } catch (Exception ex) {
-                logger.trace(ex.message)
+                initialization('pip3') // 优先尝试使用pip3安装
+            } catch (Exception e) {
+                logger.trace(e.message)
+                try {
+                    initialization('pip') // Runtime.exec使用pip3被拒绝时尝试使用pip安装
+                } catch (Exception ex) {
+                    logger.trace(ex.message) // 所有安装均失败
+                }
             }
         }
     }

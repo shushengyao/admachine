@@ -150,13 +150,13 @@ class AdvertisementController extends BaseController {
             advertisement.addTime = DateUtils.GetDateTime()
             service.insert advertisement
             // 推送
-            push(advertisement.machineID, advertisement.id, "New advertisement.")
+            Thread.start { push(advertisement.machineID, advertisement.id, "New advertisement.") }
             addMessage redirectAttributes, "创建广告成功"
         } else {
             advertisement.id = id
             service.update advertisement
             // 推送
-            push(advertisement.machineID, advertisement.id, "An advertisement updated.")
+            Thread.start { push(advertisement.machineID, advertisement.id, "An advertisement updated.") }
             addMessage redirectAttributes, "修改广告成功"
         }
         "redirect:$adminPath/advertisement/list/1"
@@ -199,7 +199,7 @@ class AdvertisementController extends BaseController {
         if (responseCode == DONE) {
             def ad = AdvertisementCache.get(id)
             // 推送
-            push(ad.machineID, id, "New ad media.")
+            Thread.start { push(ad.machineID, id, "New ad media.") }
             addMessage attributes, "上传成功"
         }
         if (responseCode == FAILURE) {
