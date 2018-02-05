@@ -1,6 +1,8 @@
 package com.xmlan.machine.common.util;
 
 import com.xmlan.machine.common.base.AlgorithmEnum;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -11,6 +13,7 @@ import java.security.NoSuchAlgorithmException;
  */
 public class EncryptUtils {
 
+    private final static Logger logger = LogManager.getLogger(EncryptUtils.class);
     private final static char[] HEX = "0123456789ABCDEF".toCharArray();
 
     /**
@@ -23,7 +26,7 @@ public class EncryptUtils {
             messageDigest.update(message.getBytes());
             return messageDigest.digest();
         } catch (NoSuchAlgorithmException e) {
-            System.err.println("Type " + type.name() + " is not support.");
+            logger.error("Type " + type.name() + " is not support.");
             return null;
         }
     }
@@ -33,32 +36,41 @@ public class EncryptUtils {
      * @return encrypt password
      */
     private static String ConvertToString(byte[] raw) {
-        StringBuffer stringBuffer = new StringBuffer();
+        StringBuilder stringBuilder = new StringBuilder();
         for (byte b : raw) {
-            stringBuffer.append(HEX[(b >>> 4) & 0x0f]);
-            stringBuffer.append(HEX[b & 0x0f]);
+            stringBuilder.append(HEX[(b >>> 4) & 0x0f]);
+            stringBuilder.append(HEX[b & 0x0f]);
         }
-        return stringBuffer.toString().toLowerCase();
+        return stringBuilder.toString().toLowerCase();
+    }
+
+    /**
+     * @param message : content
+     * @param type    : algorithm type
+     * @return encrypted content
+     */
+    private static String TenTimes(String message, AlgorithmEnum type) {
+        String result = message;
+        for (int i = 0; i < 10; i++)
+            result = ConvertToString(GetEncodeByte(result, type));
+        return result;
     }
 
     /**
      * 10 times loop encrypt by md5.
      *
-     * @param message
-     * @return
+     * @param message : content
+     * @return encrypted content
      */
     public static String MD5ForTenTimes(String message) {
-        String result = message;
-        for (int i = 0; i < 10; i++)
-            result = ConvertToString(GetEncodeByte(result, AlgorithmEnum.MD5));
-        return result;
+        return TenTimes(message, AlgorithmEnum.MD5);
     }
 
     /**
      * encrypt by md5.
      *
-     * @param message
-     * @return
+     * @param message : content
+     * @return encrypted content
      */
     public static String MD5(String message) {
         return ConvertToString(GetEncodeByte(message, AlgorithmEnum.MD5));
@@ -67,21 +79,18 @@ public class EncryptUtils {
     /**
      * 10 times loop encrypt by sha-1.
      *
-     * @param message
-     * @return
+     * @param message : content
+     * @return encrypted content
      */
     public static String SHA1ForTenTimes(String message) {
-        String result = message;
-        for (int i = 0; i < 10; i++)
-            result = ConvertToString(GetEncodeByte(result, AlgorithmEnum.SHA1));
-        return result;
+        return TenTimes(message, AlgorithmEnum.SHA1);
     }
 
     /**
      * encrypt by sha-1.
      *
-     * @param message
-     * @return
+     * @param message : content
+     * @return encrypted content
      */
     public static String SHA1(String message) {
         return ConvertToString(GetEncodeByte(message, AlgorithmEnum.SHA1));
@@ -90,21 +99,18 @@ public class EncryptUtils {
     /**
      * 10 times loop encrypt by sha-256.
      *
-     * @param message
-     * @return
+     * @param message : content
+     * @return encrypted content
      */
     public static String SHA256ForTenTimes(String message) {
-        String result = message;
-        for (int i = 0; i < 10; i++)
-            result = ConvertToString(GetEncodeByte(result, AlgorithmEnum.SHA256));
-        return result;
+        return TenTimes(message, AlgorithmEnum.SHA256);
     }
 
     /**
      * encrypt by sha-256.
      *
-     * @param message
-     * @return
+     * @param message : content
+     * @return encrypted content
      */
     public static String SHA256(String message) {
         return ConvertToString(GetEncodeByte(message, AlgorithmEnum.SHA256));

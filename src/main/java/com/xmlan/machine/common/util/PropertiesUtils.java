@@ -43,7 +43,7 @@ public class PropertiesUtils {
         if (properties.containsKey(key)) {
             return properties.getProperty(key);
         }
-        return "";
+        return StringUtils.EMPTY;
     }
 
     /**

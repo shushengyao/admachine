@@ -24,7 +24,6 @@ public class JsonUtils extends ObjectMapper {
     private static final long serialVersionUID = 1L;
 
     private static Logger logger = LoggerFactory.getLogger(JsonUtils.class);
-
     private static JsonUtils mapper;
 
     public JsonUtils() {
