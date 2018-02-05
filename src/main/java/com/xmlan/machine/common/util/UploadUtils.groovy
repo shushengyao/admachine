@@ -16,7 +16,7 @@ import javax.servlet.http.HttpServletRequest
  * Created by Ayakura Yuki on 2017/7/20. <br />
  * 获取request，将文件存储到Apache文件服务器。
  */
-class UploadUtils {
+final class UploadUtils {
 
     private static final Logger logger = LogManager.getLogger(UploadUtils.class)
 
@@ -46,7 +46,7 @@ class UploadUtils {
                     try {
                         String extension = file.originalFilename.substring(file.originalFilename.lastIndexOf('.'))
                         if (file != null && isMedia(file.originalFilename)) {
-                            String filename = "${DateUtils.GetDate('yyyy-MM-dd_HH-mm-ss')}_No${i}${extension}"
+                            String filename = "${DateUtils.getDate('yyyy-MM-dd_HH-mm-ss')}_No${i}${extension}"
                             try {
                                 // 存储文件
                                 if (isImage(extension)) {
@@ -72,7 +72,7 @@ class UploadUtils {
             try {
                 String extension = request.originalFilename.substring(request.originalFilename.lastIndexOf('.'))
                 if (request != null && isMedia(request.originalFilename)) {
-                    String filename = "${DateUtils.GetDate('yyyy-MM-dd_HH-mm-ss_SSS')}_${extension}"
+                    String filename = "${DateUtils.getDate('yyyy-MM-dd_HH-mm-ss_SSS')}_${extension}"
                     try {
                         // 存储文件
                         if (isImage(extension)) {

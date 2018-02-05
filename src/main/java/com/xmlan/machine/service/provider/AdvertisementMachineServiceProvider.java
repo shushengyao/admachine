@@ -69,7 +69,7 @@ public class AdvertisementMachineServiceProvider extends BaseController {
             return map;
         }
         if (StringUtils.isBlank(advertisementMachine.getAddTime())) {
-            advertisementMachine.setAddTime(DateUtils.GetDateTime());
+            advertisementMachine.setAddTime(DateUtils.getDateTime());
         }
         advertisementMachine.setName(StringUtils.EMPTY);
         advertisementMachine.setUserID(-2);

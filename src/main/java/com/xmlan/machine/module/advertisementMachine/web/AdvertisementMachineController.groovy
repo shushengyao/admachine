@@ -121,7 +121,7 @@ class AdvertisementMachineController extends BaseController {
             advertisementMachine.latitude = "0.0"
         }
         if (StringUtils.equals(id, NEW_INSERT_ID.toString())) {
-            advertisementMachine.addTime = DateUtils.GetDateTime()
+            advertisementMachine.addTime = DateUtils.dateTime
             service.insert advertisementMachine
             addMessage redirectAttributes, "创建广告机成功"
         } else {

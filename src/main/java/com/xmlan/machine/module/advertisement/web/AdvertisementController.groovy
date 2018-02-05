@@ -147,7 +147,7 @@ class AdvertisementController extends BaseController {
             advertisement.userID = SessionUtils.getAdmin(request).id
         }
         if (id == NEW_INSERT_ID) {
-            advertisement.addTime = DateUtils.GetDateTime()
+            advertisement.addTime = DateUtils.dateTime
             service.insert advertisement
             // 推送
             Thread.start { push(advertisement.machineID, advertisement.id, "New advertisement.") }
