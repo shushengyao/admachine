@@ -44,14 +44,14 @@ class WelcomeListener implements ServletContextListener {
         Thread.start {
             try {
                 initialization('pip3') // 优先尝试使用pip3安装
-                TinyImage.getInstance().setEnable(true)
+                TinyImage.instance.setEnable(true)
             } catch (Exception e) {
                 logger.info("pip3安装失败，尝试使用pip安装。消息：${e.message}")
                 try {
                     initialization('pip') // Runtime.exec使用pip3被拒绝时尝试使用pip安装
-                    TinyImage.getInstance().setEnable(true)
+                    TinyImage.instance.setEnable(true)
                 } catch (Exception ex) {
-                    TinyImage.getInstance().setEnable(false)
+                    TinyImage.instance.setEnable(false)
                     logger.error("Python依赖库未安装成功，不能使用缩图功能。消息：${ex.message}") // 所有安装均失败
                 }
             }

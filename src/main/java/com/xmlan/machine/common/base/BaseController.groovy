@@ -2,6 +2,7 @@ package com.xmlan.machine.common.base
 
 import com.xmlan.machine.common.util.BeanValidator
 import com.xmlan.machine.common.util.SessionUtils
+import com.xmlan.machine.common.util.StringUtils
 import com.xmlan.machine.module.user.entity.User
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
@@ -82,9 +83,9 @@ abstract class BaseController extends BaseBean {
      * @param messages 消息（任意个数的对象）
      */
     protected void addMessage(RedirectAttributes redirectAttributes, String... messages) {
-        StringBuilder stringBuilder = new StringBuilder()
-        for (String message : messages) {
-            stringBuilder.append(message).append(messages.length > 1 ? "<br/>" : "")
+        def stringBuilder = new StringBuilder()
+        for (message in messages) {
+            stringBuilder.append(message).append(messages.length > 1 ? '<br/>' : StringUtils.EMPTY)
         }
         redirectAttributes.addFlashAttribute("message", stringBuilder.toString())
         logger.debug "Message added."
@@ -97,24 +98,24 @@ abstract class BaseController extends BaseBean {
      * @param messages 消息（任意个数的对象）
      */
     protected void addMessage(Model model, String... messages) {
-        StringBuilder stringBuilder = new StringBuilder()
-        for (String message : messages) {
-            stringBuilder.append(message).append(messages.length > 1 ? "<br/>" : "")
+        def stringBuilder = new StringBuilder()
+        for (message in messages) {
+            stringBuilder.append(message).append(messages.length > 1 ? '<br/>' : StringUtils.EMPTY)
         }
         model.addAttribute("message", stringBuilder.toString())
         logger.debug "Message added."
     }
 
-    protected boolean beanValidator(Object attributesObject, Object object, Class<?>... groups) {
+    protected boolean beanValidator(Object modelOrAttribute, Object object, Class<?>... groups) {
         try {
             BeanValidator.validateWithException(validator, object, groups)
         } catch (ConstraintViolationException ex) {
-            List<String> list = BeanValidator.extractPropertyAndMessageAsList(ex, ": ")
-            list.add(0, "数据验证失败：")
-            if (attributesObject instanceof RedirectAttributes) {
-                addMessage((RedirectAttributes) attributesObject, list.toArray([] as String[]))
-            } else if (attributesObject instanceof Model) {
-                addMessage((Model) attributesObject, list.toArray([] as String[]))
+            def list = BeanValidator.extractPropertyAndMessageAsList(ex, ": ")
+            list.add(0, "Bean validation failed: ")
+            if (modelOrAttribute instanceof RedirectAttributes) {
+                addMessage((RedirectAttributes) modelOrAttribute, list.toArray([] as String[]))
+            } else if (modelOrAttribute instanceof Model) {
+                addMessage((Model) modelOrAttribute, list.toArray([] as String[]))
             }
             return false
         }

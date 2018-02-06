@@ -10,7 +10,7 @@ package com.xmlan.machine.common.base
  * <pre>SHA-1</pre>
  * <pre>SHA256</pre>
  */
-enum AlgorithmEnum {
+final enum AlgorithmEnum {
 
     MD5("MD5"), SHA1("SHA-1"), SHA256("SHA-256")
 
