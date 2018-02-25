@@ -6,6 +6,7 @@ import com.xmlan.machine.common.base.BaseController
 import com.xmlan.machine.common.cache.RoleCache
 import com.xmlan.machine.common.cache.UserCache
 import com.xmlan.machine.common.util.DateUtils
+import com.xmlan.machine.common.util.SessionUtils
 import com.xmlan.machine.common.util.StringUtils
 import com.xmlan.machine.common.util.TokenUtils
 import com.xmlan.machine.module.advertisementMachine.service.AdvertisementMachineService
@@ -117,6 +118,9 @@ class UserController extends BaseController {
             user.id = id.toInteger()
             service.update user
             addMessage redirectAttributes, "修改用户成功"
+        }
+        if (SessionUtils.getAdmin(request).id == user.id) { // 如果修改的用户是本人
+            SessionUtils.setAdmin(request, user) // 刷新Session
         }
         "redirect:$adminPath/user/list/1"
     }
