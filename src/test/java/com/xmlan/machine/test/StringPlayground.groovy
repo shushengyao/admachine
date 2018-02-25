@@ -1,9 +1,5 @@
 package com.xmlan.machine.test
 
-import com.xmlan.machine.common.util.DateUtils
-import com.xmlan.machine.common.util.EncodeUtils
-import com.xmlan.machine.common.util.EncryptUtils
-import org.apache.commons.lang3.math.NumberUtils
 import org.junit.Test
 
 /**
@@ -23,7 +19,15 @@ class StringPlayground {
 //        println NumberUtils.isDigits("-22314214214")
 //        println NumberUtils.isNumber("-52.22314214214")
 
-        println EncryptUtils.SHA256ForTenTimes('zhxm2512209')
+//        println EncryptUtils.SHA256ForTenTimes('zhxm2512209')
+
+        def string = 'ac-ca-12-13-4a-dc'
+        if (!(string ==~ /([A-Fa-f0-9]{2}[:-]){5}[A-Fa-f0-9]{2}/)) {
+            println 'Variable "string" is not a mac address.'
+        } else {
+            string = string.replaceAll('-', ':')
+            println string
+        }
     }
 
 }

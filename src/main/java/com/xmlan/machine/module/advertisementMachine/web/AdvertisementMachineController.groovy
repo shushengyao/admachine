@@ -5,7 +5,10 @@ import com.google.common.collect.Maps
 import com.xmlan.machine.common.base.BaseController
 import com.xmlan.machine.common.cache.AdvertisementCache
 import com.xmlan.machine.common.cache.UserCache
-import com.xmlan.machine.common.util.*
+import com.xmlan.machine.common.util.DateUtils
+import com.xmlan.machine.common.util.SessionUtils
+import com.xmlan.machine.common.util.StringUtils
+import com.xmlan.machine.common.util.TokenUtils
 import com.xmlan.machine.module.advertisement.service.AdvertisementService
 import com.xmlan.machine.module.advertisementMachine.entity.AdvertisementMachine
 import com.xmlan.machine.module.advertisementMachine.service.AdvertisementMachineService
@@ -96,7 +99,7 @@ class AdvertisementMachineController extends BaseController {
     @RequestMapping(value = "/form")
     String form(AdvertisementMachine advertisementMachine, Model model) {
         if (StringUtils.isBlank(advertisementMachine.codeNumber)) {
-            advertisementMachine.codeNumber = IDUtils.UUID()
+            advertisementMachine.codeNumber = ''
         }
         model.addAttribute "userList", UserCache.dropdownUserList
         model.addAttribute "machine", advertisementMachine
@@ -114,12 +117,21 @@ class AdvertisementMachineController extends BaseController {
         if (!beanValidator(model, advertisementMachine)) {
             return form(advertisementMachine, model)
         }
+
+        if (!(advertisementMachine.codeNumber ==~ /([A-Fa-f0-9]{2}[:-]){5}[A-Fa-f0-9]{2}/)) {
+            addMessage redirectAttributes, "机器识别码格式不正确，机器识别码是广告机的MAC地址！"
+            return form(advertisementMachine, model)
+        } else {
+            advertisementMachine.codeNumber = advertisementMachine.codeNumber.replaceAll('-', ':')
+        }
+
         if (StringUtils.isBlank(advertisementMachine.longitude)) {
             advertisementMachine.longitude = "0.0"
         }
         if (StringUtils.isBlank(advertisementMachine.latitude)) {
             advertisementMachine.latitude = "0.0"
         }
+
         if (StringUtils.equals(id, NEW_INSERT_ID.toString())) {
             advertisementMachine.addTime = DateUtils.dateTime
             service.insert advertisementMachine

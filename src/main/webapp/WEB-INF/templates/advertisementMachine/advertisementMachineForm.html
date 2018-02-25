@@ -81,7 +81,8 @@
     </div>
     <br/>
     <div id="main-content" class="container">
-        <form th:action="@{${adminPath}+'/advertisementMachine/save/'+${machine.id}}" method="post">
+        <form th:action="@{${adminPath}+'/advertisementMachine/save/'+${machine.id}}" method="post"
+              onsubmit="return save();">
             <input name="token" th:value="${token}" type="hidden"/>
             <input id="id" name="id" type="hidden" class="validate" required="required" th:value="${machine.id}"/>
             <input id="longitude" name="longitude" type="hidden" class="validate" th:value="${machine.longitude}"/>
@@ -176,6 +177,14 @@
         $("#userID-ro").material_select();
         toast('[[${message}]]');
     });
+
+    function save() {
+        if (!(/^([A-Fa-f0-9]{2}[:-]){5}[A-Fa-f0-9]{2}$/.test($("#codeNumber").val()))) {
+            toast("机器识别码格式不正确，机器识别码是广告机的MAC地址！");
+            return false;
+        }
+        return true;
+    }
 </script>
 </body>
 </html>
