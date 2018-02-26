@@ -106,7 +106,7 @@ class UserController extends BaseController {
             addMessage redirectAttributes, "确认密码与登录密码不匹配"
             return form(user, model)
         }
-        if (!(user.phone ==~ /((86)|(\+86))?(\-)?1[3|4|5|7|8][0-9]\d{8}/)) {
+        if (!(user.phone ==~ /(([+])?(86)(-)?)?1[3|4|5|7|8]\d{9}/)) {
             addMessage redirectAttributes, "手机号码格式不正确"
             return form(user, model)
         }
