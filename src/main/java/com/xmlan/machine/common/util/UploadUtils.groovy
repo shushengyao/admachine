@@ -102,7 +102,7 @@ final class UploadUtils {
     }
 
     static boolean isMedia(String extension) {
-        return extension.toLowerCase() ==~ /[\s\S]*\.(png|jpg|jpeg|bmp|git|tif|tiff|mp4|wmv|avi|flv|3gp|mkv)/
+        return extension.toLowerCase() ==~ /[\s\S]*\.(png|jpg|jpeg|bmp|gif|tif|tiff|mp4|wmv|avi|flv|3gp|mkv)/
     }
 
     static boolean isVideo(String extension) {
@@ -110,7 +110,7 @@ final class UploadUtils {
     }
 
     static boolean isImage(String extension) {
-        return extension.toLowerCase() ==~ /[\s\S]*\.(png|jpg|jpeg|bmp|git|tif|tiff)/
+        return extension.toLowerCase() ==~ /[\s\S]*\.(png|jpg|jpeg|bmp|gif|tif|tiff)/
     }
 
     private static void tinyImage(String filename) {
