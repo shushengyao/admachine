@@ -12,6 +12,25 @@ html {
     font-family: source-han-sans-sc, sans-serif;
     font-style: normal;
     font-weight: 400;
+    height: 100%;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    position: relative;
+}
+
+main {
+    height: 100%;
+    padding-bottom: 50px;
+}
+
+footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 50px;
 }
 
 @media only screen and (min-width: 993px) {
