@@ -30,7 +30,7 @@
             </div>
             <div class="card-content">
                 <p>系统内部正在进行一些准备，您可以返回上一页，再尝试进行操作。</p>
-                <p style="font-size: 10px" th:text="'消息：'+${exception.length() > 30 ? exception.substring(0, 29) : exception}"></p>
+                <p style="font-size: 10px" th:text="'消息：'+${exception}"></p>
             </div>
             <div class="card-action">
                 <a class="waves-effect waves-light btn" onclick="history.go(-1)">
