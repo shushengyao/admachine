@@ -278,107 +278,107 @@
 <th:block th:include="/common/footer::footer"/>
 <th:block th:include="/common/script::script"/>
 <script type="text/javascript">
-    $(function () {
-        resize_footer(window.screen.width);
-        $('#button-nav-menu').sideNav({
-            closeOnClick: true,
-            draggable: true
-        });
-        $('.dropdown-button').dropdown();
-        $('.date-picker').pickadatee({
-            closeOnSelect: true
-        });
-        $("#detail-modal").modal();
-        $("#upload-new-image-or-video").modal();
-        $("#delete-modal").modal({
-            complete: function () {
-                $("#delete-confirm-id").val(-2);
-                $("#delete-name").text(null);
-            }
-        });
-        $("#machineID").material_select();
-        toast('[[${message}]]');
+  $(function () {
+    resize_footer(window.screen.width);
+    $('#button-nav-menu').sideNav({
+      closeOnClick: true,
+      draggable: true
     });
+    $('.dropdown-button').dropdown();
+    $('.date-picker').pickadatee({
+      closeOnSelect: true
+    });
+    $("#detail-modal").modal();
+    $("#upload-new-image-or-video").modal();
+    $("#delete-modal").modal({
+      complete: function () {
+        $("#delete-confirm-id").val(-2);
+        $("#delete-name").text(null);
+      }
+    });
+    $("#machineID").material_select();
+    toast('[[${message}]]');
+  });
 
-    function detail(id) {
-        var url = '[[${adminPath}]]/advertisement/detail/' + id;
-        var request_url = '[[${adminPath}]]/advertisement/media/' + id;
-        $.ajax({
-            url: url,
-            type: "GET",
-            success: function (data) {
-                $("#detail-item-id").text(data['ad'].id);
-                $("#detail-item-name").text(data['ad'].name);
-                $("#detail-item-machine-id").text(data['machine']);
-                $("#detail-item-time").text(data['ad'].time);
-                $("#detail-item-add-time").text(data['ad'].addTime);
-                if (data['ad'].url !== null && data['ad'].url.indexOf("images") !== -1) {
-                    $("#detail-item-media").html(
-                        '<img id="ad-image" class="materialboxed" width="450" src="' + request_url + '"/>'
-                    );
-                } else if (data['ad'].url !== null && data['ad'].url.indexOf("videos") !== -1) {
-                    $("#detail-item-media").html(
-                        '<video id="ad-video" width="100%" height="100%" controls="controls">' +
-                        '    <source src="' + request_url + '" type="video/mp4"/>' +
-                        '</video>'
-                    );
-                } else {
-                    $("#detail-item-media").text('暂无广告图片/视频');
-                }
-                $("#detail-item-remark").text(data['ad'].remark);
-            },
-            error: function () {
-            }
-        });
-    }
-
-    function uploadImageOrVideo() {
-        var file = $("#url").val();
-        if (file === '') {
-            toast("没有选择文件，该广告的图片/视频没有更新。");
-            return false;
+  function detail(id) {
+    var url = '[[${adminPath}]]/advertisement/detail/' + id;
+    var request_url = '[[${adminPath}]]/advertisement/media/' + id;
+    $.ajax({
+      url: url,
+      type: "GET",
+      success: function (data) {
+        $("#detail-item-id").text(data['ad'].id);
+        $("#detail-item-name").text(data['ad'].name);
+        $("#detail-item-machine-id").text(data['machine']);
+        $("#detail-item-time").text(data['ad'].time);
+        $("#detail-item-add-time").text(data['ad'].addTime);
+        if (data['ad'].url !== null && data['ad'].url.indexOf("images") !== -1) {
+          $("#detail-item-media").html(
+            '<img id="ad-image" class="materialboxed" width="450" src="' + request_url + '"/>'
+          );
+        } else if (data['ad'].url !== null && data['ad'].url.indexOf("videos") !== -1) {
+          $("#detail-item-media").html(
+            '<video id="ad-video" width="100%" height="100%" controls="controls">' +
+            '    <source src="' + request_url + '" type="video/mp4"/>' +
+            '</video>'
+          );
         } else {
-            var id = $("#upload-target-id").val();
-            var url = '[[${adminPath}]]/advertisement/uploadMedia/' + id;
-            $("#upload-image-or-video-form").attr('action', url);
-            $("#upload-image-or-video-form").submit();
-            return true;
+          $("#detail-item-media").text('暂无广告图片/视频');
         }
-    }
+        $("#detail-item-remark").text(data['ad'].remark);
+      },
+      error: function () {
+      }
+    });
+  }
 
-    function openUploadModal(id) {
-        $("#new-file").val(null);
-        $("#url").val(null);
-        $("#upload-target-id").val(id);
+  function uploadImageOrVideo() {
+    var file = $("#url").val();
+    if (file === '') {
+      toast("没有选择文件，该广告的图片/视频没有更新。");
+      return false;
+    } else {
+      var id = $("#upload-target-id").val();
+      var url = '[[${adminPath}]]/advertisement/uploadMedia/' + id;
+      $("#upload-image-or-video-form").attr('action', url);
+      $("#upload-image-or-video-form").submit();
+      return true;
     }
+  }
 
-    function prepareForDeleting(id) {
-        $("#delete-confirm-id").val(id);
-        $.ajax({
-            url: '[[${adminPath}]]/advertisement/detail/' + id,
-            type: "GET",
-            success: function (data) {
-                $("#delete-name").text(data['ad'].name);
-            }
-        })
-    }
+  function openUploadModal(id) {
+    $("#new-file").val(null);
+    $("#url").val(null);
+    $("#upload-target-id").val(id);
+  }
 
-    function pauseVideo() {
-        var video = $("#ad-video");
-        if (video) {
-            video.get(0).pause();
-        }
-    }
+  function prepareForDeleting(id) {
+    $("#delete-confirm-id").val(id);
+    $.ajax({
+      url: '[[${adminPath}]]/advertisement/detail/' + id,
+      type: "GET",
+      success: function (data) {
+        $("#delete-name").text(data['ad'].name);
+      }
+    })
+  }
 
-    function hasMachine() {
-        var machines = parseInt('[[${machines}]]');
-        if (machines === 0) {
-            toast("没有可用的广告机");
-            return false;
-        } else {
-            return true;
-        }
+  function pauseVideo() {
+    var video = $("#ad-video");
+    if (video) {
+      video.get(0).pause();
     }
+  }
+
+  function hasMachine() {
+    var machines = parseInt('[[${machines}]]');
+    if (machines === 0) {
+      toast("没有可用的广告机");
+      return false;
+    } else {
+      return true;
+    }
+  }
 </script>
 </body>
 </html>

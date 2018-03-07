@@ -89,23 +89,23 @@
 <th:block th:include="/common/footer::footer"/>
 <th:block th:include="/common/script::script"/>
 <script type="text/javascript">
-    $(function () {
-        resize_footer(window.screen.width);
-        $("#button-nav-menu").sideNav({
-            closeOnClick: true,
-            draggable: true
-        });
-        $(".dropdown-button").dropdown();
-        $(".date-picker").pickadatee({
-            closeOnSelect: true
-        });
-        $("#machineID").material_select();
-        var roleID = '[[${loginUser.roleID}]]';
-        if (roleID === '1') {
-            $("#userID").material_select();
-        }
-        toast('[[${message}]]');
+  $(function () {
+    resize_footer(window.screen.width);
+    $("#button-nav-menu").sideNav({
+      closeOnClick: true,
+      draggable: true
     });
+    $(".dropdown-button").dropdown();
+    $(".date-picker").pickadatee({
+      closeOnSelect: true
+    });
+    $("#machineID").material_select();
+    var roleID = '[[${loginUser.roleID}]]';
+    if (roleID === '1') {
+      $("#userID").material_select();
+    }
+    toast('[[${message}]]');
+  });
 </script>
 </body>
 </html>

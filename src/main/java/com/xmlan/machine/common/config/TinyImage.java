@@ -23,17 +23,13 @@ public class TinyImage {
     private String tinyImageEnableKey = "tinyImage.enable";
     private String tinyImageActivateKey = "tinyImage.activate";
 
-    private static class PythonHolder {
-        private static final TinyImage instance = new TinyImage();
+    private TinyImage() {
+        PropertiesUtils utils = new PropertiesUtils(path);
+        properties = utils.getProperties();
     }
 
     public static TinyImage getInstance() {
         return PythonHolder.instance;
-    }
-
-    private TinyImage() {
-        PropertiesUtils utils = new PropertiesUtils(path);
-        properties = utils.getProperties();
     }
 
     private void setOption(String key, boolean option) {
@@ -92,6 +88,10 @@ public class TinyImage {
      */
     public void setEnable(boolean option) {
         setOption(tinyImageEnableKey, option);
+    }
+
+    private static class PythonHolder {
+        private static final TinyImage instance = new TinyImage();
     }
 
 }

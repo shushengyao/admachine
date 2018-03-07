@@ -84,7 +84,7 @@ final class DateUtils {
     /**
      * 格式化日期：获取指定或默认格式的时间
      *
-     * @param date    原始的时间
+     * @param date 原始的时间
      * @param pattern 日期格式，允许为空，或 yyyy-MM-dd 或 HH:mm:ss 或 E。默认格式为 yyyy-MM-dd。
      * @return 格式化后的时间，如 2017-04-24、14:33:32、星期一
      */
