@@ -117,7 +117,6 @@ public class AdvertisementMobileServiceProvider extends BaseController {
         advertisement.setAddTime(DateUtils.getDateTime());
         advertisementService.insert(advertisement);
         int id = AdvertisementCache.getNewInserted(advertisement).getId();
-        advertisementService.uploadMedia(String.valueOf(id), time, file);
         return uploadMedia(id, time, token, file);
     }
 
