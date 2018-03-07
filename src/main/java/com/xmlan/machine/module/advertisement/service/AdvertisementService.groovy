@@ -5,6 +5,7 @@ import com.xmlan.machine.common.base.BaseService
 import com.xmlan.machine.common.cache.AdvertisementCache
 import com.xmlan.machine.common.config.Global
 import com.xmlan.machine.common.util.JsonUtils
+import com.xmlan.machine.common.util.StringUtils
 import com.xmlan.machine.common.util.UploadUtils
 import com.xmlan.machine.module.advertisement.dao.AdvertisementDAO
 import com.xmlan.machine.module.advertisement.entity.Advertisement
@@ -72,7 +73,9 @@ class AdvertisementService extends BaseService<Advertisement, AdvertisementDAO> 
      */
     int uploadMedia(String id, int time, MultipartFile file) {
         def advertisement = dao.get(id)
-        deleteMedia(advertisement) // 更新前删除旧的媒体文件
+        if (StringUtils.isNotBlank(advertisement.url)) {
+            deleteMedia(advertisement) // 更新前删除旧的媒体文件
+        }
         def jsonString = UploadUtils.uploadImages(file)
         if (jsonString == '[]') {
             return FAILURE
