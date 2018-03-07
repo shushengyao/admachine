@@ -1,20 +1,8 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8"/>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"/>
-    <link rel="stylesheet" href="../../../static/application/css/global.css"/>
-    <link rel="stylesheet" href="../../../static/materialize/css/materialize.min.css"/>
-    <link rel="shoutcut icon" type="image/x-icon" href="favicon.ico" media="all"/>
-    <title>广告机 - 广告机管理后台</title>
-</head>
-
+<head th:include="/common/head::head('广告机 - 广告机管理后台')"></head>
 <!--/* <editor-fold desc="define"> */-->
 <!--/*@thymesVar id="adminPath" type="java.lang.String"*/-->
-<!--/*@thymesVar id="adminRoleID" type="java.lang.Integer"*/-->
-<!--/*@thymesVar id="loginUser" type="com.xmlan.machine.module.user.entity.User"*/-->
 <!--/*@thymesVar id="page" type="com.github.pagehelper.PageInfo<com.xmlan.machine.module.advertisementMachine.entity.AdvertisementMachine>"*/-->
 <!--/*@thymesVar id="adCount" type="java.util.List<com.xmlan.machine.module.advertisement.entity.AdvertisementCount>"*/-->
 <!--/*@thymesVar id="name" type="java.lang.String"*/-->
@@ -24,285 +12,226 @@
 <!--/* </editor-fold> */-->
 
 <body>
-<header style="z-index: 1;">
-    <nav class="z-depth-2 blue-grey darken-4">
-        <div class="nav-wrapper">
-            <ul class="left">
-                <li style="height: 56px;">
-                    <a href="#" data-activates="nav-mobile" id="button-nav-menu" class="hide-on-large-only">
-                        <i class="material-icons">menu</i>
-                    </a>
-                </li>
-            </ul>
-            <ul id="nav-mobile" class="side-nav fixed" style="transform: translateX(0%);">
-                <li class="logo">
-                    <a id="logo-container" th:href="@{${adminPath}+'/main'}" class="brand-logo">
-                        <img src="../../../static/application/image/logo.png" alt="logo" class="center-block"/>
-                    </a>
-                </li>
-                <li>
-                    <a th:href="@{${adminPath}+'/main'}" class="waves-effect waves-teal">首页</a>
-                </li>
-                <li class="active">
-                    <a th:href="@{${adminPath}+'/advertisementMachine/list/1'}" class="waves-effect waves-teal">广告机</a>
-                </li>
-                <li>
-                    <a th:href="@{${adminPath}+'/advertisement/list/1'}" class="waves-effect waves-teal">广告</a>
-                </li>
-                <li th:if="${loginUser.roleID==adminRoleID}">
-                    <a th:href="@{${adminPath}+'/user/list/1'}" class="waves-effect waves-teal">用户</a>
-                </li>
-                <li th:if="${loginUser.roleID==adminRoleID}">
-                    <a th:href="@{${adminPath}+'/role/list/1'}" class="waves-effect waves-teal">角色</a>
-                </li>
-            </ul>
-            <ul class="right">
-                <li th:text="|${loginUser.username}, 欢迎|"></li>
-                <li>
-                    <a class="dropdown-button" href="#" data-activates="dropdown-menu">
-                        <i class="material-icons right">account_circle</i>
-                    </a>
-                </li>
-            </ul>
-            <ul id="dropdown-menu" class="dropdown-content">
-                <li><a th:href="@{${adminPath}+'/logout'}" class="black-text">退出</a></li>
-            </ul>
-        </div>
-    </nav>
-</header>
+<th:block th:include="/common/header::header('machine')"/>
 
 <main style="z-index: 0;">
-    <div class="page-title z-depth-1 blue-grey darken-2">
-        <div class="white-text">
-            <span class="flow-text">
-                <a class="btn-flat"><i class="material-icons white-text">list</i></a>广告机列表
-            </span>
-        </div>
+  <div class="page-title z-depth-1 blue-grey darken-2">
+    <div class="white-text">
+      <span class="flow-text">
+        <a class="btn-flat"><i class="material-icons white-text">list</i></a>广告机列表
+      </span>
     </div>
-    <br/>
-    <div id="main-content" class="container">
-        <div id="search-box">
-            <form th:action="@{${adminPath}+'/advertisementMachine/list/1'}" method="post">
-                <ul class="collapsible popout" data-collapsible="accordion">
-                    <li>
-                        <div class="collapsible-header"><i class="material-icons">search</i>条件搜索</div>
-                        <div class="collapsible-body">
-                            <div class="row">
-                                <div class="col s12 m10 l10 center">
-                                    <div class="input-field col s12 m4 l4">
-                                        <input type="text" id="name" name="name" th:value="${name}"/>
-                                        <label for="name">按广告机名称</label>
-                                    </div>
-                                    <div class="input-field col s12 m4 l4">
-                                        <input type="text" id="codeNumber" name="codeNumber" th:value="${codeNumber}"/>
-                                        <label for="codeNumber">按广告机识别码</label>
-                                    </div>
-                                    <div class="input-field col s12 m4 l4">
-                                        <input type="text" id="addTime" name="addTime" class="date-picker"
-                                               placeholder="选择日期" th:value="${addTime==' '?'':addTime}"/>
-                                        <label for="addTime">按加入时间</label>
-                                    </div>
-                                </div>
-                                <div class="col s12 m2 l2 center">
-                                    <div class="input-field col s12 m12 l12">
-                                        <button type="submit"
-                                                class="btn-floating btn-large waves-effect waves-light green">
-                                            <i class="material-icons">search</i>
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </li>
-                </ul>
-            </form>
-        </div>
-
-        <table class="highlight responsive-table">
-            <thead>
-            <tr>
-                <th>名称</th>
-                <th>地址</th>
-                <th>加入时间</th>
-                <th>机器识别码</th>
-                <th>广告数</th>
-                <th>灯</th>
-                <th>充电状态</th>
-            </tr>
-            </thead>
-            <tbody class="card">
-            <tr th:each="item:${page.list}" th:onclick="'javascript:detail(\''+*{item.id}+'\')'">
-                <td th:text="*{item.name}">name</td>
-                <td th:text="*{#strings.abbreviate(item.address,30)}">address</td>
-                <td th:text="*{#strings.substring(item.addTime,0,10)}">addTime</td>
-                <td th:text="*{#strings.abbreviate(item.codeNumber,15)}">codeNumber</td>
-                <th:block th:each="count:${adCount}">
-                    <td th:if="${item.id==count.id}" th:text="${count.count}"></td>
-                </th:block>
-                <th:block>
-                    <td th:if="${item.light==1}" th:text="开"></td>
-                    <td th:if="${item.light==0}" th:text="关"></td>
-                </th:block>
-                <th:block>
-                    <td th:if="${item.charge==1}" th:text="充电"></td>
-                    <td th:if="${item.charge==0}" th:text="闲置"></td>
-                </th:block>
-                <td class="right-align hide-on-med-and-down">
-                    <div class="fixed-action-btn horizontal" style="position: relative; right: 0; top: 0;">
-                        <a class="btn-floating btn-large blue"><i class="material-icons">menu</i></a>
-                        <ul>
-                            <li>
-                                <a class="btn-floating blue waves-effect waves-light tooltipped btn modal-trigger"
-                                   data-position="top" data-delay="50" data-tooltip="查看详情" href="#detail-modal"
-                                   th:onmouseover="'javascript:detail(\''+*{item.id}+'\')'">
-                                    <i class="material-icons">more_horiz</i>
-                                </a>
-                            </li>
-                            <li>
-                                <a class="btn-floating green waves-effect waves-light tooltipped" data-position="top"
-                                   data-delay="50" data-tooltip="编辑"
-                                   th:href="@{${adminPath}+'/advertisementMachine/form?id='+${item.id}}">
-                                    <i class="material-icons">edit</i>
-                                </a>
-                            </li>
-                            <li>
-                                <a class="btn-floating red darken-1 waves-effect waves-light tooltipped btn modal-trigger"
-                                   data-position="top" data-delay="50" data-tooltip="删除" href="#delete-modal"
-                                   th:onclick="'javascript:prepareForDeleting(\''+${item.id}+'\')'">
-                                    <i class="material-icons">delete</i>
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                </td>
-                <td class="hide-on-large-only" id="mobile-table-item-buttons">
-                    <div class="fixed-action-btn click-to-toggle center-align"
-                         style="position: relative; left: 0; top: 0;">
-                        <a class="btn-floating blue"><i class="material-icons">menu</i></a>
-                        <ul>
-                            <li>
-                                <a class="btn-floating blue waves-effect waves-light tooltipped btn modal-trigger"
-                                   data-position="top" data-delay="50" data-tooltip="查看详情" href="#detail-modal"
-                                   th:onclick="'javascript:detail(\''+*{item.id}+'\')'">
-                                    <i class="material-icons">more_horiz</i>
-                                </a>
-                            </li>
-                            <li>
-                                <a class="btn-floating green waves-effect waves-light tooltipped" data-position="top"
-                                   data-delay="50" data-tooltip="编辑"
-                                   th:href="@{${adminPath}+'/advertisementMachine/form?id='+${item.id}}">
-                                    <i class="material-icons">edit</i>
-                                </a>
-                            </li>
-                            <li>
-                                <a class="btn-floating red darken-1 waves-effect waves-light tooltipped btn modal-trigger"
-                                   data-position="top" data-delay="50" data-tooltip="删除" href="#delete-modal"
-                                   th:onclick="'javascript:prepareForDeleting(\''+${item.id}+'\')'">
-                                    <i class="material-icons">delete</i>
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                </td>
-            </tr>
-            </tbody>
-        </table>
-
-        <div id="fixed-add-btn" class="fixed-action-btn" th:if="${loginUser.roleID==adminRoleID}">
-            <a class="btn-floating btn-large waves-effect waves-light blue"
-               th:href="@{${adminPath}+'/advertisementMachine/form'}">
-                <i class="large material-icons">add</i>
-            </a>
-        </div>
-
-        <div id="pagination-div" class="center">
-            <ul class="pagination">
-                <li th:if="${!page.hasPreviousPage}" class="disabled">
-                    <a href="#"><i class="material-icons">chevron_left</i></a>
-                </li>
-                <li th:if="${page.hasPreviousPage}" class="waves-effect">
-                    <a th:href="@{${adminPath}+'/advertisementMachine/list/'+${page.prePage}+'?name='+${name}+'&codeNumber='+${codeNumber}+'&addTime='+${addTime}}"><i
-                            class="
-                       material-icons">chevron_left</i></a>
-                </li>
-
-                <th:block th:each="number:${page.navigatepageNums}">
-                    <li th:if="${number==page.pageNum}" class="waves-effect" id="active-page">
-                        <a href="#" th:text="${number}"></a>
-                    </li>
-                    <li th:if="${number!=page.pageNum}" class="waves-effect">
-                        <a th:href="@{${adminPath}+'/advertisementMachine/list/'+${number}+'?name='+${name}+'&codeNumber='+${codeNumber}+'&addTime='+${addTime}}"
-                           th:text="${number}"></a>
-                    </li>
-                </th:block>
-
-                <li th:if="${!page.hasNextPage}" class="disabled">
-                    <a href="#"><i class="material-icons">chevron_right</i></a>
-                </li>
-                <li th:if="${page.hasNextPage}" class="waves-effect">
-                    <a th:href="@{${adminPath}+'/advertisementMachine/list/'+${page.nextPage}+'?name='+${name}+'&codeNumber='+${codeNumber}+'&addTime='+${addTime}}"><i
-                            class="material-icons">chevron_right</i></a>
-                </li>
+  </div>
+  <br/>
+  <div id="main-content" class="container">
+    <div id="search-box">
+      <form th:action="@{${adminPath}+'/advertisementMachine/list/1'}" method="post">
+        <ul class="collapsible popout" data-collapsible="accordion">
+          <li>
+            <div class="collapsible-header"><i class="material-icons">search</i>条件搜索</div>
+            <div class="collapsible-body">
+              <div class="row">
+                <div class="col s12 m10 l10 center">
+                  <div class="input-field col s12 m4 l4">
+                    <input type="text" id="name" name="name" th:value="${name}"/>
+                    <label for="name">按广告机名称</label>
+                  </div>
+                  <div class="input-field col s12 m4 l4">
+                    <input type="text" id="codeNumber" name="codeNumber" th:value="${codeNumber}"/>
+                    <label for="codeNumber">按广告机识别码</label>
+                  </div>
+                  <div class="input-field col s12 m4 l4">
+                    <input type="text" id="addTime" name="addTime" class="date-picker"
+                           placeholder="选择日期" th:value="${addTime==' '?'':addTime}"/>
+                    <label for="addTime">按加入时间</label>
+                  </div>
+                </div>
+                <div class="col s12 m2 l2 center">
+                  <div class="input-field col s12 m12 l12">
+                    <button type="submit"
+                            class="btn-floating btn-large waves-effect waves-light green">
+                      <i class="material-icons">search</i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </form>
+    </div>
+    <table class="highlight responsive-table">
+      <thead>
+      <tr>
+        <th>名称</th>
+        <th>地址</th>
+        <th>加入时间</th>
+        <th>机器识别码</th>
+        <th>广告数</th>
+        <th>灯</th>
+        <th>充电状态</th>
+      </tr>
+      </thead>
+      <tbody class="card">
+      <tr th:each="item:${page.list}" th:onclick="'javascript:detail(\''+*{item.id}+'\')'">
+        <td th:text="*{item.name}">name</td>
+        <td th:text="*{#strings.abbreviate(item.address,30)}">address</td>
+        <td th:text="*{#strings.substring(item.addTime,0,10)}">addTime</td>
+        <td th:text="*{#strings.abbreviate(item.codeNumber,15)}">codeNumber</td>
+        <th:block th:each="count:${adCount}">
+          <td th:if="${item.id==count.id}" th:text="${count.count}"></td>
+        </th:block>
+        <th:block>
+          <td th:if="${item.light==1}" th:text="开"></td>
+          <td th:if="${item.light==0}" th:text="关"></td>
+        </th:block>
+        <th:block>
+          <td th:if="${item.charge==1}" th:text="充电"></td>
+          <td th:if="${item.charge==0}" th:text="闲置"></td>
+        </th:block>
+        <td class="right-align hide-on-med-and-down">
+          <div class="fixed-action-btn horizontal" style="position: relative; right: 0; top: 0;">
+            <a class="btn-floating btn-large blue"><i class="material-icons">menu</i></a>
+            <ul>
+              <li>
+                <a class="btn-floating blue waves-effect waves-light tooltipped btn modal-trigger"
+                   data-position="top" data-delay="50" data-tooltip="查看详情" href="#detail-modal"
+                   th:onmouseover="'javascript:detail(\''+*{item.id}+'\')'">
+                  <i class="material-icons">more_horiz</i>
+                </a>
+              </li>
+              <li>
+                <a class="btn-floating green waves-effect waves-light tooltipped" data-position="top"
+                   data-delay="50" data-tooltip="编辑"
+                   th:href="@{${adminPath}+'/advertisementMachine/form?id='+${item.id}}">
+                  <i class="material-icons">edit</i>
+                </a>
+              </li>
+              <li>
+                <a class="btn-floating red darken-1 waves-effect waves-light tooltipped btn modal-trigger"
+                   data-position="top" data-delay="50" data-tooltip="删除" href="#delete-modal"
+                   th:onclick="'javascript:prepareForDeleting(\''+${item.id}+'\')'">
+                  <i class="material-icons">delete</i>
+                </a>
+              </li>
             </ul>
-        </div>
+          </div>
+        </td>
+        <td class="hide-on-large-only" id="mobile-table-item-buttons">
+          <div class="fixed-action-btn click-to-toggle center-align"
+               style="position: relative; left: 0; top: 0;">
+            <a class="btn-floating blue"><i class="material-icons">menu</i></a>
+            <ul>
+              <li>
+                <a class="btn-floating blue waves-effect waves-light tooltipped btn modal-trigger"
+                   data-position="top" data-delay="50" data-tooltip="查看详情" href="#detail-modal"
+                   th:onclick="'javascript:detail(\''+*{item.id}+'\')'">
+                  <i class="material-icons">more_horiz</i>
+                </a>
+              </li>
+              <li>
+                <a class="btn-floating green waves-effect waves-light tooltipped" data-position="top"
+                   data-delay="50" data-tooltip="编辑"
+                   th:href="@{${adminPath}+'/advertisementMachine/form?id='+${item.id}}">
+                  <i class="material-icons">edit</i>
+                </a>
+              </li>
+              <li>
+                <a class="btn-floating red darken-1 waves-effect waves-light tooltipped btn modal-trigger"
+                   data-position="top" data-delay="50" data-tooltip="删除" href="#delete-modal"
+                   th:onclick="'javascript:prepareForDeleting(\''+${item.id}+'\')'">
+                  <i class="material-icons">delete</i>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+
+    <div id="fixed-add-btn" class="fixed-action-btn" th:if="${loginUser.roleID==adminRoleID}">
+      <a class="btn-floating btn-large waves-effect waves-light blue"
+         th:href="@{${adminPath}+'/advertisementMachine/form'}">
+        <i class="large material-icons">add</i>
+      </a>
     </div>
 
-    <div id="detail-modal" class="modal modal-fixed-footer">
-        <div class="modal-content">
-            <h4>详情</h4>
-            <h6 class="green-text text-darken-2">广告机ID</h6>
-            <p id="detail-item-id">id</p>
-            <h6 class="green-text text-darken-2">名称</h6>
-            <p id="detail-item-name">name</p>
-            <h6 class="green-text text-darken-2">加入时间</h6>
-            <p id="detail-item-add-time">addTime</p>
-            <h6 class="green-text text-darken-2">所属用户</h6>
-            <p id="detail-item-user-id">userID -> username</p>
-            <h6 class="green-text text-darken-2">机器识别码</h6>
-            <p id="detail-item-code-number">codeNumber</p>
-            <h6 class="green-text text-darken-2">广告数</h6>
-            <p id="detail-item-ads">ads count</p>
-            <h6 class="green-text text-darken-2">状态 (灯/充电)</h6>
-            <p id="detail-item-status">status</p>
-            <h6 class="green-text text-darken-2">地址</h6>
-            <p id="detail-item-address">address</p>
-            <h6 class="green-text text-darken-2">备注</h6>
-            <p id="detail-item-remark">remark</p>
-        </div>
-        <div class="modal-footer">
-            <a href="#" class="modal-action modal-close waves-effect waves-green btn-flat">关闭</a>
-        </div>
+    <div id="pagination-div" class="center">
+      <ul class="pagination">
+        <li th:if="${!page.hasPreviousPage}" class="disabled">
+          <a href="#"><i class="material-icons">chevron_left</i></a>
+        </li>
+        <li th:if="${page.hasPreviousPage}" class="waves-effect">
+          <a th:href="@{${adminPath}+'/advertisementMachine/list/'+${page.prePage}+'?name='+${name}+'&codeNumber='+${codeNumber}+'&addTime='+${addTime}}"><i
+              class="material-icons">chevron_left</i></a>
+        </li>
+        <th:block th:each="number:${page.navigatepageNums}">
+          <li th:if="${number==page.pageNum}" class="waves-effect" id="active-page">
+            <a href="#" th:text="${number}"></a>
+          </li>
+          <li th:if="${number!=page.pageNum}" class="waves-effect">
+            <a th:href="@{${adminPath}+'/advertisementMachine/list/'+${number}+'?name='+${name}+'&codeNumber='+${codeNumber}+'&addTime='+${addTime}}"
+               th:text="${number}"></a>
+          </li>
+        </th:block>
+        <li th:if="${!page.hasNextPage}" class="disabled">
+          <a href="#"><i class="material-icons">chevron_right</i></a>
+        </li>
+        <li th:if="${page.hasNextPage}" class="waves-effect">
+          <a th:href="@{${adminPath}+'/advertisementMachine/list/'+${page.nextPage}+'?name='+${name}+'&codeNumber='+${codeNumber}+'&addTime='+${addTime}}"><i
+              class="material-icons">chevron_right</i></a>
+        </li>
+      </ul>
     </div>
+  </div>
 
-    <div id="delete-modal" class="modal">
-        <form th:action="@{${adminPath}+'/advertisementMachine/delete'}">
-            <div class="modal-content">
-                <h4>注意！</h4>
-                <input name="deleteToken" type="hidden" th:value="${deleteToken}">
-                <input id="delete-confirm-id" name="id" type="hidden"/>
-                <p>是否要删除广告机 <span id="delete-name"></span> ?</p>
-            </div>
-            <div class="modal-footer">
-                <a href="#" class="modal-action modal-close waves-effect waves-green btn-flat">不是</a>
-                <button type="submit" class="modal-action modal-close waves-effect btn-flat">是</button>
-            </div>
-        </form>
+  <div id="detail-modal" class="modal modal-fixed-footer">
+    <div class="modal-content">
+      <h4>详情</h4>
+      <h6 class="green-text text-darken-2">广告机ID</h6>
+      <p id="detail-item-id">id</p>
+      <h6 class="green-text text-darken-2">名称</h6>
+      <p id="detail-item-name">name</p>
+      <h6 class="green-text text-darken-2">加入时间</h6>
+      <p id="detail-item-add-time">addTime</p>
+      <h6 class="green-text text-darken-2">所属用户</h6>
+      <p id="detail-item-user-id">userID -> username</p>
+      <h6 class="green-text text-darken-2">机器识别码</h6>
+      <p id="detail-item-code-number">codeNumber</p>
+      <h6 class="green-text text-darken-2">广告数</h6>
+      <p id="detail-item-ads">ads count</p>
+      <h6 class="green-text text-darken-2">状态 (灯/充电)</h6>
+      <p id="detail-item-status">status</p>
+      <h6 class="green-text text-darken-2">地址</h6>
+      <p id="detail-item-address">address</p>
+      <h6 class="green-text text-darken-2">备注</h6>
+      <p id="detail-item-remark">remark</p>
     </div>
+    <div class="modal-footer">
+      <a href="#" class="modal-action modal-close waves-effect waves-green btn-flat">关闭</a>
+    </div>
+  </div>
+
+  <div id="delete-modal" class="modal">
+    <form th:action="@{${adminPath}+'/advertisementMachine/delete'}">
+      <div class="modal-content">
+        <h4>注意！</h4>
+        <input name="deleteToken" type="hidden" th:value="${deleteToken}">
+        <input id="delete-confirm-id" name="id" type="hidden"/>
+        <p>是否要删除广告机 <span id="delete-name"></span> ?</p>
+      </div>
+      <div class="modal-footer">
+        <a href="#" class="modal-action modal-close waves-effect waves-green btn-flat">不是</a>
+        <button type="submit" class="modal-action modal-close waves-effect btn-flat">是</button>
+      </div>
+    </form>
+  </div>
 
 </main>
 
-<footer class="page-footer hide-on-med-and-down blue-grey darken-4" style="z-index: 1;">
-    <div class="footer-copyright">
-        <div class="container right-align">
-            © 2017 Copyright 珠海希梦电子科技有限公司
-        </div>
-    </div>
-</footer>
-
-<script type="text/javascript" src="../../../static/application/js/jquery.min.js"></script>
-<script type="text/javascript" src="../../../static/materialize/js/materialize.min.js"></script>
-<script type="text/javascript" src="../../../static/application/js/date-picker.js"></script>
-<script type="text/javascript" src="../../../static/application/js/global.js"></script>
+<th:block th:include="/common/footer::footer"/>
+<th:block th:include="/common/script::script"/>
 <script type="text/javascript">
     $(function () {
         resize_footer(window.screen.width);

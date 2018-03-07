@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<div th:fragment="header(module)">
+  <!--/* <editor-fold desc="define"> */-->
+  <!--/*@thymesVar id="adminPath" type="java.lang.String"*/-->
+  <!--/*@thymesVar id="adminRoleID" type="java.lang.Integer"*/-->
+  <!--/*@thymesVar id="loginUser" type="com.xmlan.machine.module.user.entity.User"*/-->
+  <!--/* </editor-fold> */-->
+  <header style="z-index: 1;">
+    <nav class="z-depth-2 blue-grey darken-4">
+      <div class="nav-wrapper">
+        <ul class="left">
+          <li style="height: 56px;">
+            <a href="#" data-activates="nav-mobile" id="button-nav-menu" class="hide-on-large-only">
+              <i class="material-icons">menu</i>
+            </a>
+          </li>
+        </ul>
+        <ul id="nav-mobile" class="side-nav fixed" style="transform: translateX(0%);">
+          <li class="logo">
+            <a id="logo-container" th:href="@{${adminPath}+'/main'}" class="brand-logo">
+              <img src="../../../static/application/image/logo.png" alt="logo" class="center-block"/>
+            </a>
+          </li>
+          <th:block th:switch="${module}">
+            <li class="active" th:case="'index'">
+              <a th:href="@{${adminPath}+'/main'}" class="waves-effect waves-teal">首页</a>
+            </li>
+            <li th:case="*">
+              <a th:href="@{${adminPath}+'/main'}" class="waves-effect waves-teal">首页</a>
+            </li>
+          </th:block>
+          <th:block th:switch="${module}">
+            <li class="active" th:case="'machine'">
+              <a th:href="@{${adminPath}+'/advertisementMachine/list/1'}" class="waves-effect waves-teal">广告机</a>
+            </li>
+            <li th:case="*">
+              <a th:href="@{${adminPath}+'/advertisementMachine/list/1'}" class="waves-effect waves-teal">广告机</a>
+            </li>
+          </th:block>
+          <th:block th:switch="${module}">
+            <li class="active" th:case="'advertisement'">
+              <a th:href="@{${adminPath}+'/advertisement/list/1'}" class="waves-effect waves-teal">广告</a>
+            </li>
+            <li th:case="*">
+              <a th:href="@{${adminPath}+'/advertisement/list/1'}" class="waves-effect waves-teal">广告</a>
+            </li>
+          </th:block>
+          <th:block th:switch="${module}">
+            <li class="active" th:if="${loginUser.roleID==adminRoleID}" th:case="'user'">
+              <a th:href="@{${adminPath}+'/user/list/1'}" class="waves-effect waves-teal">用户</a>
+            </li>
+            <li th:if="${loginUser.roleID==adminRoleID}" th:case="*">
+              <a th:href="@{${adminPath}+'/user/list/1'}" class="waves-effect waves-teal">用户</a>
+            </li>
+          </th:block>
+          <th:block th:switch="${module}">
+            <li class="active" th:if="${loginUser.roleID==adminRoleID}" th:case="'role'">
+              <a th:href="@{${adminPath}+'/role/list/1'}" class="waves-effect waves-teal">角色</a>
+            </li>
+            <li th:if="${loginUser.roleID==adminRoleID}" th:case="*">
+              <a th:href="@{${adminPath}+'/role/list/1'}" class="waves-effect waves-teal">角色</a>
+            </li>
+          </th:block>
+        </ul>
+        <ul class="right">
+          <li th:text="|${loginUser.username}, 欢迎|"></li>
+          <li>
+            <a class="dropdown-button" href="#" data-activates="dropdown-menu">
+              <i class="material-icons right">account_circle</i>
+            </a>
+          </li>
+        </ul>
+        <ul id="dropdown-menu" class="dropdown-content">
+          <li><a th:href="@{${adminPath}+'/logout'}" class="black-text">退出</a></li>
+        </ul>
+      </div>
+    </nav>
+  </header>
+</div>
+</body>
+</html>

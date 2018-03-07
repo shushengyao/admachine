@@ -1,104 +1,43 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8"/>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"/>
-    <link rel="stylesheet" href="../../../static/application/css/global.css"/>
-    <link rel="stylesheet" href="../../../static/materialize/css/materialize.min.css"/>
-    <link rel="shoutcut icon" type="image/x-icon" href="/favicon.ico" media="all"/>
-    <title>首页 - 广告机管理后台</title>
-</head>
+<head th:include="/common/head::head('首页 - 广告机管理后台')"></head>
+<!--/* <editor-fold desc="define"> */-->
 <!--/*@thymesVar id="adminPath" type="java.lang.String"*/-->
 <!--/*@thymesVar id="adminRoleID" type="java.lang.Integer"*/-->
 <!--/*@thymesVar id="loginUser" type="com.xmlan.machine.module.user.entity.User"*/-->
+<!--/* </editor-fold> */-->
+
 <body>
-<header style="z-index: 1;">
-    <nav class="z-depth-1 blue-grey darken-4">
-        <div class="nav-wrapper">
-            <ul class="left">
-                <li style="height: 56px;">
-                    <a href="#" data-activates="nav-mobile" id="button-nav-menu" class="hide-on-large-only">
-                        <i class="material-icons">menu</i>
-                    </a>
-                </li>
-            </ul>
-            <ul id="nav-mobile" class="side-nav fixed" style="transform: translateX(0%);">
-                <li class="logo">
-                    <a id="logo-container" th:href="@{${adminPath}+'/main'}" class="brand-logo">
-                        <img src="../../../static/application/image/logo.png" alt="logo" class="center-block"/>
-                    </a>
-                </li>
-                <li class="active">
-                    <a th:href="@{${adminPath}+'/main'}" class="waves-effect waves-teal">首页</a>
-                </li>
-                <li>
-                    <a th:href="@{${adminPath}+'/advertisementMachine/list/1'}" class="waves-effect waves-teal">广告机</a>
-                </li>
-                <li>
-                    <a th:href="@{${adminPath}+'/advertisement/list/1'}" class="waves-effect waves-teal">广告</a>
-                </li>
-                <li th:if="${loginUser.roleID==adminRoleID}">
-                    <a th:href="@{${adminPath}+'/user/list/1'}" class="waves-effect waves-teal">用户</a>
-                </li>
-                <li th:if="${loginUser.roleID==adminRoleID}">
-                    <a th:href="@{${adminPath}+'/role/list/1'}" class="waves-effect waves-teal">角色</a>
-                </li>
-            </ul>
-            <ul class="right">
-                <li th:text="|${loginUser.username}, 欢迎|"></li>
-                <li>
-                    <a class="dropdown-button" href="#" data-activates="dropdown-menu">
-                        <i class="material-icons right">account_circle</i>
-                    </a>
-                </li>
-            </ul>
-            <ul id="dropdown-menu" class="dropdown-content">
-                <li><a th:href="@{${adminPath}+'/logout'}" class="black-text">退出</a></li>
-            </ul>
-        </div>
-    </nav>
-</header>
+<th:block th:include="/common/header::header('index')"/>
 
 <main style="z-index: 0;">
-    <div id="main-content" class="container center">
-        <h1 class="flow-text" th:text="|${loginUser.username}您好, 欢迎使用灯杆广告机管理后台|"></h1>
-    </div>
-    <div class="background container center hide-on-med-and-down">
-        <img src="../../../static/application/image/desk-bg.jpg" width="90%"/>
-    </div>
-    <div class="background container center hide-on-large-only">
-        <img src="../../../static/application/image/tab-mob-bg.jpg" width="90%"/>
-    </div>
+  <div id="main-content" class="container center">
+    <h1 class="flow-text" th:text="|${loginUser.username}您好, 欢迎使用灯杆广告机管理后台|"></h1>
+  </div>
+  <div class="background container center hide-on-med-and-down">
+    <img src="../../../static/application/image/desk-bg.jpg" width="90%"/>
+  </div>
+  <div class="background container center hide-on-large-only">
+    <img src="../../../static/application/image/tab-mob-bg.jpg" width="90%"/>
+  </div>
 </main>
 
-<footer class="page-footer hide-on-med-and-down blue-grey darken-4" style="z-index: 1;">
-    <div class="footer-copyright">
-        <div class="container right-align">
-            © 2017 Copyright 珠海希梦电子科技有限公司
-        </div>
-    </div>
-</footer>
-
-<script type="text/javascript" src="../../../static/application/js/jquery.min.js"></script>
-<script type="text/javascript" src="../../../static/materialize/js/materialize.min.js"></script>
-<script type="text/javascript" src="../../../static/application/js/global.js"></script>
+<th:block th:include="/common/footer::footer"/>
+<th:block th:include="/common/script::script"/>
 <script type="text/javascript">
-    $(document.body).css({
-        "overflow-x": "hidden",
-        "overflow-y": "hidden"
+  $(document.body).css({
+    "overflow-x": "hidden",
+    "overflow-y": "hidden"
+  });
+  $(function () {
+    resize_footer(window.screen.width);
+    $("#button-nav-menu").sideNav({
+      closeOnClick: true,
+      draggable: true
     });
-
-    $(function () {
-        resize_footer(window.screen.width);
-        $("#button-nav-menu").sideNav({
-            closeOnClick: true,
-            draggable: true
-        });
-        $(".dropdown-button").dropdown();
-        toast('[[${message}]]');
-    });
+    $(".dropdown-button").dropdown();
+    toast('[[${message}]]');
+  });
 </script>
 </body>
 </html>

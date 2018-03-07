@@ -1,16 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8"/>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"/>
-    <link rel="stylesheet" href="../../../static/application/css/global.css"/>
-    <link rel="stylesheet" href="../../../static/materialize/css/materialize.min.css"/>
-    <link rel="shoutcut icon" type="image/x-icon" href="/favicon.ico" media="all"/>
-    <title>用户 - 广告机管理后台</title>
-</head>
-
+<head th:include="/common/head::head('用户 - 广告机管理后台')"></head>
 <!--/* <editor-fold desc="define"> */-->
 <!--/*@thymesVar id="adminPath" type="java.lang.String"*/-->
 <!--/*@thymesVar id="adminRoleID" type="java.lang.Integer"*/-->
@@ -28,487 +18,420 @@
 <!--/* </editor-fold> */-->
 
 <body>
-<header style="z-index: 1;">
-    <nav class="z-depth-2 blue-grey darken-4">
-        <div class="nav-wrapper">
-            <ul class="left">
-                <li style="height: 56px;">
-                    <a href="#" data-activates="nav-mobile" id="button-nav-menu" class="hide-on-large-only">
-                        <i class="material-icons">menu</i>
-                    </a>
-                </li>
-            </ul>
-            <ul id="nav-mobile" class="side-nav fixed" style="transform: translateX(0%);">
-                <li class="logo">
-                    <a id="logo-container" th:href="@{${adminPath}+'/main'}" class="brand-logo">
-                        <img src="../../../static/application/image/logo.png" alt="logo" class="center-block"/>
-                    </a>
-                </li>
-                <li>
-                    <a th:href="@{${adminPath}+'/main'}" class="waves-effect waves-teal">首页</a>
-                </li>
-                <li>
-                    <a th:href="@{${adminPath}+'/advertisementMachine/list/1'}" class="waves-effect waves-teal">广告机</a>
-                </li>
-                <li>
-                    <a th:href="@{${adminPath}+'/advertisement/list/1'}" class="waves-effect waves-teal">广告</a>
-                </li>
-                <li class="active" th:if="${loginUser.roleID==adminRoleID}">
-                    <a th:href="@{${adminPath}+'/user/list/1'}" class="waves-effect waves-teal">用户</a>
-                </li>
-                <li th:if="${loginUser.roleID==adminRoleID}">
-                    <a th:href="@{${adminPath}+'/role/list/1'}" class="waves-effect waves-teal">角色</a>
-                </li>
-            </ul>
-            <ul class="right">
-                <li th:text="|${loginUser.username}, 欢迎|"></li>
-                <li>
-                    <a class="dropdown-button" href="#" data-activates="dropdown-menu">
-                        <i class="material-icons right">account_circle</i>
-                    </a>
-                </li>
-            </ul>
-            <ul id="dropdown-menu" class="dropdown-content">
-                <li><a th:href="@{${adminPath}+'/logout'}" class="black-text">退出</a></li>
-            </ul>
-        </div>
-    </nav>
-</header>
+<th:block th:include="/common/header::header('user')"/>
 
 <main style="z-index: 0;">
-    <div class="page-title z-depth-1 blue-grey darken-2">
-        <div class="white-text">
-            <span class="flow-text">
-                <a class="btn-flat"><i class="material-icons white-text">list</i></a>用户列表
-            </span>
-        </div>
+  <div class="page-title z-depth-1 blue-grey darken-2">
+    <div class="white-text">
+      <span class="flow-text">
+        <a class="btn-flat"><i class="material-icons white-text">list</i></a>用户列表
+      </span>
     </div>
-    <br/>
-    <div id="main-content" class="container">
-        <div id="search-box">
-            <form th:action="@{${adminPath}+'/user/list/1'}" method="post">
-                <ul class="collapsible popout" data-collapsible="accordion">
-                    <li>
-                        <div class="collapsible-header"><i class="material-icons">search</i>条件搜索</div>
-                        <div class="collapsible-body">
-                            <div class="row">
-                                <div class="col s12 m10 l10 center">
-                                    <div class="input-field col s6 m3 l3">
-                                        <input id="username" name="username" th:value="${username}" type="text"
-                                               placeholder="输入用户名"/>
-                                        <label for="username">按用户名</label>
-                                    </div>
-                                    <div class="input-field col s6 m3 l3">
-                                        <input id="authname" name="authname" th:value="${authname}" type="text"
-                                               placeholder="输入登录账号"/>
-                                        <label for="authname">按登录名</label>
-                                    </div>
-                                    <div class="input-field col s6 m3 l3">
-                                        <input id="addTime" name="addTime" th:value="${addTime}" type="text"
-                                               class="date-picker" placeholder="选择日期"/>
-                                        <label for="addTime">按加入时间</label>
-                                    </div>
-                                    <div class="input-field col s6 m3 l3">
-                                        <select id="roleID" name="roleID">
-                                            <option th:each="item:${roleList}" th:value="*{item.id}"
-                                                    th:text="*{item.name}" th:if="${item.id==roleID}"
-                                                    selected="selected"></option>
-                                            <option value="-1">不选择</option>
-                                            <option th:each="item:${roleList}" th:value="*{item.id}"
-                                                    th:text="*{item.name}"></option>
-                                        </select>
-                                        <label for="roleID">按角色</label>
-                                    </div>
-                                </div>
-                                <div class="col s12 m2 l2 center">
-                                    <div class="input-field">
-                                        <button type="submit"
-                                                class="btn-floating btn-large waves-effect waves-light green">
-                                            <i class="material-icons">search</i>
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </li>
-                </ul>
-            </form>
-        </div>
-
-        <table id="table-main-content" class="highlight responsive-table">
-            <thead>
-            <tr>
-                <th>用户名</th>
-                <th>登录名</th>
-                <th>联系方式</th>
-                <th>角色</th>
-                <th>广告机数</th>
-                <th>地址</th>
-            </tr>
-            </thead>
-            <tbody class="card">
-            <tr th:each="item:${page.list}">
-                <td th:text="*{item.username}">username</td>
-                <td th:text="*{item.authname}">authname</td>
-                <td th:text="*{item.phone}">phone</td>
-                <th:block th:each="role:${roleList}">
-                    <td th:if="${item.roleID==role.id}" th:text="*{role.name}"></td>
-                </th:block>
-                <th:block th:each="count:${machineCount}">
-                    <td th:if="${item.id==count.id}" th:text="*{count.count}"></td>
-                </th:block>
-                <td th:text="*{item.address}">address</td>
-                <td class="right-align hide-on-med-and-down">
-                    <div class="fixed-action-btn horizontal" style="position: relative; right: 0; top: 0;">
-                        <a class="btn-floating btn-large blue"><i class="material-icons">menu</i></a>
-                        <ul>
-                            <li>
-                                <a class="btn-floating blue waves-effect waves-light tooltipped btn modal-trigger"
-                                   data-position="top" data-delay="50" data-tooltip="查看详情" href="#detail-modal"
-                                   th:onmouseover="'javascript:detail(\''+*{item.id}+'\')'">
-                                    <i class="material-icons">more_horiz</i>
-                                </a>
-                            </li>
-                            <li>
-                                <a class="btn-floating green waves-effect waves-light tooltipped"
-                                   data-position="top" data-delay="50" data-tooltip="编辑"
-                                   th:href="@{${adminPath}+'/user/form?id='+${item.id}}">
-                                    <i class="material-icons">edit</i>
-                                </a>
-                            </li>
-                            <li>
-                                <a class="btn-floating cyan waves-effect waves-light tooltipped btn modal-trigger"
-                                   data-position="top" data-delay="50" data-tooltip="更改角色" href="#chgrp-modal"
-                                   th:onclick="'javascript:prepareForChgrp(\''+${item.id}+'\')'">
-                                    <i class="material-icons">group</i>
-                                </a>
-                            </li>
-                            <li>
-                                <a class="btn-floating yellow waves-effect waves-light tooltipped btn modal-trigger"
-                                   data-position="top" data-delay="50" data-tooltip="修改密码" href="#passwd-modal"
-                                   th:onclick="'javascript:prepareForPasswd(\''+${item.id}+'\', \''+${item.roleID}+'\')'">
-                                    <i class="material-icons">lock_outline</i>
-                                </a>
-                            </li>
-                            <li>
-                                <a class="btn-floating red darken-1 waves-effect waves-light tooltipped btn modal-trigger"
-                                   data-position="top" data-delay="50" data-tooltip="删除" href="#delete-modal"
-                                   th:onclick="'javascript:prepareForDeleting(\''+${item.id}+'\')'">
-                                    <i class="material-icons">delete</i>
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                </td>
-                <td class="hide-on-large-only" id="mobile-table-item-buttons">
-                    <div class="fixed-action-btn click-to-toggle center-align"
-                         style="position: relative; left: 0; top: 0;">
-                        <a class="btn-floating blue"><i class="material-icons">menu</i></a>
-                        <ul>
-                            <li>
-                                <a class="btn-floating blue waves-effect waves-light tooltipped btn modal-trigger"
-                                   data-position="top" data-delay="50" data-tooltip="查看详情" href="#detail-modal"
-                                   th:onclick="'javascript:detail(\''+*{item.id}+'\')'">
-                                    <i class="material-icons">more_horiz</i>
-                                </a>
-                            </li>
-                            <li>
-                                <a class="btn-floating green waves-effect waves-light tooltipped" data-position="top"
-                                   data-delay="50" data-tooltip="编辑"
-                                   th:href="@{${adminPath}+'/user/form?id='+${item.id}}">
-                                    <i class="material-icons">edit</i>
-                                </a>
-                            </li>
-                            <li>
-                                <a class="btn-floating cyan waves-effect waves-light tooltipped btn modal-trigger"
-                                   data-position="top" data-delay="50" data-tooltip="更改角色" href="#chgrp-modal"
-                                   th:onclick="'javascript:prepareForChgrp(\''+${item.id}+'\')'">
-                                    <i class="material-icons">group</i>
-                                </a>
-                            </li>
-                            <li>
-                                <a class="btn-floating yellow waves-effect waves-light tooltipped btn modal-trigger"
-                                   data-position="top" data-delay="50" data-tooltip="修改密码" href="#passwd-modal"
-                                   th:onclick="'javascript:prepareForPasswd(\''+${item.id}+'\')'">
-                                    <i class="material-icons">lock_outline</i>
-                                </a>
-                            </li>
-                            <li>
-                                <a class="btn-floating red darken-1 waves-effect waves-light tooltipped btn modal-trigger"
-                                   data-position="top" data-delay="50" data-tooltip="删除" href="#delete-modal"
-                                   th:onclick="'javascript:prepareForDeleting(\''+${item.id}+'\')'">
-                                    <i class="material-icons">delete</i>
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                </td>
-            </tr>
-            </tbody>
-        </table>
-
-        <div id="fixed-add-btn" class="fixed-action-btn">
-            <a class="btn-floating btn-large waves-effect waves-light blue" th:href="@{${adminPath}+'/user/form'}">
-                <i class="large material-icons">add</i>
-            </a>
-        </div>
-
-        <div id="pagination-div" class="center">
-            <ul class="pagination">
-                <li th:if="${!page.hasPreviousPage}" class="disabled">
-                    <a href="#"><i class="material-icons">chevron_left</i></a>
-                </li>
-                <li th:if="${page.hasPreviousPage}" class="waves-effect">
-                    <a th:href="@{${adminPath}+'/user/list/'+${page.prePage}+'?username='+${username}+'&authname='+${authname}+'&addTime='+${addTime}+'&roleID='+${roleID}}"><i
-                            class="material-icons">chevron_left</i></a>
-                </li>
-
-                <th:block th:each="number:${page.navigatepageNums}">
-                    <li th:if="${number==page.pageNum}" class="waves-effect" id="active-page">
-                        <a href="#" th:text="${number}"></a>
-                    </li>
-                    <li th:if="${number!=page.pageNum}" class="waves-effect">
-                        <a th:href="@{${adminPath}+'/user/list/'+${number}+'?username='+${username}+'&authname='+${authname}+'&addTime='+${addTime}+'&roleID='+${roleID}}"
-                           th:text="${number}"></a>
-                    </li>
-                </th:block>
-
-                <li th:if="${!page.hasNextPage}" class="disabled">
-                    <a href="#"><i class="material-icons">chevron_right</i></a>
-                </li>
-                <li th:if="${page.hasNextPage}" class="waves-effect">
-                    <a th:href="@{${adminPath}+'/user/list/'+${page.nextPage}+'?username='+${username}+'&authname='+${authname}+'&addTime='+${addTime}+'&roleID='+${roleID}}"><i
-                            class="material-icons">chevron_right</i></a>
-                </li>
-            </ul>
-        </div>
-    </div>
-
-    <!-- <editor-fold desc="Modal"> -->
-    <div id="detail-modal" class="modal modal-fixed-footer">
-        <div class="modal-content">
-            <h4>详情</h4>
-            <h6 class="green-text text-darken-2">用户编号</h6>
-            <p id="detail-item-id">id</p>
-            <h6 class="green-text text-darken-2">用户名</h6>
-            <p id="detail-item-username">username</p>
-            <h6 class="green-text text-darken-2">登录名</h6>
-            <p id="detail-item-authname">authname</p>
-            <h6 class="green-text text-darken-2">联系电话</h6>
-            <p id="detail-item-phone">phone</p>
-            <h6 class="green-text text-darken-2">加入时间</h6>
-            <p id="detail-item-add-time">addTime</p>
-            <h6 class="green-text text-darken-2">角色</h6>
-            <p id="detail-item-role">roleID -> role.name</p>
-            <h6 class="green-text text-darken-2">地址</h6>
-            <p id="detail-item-address">address</p>
-            <h6 class="green-text text-darken-2">备注</h6>
-            <p id="detail-item-remark">remark</p>
-        </div>
-        <div class="modal-footer">
-            <a href="#" class="modal-action modal-close waves-effect waves-green btn-flat">关闭</a>
-        </div>
-    </div>
-
-    <div id="delete-modal" class="modal">
-        <form th:action="@{${adminPath}+'/user/delete'}">
-            <div class="modal-content">
-                <h4>注意！</h4>
-                <input id="delete-confirm-id" name="id" type="hidden"/>
-                <input name="deleteToken" type="hidden" th:value="${deleteToken}">
-                <p>是否要删除用户 <span id="delete-name"></span> ?</p>
-            </div>
-            <div class="modal-footer">
-                <a href="#" class="modal-action modal-close waves-effect waves-green btn-flat">不是</a>
-                <button type="submit" class="modal-action modal-close waves-effect btn-flat">是</button>
-            </div>
-        </form>
-    </div>
-
-    <div id="passwd-modal" class="modal">
-        <div class="modal-content">
-            <h4>修改密码</h4>
-            <input id="passwd-id" name="id" type="hidden">
-            <input name="passwdToken" id="pto" type="hidden" th:value="${passwdToken}">
-            <div class="row">
-                <div class="input-field col s12 m12 l12">
-                    <input id="old-passwd" name="oldPasswd" placeholder="角色是管理员则必填" type="password" class="validate">
-                    <label for="old-passwd">原密码</label>
-                </div>
-                <div class="input-field col s12 m12 l12">
-                    <input id="new-passwd" name="newPasswd" type="password" class="validate">
-                    <label for="new-passwd">新密码</label>
-                </div>
-                <div class="input-field col s12 m12 l12">
-                    <input id="re-passwd" name="rePasswd" type="password" class="validate">
-                    <label for="re-passwd">重复密码</label>
-                </div>
-            </div>
-        </div>
-        <div class="modal-footer">
-            <a href="#" class="modal-action modal-close waves-effect waves-green btn-flat">放弃修改</a>
-            <a href="#" onclick="passwd()" class="modal-action modal-close waves-effect btn-flat">确认修改</a>
-        </div>
-    </div>
-
-    <div id="chgrp-modal" class="modal">
-        <div class="modal-content">
-            <h4>更改用户角色</h4>
-            <input id="chgrp-id" name="id" type="hidden">
-            <input name="chgrpToken" id="cto" type="hidden" th:value="${chgrpToken}">
-            <div class="row">
-                <div class="input-field col s12 m12 l12">
-                    <select id="chgrp-roleID" name="roleID">
-                        <option th:each="item:${roleList}" th:value="*{item.id}" th:text="*{item.name}"></option>
+  </div>
+  <br/>
+  <div id="main-content" class="container">
+    <div id="search-box">
+      <form th:action="@{${adminPath}+'/user/list/1'}" method="post">
+        <ul class="collapsible popout" data-collapsible="accordion">
+          <li>
+            <div class="collapsible-header"><i class="material-icons">search</i>条件搜索</div>
+            <div class="collapsible-body">
+              <div class="row">
+                <div class="col s12 m10 l10 center">
+                  <div class="input-field col s6 m3 l3">
+                    <input id="username" name="username" th:value="${username}" type="text" placeholder="输入用户名"/>
+                    <label for="username">按用户名</label>
+                  </div>
+                  <div class="input-field col s6 m3 l3">
+                    <input id="authname" name="authname" th:value="${authname}" type="text" placeholder="输入登录账号"/>
+                    <label for="authname">按登录名</label>
+                  </div>
+                  <div class="input-field col s6 m3 l3">
+                    <input id="addTime" name="addTime" th:value="${addTime}" type="text" class="date-picker"
+                           placeholder="选择日期"/>
+                    <label for="addTime">按加入时间</label>
+                  </div>
+                  <div class="input-field col s6 m3 l3">
+                    <select id="roleID" name="roleID">
+                      <option th:each="item:${roleList}" th:value="*{item.id}" th:text="*{item.name}"
+                              th:if="${item.id==roleID}" selected="selected"></option>
+                      <option value="-1">不选择</option>
+                      <option th:each="item:${roleList}" th:value="*{item.id}" th:text="*{item.name}"></option>
                     </select>
-                    <label for="chgrp-roleID">按角色</label>
+                    <label for="roleID">按角色</label>
+                  </div>
                 </div>
+                <div class="col s12 m2 l2 center">
+                  <div class="input-field">
+                    <button type="submit" class="btn-floating btn-large waves-effect waves-light green"><i
+                        class="material-icons">search</i></button>
+                  </div>
+                </div>
+              </div>
             </div>
-        </div>
-        <div class="modal-footer">
-            <a href="#" class="modal-action modal-close waves-effect waves-green btn-flat">放弃更改</a>
-            <a href="#" onclick="chgrp()" class="modal-action modal-close waves-effect btn-flat">确认更改</a>
-        </div>
+          </li>
+        </ul>
+      </form>
     </div>
-    <!-- </editor-fold> -->
 
+    <table id="table-main-content" class="highlight responsive-table">
+      <thead>
+      <tr>
+        <th>用户名</th>
+        <th>登录名</th>
+        <th>联系方式</th>
+        <th>角色</th>
+        <th>广告机数</th>
+        <th>地址</th>
+      </tr>
+      </thead>
+      <tbody class="card">
+      <tr th:each="item:${page.list}">
+        <td th:text="*{item.username}">username</td>
+        <td th:text="*{item.authname}">authname</td>
+        <td th:text="*{item.phone}">phone</td>
+        <th:block th:each="role:${roleList}">
+          <td th:if="${item.roleID==role.id}" th:text="*{role.name}"></td>
+        </th:block>
+        <th:block th:each="count:${machineCount}">
+          <td th:if="${item.id==count.id}" th:text="*{count.count}"></td>
+        </th:block>
+        <td th:text="*{item.address}">address</td>
+        <td class="right-align hide-on-med-and-down">
+          <div class="fixed-action-btn horizontal" style="position: relative; right: 0; top: 0;">
+            <a class="btn-floating btn-large blue"><i class="material-icons">menu</i></a>
+            <ul>
+              <li>
+                <a class="btn-floating blue waves-effect waves-light tooltipped btn modal-trigger"
+                   data-position="top" data-delay="50" data-tooltip="查看详情" href="#detail-modal"
+                   th:onmouseover="'javascript:detail(\''+*{item.id}+'\')'">
+                  <i class="material-icons">more_horiz</i>
+                </a>
+              </li>
+              <li>
+                <a class="btn-floating green waves-effect waves-light tooltipped"
+                   data-position="top" data-delay="50" data-tooltip="编辑"
+                   th:href="@{${adminPath}+'/user/form?id='+${item.id}}">
+                  <i class="material-icons">edit</i>
+                </a>
+              </li>
+              <li>
+                <a class="btn-floating cyan waves-effect waves-light tooltipped btn modal-trigger"
+                   data-position="top" data-delay="50" data-tooltip="更改角色" href="#chgrp-modal"
+                   th:onclick="'javascript:prepareForChgrp(\''+${item.id}+'\')'">
+                  <i class="material-icons">group</i>
+                </a>
+              </li>
+              <li>
+                <a class="btn-floating yellow waves-effect waves-light tooltipped btn modal-trigger"
+                   data-position="top" data-delay="50" data-tooltip="修改密码" href="#passwd-modal"
+                   th:onclick="'javascript:prepareForPasswd(\''+${item.id}+'\', \''+${item.roleID}+'\')'">
+                  <i class="material-icons">lock_outline</i>
+                </a>
+              </li>
+              <li>
+                <a class="btn-floating red darken-1 waves-effect waves-light tooltipped btn modal-trigger"
+                   data-position="top" data-delay="50" data-tooltip="删除" href="#delete-modal"
+                   th:onclick="'javascript:prepareForDeleting(\''+${item.id}+'\')'">
+                  <i class="material-icons">delete</i>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </td>
+        <td class="hide-on-large-only" id="mobile-table-item-buttons">
+          <div class="fixed-action-btn click-to-toggle center-align" style="position: relative; left: 0; top: 0;">
+            <a class="btn-floating blue"><i class="material-icons">menu</i></a>
+            <ul>
+              <li>
+                <a class="btn-floating blue waves-effect waves-light tooltipped btn modal-trigger" data-position="top"
+                   data-delay="50" data-tooltip="查看详情" href="#detail-modal"
+                   th:onclick="'javascript:detail(\''+*{item.id}+'\')'">
+                  <i class="material-icons">more_horiz</i>
+                </a>
+              </li>
+              <li>
+                <a class="btn-floating green waves-effect waves-light tooltipped" data-position="top" data-delay="50"
+                   data-tooltip="编辑" th:href="@{${adminPath}+'/user/form?id='+${item.id}}">
+                  <i class="material-icons">edit</i>
+                </a>
+              </li>
+              <li>
+                <a class="btn-floating cyan waves-effect waves-light tooltipped btn modal-trigger"
+                   data-position="top" data-delay="50" data-tooltip="更改角色" href="#chgrp-modal"
+                   th:onclick="'javascript:prepareForChgrp(\''+${item.id}+'\')'">
+                  <i class="material-icons">group</i>
+                </a>
+              </li>
+              <li>
+                <a class="btn-floating yellow waves-effect waves-light tooltipped btn modal-trigger"
+                   data-position="top" data-delay="50" data-tooltip="修改密码" href="#passwd-modal"
+                   th:onclick="'javascript:prepareForPasswd(\''+${item.id}+'\')'">
+                  <i class="material-icons">lock_outline</i>
+                </a>
+              </li>
+              <li>
+                <a class="btn-floating red darken-1 waves-effect waves-light tooltipped btn modal-trigger"
+                   data-position="top" data-delay="50" data-tooltip="删除" href="#delete-modal"
+                   th:onclick="'javascript:prepareForDeleting(\''+${item.id}+'\')'">
+                  <i class="material-icons">delete</i>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+
+    <div id="fixed-add-btn" class="fixed-action-btn">
+      <a class="btn-floating btn-large waves-effect waves-light blue" th:href="@{${adminPath}+'/user/form'}">
+        <i class="large material-icons">add</i>
+      </a>
+    </div>
+
+    <div id="pagination-div" class="center">
+      <ul class="pagination">
+        <li th:if="${!page.hasPreviousPage}" class="disabled">
+          <a href="#"><i class="material-icons">chevron_left</i></a>
+        </li>
+        <li th:if="${page.hasPreviousPage}" class="waves-effect">
+          <a th:href="@{${adminPath}+'/user/list/'+${page.prePage}+'?username='+${username}+'&authname='+${authname}+'&addTime='+${addTime}+'&roleID='+${roleID}}"><i
+              class="material-icons">chevron_left</i></a>
+        </li>
+        <th:block th:each="number:${page.navigatepageNums}">
+          <li th:if="${number==page.pageNum}" class="waves-effect" id="active-page">
+            <a href="#" th:text="${number}"></a>
+          </li>
+          <li th:if="${number!=page.pageNum}" class="waves-effect">
+            <a th:href="@{${adminPath}+'/user/list/'+${number}+'?username='+${username}+'&authname='+${authname}+'&addTime='+${addTime}+'&roleID='+${roleID}}"
+               th:text="${number}"></a>
+          </li>
+        </th:block>
+        <li th:if="${!page.hasNextPage}" class="disabled">
+          <a href="#"><i class="material-icons">chevron_right</i></a>
+        </li>
+        <li th:if="${page.hasNextPage}" class="waves-effect">
+          <a th:href="@{${adminPath}+'/user/list/'+${page.nextPage}+'?username='+${username}+'&authname='+${authname}+'&addTime='+${addTime}+'&roleID='+${roleID}}"><i
+              class="material-icons">chevron_right</i></a>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- <editor-fold desc="Modal"> -->
+  <div id="detail-modal" class="modal modal-fixed-footer">
+    <div class="modal-content">
+      <h4>详情</h4>
+      <h6 class="green-text text-darken-2">用户编号</h6>
+      <p id="detail-item-id">id</p>
+      <h6 class="green-text text-darken-2">用户名</h6>
+      <p id="detail-item-username">username</p>
+      <h6 class="green-text text-darken-2">登录名</h6>
+      <p id="detail-item-authname">authname</p>
+      <h6 class="green-text text-darken-2">联系电话</h6>
+      <p id="detail-item-phone">phone</p>
+      <h6 class="green-text text-darken-2">加入时间</h6>
+      <p id="detail-item-add-time">addTime</p>
+      <h6 class="green-text text-darken-2">角色</h6>
+      <p id="detail-item-role">roleID -> role.name</p>
+      <h6 class="green-text text-darken-2">地址</h6>
+      <p id="detail-item-address">address</p>
+      <h6 class="green-text text-darken-2">备注</h6>
+      <p id="detail-item-remark">remark</p>
+    </div>
+    <div class="modal-footer">
+      <a href="#" class="modal-action modal-close waves-effect waves-green btn-flat">关闭</a>
+    </div>
+  </div>
+
+  <div id="delete-modal" class="modal">
+    <form th:action="@{${adminPath}+'/user/delete'}">
+      <div class="modal-content">
+        <h4>注意！</h4>
+        <input id="delete-confirm-id" name="id" type="hidden"/>
+        <input name="deleteToken" type="hidden" th:value="${deleteToken}">
+        <p>是否要删除用户 <span id="delete-name"></span> ?</p>
+      </div>
+      <div class="modal-footer">
+        <a href="#" class="modal-action modal-close waves-effect waves-green btn-flat">不是</a>
+        <button type="submit" class="modal-action modal-close waves-effect btn-flat">是</button>
+      </div>
+    </form>
+  </div>
+
+  <div id="passwd-modal" class="modal">
+    <div class="modal-content">
+      <h4>修改密码</h4>
+      <input id="passwd-id" name="id" type="hidden">
+      <input name="passwdToken" id="pto" type="hidden" th:value="${passwdToken}">
+      <div class="row">
+        <div class="input-field col s12 m12 l12">
+          <input id="old-passwd" name="oldPasswd" placeholder="角色是管理员则必填" type="password" class="validate">
+          <label for="old-passwd">原密码</label>
+        </div>
+        <div class="input-field col s12 m12 l12">
+          <input id="new-passwd" name="newPasswd" type="password" class="validate">
+          <label for="new-passwd">新密码</label>
+        </div>
+        <div class="input-field col s12 m12 l12">
+          <input id="re-passwd" name="rePasswd" type="password" class="validate">
+          <label for="re-passwd">重复密码</label>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <a href="#" class="modal-action modal-close waves-effect waves-green btn-flat">放弃修改</a>
+      <a href="#" onclick="passwd()" class="modal-action modal-close waves-effect btn-flat">确认修改</a>
+    </div>
+  </div>
+
+  <div id="chgrp-modal" class="modal">
+    <div class="modal-content">
+      <h4>更改用户角色</h4>
+      <input id="chgrp-id" name="id" type="hidden">
+      <input name="chgrpToken" id="cto" type="hidden" th:value="${chgrpToken}">
+      <div class="row">
+        <div class="input-field col s12 m12 l12">
+          <select id="chgrp-roleID" name="roleID">
+            <option th:each="item:${roleList}" th:value="*{item.id}" th:text="*{item.name}"></option>
+          </select>
+          <label for="chgrp-roleID">按角色</label>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <a href="#" class="modal-action modal-close waves-effect waves-green btn-flat">放弃更改</a>
+      <a href="#" onclick="chgrp()" class="modal-action modal-close waves-effect btn-flat">确认更改</a>
+    </div>
+  </div>
 </main>
 
-<footer class="page-footer hide-on-med-and-down blue-grey darken-4" style="z-index: 1;">
-    <div class="footer-copyright">
-        <div class="container right-align">
-            © 2017 Copyright 珠海希梦电子科技有限公司
-        </div>
-    </div>
-</footer>
-
-<script type="text/javascript" src="../../../static/application/js/jquery.min.js"></script>
-<script type="text/javascript" src="../../../static/materialize/js/materialize.min.js"></script>
-<script type="text/javascript" src="../../../static/application/js/date-picker.js"></script>
-<script type="text/javascript" src="../../../static/application/js/global.js"></script>
+<th:block th:include="/common/footer::footer"/>
+<th:block th:include="/common/script::script"/>
 <script type="text/javascript">
-    $(function () {
-        resize_footer(window.screen.width);
-        $('#button-nav-menu').sideNav({
-            closeOnClick: true,
-            draggable: true
-        });
-        $('.dropdown-button').dropdown();
-        $('.date-picker').pickadatee({
-            closeOnSelect: true
-        });
-        $("#detail-modal").modal({
-            complete: function () {
-                $("#detail-item-id").text('');
-                $("#detail-item-username").text('');
-                $("#detail-item-authname").text('');
-                $("#detail-item-phone").text('');
-                $("#detail-item-add-time").text('');
-                $("#detail-item-role").text('');
-                $("#detail-item-address").text('');
-                $("#detail-item-remark").text('');
-            }
-        });
-        $("#delete-modal").modal();
-        $("#passwd-modal").modal({
-            complete: function () {
-                $("#old-passwd").val(null);
-                $("#new-passwd").val(null);
-                $("#re-passwd").val(null);
-            }
-        });
-        $("#chgrp-modal").modal();
-        $("#roleID").material_select();
-        $("#chgrp-roleID").material_select();
-        toast('[[${message}]]');
+  $(function () {
+    resize_footer(window.screen.width);
+    $('#button-nav-menu').sideNav({
+      closeOnClick: true,
+      draggable: true
     });
+    $('.dropdown-button').dropdown();
+    $('.date-picker').pickadatee({
+      closeOnSelect: true
+    });
+    $("#detail-modal").modal({
+      complete: function () {
+        $("#detail-item-id").text('');
+        $("#detail-item-username").text('');
+        $("#detail-item-authname").text('');
+        $("#detail-item-phone").text('');
+        $("#detail-item-add-time").text('');
+        $("#detail-item-role").text('');
+        $("#detail-item-address").text('');
+        $("#detail-item-remark").text('');
+      }
+    });
+    $("#delete-modal").modal();
+    $("#passwd-modal").modal({
+      complete: function () {
+        $("#old-passwd").val(null);
+        $("#new-passwd").val(null);
+        $("#re-passwd").val(null);
+      }
+    });
+    $("#chgrp-modal").modal();
+    $("#roleID").material_select();
+    $("#chgrp-roleID").material_select();
+    toast('[[${message}]]');
+  });
 
-    function detail(id) {
-        var url = '[[${adminPath}]]/user/detail/' + id;
-        $.ajax({
-            url: url,
-            type: "GET",
-            success: function (data) {
-                $("#detail-item-id").text(data['user'].id);
-                $("#detail-item-username").text(data['user'].username);
-                $("#detail-item-authname").text(data['user'].authname);
-                $("#detail-item-phone").text(data['user'].phone);
-                $("#detail-item-add-time").text(data['user'].addTime);
-                $("#detail-item-role").text(data['roleName']);
-                $("#detail-item-address").text(data['user'].address);
-                $("#detail-item-remark").text(data['user'].remark);
-            },
-            error: function () {
-            }
-        });
-    }
+  function detail(id) {
+    var url = '[[${adminPath}]]/user/detail/' + id;
+    $.ajax({
+      url: url,
+      type: "GET",
+      success: function (data) {
+        $("#detail-item-id").text(data['user'].id);
+        $("#detail-item-username").text(data['user'].username);
+        $("#detail-item-authname").text(data['user'].authname);
+        $("#detail-item-phone").text(data['user'].phone);
+        $("#detail-item-add-time").text(data['user'].addTime);
+        $("#detail-item-role").text(data['roleName']);
+        $("#detail-item-address").text(data['user'].address);
+        $("#detail-item-remark").text(data['user'].remark);
+      },
+      error: function () {
+      }
+    });
+  }
 
-    function prepareForDeleting(id) {
-        $("#delete-confirm-id").val(id);
-        $.ajax({
-            url: '[[${adminPath}]]/user/detail/' + id,
-            type: "GET",
-            success: function (data) {
-                $("#delete-name").text(data['ad'].name);
-            }
-        })
-    }
+  function prepareForDeleting(id) {
+    $("#delete-confirm-id").val(id);
+    $.ajax({
+      url: '[[${adminPath}]]/user/detail/' + id,
+      type: "GET",
+      success: function (data) {
+        $("#delete-name").text(data['ad'].name);
+      }
+    })
+  }
 
-    function prepareForPasswd(id) {
-        $("#passwd-id").val(id);
-    }
+  function prepareForPasswd(id) {
+    $("#passwd-id").val(id);
+  }
 
-    function prepareForChgrp(id) {
-        $("#chgrp-id").val(id);
-    }
+  function prepareForChgrp(id) {
+    $("#chgrp-id").val(id);
+  }
 
-    function passwd() {
-        var id = $("#passwd-id").val();
-        var oldPasswd = $("#old-passwd").val();
-        var newPasswd = $("#new-passwd").val();
-        var rePasswd = $("#re-passwd").val();
-        var p = $("#pto").val();
-        var url = '[[${adminPath}]]/user/passwd/' + id;
-        $.ajax({
-            url: url,
-            type: "POST",
-            data: {"oldPasswd": oldPasswd, "newPasswd": newPasswd, "rePasswd": rePasswd, "pto": p},
-            dataType: "json",
-            cache: false,
-            success: function (msg) {
-                toast(msg);
-                setTimeout(function () {
-                    location.reload()
-                }, 3000);
-            },
-            error: function () {
-                toast("修改失败，系统繁忙，或是网络不通畅");
-            }
-        })
-    }
+  function passwd() {
+    var id = $("#passwd-id").val();
+    var oldPasswd = $("#old-passwd").val();
+    var newPasswd = $("#new-passwd").val();
+    var rePasswd = $("#re-passwd").val();
+    var p = $("#pto").val();
+    var url = '[[${adminPath}]]/user/passwd/' + id;
+    $.ajax({
+      url: url,
+      type: "POST",
+      data: {"oldPasswd": oldPasswd, "newPasswd": newPasswd, "rePasswd": rePasswd, "pto": p},
+      dataType: "json",
+      cache: false,
+      success: function (msg) {
+        toast(msg);
+        setTimeout(function () {
+          location.reload()
+        }, 3000);
+      },
+      error: function () {
+        toast("修改失败，系统繁忙，或是网络不通畅");
+      }
+    })
+  }
 
-    function chgrp() {
-        var id = $("#chgrp-id").val();
-        var roleID = $("#chgrp-roleID").val();
-        var c = $("#cto").val();
-        var url = '[[${adminPath}]]/user/chgrp/' + id;
-        $.ajax({
-            url: url,
-            type: "POST",
-            data: {"id": id, "roleID": roleID, "cto": c},
-            dataType: "json",
-            cache: false,
-            success: function (msg) {
-                toast(msg);
-                setTimeout(function () {
-                    location.reload()
-                }, 3000);
-            },
-            error: function () {
-                toast("更改失败，系统繁忙，或是网络不通畅");
-            }
-        })
-    }
+  function chgrp() {
+    var id = $("#chgrp-id").val();
+    var roleID = $("#chgrp-roleID").val();
+    var c = $("#cto").val();
+    var url = '[[${adminPath}]]/user/chgrp/' + id;
+    $.ajax({
+      url: url,
+      type: "POST",
+      data: {"id": id, "roleID": roleID, "cto": c},
+      dataType: "json",
+      cache: false,
+      success: function (msg) {
+        toast(msg);
+        setTimeout(function () {
+          location.reload()
+        }, 3000);
+      },
+      error: function () {
+        toast("更改失败，系统繁忙，或是网络不通畅");
+      }
+    })
+  }
 </script>
 </body>
 </html>

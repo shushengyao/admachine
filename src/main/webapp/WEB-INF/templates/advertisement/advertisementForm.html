@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:include="/common/head::head('编辑广告 - 广告机管理后台')"></head>
-
 <!--/* <editor-fold desc="define"> */-->
 <!--/*@thymesVar id="adminPath" type="java.lang.String"*/-->
 <!--/*@thymesVar id="adminRoleID" type="java.lang.Integer"*/-->
@@ -14,141 +13,81 @@
 <!--/* </editor-fold> */-->
 
 <body>
-<header style="z-index: 1;">
-    <nav class="z-depth-2 blue-grey darken-4">
-        <div class="nav-wrapper">
-            <ul class="left">
-                <li style="height: 56px;">
-                    <a href="#" data-activates="nav-mobile" id="button-nav-menu" class="hide-on-large-only">
-                        <i class="material-icons">menu</i>
-                    </a>
-                </li>
-            </ul>
-            <ul id="nav-mobile" class="side-nav fixed" style="transform: translateX(0%);">
-                <li class="logo">
-                    <a id="logo-container" th:href="@{${adminPath}+'/main'}" class="brand-logo">
-                        <img src="../../../static/application/image/logo.png" alt="logo" class="center-block"/>
-                    </a>
-                </li>
-                <li>
-                    <a th:href="@{${adminPath}+'/main'}" class="waves-effect waves-teal">首页</a>
-                </li>
-                <li>
-                    <a th:href="@{${adminPath}+'/advertisementMachine/list/1'}" class="waves-effect waves-teal">广告机</a>
-                </li>
-                <li class="active">
-                    <a th:href="@{${adminPath}+'/advertisement/list/1'}" class="waves-effect waves-teal">广告</a>
-                </li>
-                <li th:if="${loginUser.roleID==adminRoleID}">
-                    <a th:href="@{${adminPath}+'/user/list/1'}" class="waves-effect waves-teal">用户</a>
-                </li>
-                <li th:if="${loginUser.roleID==adminRoleID}">
-                    <a th:href="@{${adminPath}+'/role/list/1'}" class="waves-effect waves-teal">角色</a>
-                </li>
-            </ul>
-            <ul class="right">
-                <li th:text="|${loginUser.username}, 欢迎|"></li>
-                <li>
-                    <a class="dropdown-button" href="#" data-activates="dropdown-menu">
-                        <i class="material-icons right">account_circle</i>
-                    </a>
-                </li>
-            </ul>
-            <ul id="dropdown-menu" class="dropdown-content">
-                <li><a th:href="@{${adminPath}+'/logout'}" class="black-text">退出</a></li>
-            </ul>
-        </div>
-    </nav>
-</header>
+<th:block th:include="/common/header::header('advertisement')"/>
 
 <main style="z-index: 0;">
-    <div class="page-title z-depth-1 blue-grey darken-2">
-        <div class="white-text">
-            <span class="flow-text">
-                <a class="btn-flat tooltipped" data-position="bottom" data-delay="50" data-tooltip="返回列表"
-                   onclick="history.go(-1);"><i class="material-icons white-text">arrow_back</i></a><span
-                    th:text="${advertisement.id==newEntityID?'新增广告':advertisement.name}"></span>
-            </span>
+  <div class="page-title z-depth-1 blue-grey darken-2">
+    <div class="white-text">
+      <span class="flow-text">
+        <a class="btn-flat tooltipped" data-position="bottom" data-delay="50" data-tooltip="返回列表"
+           onclick="history.go(-1);"><i class="material-icons white-text">arrow_back</i></a><span
+          th:text="${advertisement.id==newEntityID?'新增广告':advertisement.name}"></span>
+      </span>
+    </div>
+  </div>
+  <br/>
+  <div id="main-content" class="container">
+    <form th:action="@{${adminPath}+'/advertisement/save/'+${advertisement.id}}" method="post">
+      <input name="token" th:value="${token}" type="hidden"/>
+      <input id="id" name="id" th:value="${advertisement.id}" type="hidden" class="validate" required="required"/>
+      <input id="url" name="url" th:value="${advertisement.url}" type="hidden" class="validate"/>
+      <input id="userID-ro" name="userID" th:value="${advertisement.userID}" type="hidden" class="validate"
+             required="required" th:if="${loginUser.roleID!=adminRoleID}"/>
+      <input id="addTime" name="addTime" th:value="${advertisement.addTime}" type="hidden" class="validate"/>
+
+      <div class="row">
+        <div class="input-field col s6 m6 l6">
+          <i class="material-icons prefix">create</i>
+          <input id="name" name="name" th:value="${advertisement.name}" type="text" class="validate" placeholder="输入名称"
+                 required="required"/>
+          <label for="name">广告名称</label>
         </div>
-    </div>
-    <br/>
-    <div id="main-content" class="container">
-        <form th:action="@{${adminPath}+'/advertisement/save/'+${advertisement.id}}" method="post">
-            <input name="token" th:value="${token}" type="hidden"/>
-            <input id="id" name="id" th:value="${advertisement.id}" type="hidden" class="validate" required="required"/>
-            <input id="url" name="url" th:value="${advertisement.url}" type="hidden" class="validate"/>
-            <input id="userID-ro" name="userID" th:value="${advertisement.userID}" type="hidden" class="validate"
-                   required="required" th:if="${loginUser.roleID!=adminRoleID}"/>
-            <input id="addTime" name="addTime" th:value="${advertisement.addTime}" type="hidden" class="validate"/>
+        <div class="input-field col s6 m6 l6">
+          <i class="material-icons prefix">access_time</i>
+          <input id="time" name="time" th:value="${advertisement.time}" type="text" class="text" placeholder="输入播放时间"
+                 onblur="checkNumber();"/>
+          <label for="time">播放时间</label>
+        </div>
 
-            <div class="row">
-                <div class="input-field col s6 m6 l6">
-                    <i class="material-icons prefix">create</i>
-                    <input id="name" name="name" th:value="${advertisement.name}" type="text" class="validate"
-                           placeholder="输入名称" required="required"/>
-                    <label for="name">广告名称</label>
-                </div>
-                <div class="input-field col s6 m6 l6">
-                    <i class="material-icons prefix">access_time</i>
-                    <input id="time" name="time" th:value="${advertisement.time}" type="text" class="text"
-                           placeholder="输入播放时间" onblur="checkNumber();"/>
-                    <label for="time">播放时间</label>
-                </div>
+        <div class="input-field col s6 m6 l6">
+          <i class="material-icons prefix">personal_video</i>
+          <select id="machineID" name="machineID">
+            <option th:each="item:${machineList}" th:value="${item.id}" th:text="${item.name}"
+                    th:if="${item.id==advertisement.machineID}" selected="selected"></option>
+            <option th:each="item:${machineList}" th:value="${item.id}" th:text="${item.name}"></option>
+          </select>
+          <label for="machineID">所属广告机</label>
+        </div>
+        <div class="input-field col s6 m6 l6" th:if="${loginUser.roleID==adminRoleID}">
+          <i class="material-icons prefix">account_circle</i>
+          <select id="userID" name="userID">
+            <option th:each="item:${userList}" th:value="*{item.id}" th:text="*{item.username}"
+                    th:if="${item.id==advertisement.userID}" selected="selected"></option>
+            <option th:each="item:${userList}" th:value="*{item.id}" th:text="*{item.username}"></option>
+          </select>
+          <label for="userID">所属用户</label>
+        </div>
 
-                <div class="input-field col s6 m6 l6">
-                    <i class="material-icons prefix">personal_video</i>
-                    <select id="machineID" name="machineID">
-                        <option th:each="item:${machineList}" th:value="${item.id}" th:text="${item.name}"
-                                th:if="${item.id==advertisement.machineID}" selected="selected"></option>
-                        <option th:each="item:${machineList}" th:value="${item.id}" th:text="${item.name}"></option>
-                    </select>
-                    <label for="machineID">所属广告机</label>
-                </div>
-                <div class="input-field col s6 m6 l6" th:if="${loginUser.roleID==adminRoleID}">
-                    <i class="material-icons prefix">account_circle</i>
-                    <select id="userID" name="userID">
-                        <option th:each="item:${userList}" th:value="*{item.id}" th:text="*{item.username}"
-                                th:if="${item.id==advertisement.userID}" selected="selected"></option>
-                        <option th:each="item:${userList}" th:value="*{item.id}" th:text="*{item.username}"></option>
-                    </select>
-                    <label for="userID">所属用户</label>
-                </div>
-
-                <div class="input-field col s12 m12 l12">
-                    <i class="material-icons prefix">insert_comment</i>
-                    <textarea id="remark" th:text="${advertisement.remark}" name="remark" class="materialize-textarea"
-                              placeholder=""></textarea>
-                    <label for="remark">备注</label>
-                </div>
-            </div>
-            <div class="row">
-                <div class="input-field col s6 m6 l6 right-align">
-                    <button type="reset" class="waves-effect waves-light btn">
-                        <i class="material-icons left">clear</i>清空
-                    </button>
-                </div>
-                <div class="input-field col s6 m6 l6 left-align">
-                    <button type="submit" class="waves-effect waves-light btn">
-                        <i class="material-icons right">send</i>提交
-                    </button>
-                </div>
-            </div>
-        </form>
-    </div>
+        <div class="input-field col s12 m12 l12">
+          <i class="material-icons prefix">insert_comment</i>
+          <textarea id="remark" th:text="${advertisement.remark}" name="remark" class="materialize-textarea"></textarea>
+          <label for="remark">备注</label>
+        </div>
+      </div>
+      <div class="row">
+        <div class="input-field col s6 m6 l6 right-align">
+          <button type="reset" class="waves-effect waves-light btn"><i class="material-icons left">clear</i>清空</button>
+        </div>
+        <div class="input-field col s6 m6 l6 left-align">
+          <button type="submit" class="waves-effect waves-light btn"><i class="material-icons right">send</i>提交</button>
+        </div>
+      </div>
+    </form>
+  </div>
 </main>
 
-<footer class="page-footer hide-on-med-and-down blue-grey darken-4" style="z-index: 1;">
-    <div class="footer-copyright">
-        <div class="container right-align">
-            © 2017 Copyright 珠海希梦电子科技有限公司
-        </div>
-    </div>
-</footer>
-
-<script type="text/javascript" src="../../../static/application/js/jquery.min.js"></script>
-<script type="text/javascript" src="../../../static/materialize/js/materialize.min.js"></script>
-<script type="text/javascript" src="../../../static/application/js/date-picker.js"></script>
-<script type="text/javascript" src="../../../static/application/js/global.js"></script>
+<th:block th:include="/common/footer::footer"/>
+<th:block th:include="/common/script::script"/>
 <script type="text/javascript">
     $(function () {
         resize_footer(window.screen.width);

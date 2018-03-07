@@ -1,190 +1,121 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8"/>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"/>
-    <link rel="stylesheet" href="../../../static/application/css/global.css"/>
-    <link rel="stylesheet" href="../../../static/materialize/css/materialize.min.css"/>
-    <link rel="shoutcut icon" type="image/x-icon" href="favicon.ico" media="all"/>
-    <title>编辑广告机 - 广告机管理后台</title>
-</head>
-
+<head th:include="/common/head::head('编辑广告机 - 广告机管理后台')"></head>
 <!--/* <editor-fold desc="define"> */-->
 <!--/*@thymesVar id="adminPath" type="java.lang.String"*/-->
-<!--/*@thymesVar id="adminRoleID" type="java.lang.Integer"*/-->
-<!--/*@thymesVar id="newEntityID" type="java.lang.Integer"*/-->
 <!--/*@thymesVar id="loginUser" type="com.xmlan.machine.module.user.entity.User"*/-->
+<!--/*@thymesVar id="newEntityID" type="java.lang.Integer"*/-->
 <!--/*@thymesVar id="machine" type="com.xmlan.machine.module.advertisementMachine.entity.AdvertisementMachine"*/-->
 <!--/*@thymesVar id="userList" type="java.util.List<com.xmlan.machine.module.user.entity.SimpleUser>"*/-->
 <!--/*@thymesVar id="token" type="java.lang.String"*/-->
 <!--/* </editor-fold> */-->
 
 <body>
-<header style="z-index: 1;">
-    <nav class="z-depth-2 blue-grey darken-4">
-        <div class="nav-wrapper">
-            <ul class="left">
-                <li style="height: 56px;">
-                    <a href="#" data-activates="nav-mobile" id="button-nav-menu" class="hide-on-large-only">
-                        <i class="material-icons">menu</i>
-                    </a>
-                </li>
-            </ul>
-            <ul id="nav-mobile" class="side-nav fixed" style="transform: translateX(0%);">
-                <li class="logo">
-                    <a id="logo-container" th:href="@{${adminPath}+'/main'}" class="brand-logo">
-                        <img src="../../../static/application/image/logo.png" alt="logo" class="center-block"/>
-                    </a>
-                </li>
-                <li>
-                    <a th:href="@{${adminPath}+'/main'}" class="waves-effect waves-teal">首页</a>
-                </li>
-                <li class="active">
-                    <a th:href="@{${adminPath}+'/advertisementMachine/list/1'}" class="waves-effect waves-teal">广告机</a>
-                </li>
-                <li>
-                    <a th:href="@{${adminPath}+'/advertisement/list/1'}" class="waves-effect waves-teal">广告</a>
-                </li>
-                <li th:if="${loginUser.roleID==adminRoleID}">
-                    <a th:href="@{${adminPath}+'/user/list/1'}" class="waves-effect waves-teal">用户</a>
-                </li>
-                <li th:if="${loginUser.roleID==adminRoleID}">
-                    <a th:href="@{${adminPath}+'/role/list/1'}" class="waves-effect waves-teal">角色</a>
-                </li>
-            </ul>
-            <ul class="right">
-                <li th:text="|${loginUser.username}, 欢迎|"></li>
-                <li>
-                    <a class="dropdown-button" href="#" data-activates="dropdown-menu">
-                        <i class="material-icons right">account_circle</i>
-                    </a>
-                </li>
-            </ul>
-            <ul id="dropdown-menu" class="dropdown-content">
-                <li><a th:href="@{${adminPath}+'/logout'}" class="black-text">退出</a></li>
-            </ul>
-        </div>
-    </nav>
-</header>
+<th:block th:include="/common/header::header('machine')"/>
 
 <main style="z-index: 0;">
-    <div class="page-title z-depth-1 blue-grey darken-2">
-        <div class="white-text">
-            <span class="flow-text">
-                <a class="btn-flat tooltipped" data-position="bottom" data-delay="50" data-tooltip="返回列表"
-                   onclick="history.go(-1);"><i class="material-icons white-text">arrow_back</i></a><span
-                    th:text="${machine.id==newEntityID?'新增广告机':machine.name}"></span>
-            </span>
+  <div class="page-title z-depth-1 blue-grey darken-2">
+    <div class="white-text">
+      <span class="flow-text">
+        <a class="btn-flat tooltipped" data-position="bottom" data-delay="50" data-tooltip="返回列表"
+           onclick="history.go(-1);"><i class="material-icons white-text">arrow_back</i></a><span
+          th:text="${machine.id==newEntityID?'新增广告机':machine.name}"></span>
+      </span>
+    </div>
+  </div>
+  <br/>
+  <div id="main-content" class="container">
+    <form th:action="@{${adminPath}+'/advertisementMachine/save/'+${machine.id}}" method="post"
+          onsubmit="return save();">
+      <input name="token" th:value="${token}" type="hidden"/>
+      <input id="id" name="id" type="hidden" class="validate" required="required" th:value="${machine.id}"/>
+      <input id="longitude" name="longitude" type="hidden" class="validate" th:value="${machine.longitude}"/>
+      <input id="latitude" name="latitude" type="hidden" class="validate" th:value="${machine.latitude}"/>
+      <input id="light" name="light" type="hidden" class="validate" th:value="${machine.light}"/>
+      <input id="charge" name="charge" type="hidden" class="validate" th:value="${machine.charge}"/>
+      <input id="checked" name="checked" type="hidden" class="validate" th:value="${machine.checked}"/>
+      <input id="addTime" name="addTime" type="hidden" class="validate" th:value="${machine.addTime}"/>
+      <input id="codeNumber-ro" name="codeNumber" type="hidden" class="validate" th:value="${machine.codeNumber}"
+             th:if="${machine.id!=newEntityID}"/>
+
+      <div class="row">
+        <div class="input-field col s6 m6 l6">
+          <i class="material-icons prefix">create</i>
+          <input id="name" name="name" type="text" class="validate" placeholder="输入名称" required="required"
+                 th:value="${machine.name}"/>
+          <label for="name">广告机名称</label>
         </div>
-    </div>
-    <br/>
-    <div id="main-content" class="container">
-        <form th:action="@{${adminPath}+'/advertisementMachine/save/'+${machine.id}}" method="post"
-              onsubmit="return save();">
-            <input name="token" th:value="${token}" type="hidden"/>
-            <input id="id" name="id" type="hidden" class="validate" required="required" th:value="${machine.id}"/>
-            <input id="longitude" name="longitude" type="hidden" class="validate" th:value="${machine.longitude}"/>
-            <input id="latitude" name="latitude" type="hidden" class="validate" th:value="${machine.latitude}"/>
-            <input id="light" name="light" type="hidden" class="validate" th:value="${machine.light}"/>
-            <input id="charge" name="charge" type="hidden" class="validate" th:value="${machine.charge}"/>
-            <input id="checked" name="checked" type="hidden" class="validate" th:value="${machine.checked}"/>
-            <input id="addTime" name="addTime" type="hidden" class="validate" th:value="${machine.addTime}"/>
-            <input id="codeNumber-ro" name="codeNumber" type="hidden" class="validate" th:value="${machine.codeNumber}"
-                   th:if="${machine.id!=newEntityID}"/>
+        <div class="input-field col s6 m6 l6">
+          <i class="material-icons prefix">account_circle</i>
+          <select id="userID-ro" name="userID" th:if="${loginUser.roleID!=adminRoleID}">
+            <option th:each="item:${userList}" th:value="*{item.id}" th:text="*{item.username}"
+                    th:if="${item.id==machine.userID}" selected="selected"></option>
+          </select>
+          <label for="userID-ro" th:if="${loginUser.roleID!=adminRoleID}">所属用户</label>
+          <select id="userID" name="userID" th:if="${loginUser.roleID==adminRoleID}">
+            <option th:each="item:${userList}" th:value="*{item.id}" th:text="*{item.username}"
+                    th:if="${item.id==machine.userID}" selected="selected"></option>
+            <option th:each="item:${userList}" th:value="*{item.id}" th:text="*{item.username}"></option>
+          </select>
+          <label for="userID" th:if="${loginUser.roleID==adminRoleID}">所属用户</label>
+        </div>
 
-            <div class="row">
-                <div class="input-field col s6 m6 l6">
-                    <i class="material-icons prefix">create</i>
-                    <input id="name" name="name" type="text" class="validate" placeholder="输入名称" required="required"
-                           th:value="${machine.name}"/>
-                    <label for="name">广告机名称</label>
-                </div>
-                <div class="input-field col s6 m6 l6">
-                    <i class="material-icons prefix">account_circle</i>
-                    <select id="userID-ro" name="userID" th:if="${loginUser.roleID!=adminRoleID}">
-                        <option th:each="item:${userList}" th:value="*{item.id}" th:text="*{item.username}"
-                                th:if="${item.id==machine.userID}" selected="selected"></option>
-                    </select>
-                    <label for="userID-ro" th:if="${loginUser.roleID!=adminRoleID}">所属用户</label>
-                    <select id="userID" name="userID" th:if="${loginUser.roleID==adminRoleID}">
-                        <option th:each="item:${userList}" th:value="*{item.id}" th:text="*{item.username}"
-                                th:if="${item.id==machine.userID}" selected="selected"></option>
-                        <option th:each="item:${userList}" th:value="*{item.id}" th:text="*{item.username}"></option>
-                    </select>
-                    <label for="userID" th:if="${loginUser.roleID==adminRoleID}">所属用户</label>
-                </div>
+        <div class="input-field col s12 m12 l12">
+          <i class="material-icons prefix">place</i>
+          <input id="address" name="address" type="text" class="validate" placeholder="输入地址"
+                 th:value="${machine.address}"/>
+          <label for="address">广告机地址</label>
+        </div>
 
-                <div class="input-field col s12 m12 l12">
-                    <i class="material-icons prefix">place</i>
-                    <input id="address" name="address" type="text" class="validate" placeholder="输入地址"
-                           th:value="${machine.address}"/>
-                    <label for="address">广告机地址</label>
-                </div>
+        <div class="input-field col s6 m6 l6" th:if="${machine.id==newEntityID}">
+          <i class="material-icons prefix">code</i>
+          <input id="codeNumber" name="codeNumber" type="text" class="validate" placeholder=""
+                 th:value="${machine.codeNumber}"/>
+          <label for="codeNumber">机器识别码</label>
+        </div>
 
-                <div class="input-field col s6 m6 l6" th:if="${machine.id==newEntityID}">
-                    <i class="material-icons prefix">code</i>
-                    <input id="codeNumber" name="codeNumber" type="text"
-                           class="validate" placeholder="" th:value="${machine.codeNumber}"/>
-                    <label for="codeNumber">机器识别码</label>
-                </div>
+        <div class="input-field col s12 m12 l12">
+          <i class="material-icons prefix">insert_comment</i>
+          <textarea id="remark" name="remark" class="materialize-textarea" th:text="${machine.remark}"></textarea>
+          <label for="remark">备注</label>
+        </div>
 
-                <div class="input-field col s12 m12 l12">
-                    <i class="material-icons prefix">insert_comment</i>
-                    <textarea id="remark" name="remark" class="materialize-textarea" placeholder=""
-                              th:text="${machine.remark}"></textarea>
-                    <label for="remark">备注</label>
-                </div>
-
-                <div class="input-field col s6 m6 l6 right-align">
-                    <button type="reset" class="waves-effect waves-light btn"><i class="material-icons left">clear</i>清空
-                    </button>
-                </div>
-                <div class="input-field col s6 m6 l6 left-align">
-                    <button type="submit" class="waves-effect waves-light btn"><i class="material-icons right">send</i>提交
-                    </button>
-                </div>
-            </div>
-        </form>
-    </div>
+        <div class="input-field col s6 m6 l6 right-align">
+          <button type="reset" class="waves-effect waves-light btn"><i class="material-icons left">clear</i>清空</button>
+        </div>
+        <div class="input-field col s6 m6 l6 left-align">
+          <button type="submit" class="waves-effect waves-light btn"><i class="material-icons right">send</i>提交</button>
+        </div>
+      </div>
+    </form>
+  </div>
 </main>
 
-<footer class="page-footer hide-on-med-and-down blue-grey darken-4" style="z-index: 1;">
-    <div class="footer-copyright">
-        <div class="container right-align">
-            © 2017 Copyright 珠海希梦电子科技有限公司
-        </div>
-    </div>
-</footer>
-
-<script type="text/javascript" src="../../../static/application/js/jquery.min.js"></script>
-<script type="text/javascript" src="../../../static/materialize/js/materialize.min.js"></script>
-<script type="text/javascript" src="../../../static/application/js/date-picker.js"></script>
-<script type="text/javascript" src="../../../static/application/js/global.js"></script>
+<th:block th:include="/common/footer::footer"/>
+<th:block th:include="/common/script::script"/>
 <script type="text/javascript">
-    $(function () {
-        resize_footer(window.screen.width);
-        $("#button-nav-menu").sideNav({
-            closeOnClick: true,
-            draggable: true
-        });
-        $(".dropdown-button").dropdown();
-        $(".date-picker").pickadatee({
-            closeOnSelect: true
-        });
-        $("#userID").material_select();
-        $("#userID-ro").material_select();
-        toast('[[${message}]]');
+  $(function () {
+    resize_footer(window.screen.width);
+    $("#button-nav-menu").sideNav({
+      closeOnClick: true,
+      draggable: true
     });
+    $(".dropdown-button").dropdown();
+    $(".date-picker").pickadatee({
+      closeOnSelect: true
+    });
+    $("#userID").material_select();
+    $("#userID-ro").material_select();
+    toast('[[${message}]]');
+  });
 
-    function save() {
-        if (!(/^([A-Fa-f0-9]{2}[:-]){5}[A-Fa-f0-9]{2}$/.test($("#codeNumber").val()))) {
-            toast("机器识别码格式不正确，机器识别码是广告机的MAC地址！");
-            return false;
-        }
-        return true;
+  function save() {
+    if (!(/^([A-Fa-f0-9]{2}[:-]){5}[A-Fa-f0-9]{2}$/.test($("#codeNumber").val()))) {
+      toast("机器识别码格式不正确，机器识别码是广告机的MAC地址！");
+      return false;
     }
+    return true;
+  }
 </script>
 </body>
 </html>
