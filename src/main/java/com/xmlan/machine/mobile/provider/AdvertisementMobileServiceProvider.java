@@ -240,7 +240,7 @@ public class AdvertisementMobileServiceProvider extends BaseController {
         pushUpdate(id, DONE, "有广告被删除了，需要刷新");
         int responseCode = advertisementService.delete(advertisement);
         map.put("responseCode", responseCode);
-        if (responseCode == 0) {
+        if (responseCode != DONE) {
             map.put("message", "没有对应的广告");
         } else {
             map.put("responseCode", DONE);
