@@ -30,18 +30,23 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created by ayakurayuki on 2018/1/17-18:41.
- * <p>
- * Package: com.xmlan.machine.mobile.provider
- * <p>
  * 手机端 广告服务接口
+ *
+ * Package: com.xmlan.machine.mobile.provider
+ *
+ * @author ayakurayuki
+ * @date 2018/1/17-18:41
  */
 @Controller
 @RequestMapping("${mobilePath}/ad")
 public class AdvertisementMobileServiceProvider extends BaseController {
 
+    private final AdvertisementService advertisementService;
+
     @Autowired
-    private AdvertisementService advertisementService;
+    public AdvertisementMobileServiceProvider(AdvertisementService advertisementService) {
+        this.advertisementService = advertisementService;
+    }
 
     /**
      * 获取广告对象
@@ -168,7 +173,8 @@ public class AdvertisementMobileServiceProvider extends BaseController {
         }
         // 获取广告机
         AdvertisementMachine machine = AdvertisementMachineCache.get(machineID);
-        HashMap<String, Integer> pushData = Maps.newHashMap();      // 封装推送体数据
+
+        HashMap<String, Integer> pushData = Maps.newHashMap();
         pushData.put("type", TYPE_MEDIA_UPDATE);
         pushData.put("needUpdate", YES);
         // 创建推送客户端
@@ -260,8 +266,10 @@ public class AdvertisementMobileServiceProvider extends BaseController {
         Advertisement advertisement = AdvertisementCache.get(id);
         // 获取广告机对象
         AdvertisementMachine machine = AdvertisementMachineCache.get(advertisement.getMachineID());
-        HashMap<String, Integer> pushData = Maps.newHashMap();      // 封装推送体数据
-        pushData.put("advertisementID", advertisement.getId());     // 添加推送体数据内容（广告ID）
+        // 封装推送体数据
+        HashMap<String, Integer> pushData = Maps.newHashMap();
+        // 添加推送体数据内容（广告ID）
+        pushData.put("advertisementID", advertisement.getId());
         pushData.put("type", TYPE_MEDIA_UPDATE);
         pushData.put("needUpdate", YES);
         // 创建推送客户端

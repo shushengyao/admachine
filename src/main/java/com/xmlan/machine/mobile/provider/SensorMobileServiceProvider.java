@@ -10,11 +10,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
- * Created by ayakurayuki on 2018/1/19-14:26.
- * <p>
- * Package: com.xmlan.machine.mobile.provider
- * <p>
  * 手机端 天气传感器数据服务接口
+ *
+ * Package: com.xmlan.machine.mobile.provider
+ *
+ * @author ayakurayuki
+ * @date 2018/1/19-14:26
  */
 @Controller
 @RequestMapping("${mobilePath}/sensor")

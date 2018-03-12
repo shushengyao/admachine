@@ -12,7 +12,9 @@ import java.io.OutputStream;
 import java.util.Properties;
 
 /**
- * Created by ayakurayuki on 2018/2/2-15:58. <br/>
+ *
+ * @author ayakurayuki
+ * @date 2018/2/2-15:58
  * Package: com.xmlan.machine.common.config <br/>
  */
 public class TinyImage {
@@ -29,17 +31,21 @@ public class TinyImage {
     }
 
     public static TinyImage getInstance() {
-        return PythonHolder.instance;
+        return PythonHolder.INSTANCE;
     }
 
     private void setOption(String key, boolean option) {
         try {
-            File file = new DefaultResourceLoader().getResource(path).getFile(); // 通过默认资源文件获取
-            OutputStream outputStream = new FileOutputStream(file); // 获取输出流
-            properties.setProperty(key, Boolean.toString(option)); // 设置选项
-            properties.store(outputStream, ""); // 输出到properties
+            // 通过默认资源文件获取
+            File file = new DefaultResourceLoader().getResource(path).getFile();
+            // 获取输出流
+            OutputStream outputStream = new FileOutputStream(file);
+            // 设置选项
+            properties.setProperty(key, Boolean.toString(option));
+            // 输出到properties
+            properties.store(outputStream, "");
             outputStream.close(); // 关闭输出流
-            logger.info("Key " + key + " switch to " + Boolean.toString(option)); // log
+            logger.info("Key " + key + " switch to " + Boolean.toString(option));
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
@@ -91,7 +97,7 @@ public class TinyImage {
     }
 
     private static class PythonHolder {
-        private static final TinyImage instance = new TinyImage();
+        private static final TinyImage INSTANCE = new TinyImage();
     }
 
 }

@@ -16,8 +16,10 @@ import java.io.IOException;
 import java.util.TimeZone;
 
 /**
- * Created by Ayakura Yuki on 2017/7/10. <br />
  * 简单封装Jackson，实现JSON String<->Java Object的Mapper.
+ *
+ * @author Ayakura Yuki
+ * @date 2017/7/10
  */
 public class JsonUtils extends ObjectMapper {
 
@@ -26,11 +28,11 @@ public class JsonUtils extends ObjectMapper {
     private static Logger logger = LoggerFactory.getLogger(JsonUtils.class);
     private static JsonUtils mapper;
 
-    public JsonUtils() {
+    private JsonUtils() {
         this(JsonInclude.Include.NON_EMPTY);
     }
 
-    public JsonUtils(JsonInclude.Include include) {
+    private JsonUtils(JsonInclude.Include include) {
         // 设置输出时包含属性的风格
         if (include != null) {
             this.setSerializationInclusion(include);
@@ -55,18 +57,15 @@ public class JsonUtils extends ObjectMapper {
                 jgen.writeString(StringEscapeUtils.unescapeHtml4(value));
             }
         }));
-        // 设置时区
-        this.setTimeZone(TimeZone.getDefault()); // GMT+8:00
+        // 设置时区, GMT+8:00
+        this.setTimeZone(TimeZone.getDefault());
     }
 
     /**
      * 创建只输出非Null且非Empty(如List.isEmpty)的属性到Json字符串的Mapper,建议在外部接口中使用.
      */
     public static JsonUtils getInstance() {
-        if (mapper == null) {
-            mapper = new JsonUtils().enableSimple();
-        }
-        return mapper;
+        return JsonUtilsHolder.INSTANCE;
     }
 
     /**
@@ -167,8 +166,6 @@ public class JsonUtils extends ObjectMapper {
     public <T> T update(String jsonString, T object) {
         try {
             return (T) this.readerForUpdating(object).readValue(jsonString);
-        } catch (JsonProcessingException e) {
-            logger.warn("update json string:" + jsonString + " to object:" + object + " error.", e);
         } catch (IOException e) {
             logger.warn("update json string:" + jsonString + " to object:" + object + " error.", e);
         }
@@ -206,6 +203,16 @@ public class JsonUtils extends ObjectMapper {
      */
     public ObjectMapper getMapper() {
         return this;
+    }
+
+    /**
+     * Singleton
+     *
+     * @author ayakurayuki
+     * @date 2018/03/12
+     */
+    private static class JsonUtilsHolder {
+        private static final JsonUtils INSTANCE = new JsonUtils();
     }
 
 }

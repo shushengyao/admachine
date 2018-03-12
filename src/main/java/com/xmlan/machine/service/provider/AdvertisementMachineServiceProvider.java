@@ -18,18 +18,23 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import java.util.HashMap;
 
 /**
- * Created by ayakurayuki on 2018/1/8-15:43.
- * <p>
- * Package: com.xmlan.machine.service.provider
- * <p>
  * 广告端 广告机服务接口
+ *
+ * Package: com.xmlan.machine.service.provider
+ *
+ * @author ayakurayuki
+ * @date 2018/1/8-15:43
  */
 @Controller
 @RequestMapping("${servicePath}/advertisementMachine")
 public class AdvertisementMachineServiceProvider extends BaseController {
 
+    private final AdvertisementMachineService service;
+
     @Autowired
-    private AdvertisementMachineService service;
+    public AdvertisementMachineServiceProvider(AdvertisementMachineService service) {
+        this.service = service;
+    }
 
     /**
      * 获取广告机对象信息

@@ -25,18 +25,23 @@ import java.util.HashMap;
 import java.util.List;
 
 /**
- * Created by ayakurayuki on 2018/1/9-14:44.
- * <p>
- * Package: com.xmlan.machine.mobile.provider
- * <p>
  * 手机端 广告机服务接口
+ *
+ * Package: com.xmlan.machine.mobile.provider
+ *
+ * @author ayakurayuki
+ * @date 2018/1/9-14:44
  */
 @Controller
 @RequestMapping("${mobilePath}/machine")
 public class AdvertisementMachineMobileServiceProvider extends BaseController {
 
+    private final AdvertisementMachineService service;
+
     @Autowired
-    private AdvertisementMachineService service;
+    public AdvertisementMachineMobileServiceProvider(AdvertisementMachineService service) {
+        this.service = service;
+    }
 
     /**
      * 判断传来的不定数量的参数是否都不为空

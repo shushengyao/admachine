@@ -14,18 +14,23 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import java.util.HashMap;
 
 /**
- * Created by ayakurayuki on 2018/1/19-14:14.
- * <p>
- * Package: com.xmlan.machine.service.provider
- * <p>
  * 广告端 天气传感器数据服务接口
+ *
+ * Package: com.xmlan.machine.service.provider
+ *
+ * @author ayakurayuki
+ * @date 2018/1/19-14:14
  */
 @Controller
 @RequestMapping("${servicePath}/sensor")
 public class SensorServiceProvider extends BaseController {
 
+    private final MachineSensorService sensorService;
+
     @Autowired
-    private MachineSensorService sensorService;
+    public SensorServiceProvider(MachineSensorService sensorService) {
+        this.sensorService = sensorService;
+    }
 
     /**
      * 获取广告机传感器天气数据

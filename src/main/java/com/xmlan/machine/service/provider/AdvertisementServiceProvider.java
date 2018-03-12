@@ -18,20 +18,25 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 /**
- * Created by ayakurayuki on 2018/1/8-09:19.
- * <p>
- * Package: com.xmlan.machine.service.provider
- * <p>
  * 广告端 广告服务接口
+ *
+ * Package: com.xmlan.machine.service.provider
+ *
+ * @author ayakurayuki
+ * @date 2018/1/8-09:19
  */
 @Controller
 @RequestMapping("${servicePath}/advertisement")
 public class AdvertisementServiceProvider extends BaseController {
 
+    private final AdvertisementService service;
+    private final AdvertisementMachineService machineService;
+
     @Autowired
-    private AdvertisementService service;
-    @Autowired
-    private AdvertisementMachineService machineService;
+    public AdvertisementServiceProvider(AdvertisementService service, AdvertisementMachineService machineService) {
+        this.service = service;
+        this.machineService = machineService;
+    }
 
     /**
      * 获取广告对象信息

@@ -8,7 +8,8 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 /**
- * Created by ayakurayuki on 2017/12/11-13:57.
+ * @author ayakurayuki
+ * @date 2017/12/11-13:57
  * Package: com.xmlan.machine.common.util
  */
 public class EncryptUtils {
@@ -51,8 +52,10 @@ public class EncryptUtils {
      */
     private static String TenTimes(String message, AlgorithmEnum type) {
         String result = message;
-        for (int i = 0; i < 10; i++)
+        final int times = 10;
+        for (int i = 0; i < times; i++) {
             result = ConvertToString(GetEncodeByte(result, type));
+        }
         return result;
     }
 

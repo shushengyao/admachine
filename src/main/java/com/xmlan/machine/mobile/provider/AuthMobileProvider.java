@@ -13,18 +13,23 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import java.util.HashMap;
 
 /**
- * Created by ayakurayuki on 2018/1/12-13:47.
- * <p>
- * Package: com.xmlan.machine.mobile.provider
- * <p>
  * 手机端 登录接口
+ *
+ * Package: com.xmlan.machine.mobile.provider
+ *
+ * @author ayakurayuki
+ * @date 2018/1/12-13:47
  */
 @Controller
 @RequestMapping("${mobilePath}")
 public class AuthMobileProvider extends BaseController {
 
+    private final LoginService loginService;
+
     @Autowired
-    private LoginService loginService;
+    public AuthMobileProvider(LoginService loginService) {
+        this.loginService = loginService;
+    }
 
     /**
      * 登录

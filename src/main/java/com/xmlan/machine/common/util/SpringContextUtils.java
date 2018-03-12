@@ -9,9 +9,10 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 
 /**
- * Created by Ayakura Yuki on 2017/7/11.
- * <p>
  * 从ApplicationContext获取已注册的Bean实例
+ *
+ * @author Ayakura Yuki
+ * @date 2017/7/11
  */
 public class SpringContextUtils implements ApplicationContextAware, DisposableBean {
 

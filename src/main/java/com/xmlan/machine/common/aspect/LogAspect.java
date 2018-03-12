@@ -10,7 +10,8 @@ import org.springframework.stereotype.Component;
 /**
  * 切面记录
  * <p>
- * Created by Ayakura Yuki on 2017/7/24.
+ * @author Ayakura Yuki
+ * @date 2017/7/24
  */
 @Component
 @Aspect

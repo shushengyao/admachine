@@ -11,7 +11,8 @@ import org.springframework.stereotype.Component;
 /**
  * 切面刷新缓存
  * <p>
- * Created by ayakurayuki on 2018/1/3-10:34.
+ * @author ayakurayuki
+ * @date 2018/1/3-10:34
  * <p>
  * Package: com.xmlan.machine.common.aspect
  */

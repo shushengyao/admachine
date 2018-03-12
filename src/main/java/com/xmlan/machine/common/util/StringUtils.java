@@ -12,8 +12,10 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * Created by Ayakura Yuki on 2017/7/11. <br />
  * 字符串工具类
+ *
+ * @author Ayakura Yuki
+ * @date 2017/7/11
  */
 public class StringUtils extends org.apache.commons.lang3.StringUtils {
 

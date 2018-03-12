@@ -11,11 +11,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
- * Created by ayakurayuki on 2018/1/12-13:33.
- * <p>
- * Package: com.xmlan.machine.mobile.provider
- * <p>
  * 手机端 用户数据服务接口
+ *
+ * com.xmlan.machine.mobile.provider
+ *
+ * @author ayakurayuki
+ * @date 2018/1/12-13:33
  */
 @Controller
 @RequestMapping("${mobilePath}/user")

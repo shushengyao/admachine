@@ -9,7 +9,9 @@ import java.util.Map;
 /**
  * 全局配置类
  * <p>
- * Created by Ayakura Yuki on 2017/7/11.
+ *
+ * @author Ayakura Yuki
+ * @date 2017/7/11
  */
 public final class Global {
 
