@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.xmlan.machine.module.system.dao.SysLogDAO">
+
+    <resultMap id="sysLogResultMap" type="com.xmlan.machine.module.system.entity.SysLog">
+        <id column="id" property="id"/>
+        <result property="type" column="type"/>
+        <result property="operate" column="operate"/>
+        <result property="operator" column="operator"/>
+        <result property="operatorObject" column="operatorObject"/>
+        <result property="description" column="description"/>
+        <result property="logDate" column="logDate"/>
+    </resultMap>
+
+    <sql id="columns">
+        t.id as "id",
+        t.type as "type",
+        t.operate as "operate",
+        t.operator as "operator",
+        t.operatorObject as "operatorObject",
+        t.description as "description",
+        t.logDate as "logDate"
+    </sql>
+
+    <select id="get" parameterType="java.lang.String" resultMap="sysLogResultMap">
+        select
+        <include refid="columns"/>
+        from `sys_log` t
+        where t.id = #{id}
+    </select>
+
+    <select id="findAll" resultMap="sysLogResultMap">
+        select
+        <include refid="columns"/>
+        from `sys_log` t
+        order by t.logDate desc
+    </select>
+
+    <select id="findList" parameterType="com.xmlan.machine.module.system.entity.SysLog" resultMap="sysLogResultMap">
+        select
+        <include refid="columns"/>
+        from `sys_log` t
+        <where>
+            <if test="type != null and type != ''">
+                t.type = #{type}
+            </if>
+            <if test="operate != null and operate != ''">
+                and t.operate = #{operate}
+            </if>
+            <if test="operator != null and operator != ''">
+                and t.operator = #{operator}
+            </if>
+            <if test="operatorObject != null and operatorObject != ''">
+                and t.operatorObject = #{operatorObject}
+            </if>
+            <if test='logDate != null and logDate != "" and logDate != " "'>
+                and t.logDate between #{logDate} and concat(left(#{logDate}, 10), ' 23:59:59')
+            </if>
+        </where>
+        <choose>
+            <otherwise>
+                order by t.logDate desc
+            </otherwise>
+        </choose>
+    </select>
+
+    <insert id="insert" parameterType="com.xmlan.machine.module.system.entity.SysLog">
+        insert into `sys_log` (
+            id,
+            type,
+            operate,
+            operator,
+            operatorObject,
+            description,
+            logDate
+        ) values (
+            id,
+            #{type},
+            #{operate},
+            #{operator},
+            #{operatorObject},
+            #{description},
+            #{logDate}
+        );
+    </insert>
+
+    <update id="update" parameterType="com.xmlan.machine.module.system.entity.SysLog">
+        update `sys_log`
+        set id = #{id}
+        where id = #{id}
+    </update>
+
+    <delete id="delete" parameterType="com.xmlan.machine.module.system.entity.SysLog">
+        delete from `sys_log`
+        where id = #{id}
+    </delete>
+
+</mapper>

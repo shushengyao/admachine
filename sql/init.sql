@@ -94,6 +94,21 @@ create table `machine_sensor` (
   char set utf8
   comment '传感器参数';
 
+drop table if exists `sys_log`;
+create table `sys_log` (
+  id             int auto_increment not null
+  comment 'ID',
+  type           varchar(64) comment '类别/模块',
+  operate        varchar(64) comment '操作类型',
+  operator       int comment '操作者ID',
+  operatorObject varchar(64) comment '操作者对象类别',
+  description    text comment '描述',
+  logDate        datetime comment '记录时间',
+  primary key (id)
+)
+  char set utf8
+  comment '系统日志';
+
 insert into role values (id, '管理员', '管理员'), (id, '用户', '用户');
 insert into user values (
   id,

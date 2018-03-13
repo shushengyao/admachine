@@ -19,12 +19,21 @@ final enum AlgorithmEnum {
      */
     private final String type
 
-    AlgorithmEnum(String type) {
+    private AlgorithmEnum(String type) {
         this.type = type
     }
 
     final String getType() {
         return type
+    }
+
+    final String getType(String originKey) {
+        for (value in values()) {
+            if (value.toString() == originKey) {
+                return value.type
+            }
+        }
+        return ""
     }
 
 }
