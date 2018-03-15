@@ -73,11 +73,24 @@
           </li>
         </ul>
         <ul id="dropdown-menu" class="dropdown-content">
+          <li th:if="${loginUser.roleID==adminRoleID}">
+            <a th:href="@{${adminPath}+'/log/1'}" class="black-text">操作记录</a>
+          </li>
           <li><a th:href="@{${adminPath}+'/logout'}" class="black-text">退出</a></li>
         </ul>
       </div>
     </nav>
   </header>
 </div>
+
+<script type="text/javascript">
+  $(function () {
+    $("#button-nav-menu").sideNav({
+      closeOnClick: true,
+      draggable: true
+    });
+    $(".dropdown-button").dropdown();
+  })
+</script>
 </body>
 </html>

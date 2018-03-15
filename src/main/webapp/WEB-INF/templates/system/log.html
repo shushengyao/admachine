@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:include="/common/head::head('操作记录 - 广告机管理后台')"></head>
+
+<!--/*@thymesVar id="page" type="com.github.pagehelper.PageInfo<com.xmlan.machine.module.system.entity.SysLog>"*/-->
+<body>
+<th:block th:include="/common/header::header('index')"/>
+
+<main>
+  <table>
+    <thead>
+    <tr>
+      <th>模块</th>
+      <th>操作</th>
+      <th>操作对象</th>
+      <th>TA是</th>
+      <th>操作日期</th>
+      <th>描述</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="log:${page.list}">
+      <td th:text="*{log.type}"></td>
+      <td th:text="*{log.operate}"></td>
+      <td th:text="*{log.operator}"></td>
+      <td th:text="*{log.operatorObject}"></td>
+      <td th:text="*{log.logDate}"></td>
+      <td th:text="*{log.description}"></td>
+    </tr>
+    </tbody>
+  </table>
+</main>
+
+<th:block th:include="/common/script::script"/>
+<script type="text/javascript">
+  $(function () {
+    resize_footer(window.screen.width);
+    toast('[[${message}]]');
+  });
+</script>
+</body>
+</html>

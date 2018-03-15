@@ -1,5 +1,6 @@
 package com.xmlan.machine.module.system.service
 
+import com.github.pagehelper.PageHelper
 import com.xmlan.machine.common.base.BaseService
 import com.xmlan.machine.common.base.ModuleEnum
 import com.xmlan.machine.common.base.ObjectEnum
@@ -21,6 +22,11 @@ import org.springframework.transaction.annotation.Transactional
 @Service("SysLogService")
 @Transactional(readOnly = true)
 class SysLogService extends BaseService<SysLog, SysLogDAO> {
+
+    List<SysLog> findAll(int pageNo) {
+        PageHelper.startPage pageNo, pageSize
+        super.findAll()
+    }
 
     /**
      * 禁止修改日志记录
