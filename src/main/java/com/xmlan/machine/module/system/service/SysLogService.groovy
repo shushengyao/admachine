@@ -7,6 +7,8 @@ import com.xmlan.machine.common.base.OperateEnum
 import com.xmlan.machine.common.util.DateUtils
 import com.xmlan.machine.module.system.dao.SysLogDAO
 import com.xmlan.machine.module.system.entity.SysLog
+import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 
 /**
  * 系统日志服务类
@@ -16,6 +18,8 @@ import com.xmlan.machine.module.system.entity.SysLog
  * @author ayakurayuki
  * @date 2018/3/13-16:38
  */
+@Service("SysLogService")
+@Transactional(readOnly = true)
 class SysLogService extends BaseService<SysLog, SysLogDAO> {
 
     /**
