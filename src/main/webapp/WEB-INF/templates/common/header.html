@@ -74,7 +74,7 @@
         </ul>
         <ul id="dropdown-menu" class="dropdown-content">
           <li th:if="${loginUser.roleID==adminRoleID}">
-            <a th:href="@{${adminPath}+'/log/1'}" class="black-text">操作记录</a>
+            <a th:href="@{${adminPath}+'/log/1?type=&operate=&operatorObject='}" class="black-text">操作记录</a>
           </li>
           <li><a th:href="@{${adminPath}+'/logout'}" class="black-text">退出</a></li>
         </ul>

@@ -32,7 +32,6 @@ class LoginService {
         password = EncryptUtils.SHA256ForTenTimes(password)
         def user = userDAO.login(authname, password)
         if (user != null) {
-
             SessionUtils.setAdmin(request, user)
             return true
         } else {

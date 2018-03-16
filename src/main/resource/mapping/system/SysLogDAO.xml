@@ -50,9 +50,6 @@
             <if test="operate != null and operate != ''">
                 and t.operate = #{operate}
             </if>
-            <if test="operator != null and operator != ''">
-                and t.operator = #{operator}
-            </if>
             <if test="operatorObject != null and operatorObject != ''">
                 and t.operatorObject = #{operatorObject}
             </if>

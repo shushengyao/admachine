@@ -22,13 +22,26 @@ enum ObjectEnum {
         return description
     }
 
-    final String getDescription(String originKey) {
+    final String getKey() {
+        this.toString()
+    }
+
+    final static String getDescription(String originKey) {
         for (value in values()) {
             if (value.toString() == originKey) {
                 return value.description
             }
         }
         return ""
+    }
+
+    final static ObjectEnum getObjectType(String description) {
+        for (value in values()) {
+            if (value.description == description) {
+                return value
+            }
+        }
+        return null
     }
 
 }

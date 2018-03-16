@@ -2,6 +2,9 @@ package com.xmlan.machine.module.system.web
 
 import com.github.pagehelper.PageInfo
 import com.xmlan.machine.common.base.BaseController
+import com.xmlan.machine.common.base.ModuleEnum
+import com.xmlan.machine.common.base.ObjectEnum
+import com.xmlan.machine.common.base.OperateEnum
 import com.xmlan.machine.common.util.SessionUtils
 import com.xmlan.machine.module.system.entity.SysLog
 import com.xmlan.machine.module.system.service.LoginService
@@ -45,6 +48,8 @@ class IndexController extends BaseController {
     @RequestMapping('${adminPath}/auth')
     String auth(String authname, String password, RedirectAttributes redirectAttributes) {
         if (service.login(request, authname, password)) {
+            // 写入系统操作日志
+            sysLogService.log(ModuleEnum.User, OperateEnum.Login, SessionUtils.getAdmin(request).id, ObjectEnum.User, "登入系统")
             addMessage redirectAttributes, "登录成功！"
             return "redirect:${adminPath}/main"
         } else {
@@ -55,6 +60,7 @@ class IndexController extends BaseController {
 
     @RequestMapping('${adminPath}/logout')
     def logout(RedirectAttributes redirectAttributes) {
+        sysLogService.log(ModuleEnum.User, OperateEnum.Logout, SessionUtils.getAdmin(request).id, ObjectEnum.User, "登出系统")
         SessionUtils.setAdmin request, null
         addMessage redirectAttributes, "退出成功"
         "system/login"
@@ -65,6 +71,11 @@ class IndexController extends BaseController {
         def list = sysLogService.findList(sysLog, pageNo)
         def page = new PageInfo<SysLog>(list)
         model.addAttribute "page", page
+        model.addAttribute "operators", sysLogService.getOperators(list)
+        model.addAttribute "modules", ModuleEnum.values()
+        model.addAttribute "operates", OperateEnum.values()
+        model.addAttribute "objectType", ObjectEnum.values()
+        model.addAttribute "sysLog", sysLog
         "system/log"
     }
 

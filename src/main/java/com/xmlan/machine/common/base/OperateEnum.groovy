@@ -19,11 +19,15 @@ enum OperateEnum {
         this.description = description
     }
 
+    final String getKey() {
+        this.toString()
+    }
+
     final String getDescription() {
         return description
     }
 
-    final String getDescription(String originKey) {
+    final static String getDescription(String originKey) {
         for (value in values()) {
             if (value.toString() == originKey) {
                 return value.description

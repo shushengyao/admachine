@@ -3,40 +3,155 @@
 <head th:include="/common/head::head('操作记录 - 广告机管理后台')"></head>
 
 <!--/*@thymesVar id="page" type="com.github.pagehelper.PageInfo<com.xmlan.machine.module.system.entity.SysLog>"*/-->
+<!--/*@thymesVar id="operators" type="java.util.List<com.xmlan.machine.module.system.entity.Operator>"*/-->
+<!--/*@thymesVar id="adminPath" type="java.lang.String"*/-->
+<!--/*@thymesVar id="modules" type="java.util.List<com.xmlan.machine.common.base.ModuleEnum>"*/-->
+<!--/*@thymesVar id="operates" type="java.util.List<com.xmlan.machine.common.base.OperateEnum>"*/-->
+<!--/*@thymesVar id="objectType" type="java.util.List<com.xmlan.machine.common.base.ObjectEnum>"*/-->
+<!--/*@thymesVar id="sysLog" type="com.xmlan.machine.module.system.entity.SysLog"*/-->
+
 <body>
 <th:block th:include="/common/header::header('index')"/>
 
-<main>
-  <table>
-    <thead>
-    <tr>
-      <th>模块</th>
-      <th>操作</th>
-      <th>操作对象</th>
-      <th>TA是</th>
-      <th>操作日期</th>
-      <th>描述</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="log:${page.list}">
-      <td th:text="*{log.type}"></td>
-      <td th:text="*{log.operate}"></td>
-      <td th:text="*{log.operator}"></td>
-      <td th:text="*{log.operatorObject}"></td>
-      <td th:text="*{log.logDate}"></td>
-      <td th:text="*{log.description}"></td>
-    </tr>
-    </tbody>
-  </table>
+<main style="z-index: 0;">
+  <div class="page-title z-depth-1 blue-grey darken-2">
+    <div class="white-text">
+      <span class="flow-text">
+        <a class="btn-flat"><i class="material-icons white-text">list</i></a>操作记录
+      </span>
+    </div>
+  </div>
+  <br/>
+  <div id="main-content" class="container">
+    <div id="search-box">
+      <form th:action="@{${adminPath}+'/log/1'}" method="post">
+        <ul class="collapsible popout" data-collapsible="accordion">
+          <li>
+            <div class="collapsible-header">
+              <i class="material-icons">search</i>条件搜索
+            </div>
+            <div class="collapsible-body row">
+              <div class="col s12 m10 l10 center">
+                <div class="input-field col s12 m4 l4">
+                  <select id="type" name="type">
+                    <option th:each="item:${modules}" th:value="${item.key}" th:if="${sysLog.type==item.key}"
+                            th:text="${item.description}" selected="selected"></option>
+                    <option value="">不选择</option>
+                    <option th:each="item:${modules}" th:value="${item.key}" th:text="${item.description}"></option>
+                  </select>
+                  <label for="type">按模块过滤</label>
+                </div>
+                <div class="input-field col s12 m4 l4">
+                  <select id="operate" name="operate">
+                    <option th:each="item:${operates}" th:value="${item.key}" th:if="${sysLog.operate==item.key}"
+                            th:text="${item.description}" selected="selected"></option>
+                    <option value="">不选择</option>
+                    <option th:each="item:${operates}" th:value="${item.key}" th:text="${item.description}"></option>
+                  </select>
+                  <label for="operate">按操作过滤</label>
+                </div>
+                <div class="input-field col s12 m4 l4">
+                  <select id="operatorObject" name="operatorObject">
+                    <option th:each="item:${objectType}" th:value="${item.key}"
+                            th:if="${sysLog.operatorObject==item.key}" th:text="${item.description}"
+                            selected="selected"></option>
+                    <option value="">不选择</option>
+                    <option th:each="item:${objectType}" th:value="${item.key}" th:text="${item.description}"></option>
+                  </select>
+                  <label for="operatorObject">按操作对象过滤</label>
+                </div>
+                <div class="input-field col s12 m4 l4">
+                  <input type="text" id="logDate" name="logDate" class="date-picker" placeholder="选择日期"
+                         th:value="${logDate==' '?'':logDate}"/>
+                  <label for="logDate">按记录时间</label>
+                </div>
+              </div>
+
+              <div class="col s12 m2 l2 center">
+                <div class="input-field col s12 m12 l12">
+                  <button type="submit" class="btn-floating btn-large waves-effect waves-light green">
+                    <i class="material-icons">search</i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </form>
+    </div>
+
+    <table class="highlight responsive-table">
+      <thead>
+      <tr>
+        <th>模块</th>
+        <th>操作</th>
+        <th>操作对象</th>
+        <th>TA是</th>
+        <th>操作日期</th>
+        <th>描述</th>
+      </tr>
+      </thead>
+      <tbody class="card">
+      <tr th:each="log:${page.list}">
+        <td th:text="*{log.type}"></td>
+        <td th:text="*{log.operate}"></td>
+        <th:block th:each="operator:${operators}">
+          <td th:if="${operator.operatorID==log.operator} and ${operator.objectType.description==log.operatorObject}"
+              th:text="*{operator.operatorName}"></td>
+        </th:block>
+        <td th:text="*{log.operatorObject}"></td>
+        <td th:text="*{log.logDate}"></td>
+        <td th:text="*{log.description}"></td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div id="pagination-div" class="center">
+    <ul class="pagination">
+      <li th:if="${!page.hasPreviousPage}" class="disabled">
+        <a href="#"><i class="material-icons">chevron_left</i></a>
+      </li>
+      <li th:if="${page.hasPreviousPage}" class="waves-effect">
+        <a th:href="@{${adminPath}+'/log/'+${page.prePage}+'?type='+${sysLog.type}+'&operate='+${sysLog.operate}+'&operatorObject='+${sysLog.operatorObject}}"><i
+            class="material-icons">chevron_left</i></a>
+      </li>
+      <th:block th:each="number:${page.navigatepageNums}">
+        <li th:if="${number==page.pageNum}" class="waves-effect" id="active-page">
+          <a href="#" th:text="${number}"></a>
+        </li>
+        <li th:if="${number!=page.pageNum}" class="waves-effect">
+          <a th:href="@{${adminPath}+'/log/'+${number}+'?type='+${sysLog.type}+'&operate='+${sysLog.operate}+'&operatorObject='+${sysLog.operatorObject}}"
+             th:text="${number}"></a>
+        </li>
+      </th:block>
+      <li th:if="${!page.hasNextPage}" class="disabled">
+        <a href="#"><i class="material-icons">chevron_right</i></a>
+      </li>
+      <li th:if="${page.hasNextPage}" class="waves-effect">
+        <a th:href="@{${adminPath}+'/log/'+${page.nextPage}+'?type='+${sysLog.type}+'&operate='+${sysLog.operate}+'&operatorObject='+${sysLog.operatorObject}}"><i
+            class="material-icons">chevron_right</i></a>
+      </li>
+    </ul>
+  </div>
 </main>
 
 <th:block th:include="/common/script::script"/>
 <script type="text/javascript">
   $(function () {
     resize_footer(window.screen.width);
+    initComponent();
     toast('[[${message}]]');
   });
+
+  function initComponent() {
+    $("#type").material_select();
+    $("#operate").material_select();
+    $("#operatorObject").material_select();
+    $('.date-picker').pickadatee({
+      closeOnSelect: true
+    });
+  }
 </script>
 </body>
 </html>

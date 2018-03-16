@@ -4,6 +4,7 @@ import com.xmlan.machine.common.base.AlgorithmEnum;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
@@ -24,10 +25,14 @@ public class EncryptUtils {
     private static byte[] GetEncodeByte(String message, AlgorithmEnum type) {
         try {
             MessageDigest messageDigest = MessageDigest.getInstance(type.getType());
-            messageDigest.update(message.getBytes());
+            final String charset = "utf-8";
+            messageDigest.update(message.getBytes(charset));
             return messageDigest.digest();
         } catch (NoSuchAlgorithmException e) {
             logger.error("Type " + type.name() + " is not support.");
+            return null;
+        } catch (UnsupportedEncodingException e) {
+            logger.error("Unsupported charset name.");
             return null;
         }
     }
