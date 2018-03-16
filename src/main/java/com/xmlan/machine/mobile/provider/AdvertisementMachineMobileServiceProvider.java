@@ -8,13 +8,19 @@ import cn.jpush.api.push.PushResult;
 import cn.jpush.api.push.model.PushPayload;
 import com.google.common.collect.Maps;
 import com.xmlan.machine.common.base.BaseController;
+import com.xmlan.machine.common.base.ModuleEnum;
+import com.xmlan.machine.common.base.ObjectEnum;
+import com.xmlan.machine.common.base.OperateEnum;
+import com.xmlan.machine.common.cache.AdvertisementMachineCache;
 import com.xmlan.machine.common.config.Global;
 import com.xmlan.machine.common.util.PushUtils;
 import com.xmlan.machine.common.util.StringUtils;
 import com.xmlan.machine.common.util.TokenUtils;
 import com.xmlan.machine.module.advertisementMachine.entity.AdvertisementMachine;
 import com.xmlan.machine.module.advertisementMachine.service.AdvertisementMachineService;
+import com.xmlan.machine.module.system.service.SysLogService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -37,10 +43,17 @@ import java.util.List;
 public class AdvertisementMachineMobileServiceProvider extends BaseController {
 
     private final AdvertisementMachineService service;
+    private final SysLogService sysLogService;
+    private final ThreadPoolTaskExecutor taskExecutor;
 
     @Autowired
-    public AdvertisementMachineMobileServiceProvider(AdvertisementMachineService service) {
+    public AdvertisementMachineMobileServiceProvider(
+            AdvertisementMachineService service,
+            SysLogService sysLogService,
+            ThreadPoolTaskExecutor taskExecutor) {
         this.service = service;
+        this.sysLogService = sysLogService;
+        this.taskExecutor = taskExecutor;
     }
 
     /**
@@ -162,6 +175,25 @@ public class AdvertisementMachineMobileServiceProvider extends BaseController {
             PushPayload payload = PushUtils.buildPayload(String.valueOf(id), "Light switch.", command);
             try {
                 map.put("message", operate == 1 ? "开灯！" : "关灯！");
+                taskExecutor.execute(() -> {
+                    if (operate == 1) {
+                        sysLogService.log(
+                                ModuleEnum.Machine,
+                                OperateEnum.Push,
+                                TokenUtils.validateTokenGetUser(token).getId(),
+                                ObjectEnum.User,
+                                "打开了" + AdvertisementMachineCache.getMachineNameByID(id) + "的灯"
+                        );
+                    } else {
+                        sysLogService.log(
+                                ModuleEnum.Machine,
+                                OperateEnum.Push,
+                                TokenUtils.validateTokenGetUser(token).getId(),
+                                ObjectEnum.User,
+                                "关闭了" + AdvertisementMachineCache.getMachineNameByID(id) + "的灯"
+                        );
+                    }
+                });
                 PushResult result = pushClient.sendPush(payload);
                 logger.trace(result);
             } catch (APIRequestException e) {
@@ -216,6 +248,25 @@ public class AdvertisementMachineMobileServiceProvider extends BaseController {
             PushPayload payload = PushUtils.buildPayload(String.valueOf(id), "Charge switch.", command);
             try {
                 map.put("message", operate == 1 ? "正在充电！" : "充电结束，闲置中。");
+                taskExecutor.execute(() -> {
+                    if (operate == 1) {
+                        sysLogService.log(
+                                ModuleEnum.Machine,
+                                OperateEnum.Push,
+                                TokenUtils.validateTokenGetUser(token).getId(),
+                                ObjectEnum.User,
+                                "启动了" + AdvertisementMachineCache.getMachineNameByID(id) + "的充电功能"
+                        );
+                    } else {
+                        sysLogService.log(
+                                ModuleEnum.Machine,
+                                OperateEnum.Push,
+                                TokenUtils.validateTokenGetUser(token).getId(),
+                                ObjectEnum.User,
+                                "结束了" + AdvertisementMachineCache.getMachineNameByID(id) + "的充电功能，结束充电"
+                        );
+                    }
+                });
                 PushResult result = pushClient.sendPush(payload);
                 logger.trace(result);
             } catch (APIRequestException e) {

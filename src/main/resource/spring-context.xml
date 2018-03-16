@@ -14,87 +14,99 @@
        http://www.springframework.org/schema/aop
        http://www.springframework.org/schema/aop/spring-aop.xsd">
 
-    <!-- <editor-fold desc="Context"> -->
-    <context:component-scan base-package="com.xmlan.machine"/>
-    <context:property-placeholder location="classpath:machine.properties"/>
-    <!-- </editor-fold> -->
+  <!-- <editor-fold desc="Context"> -->
+  <context:component-scan base-package="com.xmlan.machine"/>
+  <context:property-placeholder location="classpath:machine.properties"/>
+  <!-- </editor-fold> -->
 
-    <!-- <editor-fold desc="DataSource and Mapping"> -->
-    <bean name="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
-        <property name="driverClassName" value="${mysql.driver}"/>
-        <property name="url" value="${mysql.url}"/>
-        <property name="username" value="${mysql.user}"/>
-        <property name="password" value="${mysql.pass}"/>
-        <property name="initialSize" value="${dbcp.initialSize}"/>
-        <property name="maxActive" value="${dbcp.maxActive}"/>
-        <property name="maxIdle" value="${dbcp.maxIdle}"/>
-        <property name="minIdle" value="${dbcp.minIdle}"/>
-        <property name="maxWait" value="${dbcp.maxWait}"/>
-        <property name="maxOpenPreparedStatements" value="${dbcp.maxOpenPreparedStatements}"/>
+  <!-- <editor-fold desc="DataSource and Mapping"> -->
+  <bean name="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
+    <property name="driverClassName" value="${mysql.driver}"/>
+    <property name="url" value="${mysql.url}"/>
+    <property name="username" value="${mysql.user}"/>
+    <property name="password" value="${mysql.pass}"/>
+    <property name="initialSize" value="${dbcp.initialSize}"/>
+    <property name="maxActive" value="${dbcp.maxActive}"/>
+    <property name="maxIdle" value="${dbcp.maxIdle}"/>
+    <property name="minIdle" value="${dbcp.minIdle}"/>
+    <property name="maxWait" value="${dbcp.maxWait}"/>
+    <property name="maxOpenPreparedStatements" value="${dbcp.maxOpenPreparedStatements}"/>
 
-        <property name="validationQuery" value="select 1"/>
-        <property name="testWhileIdle" value="true"/>
-        <property name="timeBetweenEvictionRunsMillis" value="600000"/>
-        <property name="minEvictableIdleTimeMillis" value="1800000"/>
-        <property name="testOnBorrow" value="true"/>
-    </bean>
-    <bean name="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
-        <property name="dataSource" ref="dataSource"/>
-        <property name="typeAliasesPackage" value="com.xmlan.machine"/>
-        <property name="configuration" ref="mybatisConfiguration"/>
-        <property name="mapperLocations" value="classpath*:mapping/**/*.xml"/>
-        <property name="plugins">
-            <array>
-                <bean class="com.github.pagehelper.PageInterceptor">
-                    <property name="properties">
-                        <value>helperDialect=mysql</value>
-                    </property>
-                </bean>
-            </array>
-        </property>
-    </bean>
-    <bean name="mapperScannerConfigurer" class="org.mybatis.spring.mapper.MapperScannerConfigurer">
-        <property name="basePackage" value="com.xmlan.machine"/>
-        <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"/>
-        <property name="annotationClass" value="org.springframework.stereotype.Repository"/>
-    </bean>
-    <bean id="mybatisConfiguration" class="org.apache.ibatis.session.Configuration"
-          p:logImpl="org.apache.ibatis.logging.log4j2.Log4j2Impl"/>
-    <!-- </editor-fold> -->
+    <property name="validationQuery" value="select 1"/>
+    <property name="testWhileIdle" value="true"/>
+    <property name="timeBetweenEvictionRunsMillis" value="600000"/>
+    <property name="minEvictableIdleTimeMillis" value="1800000"/>
+    <property name="testOnBorrow" value="true"/>
+  </bean>
+  <bean name="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+    <property name="dataSource" ref="dataSource"/>
+    <property name="typeAliasesPackage" value="com.xmlan.machine"/>
+    <property name="configuration" ref="mybatisConfiguration"/>
+    <property name="mapperLocations" value="classpath*:mapping/**/*.xml"/>
+    <property name="plugins">
+      <array>
+        <bean class="com.github.pagehelper.PageInterceptor">
+          <property name="properties">
+            <value>helperDialect=mysql</value>
+          </property>
+        </bean>
+      </array>
+    </property>
+  </bean>
+  <bean name="mapperScannerConfigurer" class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+    <property name="basePackage" value="com.xmlan.machine"/>
+    <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"/>
+    <property name="annotationClass" value="org.springframework.stereotype.Repository"/>
+  </bean>
+  <bean id="mybatisConfiguration" class="org.apache.ibatis.session.Configuration"
+        p:logImpl="org.apache.ibatis.logging.log4j2.Log4j2Impl"/>
+  <!-- </editor-fold> -->
 
-    <!-- <editor-fold desc="Cache Manager"> -->
-    <bean id="cacheManager" class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">
-        <property name="configLocation" value="classpath:cache/ehcache-local.xml"/>
-    </bean>
-    <!-- </editor-fold> -->
+  <!-- <editor-fold desc="Cache Manager"> -->
+  <bean id="cacheManager" class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">
+    <property name="configLocation" value="classpath:cache/ehcache-local.xml"/>
+  </bean>
+  <!-- </editor-fold> -->
 
-    <!-- <editor-fold desc="Validator"> -->
-    <bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean"/>
-    <!-- </editor-fold> -->
+  <!-- <editor-fold desc="Validator"> -->
+  <bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean"/>
+  <!-- </editor-fold> -->
 
-    <!-- <editor-fold desc="Transaction"> -->
-    <tx:annotation-driven/>
-    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
-        <property name="dataSource" ref="dataSource"/>
-    </bean>
-    <tx:advice id="txAdvice" transaction-manager="transactionManager">
-        <tx:attributes>
-            <tx:method name="save*" propagation="REQUIRED"/>
-            <tx:method name="delete*" propagation="REQUIRED"/>
-            <tx:method name="insert*" propagation="REQUIRED"/>
-            <tx:method name="update*" propagation="REQUIRED"/>
-            <tx:method name="find*" propagation="SUPPORTS" read-only="true"/>
-            <tx:method name="get*" propagation="SUPPORTS" read-only="true"/>
-            <tx:method name="select*" propagation="SUPPORTS" read-only="true"/>
-        </tx:attributes>
-    </tx:advice>
-    <aop:aspectj-autoproxy/>
-    <aop:config>
-        <aop:advisor advice-ref="txAdvice" pointcut="execution(* com.xmlan.machine..*.*(..))"/>
-    </aop:config>
-    <!-- </editor-fold> -->
+  <!-- <editor-fold desc="Transaction"> -->
+  <tx:annotation-driven/>
+  <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+    <property name="dataSource" ref="dataSource"/>
+  </bean>
+  <tx:advice id="txAdvice" transaction-manager="transactionManager">
+    <tx:attributes>
+      <tx:method name="save*" propagation="REQUIRED"/>
+      <tx:method name="delete*" propagation="REQUIRED"/>
+      <tx:method name="insert*" propagation="REQUIRED"/>
+      <tx:method name="update*" propagation="REQUIRED"/>
+      <tx:method name="find*" propagation="SUPPORTS" read-only="true"/>
+      <tx:method name="get*" propagation="SUPPORTS" read-only="true"/>
+      <tx:method name="select*" propagation="SUPPORTS" read-only="true"/>
+    </tx:attributes>
+  </tx:advice>
+  <aop:aspectj-autoproxy/>
+  <aop:config>
+    <aop:advisor advice-ref="txAdvice" pointcut="execution(* com.xmlan.machine..*.*(..))"/>
+  </aop:config>
+  <!-- </editor-fold> -->
 
-    <!-- Custom bean binding configuration following here -->
-    <bean id="springContextUtils" class="com.xmlan.machine.common.util.SpringContextUtils"/>
+  <!-- <editor-fold desc="Thread pool"> -->
+  <bean id="taskExecutor" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
+    <property name="corePoolSize" value="10"/>
+    <property name="keepAliveSeconds" value="300"/>
+    <property name="maxPoolSize" value="20"/>
+    <property name="queueCapacity" value="30"/>
+    <property name="rejectedExecutionHandler">
+      <bean class="java.util.concurrent.ThreadPoolExecutor$CallerRunsPolicy"/>
+    </property>
+  </bean>
+  <!-- </editor-fold> -->
+
+  <!-- Custom bean binding configuration following here -->
+  <bean id="springContextUtils" class="com.xmlan.machine.common.util.SpringContextUtils"/>
 
 </beans>

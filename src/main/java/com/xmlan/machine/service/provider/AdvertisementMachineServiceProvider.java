@@ -2,13 +2,18 @@ package com.xmlan.machine.service.provider;
 
 import com.google.common.collect.Maps;
 import com.xmlan.machine.common.base.BaseController;
+import com.xmlan.machine.common.base.ModuleEnum;
+import com.xmlan.machine.common.base.ObjectEnum;
+import com.xmlan.machine.common.base.OperateEnum;
 import com.xmlan.machine.common.cache.AdvertisementMachineCache;
 import com.xmlan.machine.common.util.DateUtils;
 import com.xmlan.machine.common.util.StringUtils;
 import com.xmlan.machine.module.advertisementMachine.entity.AdvertisementMachine;
 import com.xmlan.machine.module.advertisementMachine.service.AdvertisementMachineService;
+import com.xmlan.machine.module.system.service.SysLogService;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,10 +35,17 @@ import java.util.HashMap;
 public class AdvertisementMachineServiceProvider extends BaseController {
 
     private final AdvertisementMachineService service;
+    private final SysLogService sysLogService;
+    private final ThreadPoolTaskExecutor taskExecutor;
 
     @Autowired
-    public AdvertisementMachineServiceProvider(AdvertisementMachineService service) {
+    public AdvertisementMachineServiceProvider(
+            AdvertisementMachineService service,
+            SysLogService sysLogService,
+            ThreadPoolTaskExecutor taskExecutor) {
         this.service = service;
+        this.sysLogService = sysLogService;
+        this.taskExecutor = taskExecutor;
     }
 
     /**
@@ -88,6 +100,13 @@ public class AdvertisementMachineServiceProvider extends BaseController {
         HashMap<String, Object> map = Maps.newHashMap();
         map.put("responseCode", result);
         map.put("id", service.getByCodeNumber(advertisementMachine.getCodeNumber()).getId());
+        taskExecutor.execute(() -> sysLogService.log(
+                ModuleEnum.Machine,
+                OperateEnum.Register,
+                service.getByCodeNumber(advertisementMachine.getCodeNumber()).getId(),
+                ObjectEnum.Machine,
+                "新注册了一台广告机"
+        ));
         return map;
     }
 
