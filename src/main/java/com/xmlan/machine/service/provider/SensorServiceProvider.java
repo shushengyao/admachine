@@ -15,7 +15,7 @@ import java.util.HashMap;
 
 /**
  * 广告端 天气传感器数据服务接口
- *
+ * <p>
  * Package: com.xmlan.machine.service.provider
  *
  * @author ayakurayuki
@@ -27,6 +27,11 @@ public class SensorServiceProvider extends BaseController {
 
     private final MachineSensorService sensorService;
 
+    /**
+     * 构造器注入方式
+     *
+     * @param sensorService 传感器Service层对象
+     */
     @Autowired
     public SensorServiceProvider(MachineSensorService sensorService) {
         this.sensorService = sensorService;
@@ -72,11 +77,11 @@ public class SensorServiceProvider extends BaseController {
         sensor.setBrightness(brightness);
         HashMap<String, Object> info = Maps.newHashMap();
         if (sensorService.update(sensor) != 0) {
-            info.put("responseCode", DONE);
-            info.put("message", "天气记录更新");
+            info.put(keyResponseCode, DONE);
+            info.put(keyMessage, "天气记录更新");
         } else {
-            info.put("responseCode", FAILURE);
-            info.put("message", "天气记录更新失败，没有对应的广告机");
+            info.put(keyResponseCode, FAILURE);
+            info.put(keyMessage, "天气记录更新失败，没有对应的广告机");
         }
         return info;
     }

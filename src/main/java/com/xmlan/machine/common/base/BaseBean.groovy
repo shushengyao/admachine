@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional
 class BaseBean {
 
     // ========================= 引导类 ========================= //
+
     /**
      * 操作完成
      */
@@ -50,6 +51,7 @@ class BaseBean {
     public static final int LOST_MEDIA_RESOURCE_WHEN_DELETE = -7
 
     // ========================= 标记类 ========================= //
+
     /**
      * 管理员角色ID
      */
@@ -60,6 +62,7 @@ class BaseBean {
     public static final int ROOT_ADMIN_ID = 1
 
     // ========================= 模块类 ========================= //
+
     /**
      * 管理员相关操作成功
      */
@@ -93,7 +96,8 @@ class BaseBean {
      */
     public static final int ERROR_API_REQUEST_EXCEPTION = -302
 
-    // ========================= 其他类 ========================= //
+    // ========================= 其他 ========================= //
+
     /**
      * 显示
      */
@@ -133,5 +137,30 @@ class BaseBean {
      * 类型：广告媒体更新
      */
     public static final int TYPE_MEDIA_UPDATE = 63342
+
+    /**
+     * 消除魔法值，ID的Key
+     */
+    public static final String keyID = "id"
+
+    /**
+     * 消除魔法值，Token的Key
+     */
+    public static final String keyToken = "token"
+
+    /**
+     * 消除魔法值, 返回码的Key
+     */
+    public static final String keyResponseCode = "responseCode"
+
+    /**
+     * 消除魔法值，消息的Key
+     */
+    public static final String keyMessage = "message"
+
+    /**
+     * 消除魔法值，错误消息的Key
+     */
+    public static final String keyErrorMessage = "errorMessage"
 
 }

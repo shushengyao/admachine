@@ -32,7 +32,7 @@ import java.util.List;
 
 /**
  * 手机端 广告机服务接口
- *
+ * <p>
  * Package: com.xmlan.machine.mobile.provider
  *
  * @author ayakurayuki
@@ -46,6 +46,13 @@ public class AdvertisementMachineMobileServiceProvider extends BaseController {
     private final SysLogService sysLogService;
     private final ThreadPoolTaskExecutor taskExecutor;
 
+    /**
+     * 构造器注入
+     *
+     * @param service       广告机Service
+     * @param sysLogService 系统日志Service
+     * @param taskExecutor  线程池
+     */
     @Autowired
     public AdvertisementMachineMobileServiceProvider(
             AdvertisementMachineService service,
@@ -156,16 +163,16 @@ public class AdvertisementMachineMobileServiceProvider extends BaseController {
     public HashMap<String, Object> light(@PathVariable("id") int id, @PathVariable("operate") int operate, String token) {
         HashMap<String, Object> map = Maps.newHashMap();
         if (!TokenUtils.validateToken(token)) {
-            map.put("responseCode", FAILURE);
-            map.put("message", "身份校验失败");
+            map.put(keyResponseCode, FAILURE);
+            map.put(keyMessage, "身份校验失败");
             return map;
         }
         int responseCode = service.lightControl(id, operate);
-        map.put("responseCode", responseCode);
+        map.put(keyResponseCode, responseCode);
         if (responseCode == NO_SUCH_ROW) {
-            map.put("message", "目标路灯不存在");
+            map.put(keyMessage, "目标路灯不存在");
         } else if (responseCode == ERROR_REQUEST) {
-            map.put("message", "操作码不正确");
+            map.put(keyMessage, "操作码不正确");
         } else if (responseCode == DONE) {
             HashMap<String, Integer> command = Maps.newHashMap();
             command.put("id", id);
@@ -174,7 +181,7 @@ public class AdvertisementMachineMobileServiceProvider extends BaseController {
             JPushClient pushClient = new JPushClient(Global.getMasterSecret(), Global.getAppKey(), null, ClientConfig.getInstance());
             PushPayload payload = PushUtils.buildPayload(String.valueOf(id), "Light switch.", command);
             try {
-                map.put("message", operate == 1 ? "开灯！" : "关灯！");
+                map.put(keyMessage, operate == 1 ? "开灯！" : "关灯！");
                 taskExecutor.execute(() -> {
                     if (operate == 1) {
                         sysLogService.log(
@@ -197,17 +204,17 @@ public class AdvertisementMachineMobileServiceProvider extends BaseController {
                 PushResult result = pushClient.sendPush(payload);
                 logger.trace(result);
             } catch (APIRequestException e) {
-                map.put("message", "Push request error.");
-                map.put("responseCode", ERROR_API_REQUEST_EXCEPTION);
+                map.put(keyMessage, "Push request error.");
+                map.put(keyResponseCode, ERROR_API_REQUEST_EXCEPTION);
                 logger.error("API exception with: " + e.getMessage());
             } catch (APIConnectionException e) {
-                map.put("message", "Push connect error.");
-                map.put("responseCode", ERROR_API_CONNECTION_EXCEPTION);
+                map.put(keyMessage, "Push connect error.");
+                map.put(keyResponseCode, ERROR_API_CONNECTION_EXCEPTION);
                 logger.error("API exception with: " + e.getMessage());
             }
         } else {
-            map.put("responseCode", PASS);
-            map.put("message", "系统繁忙");
+            map.put(keyResponseCode, PASS);
+            map.put(keyMessage, "系统繁忙");
         }
         return map;
     }
@@ -229,16 +236,16 @@ public class AdvertisementMachineMobileServiceProvider extends BaseController {
     public HashMap<String, Object> charge(@PathVariable("id") int id, @PathVariable("operate") int operate, String token) {
         HashMap<String, Object> map = Maps.newHashMap();
         if (!TokenUtils.validateToken(token)) {
-            map.put("responseCode", FAILURE);
-            map.put("message", "身份校验失败");
+            map.put(keyResponseCode, FAILURE);
+            map.put(keyMessage, "身份校验失败");
             return map;
         }
         int responseCode = service.chargeControl(id, operate);
-        map.put("responseCode", responseCode);
+        map.put(keyResponseCode, responseCode);
         if (responseCode == NO_SUCH_ROW) {
-            map.put("message", "目标充电桩不存在");
+            map.put(keyMessage, "目标充电桩不存在");
         } else if (responseCode == ERROR_REQUEST) {
-            map.put("message", "操作码不正确");
+            map.put(keyMessage, "操作码不正确");
         } else if (responseCode == DONE) {
             HashMap<String, Integer> command = Maps.newHashMap();
             command.put("id", id);
@@ -247,7 +254,7 @@ public class AdvertisementMachineMobileServiceProvider extends BaseController {
             JPushClient pushClient = new JPushClient(Global.getMasterSecret(), Global.getAppKey(), null, ClientConfig.getInstance());
             PushPayload payload = PushUtils.buildPayload(String.valueOf(id), "Charge switch.", command);
             try {
-                map.put("message", operate == 1 ? "正在充电！" : "充电结束，闲置中。");
+                map.put(keyMessage, operate == 1 ? "正在充电！" : "充电结束，闲置中。");
                 taskExecutor.execute(() -> {
                     if (operate == 1) {
                         sysLogService.log(
@@ -270,16 +277,16 @@ public class AdvertisementMachineMobileServiceProvider extends BaseController {
                 PushResult result = pushClient.sendPush(payload);
                 logger.trace(result);
             } catch (APIRequestException e) {
-                map.put("message", "Push request error.");
-                map.put("responseCode", ERROR_API_REQUEST_EXCEPTION);
+                map.put(keyMessage, "Push request error.");
+                map.put(keyResponseCode, ERROR_API_REQUEST_EXCEPTION);
                 logger.error("API exception with: " + e.getMessage());
             } catch (APIConnectionException e) {
-                map.put("message", "Push connect error.");
-                map.put("responseCode", ERROR_API_CONNECTION_EXCEPTION);
+                map.put(keyMessage, "Push connect error.");
+                map.put(keyResponseCode, ERROR_API_CONNECTION_EXCEPTION);
                 logger.error("API exception with: " + e.getMessage());
             }
         } else {
-            map.put("message", "系统繁忙");
+            map.put(keyMessage, "系统繁忙");
         }
         return map;
     }

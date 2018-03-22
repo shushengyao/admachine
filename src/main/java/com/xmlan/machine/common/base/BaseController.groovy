@@ -87,7 +87,7 @@ abstract class BaseController extends BaseBean {
         for (message in messages) {
             stringBuilder.append(message).append(messages.length > 1 ? '<br/>' : StringUtils.EMPTY)
         }
-        redirectAttributes.addFlashAttribute("message", stringBuilder.toString())
+        redirectAttributes.addFlashAttribute(keyMessage, stringBuilder.toString())
         logger.debug "Message added."
     }
 
@@ -102,7 +102,7 @@ abstract class BaseController extends BaseBean {
         for (message in messages) {
             stringBuilder.append(message).append(messages.length > 1 ? '<br/>' : StringUtils.EMPTY)
         }
-        model.addAttribute("message", stringBuilder.toString())
+        model.addAttribute(keyMessage, stringBuilder.toString())
         logger.debug "Message added."
     }
 

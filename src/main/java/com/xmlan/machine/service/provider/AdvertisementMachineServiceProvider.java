@@ -24,7 +24,7 @@ import java.util.HashMap;
 
 /**
  * 广告端 广告机服务接口
- *
+ * <p>
  * Package: com.xmlan.machine.service.provider
  *
  * @author ayakurayuki
@@ -80,9 +80,9 @@ public class AdvertisementMachineServiceProvider extends BaseController {
         AdvertisementMachine temp = AdvertisementMachineCache.get(advertisementMachine.getCodeNumber());
         if (temp != null) {
             HashMap<String, Object> map = Maps.newHashMap();
-            map.put("responseCode", DATABASE_DO_NOTHING);
-            map.put("errorMessage", "Exists machine with the same code number.");
-            map.put("id", temp.getId());
+            map.put(keyResponseCode, DATABASE_DO_NOTHING);
+            map.put(keyErrorMessage, "Exists machine with the same code number.");
+            map.put(keyID, temp.getId());
             return map;
         }
         if (StringUtils.isBlank(advertisementMachine.getAddTime())) {
@@ -98,8 +98,8 @@ public class AdvertisementMachineServiceProvider extends BaseController {
         advertisementMachine.setChecked(0);
         int result = service.insert(advertisementMachine);
         HashMap<String, Object> map = Maps.newHashMap();
-        map.put("responseCode", result);
-        map.put("id", service.getByCodeNumber(advertisementMachine.getCodeNumber()).getId());
+        map.put(keyResponseCode, result);
+        map.put(keyID, service.getByCodeNumber(advertisementMachine.getCodeNumber()).getId());
         taskExecutor.execute(() -> sysLogService.log(
                 ModuleEnum.Machine,
                 OperateEnum.Register,
@@ -129,15 +129,15 @@ public class AdvertisementMachineServiceProvider extends BaseController {
         if (NumberUtils.isNumber(longitude) && NumberUtils.isNumber(latitude)) {
             int responseCode = service.updateLocation(id, longitude, latitude);
             if (responseCode == DONE) {
-                map.put("responseCode", DONE);
-                map.put("message", "Updated!");
+                map.put(keyResponseCode, DONE);
+                map.put(keyMessage, "Updated!");
             } else {
-                map.put("responseCode", responseCode);
-                map.put("message", "Update failed!");
+                map.put(keyResponseCode, responseCode);
+                map.put(keyMessage, "Update failed!");
             }
         } else {
-            map.put("responseCode", DATABASE_DO_NOTHING);
-            map.put("message", "Longitude or Latitude is not a number.");
+            map.put(keyResponseCode, DATABASE_DO_NOTHING);
+            map.put(keyMessage, "Longitude or Latitude is not a number.");
         }
         return map;
     }

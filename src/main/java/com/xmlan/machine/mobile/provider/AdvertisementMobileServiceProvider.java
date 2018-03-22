@@ -8,6 +8,9 @@ import cn.jpush.api.push.PushResult;
 import cn.jpush.api.push.model.PushPayload;
 import com.google.common.collect.Maps;
 import com.xmlan.machine.common.base.BaseController;
+import com.xmlan.machine.common.base.ModuleEnum;
+import com.xmlan.machine.common.base.ObjectEnum;
+import com.xmlan.machine.common.base.OperateEnum;
 import com.xmlan.machine.common.cache.AdvertisementCache;
 import com.xmlan.machine.common.cache.AdvertisementMachineCache;
 import com.xmlan.machine.common.config.Global;
@@ -17,8 +20,10 @@ import com.xmlan.machine.common.util.TokenUtils;
 import com.xmlan.machine.module.advertisement.entity.Advertisement;
 import com.xmlan.machine.module.advertisement.service.AdvertisementService;
 import com.xmlan.machine.module.advertisementMachine.entity.AdvertisementMachine;
+import com.xmlan.machine.module.system.service.SysLogService;
 import com.xmlan.machine.module.user.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -31,7 +36,7 @@ import java.util.Map;
 
 /**
  * 手机端 广告服务接口
- *
+ * <p>
  * Package: com.xmlan.machine.mobile.provider
  *
  * @author ayakurayuki
@@ -42,10 +47,24 @@ import java.util.Map;
 public class AdvertisementMobileServiceProvider extends BaseController {
 
     private final AdvertisementService advertisementService;
+    private final SysLogService sysLogService;
+    private final ThreadPoolTaskExecutor taskExecutor;
 
+    /**
+     * 构造器注入
+     *
+     * @param advertisementService 广告Service
+     * @param sysLogService        系统日志Service
+     * @param taskExecutor         线程池
+     */
     @Autowired
-    public AdvertisementMobileServiceProvider(AdvertisementService advertisementService) {
+    public AdvertisementMobileServiceProvider(
+            AdvertisementService advertisementService,
+            SysLogService sysLogService,
+            ThreadPoolTaskExecutor taskExecutor) {
         this.advertisementService = advertisementService;
+        this.sysLogService = sysLogService;
+        this.taskExecutor = taskExecutor;
     }
 
     /**
@@ -109,8 +128,8 @@ public class AdvertisementMobileServiceProvider extends BaseController {
     public Map insertAD(int machineID, String name, int time, String token, MultipartFile file) {
         HashMap<String, Object> map = Maps.newHashMap();
         if (!TokenUtils.validateToken(token)) {
-            map.put("responseCode", FAILURE);
-            map.put("message", "身份校验失败");
+            map.put(keyResponseCode, FAILURE);
+            map.put(keyMessage, "身份校验失败");
             return map;
         }
         User user = TokenUtils.validateTokenGetUser(token);
@@ -121,6 +140,15 @@ public class AdvertisementMobileServiceProvider extends BaseController {
         advertisement.setMachineID(machineID);
         advertisement.setAddTime(DateUtils.getDateTime());
         advertisementService.insert(advertisement);
+        taskExecutor.execute(() ->
+                sysLogService.log(
+                        ModuleEnum.Advertisement,
+                        OperateEnum.New,
+                        user.getId(),
+                        ObjectEnum.User,
+                        "在手机上新增了一条广告"
+                )
+        );
         int id = AdvertisementCache.getNewInserted(advertisement).getId();
         return uploadMedia(id, time, token, file);
     }
@@ -143,8 +171,8 @@ public class AdvertisementMobileServiceProvider extends BaseController {
     public Map uploadMedia(int id, int time, String token, MultipartFile file) {
         if (!TokenUtils.validateToken(token)) {
             HashMap<String, Object> map = Maps.newHashMap();
-            map.put("responseCode", FAILURE);
-            map.put("message", "身份校验失败");
+            map.put(keyResponseCode, FAILURE);
+            map.put(keyMessage, "身份校验失败");
             return map;
         }
         int responseCode = advertisementService.uploadMedia(String.valueOf(id), time, file);
@@ -167,8 +195,8 @@ public class AdvertisementMobileServiceProvider extends BaseController {
     public HashMap<String, Object> manualUpdate(int machineID, String token) {
         HashMap<String, Object> map = Maps.newHashMap();
         if (!TokenUtils.validateToken(token)) {
-            map.put("responseCode", FAILURE);
-            map.put("message", "身份校验失败");
+            map.put(keyResponseCode, FAILURE);
+            map.put(keyMessage, "身份校验失败");
             return map;
         }
         // 获取广告机
@@ -184,16 +212,25 @@ public class AdvertisementMobileServiceProvider extends BaseController {
         PushResult result;
         try {
             result = client.sendPush(payload);
-            map.put("responseCode", result.statusCode);
-            map.put("message", "手动推送更新");
+            map.put(keyResponseCode, result.statusCode);
+            map.put(keyMessage, "手动推送更新");
+            taskExecutor.execute(() ->
+                    sysLogService.log(
+                            ModuleEnum.Advertisement,
+                            OperateEnum.Update,
+                            TokenUtils.validateTokenGetUser(token).getId(),
+                            ObjectEnum.User,
+                            "在手机上手动推送更新"
+                    )
+            );
             logger.trace(result.getOriginalContent());
         } catch (APIConnectionException e) {
-            map.put("responseCode", ERROR_API_CONNECTION_EXCEPTION);
-            map.put("message", "Push connect error.");
+            map.put(keyResponseCode, ERROR_API_CONNECTION_EXCEPTION);
+            map.put(keyMessage, "Push connect error.");
             logger.error("API exception with: " + e.getMessage());
         } catch (APIRequestException e) {
-            map.put("responseCode", ERROR_API_REQUEST_EXCEPTION);
-            map.put("message", "Push request error.");
+            map.put(keyResponseCode, ERROR_API_REQUEST_EXCEPTION);
+            map.put(keyMessage, "Push request error.");
             logger.error("API exception with: " + e.getMessage());
         }
         return map;
@@ -215,8 +252,8 @@ public class AdvertisementMobileServiceProvider extends BaseController {
     public HashMap<String, Object> manualPush(int id, String token) {
         HashMap<String, Object> map = Maps.newHashMap();
         if (!TokenUtils.validateToken(token)) {
-            map.put("responseCode", FAILURE);
-            map.put("message", "身份校验失败");
+            map.put(keyResponseCode, FAILURE);
+            map.put(keyMessage, "身份校验失败");
             return map;
         }
         return pushUpdate(id, DEFAULT, "手动推送");
@@ -238,19 +275,19 @@ public class AdvertisementMobileServiceProvider extends BaseController {
     public Map delete(int id, String token) {
         HashMap<String, Object> map = Maps.newHashMap();
         if (!TokenUtils.validateToken(token)) {
-            map.put("responseCode", FAILURE);
-            map.put("message", "身份校验失败");
+            map.put(keyResponseCode, FAILURE);
+            map.put(keyMessage, "身份校验失败");
             return map;
         }
         Advertisement advertisement = AdvertisementCache.get(id);
         pushUpdate(id, DONE, "有广告被删除了，需要刷新");
         int responseCode = advertisementService.delete(advertisement);
-        map.put("responseCode", responseCode);
+        map.put(keyResponseCode, responseCode);
         if (responseCode != DONE) {
-            map.put("message", "没有对应的广告");
+            map.put(keyMessage, "没有对应的广告");
         } else {
-            map.put("responseCode", DONE);
-            map.put("message", "删除成功");
+            map.put(keyResponseCode, DONE);
+            map.put(keyMessage, "删除成功");
         }
         return map;
     }
@@ -281,19 +318,28 @@ public class AdvertisementMobileServiceProvider extends BaseController {
         try {
             result = client.sendPush(payload);
             if (responseCode == DEFAULT) {
-                map.put("responseCode", result.statusCode);
+                map.put(keyResponseCode, result.statusCode);
             } else {
-                map.put("responseCode", responseCode);
+                map.put(keyResponseCode, responseCode);
             }
-            map.put("message", message);
+            map.put(keyMessage, message);
+            taskExecutor.execute(() ->
+                    sysLogService.log(
+                            ModuleEnum.Advertisement,
+                            OperateEnum.Push,
+                            machine.getUserID(),
+                            ObjectEnum.User,
+                            message
+                    )
+            );
             logger.trace(result.getOriginalContent());
         } catch (APIConnectionException e) {
-            map.put("responseCode", ERROR_API_CONNECTION_EXCEPTION);
-            map.put("message", "Push connect error.");
+            map.put(keyResponseCode, ERROR_API_CONNECTION_EXCEPTION);
+            map.put(keyMessage, "Push connect error.");
             logger.error("API exception with: " + e.getMessage());
         } catch (APIRequestException e) {
-            map.put("responseCode", ERROR_API_REQUEST_EXCEPTION);
-            map.put("message", "Push request error.");
+            map.put(keyResponseCode, ERROR_API_REQUEST_EXCEPTION);
+            map.put(keyMessage, "Push request error.");
             logger.error("API exception with: " + e.getMessage());
         }
         return map;
