@@ -1,8 +1,12 @@
+-- 新建数据库admachine, 如果存在同样的库则不会创建, 使用utf8字符集
 create schema if not exists `admachine`
   char set utf8;
 
+-- 选中数据库
 use `admachine`;
 
+-- 以下所有创建需要严格遵守本文件中的表创建顺序, 不能打乱
+-- 创建角色表, 如果存在则抛弃旧表, 重新创建
 drop table if exists `role`;
 create table `role` (
   id     int auto_increment not null
@@ -15,6 +19,7 @@ create table `role` (
   char set utf8
   comment '角色表';
 
+-- 创建用户表, 如果存在则抛弃旧表, 重新创建. 本表依赖于角色表
 drop table if exists `user`;
 create table `user` (
   id       int auto_increment not null
@@ -36,6 +41,7 @@ create table `user` (
   char set utf8
   comment '用户表';
 
+-- 创建广告机表, 如果存在则抛弃旧表重新创建
 drop table if exists `advertisement_machine`;
 create table `advertisement_machine` (
   id         int auto_increment not null
@@ -60,6 +66,7 @@ create table `advertisement_machine` (
   char set utf8
   comment '广告机表';
 
+-- 创建广告表, 如果存在则抛弃旧表重新创建
 drop table if exists `advertisement`;
 create table `advertisement` (
   id        int auto_increment not null
@@ -79,6 +86,7 @@ create table `advertisement` (
   char set utf8
   comment '广告表';
 
+-- 创建温湿度传感器数据表, 如果存在则抛弃旧表重新创建
 drop table if exists `machine_sensor`;
 create table `machine_sensor` (
   id          int auto_increment not null
@@ -94,6 +102,7 @@ create table `machine_sensor` (
   char set utf8
   comment '传感器参数';
 
+-- 创建操作记录表, 本表用于持久化所有用户以及广告机发出的操作记录, 同理如果存在则抛弃旧表重新创建
 drop table if exists `sys_log`;
 create table `sys_log` (
   id             int auto_increment not null
@@ -109,21 +118,24 @@ create table `sys_log` (
   char set utf8
   comment '系统日志';
 
+-- 初始化角色数据
 insert into role values (id, '管理员', '管理员'), (id, '用户', '用户');
+
+-- 初始化用户数据
 insert into user values (
   id,
   'admin',
   'admin',
-  'd6afefbaa8389a98c03e37035bc4cd264776bb784993b877afda72e20d8d5865',
+  '4dae3c427732469187d806fa83470313a21e6a827b35d831a6b70f420cff97fd',
   1,
   '',
   now(),
   '',
   ''
 );
--- d6afefbaa8389a98c03e37035bc4cd264776bb784993b877afda72e20d8d5865 -> yuki6261
+-- 4dae3c427732469187d806fa83470313a21e6a827b35d831a6b70f420cff97fd -> zhxm2512209
 
--- 防止删除管理员角色
+-- 防止删除管理员角色的触发器
 create trigger `ROLE_DELETE_CHECK_TRIGGER`
   after delete
   on role
@@ -141,7 +153,7 @@ create trigger `ROLE_DELETE_CHECK_TRIGGER`
     end if;
   end;
 
--- 防止删除非空角色（该角色有所属用户时不删除）
+-- 防止删除非空角色的触发器（该角色有所属用户时不删除）
 create trigger `NULL_ROLE_CHECK_TRIGGER`
   after delete
   on role
@@ -159,7 +171,7 @@ create trigger `NULL_ROLE_CHECK_TRIGGER`
     end if;
   end;
 
--- 防止删除ROOT管理员
+-- 防止删除ROOT管理员的触发器
 create trigger `ROOT_ADMIN_PROTECTION`
   after delete
   on user
