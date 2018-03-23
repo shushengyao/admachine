@@ -26,4 +26,5 @@ hs_err_pid*
 target/
 out/
 src/main/webapp/WEB-INF/classes/
+logs/
 *.iml
