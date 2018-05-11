@@ -93,6 +93,15 @@
           <div class="fixed-action-btn horizontal" style="position: relative; right: 0; top: 0;">
             <a class="btn-floating btn-large blue"><i class="material-icons">menu</i></a>
             <ul>
+
+              <li>
+                <a class="btn-floating blue waves-effect waves-light tooltipped btn modal-trigger"
+                   data-position="top" data-delay="50" data-tooltip="大气采集" href="#weather-modal"
+                   th:onmouseover="'javascript:weather(\''+*{item.id}+'\')'">
+                  <i class="material-icons">brightness_1</i>
+                </a>
+              </li>
+
               <li>
                 <a class="btn-floating blue waves-effect waves-light tooltipped btn modal-trigger"
                    data-position="top" data-delay="50" data-tooltip="查看详情" href="#detail-modal"
@@ -185,7 +194,25 @@
       </ul>
     </div>
   </div>
-
+  <div id="weather-modal" class="modal modal-fixed-footer" style="height: 200px">
+    <h4  class="text" style=" text-align:center;">大气数据采集</h4>
+    <table border="5">
+      <tr>
+        <th>广告机ID</th>
+        <th>温度</th>
+        <th>湿度</th>
+        <th>pm2.5</th>
+        <th>亮度</th>
+      </tr>
+      <tr>
+        <th><h6 id="weather-machineID">id</h6></th>
+        <td><h6 id="weather-temperature">temperature</h6></td>
+        <td><h6 id="weather-humidity">humidity</h6></td>
+        <td><h6 id="weather-pm25">pm25</h6></td>
+        <td><h6 id="weather-brightness">brightness</h6></td>
+      </tr>
+    </table>
+  </div>
   <div id="detail-modal" class="modal modal-fixed-footer">
     <div class="modal-content">
       <h4>详情</h4>
@@ -199,6 +226,10 @@
       <p id="detail-item-user-id">userID -> username</p>
       <h6 class="green-text text-darken-2">机器识别码</h6>
       <p id="detail-item-code-number">codeNumber</p>
+      <h6 class="green-text text-darken-2">坐标经度</h6>
+      <p id="detail-item-longitude">longitude</p>
+      <h6 class="green-text text-darken-2">坐标维度</h6>
+      <p id="detail-item-latitude">latitude</p>
       <h6 class="green-text text-darken-2">广告数</h6>
       <p id="detail-item-ads">ads count</p>
       <h6 class="green-text text-darken-2">状态 (灯/充电)</h6>
@@ -245,9 +276,26 @@
     });
     $("#detail-modal").modal();
     $("#delete-modal").modal();
+    $("#weather-modal").modal();
     toast('[[${message}]]');
   });
 
+  function weather(id) {
+      var url = '[[${adminPath}]]/advertisementMachine/weather/' + id;
+      $.ajax({
+          url:url,
+          type:"GET",
+          success:function (data) {
+              $("#weather-machineID").text(data['weather'].machineID);
+              $("#weather-temperature").text(data['weather'].temperature);
+              $("#weather-brightness").text(data['weather'].brightness);
+              $("#weather-pm25").text(data['weather'].pm25);
+              $("#weather-humidity").text(data['weather'].humidity);
+          },error:function () {
+              
+          }
+      });
+  }
   function detail(id) {
     var url = '[[${adminPath}]]/advertisementMachine/detail/' + id;
     $.ajax({
@@ -259,6 +307,8 @@
         $("#detail-item-add-time").text(data['machine'].addTime);
         $("#detail-item-user-id").text(data['owner']);
         $("#detail-item-code-number").text(data['machine'].codeNumber);
+        $("#detail-item-longitude").text(data['machine'].longitude);
+        $("#detail-item-latitude").text(data['machine'].latitude);
         $("#detail-item-ads").text(data['ads']);
         $("#detail-item-status").text(data['status']);
         $("#detail-item-address").text(data['machine'].address);

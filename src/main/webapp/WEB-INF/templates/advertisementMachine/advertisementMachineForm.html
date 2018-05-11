@@ -25,8 +25,7 @@
   </div>
   <br/>
   <div id="main-content" class="container">
-    <form th:action="@{${adminPath}+'/advertisementMachine/save/'+${machine.id}}" method="post"
-          onsubmit="return save();">
+    <form th:action="@{${adminPath}+'/advertisementMachine/save/'+${machine.id}}" method="post">
       <input name="token" th:value="${token}" type="hidden"/>
       <input id="id" name="id" type="hidden" class="validate" required="required" th:value="${machine.id}"/>
       <input id="longitude" name="longitude" type="hidden" class="validate" th:value="${machine.longitude}"/>
@@ -35,8 +34,6 @@
       <input id="charge" name="charge" type="hidden" class="validate" th:value="${machine.charge}"/>
       <input id="checked" name="checked" type="hidden" class="validate" th:value="${machine.checked}"/>
       <input id="addTime" name="addTime" type="hidden" class="validate" th:value="${machine.addTime}"/>
-      <input id="codeNumber-ro" name="codeNumber" type="hidden" class="validate" th:value="${machine.codeNumber}"
-             th:if="${machine.id!=newEntityID}"/>
 
       <div class="row">
         <div class="input-field col s6 m6 l6">
@@ -60,16 +57,16 @@
           <label for="userID" th:if="${loginUser.roleID==adminRoleID}">所属用户</label>
         </div>
 
-        <div class="input-field col s12 m12 l12">
+        <div class="input-field col s6 m6 l6" >
           <i class="material-icons prefix">place</i>
           <input id="address" name="address" type="text" class="validate" placeholder="输入地址"
                  th:value="${machine.address}"/>
           <label for="address">广告机地址</label>
         </div>
 
-        <div class="input-field col s6 m6 l6" th:if="${machine.id==newEntityID}">
+        <div class="input-field col s6 m6 l6" >
           <i class="material-icons prefix">code</i>
-          <input id="codeNumber" name="codeNumber" type="text" class="validate" placeholder=""
+          <input id="codeNumber" name="codeNumber" type="text" class="validate" placeholder="机器识别码"
                  th:value="${machine.codeNumber}"/>
           <label for="codeNumber">机器识别码</label>
         </div>
@@ -109,13 +106,6 @@
     toast('[[${message}]]');
   });
 
-  function save() {
-    if (!(/^([A-Fa-f0-9]{2}[:-]){5}[A-Fa-f0-9]{2}$/.test($("#codeNumber").val()))) {
-      toast("机器识别码格式不正确，机器识别码是广告机的MAC地址！");
-      return false;
-    }
-    return true;
-  }
 </script>
 </body>
 </html>

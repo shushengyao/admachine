@@ -1,0 +1,73 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="/common/head::head('广告机 - 广告机管理后台')"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+    <style type="text/css">
+         html {width: 100%;height: 100%;overflow: hidden;margin:0;font-family:"微软雅黑";}
+    </style>
+    <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=XzxEh6hT4dGzncjHCQEv9KLFEDOtaOQW"></script>
+    <title>批量转换</title>
+</head>
+<!--/*@thymesVar id="adminPath" type="java.lang.String"*/-->
+<body>
+<th:block th:include="/common/header::header('baiduMap')"/>
+<div id="dg" style="z-index: 9999; position: fixed ! important; right: 50px; top: 100px;">
+    <ul>
+        <li>
+            <a class="btn-floating green waves-effect waves-light tooltipped" data-position="top"
+               data-delay="50" data-tooltip="查看所有灯杆显示"
+               th:onclick="'javascript:index()'">
+                <i class="material-icons">location_on</i>
+            </a>
+        </li>
+    </ul>
+</div>
+<div style="width:1400px;height:500px;border:1px solid gray;margin-left: 300px" id="allmap"></div>
+<th:block th:include="/common/footer::footer"/>
+<th:block th:include="/common/script::script"/>
+</body>
+</html>
+<script type="text/javascript">
+    var convertor = new BMap.Convertor();
+    var points;
+    var map = new BMap.Map("allmap");
+    map.centerAndZoom(new BMap.Point(113.573229,22.377734), 15);
+    function index() {
+        $.ajax({
+            url:'[[${adminPath}]]/baiduMap/index',
+            type:"GET",
+            success:function (data) {
+                var machine;
+                for (var index in data){
+                    machine =data[index];
+                    for (var i= 0; i<machine.length;i++){
+                        points = [new BMap.Point(machine[i].longitude,machine[i].latitude)];
+                        translateCallback = function (data){
+                            if(data.status === 0) {
+                                map.addOverlay(new BMap.Marker(points[0]));
+                                map.setCenter(data.points[i]);
+                            }
+                        }
+                        setTimeout(function(){
+                            convertor.translate(points, 1, 5, translateCallback)
+                        }, 1000);
+                    }
+                }
+            },error:function () {
+                alert("操作失败")
+            }
+        });
+    }
+
+    map.enableScrollWheelZoom();
+    var marker=new BMap.Marker(new BMap.Point(113.573229,22.377734));
+    map.addOverlay(marker);
+    var licontent="<b>珠海市希梦电子科技有限公司</b><br>";
+    licontent+="<span><strong>地址：</strong>广东珠海市高新区唐家湾镇哈工大路哈工大科创楼3楼3116-3120</span><br>";
+    var content1 ="<form id=\"gotobaiduform\" action=\"http://api.map.baidu.com/direction\" target=\"_blank\" method=\"get\">"
+        + licontent +"</form>";
+    var opts1 = { width: 300 };
+    var  infoWindow = new BMap.InfoWindow(content1, opts1);
+    marker.openInfoWindow(infoWindow);
+</script>

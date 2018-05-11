@@ -4,6 +4,7 @@ import com.github.pagehelper.PageInfo
 import com.google.common.collect.Maps
 import com.xmlan.machine.common.base.BaseController
 import com.xmlan.machine.common.cache.AdvertisementCache
+import com.xmlan.machine.common.cache.AdvertisementMachineCache
 import com.xmlan.machine.common.cache.UserCache
 import com.xmlan.machine.common.util.DateUtils
 import com.xmlan.machine.common.util.SessionUtils
@@ -11,7 +12,9 @@ import com.xmlan.machine.common.util.StringUtils
 import com.xmlan.machine.common.util.TokenUtils
 import com.xmlan.machine.module.advertisement.service.AdvertisementService
 import com.xmlan.machine.module.advertisementMachine.entity.AdvertisementMachine
+import com.xmlan.machine.module.advertisementMachine.entity.MachineSensor
 import com.xmlan.machine.module.advertisementMachine.service.AdvertisementMachineService
+import com.xmlan.machine.module.advertisementMachine.service.MachineSensorService
 import com.xmlan.machine.module.user.service.UserService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Controller
@@ -35,6 +38,8 @@ class AdvertisementMachineController extends BaseController {
     private UserService userService
     @Autowired
     private AdvertisementService advertisementService
+    @Autowired
+    private MachineSensorService weatherService
 
     @ModelAttribute
     AdvertisementMachine get(@RequestParam(required = false) String id) {
@@ -62,6 +67,21 @@ class AdvertisementMachineController extends BaseController {
         data["owner"] = userService.get(service.get(id).userID.toString()).username
         data["ads"] = AdvertisementCache.getAdvertisementCountByMachineID(id.toInteger())
         data["status"] = "${machine.light == 1 ? '灯亮️' : '灯灭'}/${machine.charge == 1 ? '充电' : '闲置'}".toString()
+        return data
+    }
+    /**
+     * 天气查询方法，groovy语言真鸡儿不好用。。。
+     * yss
+     * @param id
+     * @return
+     */
+    @RequestMapping(value = "/weather/{id}", produces = "application/json; charset=utf-8")
+    @ResponseBody
+    Map<String, Object> weather(@PathVariable String id) {
+        Map<String, Object> data = Maps.newHashMap()
+        int machineID = Integer.parseInt(id)
+        def weather = AdvertisementMachineCache.getSensorInfo(machineID)
+        data["weather"] = weather
         return data
     }
 

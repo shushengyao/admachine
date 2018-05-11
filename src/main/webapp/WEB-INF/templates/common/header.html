@@ -48,6 +48,14 @@
             </li>
           </th:block>
           <th:block th:switch="${module}">
+            <li class="active" th:case="'informationPush'">
+              <a th:href="@{${adminPath}+'/baiduMap/map'}" class="waves-effect waves-teal">视图</a>
+            </li>
+            <li th:case="*">
+              <a th:href="@{${adminPath}+'/baiduMap/map'}" class="waves-effect waves-teal">视图</a>
+            </li>
+          </th:block>
+          <th:block th:switch="${module}">
             <li class="active" th:if="${loginUser.roleID==adminRoleID}" th:case="'user'">
               <a th:href="@{${adminPath}+'/user/list/1'}" class="waves-effect waves-teal">用户</a>
             </li>
