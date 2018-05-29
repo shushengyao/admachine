@@ -85,6 +85,37 @@ class AdvertisementMachineController extends BaseController {
         return data
     }
 
+    /**
+     * 进入大气采集主页
+     */
+    @RequestMapping(value = "/atmosphere", produces = "application/json; charset=utf-8")
+    public String atmosphere (){
+        return "atmosphere/index";
+    }
+
+    /**
+     * 大气采集
+     * yss
+     * @param id
+     * @return
+     */
+    @RequestMapping(value = "/index", produces = "application/json; charset=utf-8")
+    @ResponseBody
+    Map<String, Object> index(@PathVariable String id) {
+        Map<String, Object> data = Maps.newHashMap()
+        int machineID = Integer.parseInt(id)
+        def weather = AdvertisementMachineCache.getSensorInfo(machineID)
+        data["weather"] = weather
+        return data
+    }
+
+    /**
+     * 广告机列表
+     * @param advertisementMachine
+     * @param pageNo
+     * @param model
+     * @return
+     */
     @RequestMapping(value = "/list/{pageNo}")
     String list(AdvertisementMachine advertisementMachine, @PathVariable int pageNo, Model model) {
         // region 格式化查询条件

@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="/common/head::head('广告机 - 广告机管理后台')"/>
+
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<!--/* <editor-fold desc="define"> */-->
+<!--/*@thymesVar id="adminPath" type="java.lang.String"*/-->
+<!--/*@thymesVar id="page" type="com.github.pagehelper.PageInfo<com.xmlan.machine.module.advertisementMachine.entity.AdvertisementMachine>"*/-->
+<!--/*@thymesVar id="adCount" type="java.util.List<com.xmlan.machine.module.advertisement.entity.AdvertisementCount>"*/-->
+<!--/*@thymesVar id="name" type="java.lang.String"*/-->
+<!--/*@thymesVar id="codeNumber" type="java.lang.String"*/-->
+<!--/*@thymesVar id="addTime" type="java.lang.String"*/-->
+<!--/*@thymesVar id="deleteToken" type="java.lang.String"*/-->
+<!--/* </editor-fold> */-->
+<body>
+<th:block th:include="/common/header::header('atmosphere')"/>
+<main style="z-index: 0;">
+    <div id="main-content" class="container" style="height: 500px">
+        <table class="highlight responsive-table" id="monitorData">
+            <thead>
+            <tr>
+                <th>名称</th>
+                <th>地址</th>
+                <th>查看大气数据采集</th>
+            </tr>
+            </thead>
+        </table>
+    </div>
+    <div id="weather-modal" class="modal modal-fixed-footer" style="height: 200px">
+        <h4  class="text" style=" text-align:center;">大气数据采集</h4>
+        <table border="5">
+            <tr>
+                <th>广告机ID</th>
+                <th>温度</th>
+                <th>湿度</th>
+                <th>pm2.5</th>
+                <th>亮度</th>
+            </tr>
+            <tr>
+                <th><h6 id="weather-machineID">id</h6></th>
+                <td><h6 id="weather-temperature">temperature</h6></td>
+                <td><h6 id="weather-humidity">humidity</h6></td>
+                <td><h6 id="weather-pm25">pm25</h6></td>
+                <td><h6 id="weather-brightness">brightness</h6></td>
+            </tr>
+        </table>
+    </div>
+</main>
+<th:block th:include="/common/footer::footer"/>
+<th:block th:include="/common/script::script"/>
+
+</body>
+</html>
+<script type="text/javascript">
+    $(function () {
+        $("#weather-modal").modal();
+        $.ajax({
+            url:"[[${adminPath}]]/monitor/index",
+            type:"GET",
+            success:function (machine) {
+                machineStr =eval('(' + machine + ')');
+                $.each(machineStr,function (idx, obj) {
+                    var adid = machineStr[idx].id;
+                    var tr =
+                        "<tr>"+
+                        "<td>"+machineStr[idx].name+"</td>"+
+                        "<td>"+machineStr[idx].address+"</td>"+
+                        "<td>"+"<a data-position=\"top\" data-delay=\"50\"  class=\"btn-floating blue waves-effect waves-light tooltipped btn modal-trigger\"" +
+                        " href='#weather-modal' onclick ='winopen("+adid+")'>"+"查看"+"</a>"+"</td>"+
+                        "</tr>";
+                    $("table").append(tr);
+                });
+            },error:function () {
+            }
+        });
+        index();
+    })
+    function winopen(id) {
+        var url = '[[${adminPath}]]/advertisementMachine/weather/' + id;
+        $.ajax({
+            url:url,
+            type:"GET",
+            success:function (data) {
+                $("#weather-machineID").text(data['weather'].machineID);
+                $("#weather-temperature").text(data['weather'].temperature);
+                $("#weather-brightness").text(data['weather'].brightness);
+                $("#weather-pm25").text(data['weather'].pm25);
+                $("#weather-humidity").text(data['weather'].humidity);
+            },error:function () {
+            }
+        });
+        }
+    function index() {
+        $.ajax({
+            url:'[[${adminPath}]]/atmosphere/index',
+            type:"GET",
+            success:function (data) {
+            },error:function () {
+                alert("操作失败")
+            }
+        });
+    }
+</script>

@@ -1,11 +1,19 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <body>
+<!--/*@thymesVar id="loginUser" type="com.xmlan.machine.module.user.entity.User"*/-->
+<!--/*@thymesVar id="adminRoleID" type="java.lang.Integer"*/-->
 <div th:fragment="footer">
   <footer class="page-footer hide-on-med-and-down blue-grey darken-4" style="z-index: 1;">
     <div class="footer-copyright">
       <div class="container right-align">
-        © 2017 Copyright 珠海希梦电子科技有限公司
+        <!--© 2017 Copyright 珠海希梦电子科技有限公司-->
+        <li th:if="${loginUser.getUsername()=='junpai'}" >
+        © 2017 Copyright 中山骏牌路灯有限公司
+        </li>
+        <li th:if="${loginUser.getUsername()=='xm'}" >
+          © 2017 Copyright 珠海希梦电子科技有限公司
+        </li>
       </div>
     </div>
   </footer>

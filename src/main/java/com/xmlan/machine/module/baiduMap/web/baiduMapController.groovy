@@ -19,7 +19,7 @@ import java.util.Map;
  * 百度地图api后台
  **/
 @Controller
-@RequestMapping('${adminPath}/baiduMap')
+@RequestMapping('${adminPath}/baiduMaps')
 public class baiduMapController {
     @Autowired
     private AdvertisementMachineService service;
@@ -27,7 +27,7 @@ public class baiduMapController {
      *  打开初始化地图
      * @return
      */
-    @RequestMapping(value = "/map")
+    @RequestMapping(value = "/maps")
      String map(){
         return "baiduMap/baiduMap";
     }
@@ -35,7 +35,7 @@ public class baiduMapController {
      * 显示所有设备
      * @return
      */
-    @RequestMapping(value = "/index", produces = "application/json; charset=utf-8")
+    @RequestMapping(value = "/indexs", produces = "application/json; charset=utf-8")
     @ResponseBody
      Map<String, Object> index(){
         List<AdvertisementMachine> list = service.findAll();

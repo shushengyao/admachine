@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="/common/head::head('广告机 - 广告机管理后台')"/>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<th:block th:include="/common/header::header('monitor')"/>
+<main style="z-index: 0;">
+<div id="main-content" class="container" style="height: 500px">
+    <table class="highlight responsive-table" id="monitorData">
+        <thead>
+            <tr>
+                <th>名称</th>
+                <th>地址</th>
+                <th>监控状态</th>
+                <th>查看监控</th>
+            </tr>
+        </thead>
+    </table>
+</div>
+</main>
+<th:block th:include="/common/footer::footer"/>
+<th:block th:include="/common/script::script"/>
+</body>
+</html>
+<script type="text/javascript">
+    var machineStr;
+
+    $(function () {
+        index();
+    })
+    function index() {
+        $.ajax({
+            url:"[[${adminPath}]]/monitor/index",
+            type:"GET",
+            success:function (machine) {
+                machineStr =eval('(' + machine + ')');
+                $.each(machineStr,function (idx, obj) {
+                    var tr =
+                        "<tr>"+
+                            "<td>"+machineStr[idx].name+"</td>"+
+                            "<td>"+machineStr[idx].address+"</td>"+
+                            "<td>"+"开"+"</td>"+
+                            "<td>"+"<a href=#>"+"查看"+"</a>"+"</td>"+
+                        "</tr>";
+                    $("table").append(tr);
+                });
+            },error:function () {
+            }
+        });
+    }
+</script>

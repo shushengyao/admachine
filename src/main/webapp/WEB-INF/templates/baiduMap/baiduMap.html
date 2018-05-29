@@ -38,21 +38,17 @@
             url:'[[${adminPath}]]/baiduMap/index',
             type:"GET",
             success:function (data) {
-                var machine;
                 for (var index in data){
-                    machine =data[index];
-                    for (var i= 0; i<machine.length;i++){
-                        points = [new BMap.Point(machine[i].longitude,machine[i].latitude)];
-                        translateCallback = function (data){
-                            if(data.status === 0) {
-                                map.addOverlay(new BMap.Marker(points[0]));
-                                map.setCenter(data.points[i]);
-                            }
+                    points = [new BMap.Point(data[index].longitude,data[index].latitude)];
+                    translateCallback = function (data){
+                        if(data.status === 0) {
+                            map.addOverlay(new BMap.Marker(points[index]));
+                            map.setCenter(data.points[index]);
                         }
-                        setTimeout(function(){
-                            convertor.translate(points, 1, 5, translateCallback)
-                        }, 1000);
                     }
+                    setTimeout(function(){
+                        convertor.translate(points, 1, 5, translateCallback)
+                    }, 1000);
                 }
             },error:function () {
                 alert("操作失败")
@@ -60,14 +56,23 @@
         });
     }
 
-    map.enableScrollWheelZoom();
-    var marker=new BMap.Marker(new BMap.Point(113.573229,22.377734));
-    map.addOverlay(marker);
-    var licontent="<b>珠海市希梦电子科技有限公司</b><br>";
-    licontent+="<span><strong>地址：</strong>广东珠海市高新区唐家湾镇哈工大路哈工大科创楼3楼3116-3120</span><br>";
-    var content1 ="<form id=\"gotobaiduform\" action=\"http://api.map.baidu.com/direction\" target=\"_blank\" method=\"get\">"
-        + licontent +"</form>";
-    var opts1 = { width: 300 };
-    var  infoWindow = new BMap.InfoWindow(content1, opts1);
-    marker.openInfoWindow(infoWindow);
+    var point = new BMap.Point(113.183251,22.684053);
+    map.centerAndZoom(point,12);
+
+    var geolocation = new BMap.Geolocation();
+    geolocation.getCurrentPosition(function(r){console.log(r.point)
+        if(this.getStatus() == BMAP_STATUS_SUCCESS){
+            var mk = new BMap.Marker(r.point);
+            map.addOverlay(mk);//标出所在地
+            map.panTo(r.point);//地图中心移动
+            var point = new BMap.Point(r.point.lng,r.point.lat);//用所定位的经纬度查找所在地省市街道等信息
+            var gc = new BMap.Geocoder();
+            gc.getLocation(point, function(rs){
+                var addComp = rs.addressComponents;
+                alert(rs.address);//地址信息
+            });
+        }else {
+            alert('failed'+this.getStatus());
+        }
+    },{enableHighAccuracy: true})
 </script>

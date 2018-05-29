@@ -2,6 +2,8 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:include="/common/head::head('登录 - 广告机管理后台')"></head>
 <!--/*@thymesVar id="adminPath" type="java.lang.String"*/-->
+<!--/*@thymesVar id="loginUser" type="com.xmlan.machine.module.user.entity.User"*/-->
+<!--/*@thymesVar id="adminRoleID" type="java.lang.Integer"*/-->
 
 <body>
 <nav class="nav-extended nav-full-header" style="background-color: #37474f;">
@@ -9,15 +11,20 @@
     <div class="pattern active" style="background-image: url('../../../static/application/image/stars.jpg');"></div>
   </div>
   <div class="nav-wrapper container">
-    <a href="#" itemprop="url" class="brand-logo">
-      <img src="../../../static/application/image/logo.png" class="nav-logo-img"/>
+    <a href="#" itemprop="url" class="brand-logo" th:if="${loginUser.getUsername()=='junpai'}">
+      <!--<img src="../../../static/application/image/logo.png" class="nav-logo-img"/>-->
+      <img src="../../../static/application/image/2018052502.jpg" class="nav-logo-img" style="margin-left: 400px"/>
+    </a>
+    <a href="#" itemprop="url" class="brand-logo" th:if="${loginUser.getUsername()=='xm'}">
+      <!--<img src="../../../static/application/image/logo.png" class="nav-logo-img"/>-->
+      <img src="../../../static/application/image/logo.png" class="nav-logo-img" style="margin-left: 400px"/>
     </a>
   </div>
 </nav>
 <!-- <editor-fold desc="login card"> -->
 <div id="login-card" class="row">
-  <div class="col s12 m6 l4 offset-m6 offset-l6">
-    <div class="card card-panel hoverable blue-grey darken-1">
+  <div class="col s12 m6 l4 offset-m6 offset-l6" style="margin-left: 500px">
+    <div class="card card-panel hoverable blue-grey darken-1" >
       <div class="card-content white-text">
         <span class="card-title center-align">广告机管理后台 登录</span>
       </div>
