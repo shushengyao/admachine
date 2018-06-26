@@ -65,7 +65,10 @@ class AdvertisementMachineService extends BaseService<AdvertisementMachine, Adve
             return NO_SUCH_ROW
         }
     }
-
+    int updateAccessToken(String accessToken){
+        dao.accessToken(accessToken)
+        return DONE
+    }
     AdvertisementMachine getByCodeNumber(String codeNumber) {
         return dao.getByCodeNumber(codeNumber)
     }

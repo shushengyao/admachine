@@ -19,6 +19,12 @@
             </tr>
         </thead>
     </table>
+    <select>
+        <option value="volvo">Volvo</option>
+        <option value="saab">Saab</option>
+        <option value="opel">Opel</option>
+        <option value="audi">Audi</option>
+    </select>
 </div>
 </main>
 <th:block th:include="/common/footer::footer"/>
@@ -27,28 +33,54 @@
 </html>
 <script type="text/javascript">
     var machineStr;
-
     $(function () {
         index();
     })
     function index() {
+
         $.ajax({
             url:"[[${adminPath}]]/monitor/index",
             type:"GET",
             success:function (machine) {
                 machineStr =eval('(' + machine + ')');
                 $.each(machineStr,function (idx, obj) {
+                    var user = {id:1, name:'zs'};
+                    var idxx;
+                    var code;
+                    // console.log(machineStr)
+                    // console.log(machineStr[idx].cameraSequence)
+                    idxx =machineStr[idx].cameraSequence;
+                    code =machineStr[idx].cameraVerificationCode;
+                    access_token =machineStr[idx].accessToken;
+                    // console.log(access_token)
+                    var codes = {idxx:idxx, code:code};
                     var tr =
                         "<tr>"+
                             "<td>"+machineStr[idx].name+"</td>"+
                             "<td>"+machineStr[idx].address+"</td>"+
                             "<td>"+"开"+"</td>"+
-                            "<td>"+"<a href=#>"+"查看"+"</a>"+"</td>"+
+                            // "<td>"+"<a href='/mng/monitor/demo'>"+"查看"+"</a>"+"</td>"+
+                            "<td>"+"<a href=\"javascript:;\" onclick=\"callCamera('"+idxx+"','"+code+"','"+access_token+"')\">"+"查看"+"</a>"+"</td>"+
                         "</tr>";
                     $("table").append(tr);
                 });
             },error:function () {
             }
         });
+    }
+    function callCamera(idxx,code,access_token) {
+        window.location.href ="uikitDemo?cameraSequence="+idxx+'&cameraVerificationCode='+code+"&access_token="+access_token;
+    }
+    function demo() {
+        $.get("[[${adminPath}]]/monitor/demo",function () {
+            console.log(999)
+        });
+        // $.ajax({
+        //     url:"[[${adminPath}]]/monitor/demo",
+        //     type:"GET",
+        //     success:function () {
+        //
+        //     }
+        // });
     }
 </script>

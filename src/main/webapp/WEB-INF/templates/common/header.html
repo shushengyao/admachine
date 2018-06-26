@@ -89,6 +89,14 @@
               <a th:href="@{${adminPath}+'/role/list/1'}" class="waves-effect waves-teal">角色管理<i class="material-icons">face</i></a>
             </li>
           </th:block>
+          <th:block th:switch="${module}">
+            <li class="active" th:if="${loginUser.roleID==adminRoleID}" th:case="'role'">
+              <a th:href="@{${adminPath}+'/test/index'}" class="waves-effect waves-teal">测试模块<i class="material-icons">face</i></a>
+            </li>
+            <li th:if="${loginUser.roleID==adminRoleID}" th:case="*">
+              <a th:href="@{${adminPath}+'/test/index'}" class="waves-effect waves-teal">测试模块<i class="material-icons">face</i></a>
+            </li>
+          </th:block>
         </ul>
         <ul class="right">
           <li th:text="|${loginUser.username}, 欢迎|" ></li>

@@ -1,12 +1,23 @@
 package com.xmlan.machine.module.advertisementMachine.web
 
+import cn.jiguang.common.ClientConfig
+import cn.jiguang.common.resp.APIConnectionException
+import cn.jiguang.common.resp.APIRequestException
+import cn.jpush.api.JPushClient
+import cn.jpush.api.push.PushResult
+import cn.jpush.api.push.model.PushPayload
 import com.github.pagehelper.PageInfo
 import com.google.common.collect.Maps
 import com.xmlan.machine.common.base.BaseController
+import com.xmlan.machine.common.base.ModuleEnum
+import com.xmlan.machine.common.base.ObjectEnum
+import com.xmlan.machine.common.base.OperateEnum
 import com.xmlan.machine.common.cache.AdvertisementCache
 import com.xmlan.machine.common.cache.AdvertisementMachineCache
 import com.xmlan.machine.common.cache.UserCache
+import com.xmlan.machine.common.config.Global
 import com.xmlan.machine.common.util.DateUtils
+import com.xmlan.machine.common.util.PushUtils
 import com.xmlan.machine.common.util.SessionUtils
 import com.xmlan.machine.common.util.StringUtils
 import com.xmlan.machine.common.util.TokenUtils
@@ -15,6 +26,7 @@ import com.xmlan.machine.module.advertisementMachine.entity.AdvertisementMachine
 import com.xmlan.machine.module.advertisementMachine.entity.MachineSensor
 import com.xmlan.machine.module.advertisementMachine.service.AdvertisementMachineService
 import com.xmlan.machine.module.advertisementMachine.service.MachineSensorService
+import com.xmlan.machine.module.system.service.SysLogService
 import com.xmlan.machine.module.user.service.UserService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Controller
@@ -40,7 +52,7 @@ class AdvertisementMachineController extends BaseController {
     private AdvertisementService advertisementService
     @Autowired
     private MachineSensorService weatherService
-
+    private final SysLogService sysLogService;
     @ModelAttribute
     AdvertisementMachine get(@RequestParam(required = false) String id) {
         AdvertisementMachine entity = null
@@ -142,6 +154,7 @@ class AdvertisementMachineController extends BaseController {
         model.addAttribute "codeNumber", advertisementMachine.codeNumber
         model.addAttribute "addTime", advertisementMachine.addTime
         model.addAttribute "deleteToken", TokenUtils.getFormToken(request, "deleteToken")
+        model.addAttribute("open",TokenUtils.getFormToken(request,"open"))
         // endregion
 
         "advertisementMachine/advertisementMachineList"
@@ -195,6 +208,13 @@ class AdvertisementMachineController extends BaseController {
         "redirect:$adminPath/advertisementMachine/list/1"
     }
 
+    /**
+     * 删除广告机
+     * @param advertisementMachine
+     * @param request
+     * @param redirectAttributes
+     * @return
+     */
     @RequestMapping(value = "/delete")
     String delete(AdvertisementMachine advertisementMachine, HttpServletRequest request, RedirectAttributes redirectAttributes) {
         if (!TokenUtils.validateFormToken(request, "deleteToken", request.getParameter("deleteToken"))) {
@@ -207,6 +227,54 @@ class AdvertisementMachineController extends BaseController {
             addMessage redirectAttributes, "删除广告机成功"
         }
         "redirect:$adminPath/advertisementMachine/list/1"
+    }
+
+    /**
+     *
+     * 批量控制灯开关
+     * @param id
+     * @param operate
+     * @param token
+     * @return
+     */
+    @RequestMapping(value = "/lightBatch", produces = "application/json; charset=utf-8",method = RequestMethod.POST)
+    @ResponseBody
+    HashMap<String, Object> lightBatch(RedirectAttributes redirectAttributes,HttpServletRequest request,
+            @RequestParam(value = "adIds") Integer[] adIds,@RequestParam(value = "operate") int operate) {
+        HashMap<String, Object> map = Maps.newHashMap();
+        for(int id : adIds) {
+            int responseCode = service.lightControl(id, operate);
+            map.put(keyResponseCode, responseCode);
+            if (responseCode == NO_SUCH_ROW) {
+                map.put(keyMessage, "目标路灯不存在");
+            } else if (responseCode == ERROR_REQUEST) {
+                map.put(keyMessage, "操作码不正确");
+            } else if (responseCode == DONE) {
+                HashMap<String, Integer> command = Maps.newHashMap();
+                command.put("id", id);
+                command.put("operate", operate);
+                command.put("type", TYPE_LIGHT);
+                JPushClient pushClient = new JPushClient(Global.getMasterSecret(), Global.getAppKey(), null, ClientConfig.getInstance());
+                PushPayload payload = PushUtils.buildPayload(String.valueOf(id), "Light switch.", command);
+                try {
+                    map.put(keyMessage, operate == 1 ? "开灯！" : "关灯！");
+                    PushResult result = pushClient.sendPush(payload);
+                    logger.trace(result);
+                } catch (APIRequestException e) {
+                    map.put(keyMessage, "Push request error.");
+                    map.put(keyResponseCode, ERROR_API_REQUEST_EXCEPTION);
+                    logger.error("API exception with: " + e.getMessage());
+                } catch (APIConnectionException e) {
+                    map.put(keyMessage, "Push connect error.");
+                    map.put(keyResponseCode, ERROR_API_CONNECTION_EXCEPTION);
+                    logger.error("API exception with: " + e.getMessage());
+                }
+            } else {
+                map.put(keyResponseCode, PASS);
+                map.put(keyMessage, "系统繁忙");
+            }
+        }
+        return map;
     }
 
 }

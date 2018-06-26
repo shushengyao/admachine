@@ -19,6 +19,10 @@
         <result column="charge" property="charge"/>
         <result column="checked" property="checked"/>
         <result column="remark" property="remark"/>
+        <result column="cameraIP" property="cameraIP"/>
+        <result column="cameraSequence" property="cameraSequence"/>
+        <result column="cameraVerificationCode" property="cameraVerificationCode"/>
+        <result column="accessToken" property="accessToken"/>
     </resultMap>
 
     <sql id="columns">
@@ -33,7 +37,11 @@
         t.light as "light",
         t.charge as "charge",
         t.checked as "checked",
-        t.remark as "remark"
+        t.remark as "remark",
+        t.cameraIP as "cameraIP",
+        t.cameraSequence as "cameraSequence",
+        t.cameraVerificationCode as "cameraVerificationCode",
+        t.accessToken as "accessToken"
     </sql>
 
     <select id="get" parameterType="java.lang.String" resultMap="advertisementMachineResultMap">
@@ -80,6 +88,18 @@
             <if test="latitude != null and latitude != ''">
                 and t.latitude = #{latitude}
             </if>
+            <if test="cameraIP != null and cameraIP != ''">
+                and t.cameraIP = #{'%',#{cameraIP},'%'}
+            </if>
+            <if test="cameraSequence != null and cameraSequence != ''">
+                and t.cameraSequence = #{'%',#{cameraSequence},'%'}
+            </if>
+            <if test="cameraVerificationCode != null and cameraVerificationCode != ''">
+                and t.cameraVerificationCode = #{'%',#{cameraVerificationCode},'%'}
+            </if>
+            <if test="accessToken != null and accessToken != ''">
+                and t.accessToken = #{'%',#{accessToken},'%'}
+            </if>
         </where>
         <choose>
             <otherwise>
@@ -101,7 +121,10 @@
         light,
         charge,
         checked,
-        remark
+        remark,
+        cameraIP,
+        cameraSequence,
+        cameraVerificationCode
         ) values (
         id,
         #{userID},
@@ -114,7 +137,10 @@
         0,
         0,
         0,
-        #{remark}
+        #{remark},
+        #{cameraIP},
+        #{cameraSequence},
+        #{cameraVerificationCode}
         );
     </insert>
 
@@ -124,10 +150,12 @@
         userID = #{userID},
         name = #{name},
         address = #{address},
-        remark = #{remark}
+        remark = #{remark},
+        cameraIP = #{cameraIP},
+        cameraSequence = #{cameraSequence},
+        cameraVerificationCode = #{cameraVerificationCode}
         where id = #{id}
     </update>
-
     <delete id="delete" parameterType="com.xmlan.machine.module.advertisementMachine.entity.AdvertisementMachine">
         delete from advertisement_machine
         where id = #{id}
@@ -154,7 +182,11 @@
         latitude = #{latitude}
         where id = #{id}
     </update>
-
+    <update id="accessToken">
+        update advertisement_machine
+        set
+        accessToken =#{accessToken}
+    </update>
     <update id="lightControl">
         update advertisement_machine
         set light = #{operate}
@@ -172,5 +204,6 @@
         set checked = #{operate}
         where id = #{id}
     </update>
+
 
 </mapper>

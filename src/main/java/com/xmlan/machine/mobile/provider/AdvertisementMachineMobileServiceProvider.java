@@ -29,6 +29,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 手机端 广告机服务接口
@@ -118,6 +119,17 @@ public class AdvertisementMachineMobileServiceProvider extends BaseController {
         AdvertisementMachine machine = new AdvertisementMachine();
         machine.setUserID(userID);
         return AdvertisementMachineService.findForProvider(machine);
+    }
+    /*
+        手机端获取accessToken
+     */
+    @RequestMapping(value = "/getAccessToken",method = RequestMethod.POST,produces = "application/json; charset=utf-8")
+    @ResponseBody
+    public Map<String,String> getAccessToken(){
+        String token =service.get("34").getAccessToken();
+        Map<String,String> result = new HashMap<>();
+        result.put("accessToken",token);
+        return result;
     }
 
     /**

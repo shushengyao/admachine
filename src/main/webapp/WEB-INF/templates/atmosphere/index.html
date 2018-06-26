@@ -5,6 +5,30 @@
 
     <meta charset="UTF-8">
     <title>Title</title>
+    <style type="text/css">
+        .weatherUl{
+            width:700px;
+            height:50px;
+            list-style: none;
+            margin:0;
+            padding:0;
+        }
+        .weatherUl li{
+            width:120px;
+            margin:0 10px;
+            float: left;/*该处换为display:inline-block;同样效果*/
+
+        }
+        .weatherUl li a{
+            width:70px;
+            height:50px;
+            padding:0 20px;
+            font-size: 12px;
+            line-height:50px;
+            background: red;
+            display: inline-block;
+        }
+    </style>
 </head>
 <!--/* <editor-fold desc="define"> */-->
 <!--/*@thymesVar id="adminPath" type="java.lang.String"*/-->
@@ -19,7 +43,7 @@
 <th:block th:include="/common/header::header('atmosphere')"/>
 <main style="z-index: 0;">
     <div id="main-content" class="container" style="height: 500px">
-        <table class="highlight responsive-table" id="monitorData">
+        <table class="highlight responsive-table" >
             <thead>
             <tr>
                 <th>名称</th>
@@ -29,24 +53,27 @@
             </thead>
         </table>
     </div>
-    <div id="weather-modal" class="modal modal-fixed-footer" style="height: 200px">
+    <div id="weather-modal" class="modal modal-fixed-footer" style="height: 150px">
         <h4  class="text" style=" text-align:center;">大气数据采集</h4>
-        <table border="5">
-            <tr>
-                <th>广告机ID</th>
-                <th>温度</th>
-                <th>湿度</th>
-                <th>pm2.5</th>
-                <th>亮度</th>
-            </tr>
-            <tr>
-                <th><h6 id="weather-machineID">id</h6></th>
-                <td><h6 id="weather-temperature">temperature</h6></td>
-                <td><h6 id="weather-humidity">humidity</h6></td>
-                <td><h6 id="weather-pm25">pm25</h6></td>
-                <td><h6 id="weather-brightness">brightness</h6></td>
-            </tr>
-        </table>
+
+            <tbody class="card">
+            <ul class="weatherUl">
+                <th><li>广告机ID</li></th>
+                <th><li>温度</li></th>
+                <th><li>湿度</li></th>
+                <th><li>pm2.5</li></th>
+                <th><li>亮度</li></th>
+            </ul>
+            </tbody>
+            <ul class="weatherUl">
+            <tbody class="card">
+                <th><li id="weather-machineID">id</li></th>
+                <td><li id="weather-temperature">temperature</li></td>
+                <td><li id="weather-humidity">humidity</li></td>
+                <td><li id="weather-pm25">pm25</li></td>
+                <td><li id="weather-brightness">brightness</li></td>
+            </tbody>
+            </ul>
     </div>
 </main>
 <th:block th:include="/common/footer::footer"/>
@@ -57,6 +84,7 @@
 <script type="text/javascript">
     $(function () {
         $("#weather-modal").modal();
+        toast('[[${message}]]');
         $.ajax({
             url:"[[${adminPath}]]/monitor/index",
             type:"GET",

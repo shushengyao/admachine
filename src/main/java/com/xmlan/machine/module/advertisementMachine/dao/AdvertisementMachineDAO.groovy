@@ -35,6 +35,12 @@ interface AdvertisementMachineDAO extends BaseDAO<AdvertisementMachine> {
     int updateLocation(@Param("id") int id, @Param("longitude") String longitude, @Param("latitude") String latitude)
 
     /**
+     * 更新摄像头的accessToken
+     * @param accessToken
+     * @return
+     */
+    int accessToken(@Param("accessToken") String accessToken)
+    /**
      * 灯光控制
      * @param id 广告机ID
      * @param operate 操作码 (0/1)

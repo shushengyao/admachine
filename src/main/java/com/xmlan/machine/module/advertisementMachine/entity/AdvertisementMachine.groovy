@@ -33,6 +33,38 @@ class AdvertisementMachine implements Serializable {
     private int checked
     // 备注
     private String remark
+    //摄像头IP
+    private String cameraIP
+    //摄像头序列号
+    private String cameraSequence
+    //摄像头设备验证码
+    private String cameraVerificationCode
+    //摄像头accessToken
+    private String accessToken
+
+    String getAccessToken() {
+        return accessToken
+    }
+
+    void setAccessToken(String accessToken) {
+        this.accessToken = accessToken
+    }
+
+    String getCameraSequence() {
+        return cameraSequence
+    }
+
+    void setCameraSequence(String cameraSequence) {
+        this.cameraSequence = cameraSequence
+    }
+
+    String getCameraVerificationCode() {
+        return cameraVerificationCode
+    }
+
+    void setCameraVerificationCode(String cameraVerificationCode) {
+        this.cameraVerificationCode = cameraVerificationCode
+    }
 
     int getId() {
         return id
@@ -131,4 +163,11 @@ class AdvertisementMachine implements Serializable {
         this.remark = remark
     }
 
+    String getCameraIP() {
+        return cameraIP
+    }
+
+    void setCameraIP(String cameraIP) {
+        this.cameraIP = cameraIP
+    }
 }

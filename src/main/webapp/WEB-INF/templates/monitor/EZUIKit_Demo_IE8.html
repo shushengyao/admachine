@@ -1,0 +1,511 @@
+﻿<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<title>EZUIKit控件 demo</title>
+	<th:block th:include="/common/head::head('广告机 - 广告机管理后台')"/>
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" >
+	<link rel="stylesheet" href="../../../static/application/css/menu.css"/>
+	<style type="text/css">
+		body {background-color: lightblue}
+		table {
+			BORDER-COLLAPSE: collapse;
+			border-style:dotted;
+			border-color:#7CCD7C;
+		}
+	</style>
+</head>
+
+<body onload="init()">
+<th:block th:include="/common/header::header('monitor')"/>
+<main style="z-index: 0;"><center>
+
+
+	<table border=1 width="1400">
+		<script>
+            // json2.js
+            if(typeof JSON!=="object"){JSON={}}(function(){var rx_one=/^[\],:{}\s]*$/;var rx_two=/\\(?:["\\\/bfnrt]|u[0-9a-fA-F]{4})/g;var rx_three=/"[^"\\\n\r]*"|true|false|null|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?/g;var rx_four=/(?:^|:|,)(?:\s*\[)+/g;var rx_escapable=/[\\"\u0000-\u001f\u007f-\u009f\u00ad\u0600-\u0604\u070f\u17b4\u17b5\u200c-\u200f\u2028-\u202f\u2060-\u206f\ufeff\ufff0-\uffff]/g;var rx_dangerous=/[\u0000\u00ad\u0600-\u0604\u070f\u17b4\u17b5\u200c-\u200f\u2028-\u202f\u2060-\u206f\ufeff\ufff0-\uffff]/g;function f(n){return n<10?"0"+n:n}function this_value(){return this.valueOf()}if(typeof Date.prototype.toJSON!=="function"){Date.prototype.toJSON=function(){return isFinite(this.valueOf())?this.getUTCFullYear()+"-"+f(this.getUTCMonth()+1)+"-"+f(this.getUTCDate())+"T"+f(this.getUTCHours())+":"+f(this.getUTCMinutes())+":"+f(this.getUTCSeconds())+"Z":null};Boolean.prototype.toJSON=this_value;Number.prototype.toJSON=this_value;String.prototype.toJSON=this_value}var gap;var indent;var meta;var rep;function quote(string){rx_escapable.lastIndex=0;return rx_escapable.test(string)?'"'+string.replace(rx_escapable,function(a){var c=meta[a];return typeof c==="string"?c:"\\u"+("0000"+a.charCodeAt(0).toString(16)).slice(-4)})+'"':'"'+string+'"'}function str(key,holder){var i;var k;var v;var length;var mind=gap;var partial;var value=holder[key];if(value&&typeof value==="object"&&typeof value.toJSON==="function"){value=value.toJSON(key)}if(typeof rep==="function"){value=rep.call(holder,key,value)}switch(typeof value){case"string":return quote(value);case"number":return isFinite(value)?String(value):"null";case"boolean":case"null":return String(value);case"object":if(!value){return"null"}gap+=indent;partial=[];if(Object.prototype.toString.apply(value)==="[object Array]"){length=value.length;for(i=0;i<length;i+=1){partial[i]=str(i,value)||"null"}v=partial.length===0?"[]":gap?"[\n"+gap+partial.join(",\n"+gap)+"\n"+mind+"]":"["+partial.join(",")+"]";gap=mind;return v}if(rep&&typeof rep==="object"){length=rep.length;for(i=0;i<length;i+=1){if(typeof rep[i]==="string"){k=rep[i];v=str(k,value);if(v){partial.push(quote(k)+(gap?": ":":")+v)}}}}else{for(k in value){if(Object.prototype.hasOwnProperty.call(value,k)){v=str(k,value);if(v){partial.push(quote(k)+(gap?": ":":")+v)}}}}v=partial.length===0?"{}":gap?"{\n"+gap+partial.join(",\n"+gap)+"\n"+mind+"}":"{"+partial.join(",")+"}";gap=mind;return v}}if(typeof JSON.stringify!=="function"){meta={"\b":"\\b","\t":"\\t","\n":"\\n","\f":"\\f","\r":"\\r",'"':'\\"',"\\":"\\\\"};JSON.stringify=function(value,replacer,space){var i;gap="";indent="";if(typeof space==="number"){for(i=0;i<space;i+=1){indent+=" "}}else{if(typeof space==="string"){indent=space}}rep=replacer;if(replacer&&typeof replacer!=="function"&&(typeof replacer!=="object"||typeof replacer.length!=="number")){throw new Error("JSON.stringify")}return str("",{"":value})}}if(typeof JSON.parse!=="function"){JSON.parse=function(text,reviver){var j;function walk(holder,key){var k;var v;var value=holder[key];if(value&&typeof value==="object"){for(k in value){if(Object.prototype.hasOwnProperty.call(value,k)){v=walk(value,k);if(v!==undefined){value[k]=v}else{delete value[k]}}}}return reviver.call(holder,key,value)}text=String(text);rx_dangerous.lastIndex=0;if(rx_dangerous.test(text)){text=text.replace(rx_dangerous,function(a){return"\\u"+("0000"+a.charCodeAt(0).toString(16)).slice(-4)})}if(rx_one.test(text.replace(rx_two,"@").replace(rx_three,"]").replace(rx_four,""))){j=eval("("+text+")");return(typeof reviver==="function")?walk({"":j},""):j}throw new SyntaxError("JSON.parse")}}}());
+		</script>
+		<tr><td width="255">
+			<object classid="clsid:54FC7795-1014-4BF6-8BA3-500C61EC1A05" id="EZUIKit" width="400" height="400" name="EZUIKit" ></object>
+		</td><td valign="bottom">
+
+			<table border >
+				<tr><td>
+					<table border="1" width="1000" height="120">
+						<tr height="20" width="300">
+							<fieldset class="menu">
+							<ul>
+							<li><a href="javascript:showPtz();">局域网控制 </a></li>
+							</ul>
+							</fieldset>
+						<tr>
+							<td>
+								<table border width="1200" height="100">
+									<tr>
+										<td>
+											<input type="button" value="开始播放" onclick="StartPlay()" style="display:block" id="startplaybtn">
+											<input type="button" value="结束播放" onclick="StopPlay()" style="display:none" id="stopplaybtn">
+										</td>
+										<td>
+											AppKey:(不可见) <input size=45 type="text" id="appkey" value="51a534ebadf54c31a0848dc575dfa206" style="visibility:hidden">******<br>
+											AccessToken: <input size=80 type="text" id="access_token" ><br>
+											Url: <input size=60 type="text" id="play_url" >
+										</td>
+									</tr>
+									<tr>
+										<td>
+											<label>云台</label>
+										</td>
+										<td>
+											<input type="button" value="上" onmousedown="StartUpPTZCtrl()" onmouseup="StopUpPTZCtrl()" style="display:block" id="ptzupbtn">
+											<input type="button" value="左" onmousedown="StartLeftPTZCtrl()" onmouseup="StopLeftPTZCtrl()" style="display:block" id="ptzleftbtn">
+											<input type="button" value="右" onmousedown="StartRightPTZCtrl()" onmouseup="StopRightPTZCtrl()" style="display:block" id="ptzrightbtn">
+											<input type="button" value="下" onmousedown="StartDownPTZCtrl()" onmouseup="StopDownPTZCtrl()" style="display:block" id="ptzdownbtn">
+										</td>
+									</tr>
+									<tr>
+										<td>播放结果</td>
+										<td><textarea rows=8 cols=70 id="showPanel" value=""></textarea></td>
+									</tr>
+								</table>
+							</td>
+
+						</tr>
+					</table>
+			</table>
+		</td></tr>
+
+	</table>
+	</table>
+	</table>
+
+
+    </script>
+    </center>
+
+    <script type="text/javascript">
+
+    var gAppKey;				//app key
+    var gAccessToken;			//accesstoken
+    var gPlaybackSearchRecord;	//search record
+
+    function init() {
+        TestActiveX();
+        var text = '{ \n' +
+            ' "AppKey":"596372da86f84628945da2476960ed9a", \n' +
+            ' "AccessToken":"at.5nn1d21p6ucmit3wbbwbgvp9copgsbhm-54uoo7yr4r-1r012n5-wgqpkksiy", \n' +
+            ' "Url":"ezopen://RXUVSV@open.ys7.com/701749234/1.hd.live" \n}';
+        var showpanel = document.getElementById("dataPanel"); //获取显示的窗口
+
+        var aplay_url = document.getElementById("play_url");
+		var access_token =document.getElementById("access_token")
+		//通过网页路径获取摄像机参数
+        var urlParam = decodeURI(window.location.href.split("?")[1]);
+		var cameraSequence =urlParam.split("cameraSequence=")[1].split("&")[0];
+        var cameraVerificationCode =urlParam.split("cameraVerificationCode=")[1].split("&")[0];
+		var aaccess_token =urlParam.split("access_token=")[1].split("&")[0];
+        aplay_url.value = "ezopen://"+cameraVerificationCode+"@open.ys7.com/"+cameraSequence+"/1.hd.live";
+        access_token.value = aaccess_token;
+        // showpanel.value = text;
+        document.getElementById('ptzupbtn').style.display='none';
+        document.getElementById('ptzdownbtn').style.display='none';
+        document.getElementById('ptzleftbtn').style.display='none';
+        document.getElementById('ptzrightbtn').style.display='none';
+    }
+    function showPtz(){
+        window.location.href ="demo";
+	}
+    //预览函数
+    function StartPlay() {
+        //得到控件引用
+        var playOcx = document.getElementById("EZUIKit");
+        if(!playOcx)
+        {
+            alert("EZUIKit can't find!");
+            return ;
+        }
+        //获取取流参数
+        <!-- var streamparams = document.getElementById("dataPanel").value; -->
+        <!-- var streamobj = JSON.parse(streamparams); -->
+        <!-- if (!streamobj) -->
+        <!-- { -->
+        <!-- alert("Get stream params invalid!"); -->
+        <!-- return ; -->
+        <!-- } -->
+        var appkey = document.getElementById("appkey").value;
+        var accesstoken = document.getElementById("access_token").value;
+		// console.log(accesstoken)
+        var ezurl = document.getElementById("play_url").value;
+        // ezurl.value ="ezopen://HCBLEQ@open.ys7.com/174295241/1.hd.live";
+        //检测取流参数
+        if(appkey=="")
+        {
+            alert("Appkey is empty!");
+            return ;
+        }
+        if(accesstoken=="")
+        {
+            alert("Accesstoken is empty!");
+            return ;
+        }
+        if(ezurl=="")
+        {
+            alert("EzUrl is empty!");
+            return ;
+        }
+        //alert(appkey);
+        //alert(accesstoken);
+        //alert(ezurl);
+        //设置appkey
+        //判断参数是否初始化过
+        if(gAppKey != appkey)
+        {
+            var res = playOcx.InitWithAppKey(appkey);
+            if(0 != res)
+            {
+                alert("Init appkey Error!");
+                return;
+            }
+            gAppKey = appkey;
+            //alert("Init appkey success.");
+        }
+        //设置
+        if(gAccessToken != accesstoken)
+        {
+            var res = playOcx.SetAccessToken(accesstoken);
+            if(0 != res)
+            {
+                alert("Init accesstoken Error!");
+                return;
+            }
+            gAccessToken = accesstoken;
+            //alert("Init accesstoken success.");
+        }
+        //清理播放结果窗口
+        var showpanel = document.getElementById("showPanel"); //获取显示的窗口
+        showpanel.value = "";
+        //开始播放, 播放结果 根据 PluginEventHandler 回调函数
+        var res = playOcx.StartPlay(ezurl);
+        if(0 != res)
+        {
+            alert("startplay failed! check ezurl!");
+            return ;
+        }
+        //alert("Startplay success.");
+    }
+
+    function StopPlay() {
+        //清理播放结果窗口
+        var showpanel = document.getElementById("showPanel"); //获取显示的窗口
+        showpanel.value = "";
+        var playOcx = document.getElementById("EZUIKit");//得到控件引用
+        var res = playOcx.StopPlay();
+        if(0 != res)
+        {
+            alert("StopPlay Error！");
+        }
+    }
+
+    function CapturePicture() {
+        var picNameText = document.getElementById("picturename"); //获取picture name 输入框
+        if(picNameText.value == "")
+        {
+            alert("please input the name of picture.");
+            return ;
+        }
+        var picname = picNameText.value;
+        var playOcx = document.getElementById("EZUIKit");//得到控件引用
+        var res = playOcx.CapturePicture(picname);
+        if(res=="")
+        {
+            alert("capture picture Error！");
+        }
+        else
+        {
+            alert("picture save at " + res);
+        }
+    }
+
+
+
+    //ptz command
+    var cmd_up 			= 0;
+    var cmd_down 		= 1;
+    var cmd_left 		= 2;
+    var cmd_right 		= 3;
+    //ptz action
+    var action_start 	= 0;
+    var action_stop 	= 1;
+    //ptz speed
+    var ptz_speed 		= 7;
+
+    function StartUpPTZCtrl() {
+        var playOcx = document.getElementById("EZUIKit");//得到控件引用
+        var res = playOcx.PTZCtrl(cmd_up, action_start, ptz_speed);
+        if(0 != res)
+        {
+            alert("StopTalk Error！");
+        }
+    }
+
+    function StopUpPTZCtrl() {
+        var playOcx = document.getElementById("EZUIKit");//得到控件引用
+        var res = playOcx.PTZCtrl(cmd_up, action_stop, ptz_speed);
+        if(0 != res)
+        {
+            alert("StopTalk Error！");
+        }
+    }
+
+    function StartDownPTZCtrl() {
+        var playOcx = document.getElementById("EZUIKit");//得到控件引用
+        var res = playOcx.PTZCtrl(cmd_down, action_start, ptz_speed);
+        if(0 != res)
+        {
+            alert("StopTalk Error！");
+        }
+    }
+
+    function StopDownPTZCtrl() {
+        var playOcx = document.getElementById("EZUIKit");//得到控件引用
+        var res = playOcx.PTZCtrl(cmd_down, action_stop, ptz_speed);
+        if(0 != res)
+        {
+            alert("StopTalk Error！");
+        }
+    }
+
+    function StartLeftPTZCtrl() {
+        var playOcx = document.getElementById("EZUIKit");//得到控件引用
+        var res = playOcx.PTZCtrl(cmd_left, action_start, ptz_speed);
+        if(0 != res)
+        {
+            alert("StopTalk Error！");
+        }
+    }
+
+    function StopLeftPTZCtrl() {
+        var playOcx = document.getElementById("EZUIKit");//得到控件引用
+        var res = playOcx.PTZCtrl(cmd_left, action_stop, ptz_speed);
+        if(0 != res)
+        {
+            alert("StopTalk Error！");
+        }
+    }
+
+    function StartRightPTZCtrl() {
+        var playOcx = document.getElementById("EZUIKit");//得到控件引用
+        var res = playOcx.PTZCtrl(cmd_right, action_start, ptz_speed);
+        if(0 != res)
+        {
+            alert("StopTalk Error！");
+        }
+    }
+
+    function StopRightPTZCtrl() {
+        var playOcx = document.getElementById("EZUIKit");//得到控件引用
+        var res = playOcx.PTZCtrl(cmd_right, action_stop, ptz_speed);
+        if(0 != res)
+        {
+            alert("StopTalk Error！");
+        }
+    }
+
+    function TestActiveX()
+    {
+        try {
+            var ax = new ActiveXObject("EZOPENUIACTIVEXK.EzOpenUIActiveXKCtrl.1");
+            bInstall = true;
+            //alert("已安装");
+        } catch(e) {
+            alert("未安装");
+        }
+    }
+
+    //handle message msgtype
+    var EZUI_MSGID_PLAY_EXCEPTION 			 = 0;			//播放异常
+    var EZUI_MSGID_PLAY_RECONNECT 			 = 1;			//播放重连
+    var EZUI_MSGID_PLAY_RECONNECT_EXCEPTION  = 2;			//播放重连异常
+    var EZUI_MSGID_PLAY_START 				 = 3;			//播放开始
+    var EZUI_MSGID_PLAY_STOP 				 = 4;			//播放停止
+    var EZUI_MSGID_PLAY_ARCHIVE_END 		 = 5;			//回放结束
+    var EZUI_MSGID_VOICETALK_START 		     = 16;			//语音对讲开始
+    var	EZUI_MSGID_VOICETALK_STOP 			 = 17;			//语音对讲停止
+    var	EZUI_MSGID_VOICETALK_EXCEPTION 	     = 18;			//语音对讲异常
+    var EZUI_MSGID_RECORD_FILE 			     = 20;			//查询的录像文件
+    var EZUI_MSGID_PTZCTRL_SUCCESS		     = 46;			//云台控制命令发送成功
+    var EZUI_MSGID_PTZCTRL_FAILED			 = 47;			//云台控制失败
+
+    var EZUI_ERROR_ACCESSTOKEN_EXPIRE        = "UE001"; 	///< accesstoken异常或失效，需要重新获取accesstoken，并传入到sdk
+    var EZUI_ERROR_APPKEY_TOKEN_NOT_MATCH    = "UE002";     ///< appkey和AccessToken不匹配,建议更换appkey或者AccessToken
+    var EZUI_ERROR_CHANNEL_NOT_EXIST	     = "UE004";     ///< 通道不存在，设备参数错误，建议重新获取播放地址
+    var EZUI_ERROR_DEVICE_NOT_EXIST	         = "UE005";     ///< 设备不存在，设备参数错误，建议重新获取播放地址
+    var EZUI_ERROR_PARAM_INVALID	         = "UE006";     ///< 参数错误，建议重新获取播放地址
+    var EZUI_ERROR_EZOPEN_URL_INVALID	     = "UE007";     ///< 播放地址错误,建议重新获取播放地址
+    var EZUI_ERROR_NO_RESOURCE 			 	 = "UE101";	    ///< 设备连接数过大，停止其他连接后再试试
+    var EZUI_ERROR_DEVICE_OFFLINE   	 	 = "UE102"; 	///< 设备不在线，确认设备上线之后重试
+    var EZUI_ERROR_CONNECT_DEVICE_TIMEOUT    = "UE103"; 	///< 播放失败，请求连接设备超时，检测设备网路连接是否正常.
+    var EZUI_ERROR_INNER_VERIFYCODE   		 = "UE104"; 	///< 视频验证码错误，建议查看设备上标记的验证码
+    var EZUI_ERROR_PLAY_FAIL       	 		 = "UE105"; 	///< 视频播放失败
+    var EZUI_ERROR_TERMINAL_BINDING   		 = "UE106"; 	///< 当前账号开启了终端绑定，只允许指定设备登录操作
+    var EZUI_ERROR_DEVICE_INFO_INVALID       = "UE107"; 	///< 设备信息异常为空，建议重新获取播放地址
+    var EZUI_ERROR_VIDEO_RECORD_NOTEXIST     = "UE108"; 	///< 未查找到录像文件
+    var EZUI_ERROR_VTDU_NO_RESOURCE        	 = "UE109"; 	///< 取流并发路数限制,请升级为企业版.
+    var EZUI_ERROR_UNSUPPORTED        		 = "UE110"; 	///< 设备不支持的清晰度类型, 请根据设备预览能力级选择.
+
+
+    function PluginEventHandler(lEventType, strErrorCode, lInterErrorCode){
+
+        var showpanel = document.getElementById("showPanel"); //获取显示的窗口
+        switch(lEventType)
+        {
+            case EZUI_MSGID_PLAY_START:		//播放开始
+            {
+                var info;
+                if(gPlaybackSearchRecord != "")
+                {
+                    info = "回放成功!" + gPlaybackSearchRecord;
+                }
+                else
+                {
+                    info = "播放成功!";
+                }
+                showpanel.value = info;
+                document.getElementById('startplaybtn').style.display='none';
+                document.getElementById('stopplaybtn').style.display='block';
+                document.getElementById('ptzupbtn').style.display='block';
+                document.getElementById('ptzdownbtn').style.display='block';
+                document.getElementById('ptzleftbtn').style.display='block';
+                document.getElementById('ptzrightbtn').style.display='block';
+            }
+                break;
+            case EZUI_MSGID_PLAY_EXCEPTION:	//播放异常
+            {
+                var errinfo;
+                if(strErrorCode == EZUI_ERROR_ACCESSTOKEN_EXPIRE)
+                {
+                    errinfo = "accesstoken异常或失效，需要重新获取accesstoken，并传入到sdk";
+                }
+                else if(strErrorCode == EZUI_ERROR_APPKEY_TOKEN_NOT_MATCH)
+                {
+                    errinfo = "ppkey和AccessToken不匹配,建议更换appkey或者AccessToken";
+                }
+                else if(strErrorCode == EZUI_ERROR_CHANNEL_NOT_EXIST)
+                {
+                    errinfo = "通道不存在，设备参数错误，建议重新获取播放地址";
+                }
+                else if(strErrorCode == EZUI_ERROR_DEVICE_NOT_EXIST)
+                {
+                    errinfo = "设备不存在，设备参数错误，建议重新获取播放地址";
+                }
+                else if(strErrorCode == EZUI_ERROR_PARAM_INVALID)
+                {
+                    errinfo = "参数错误，建议重新获取播放地址";
+                }
+                else if(strErrorCode == EZUI_ERROR_EZOPEN_URL_INVALID)
+                {
+                    errinfo = "播放地址错误,建议重新获取播放地址";
+                }
+                else if(strErrorCode == EZUI_ERROR_NO_RESOURCE)
+                {
+                    errinfo = "设备连接数过大，停止其他连接后再试试";
+                }
+                else if(strErrorCode == EZUI_ERROR_DEVICE_OFFLINE)
+                {
+                    errinfo = "设备不在线，确认设备上线之后重试";
+                }
+                else if(strErrorCode == EZUI_ERROR_CONNECT_DEVICE_TIMEOUT)
+                {
+                    errinfo = "播放失败，请求连接设备超时，检测设备网路连接是否正常.";
+                }
+                else if(strErrorCode == EZUI_ERROR_INNER_VERIFYCODE)
+                {
+                    errinfo = "视频验证码错误，建议查看设备上标记的验证码";
+                }
+                else if(strErrorCode == EZUI_ERROR_PLAY_FAIL)
+                {
+                    errinfo = "视频播放失败";
+                }
+                else if(strErrorCode == EZUI_ERROR_TERMINAL_BINDING)
+                {
+                    errinfo = "当前账号开启了终端绑定，只允许指定设备登录操作";
+                }
+                else if(strErrorCode == EZUI_ERROR_DEVICE_INFO_INVALID)
+                {
+                    errinfo = "设备信息异常为空，建议重新获取播放地址";
+                }
+                else if(strErrorCode == EZUI_ERROR_VIDEO_RECORD_NOTEXIST)
+                {
+                    errinfo = "未查找到录像文件";
+                }
+                else if(strErrorCode == EZUI_ERROR_VTDU_NO_RESOURCE)
+                {
+                    errinfo = "取流并发路数限制,请升级为企业版.";
+                }
+                else if(strErrorCode == EZUI_ERROR_UNSUPPORTED)
+                {
+                    errinfo = "设备不支持的清晰度类型, 请根据设备预览能力级选择";
+                }
+
+                var info = "播放失败,"+ errinfo +".错误码:" + strErrorCode + ", 内部错误码:" +  lInterErrorCode;
+                showpanel.value = info;
+            }
+                break;
+            case EZUI_MSGID_PLAY_STOP:			//播放停止
+            {
+                document.getElementById('startplaybtn').style.display='block';
+                document.getElementById('stopplaybtn').style.display='none';
+                document.getElementById('ptzupbtn').style.display='none';
+                document.getElementById('ptzdownbtn').style.display='none';
+                document.getElementById('ptzleftbtn').style.display='none';
+                document.getElementById('ptzrightbtn').style.display='none';
+            }
+                break;
+            case EZUI_MSGID_RECORD_FILE:		//录像搜索成功
+            {
+                gPlaybackSearchRecord = "录像搜索成功:" + strErrorCode;
+            }
+                break;
+            case EZUI_MSGID_VOICETALK_START:		//对讲开启
+            {
+                var info = "对讲开启成功";
+                showpanel.value = info;
+            }
+                break;
+            case EZUI_MSGID_VOICETALK_STOP:		//对讲开启
+            {
+                var info = "对讲停止成功";
+                showpanel.value = info;
+            }
+                break;
+            case EZUI_MSGID_PTZCTRL_SUCCESS:		//云台控制成功
+            {
+                var info = "云台控制信令发送成功";
+                showpanel.value = info;
+            }
+                break;
+            case EZUI_MSGID_PTZCTRL_FAILED:		//云台控制失败
+            {
+                var info = "云台控制失败";
+                showpanel.value = info;
+            }
+                break;
+            default:
+        }
+
+    }
+
+    window.unload = function(){
+        alert("unload");
+    }
+
+	</script>
+
+
+	<script language="javascript" for="EZUIKit" event="PluginEventHandler(lEventType, strErrorCode, lInterErrorCode)">   //打开预览时触发该事件
+    PluginEventHandler(lEventType, strErrorCode, lInterErrorCode);
+	</script>
+</main>
+</body>
+</html>

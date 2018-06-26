@@ -2,6 +2,7 @@ package com.xmlan.machine.common.listener
 
 import com.xmlan.machine.common.config.Global
 import com.xmlan.machine.common.config.TinyImage
+import com.xmlan.machine.common.timer.WorkTimer
 import com.xmlan.machine.common.util.ColorPrintUtils
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
@@ -40,6 +41,7 @@ class WelcomeListener implements ServletContextListener {
         """
         ColorPrintUtils.Println(ColorPrintUtils.BLUE, logo)
 
+
         // 本程序不涉及实时Python调用，所以可以异步安装requirements
         Thread.start {
             try {
@@ -73,5 +75,6 @@ class WelcomeListener implements ServletContextListener {
             }
         }
     }
+
 
 }

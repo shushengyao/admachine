@@ -1,0 +1,313 @@
+@charset "utf-8";
+*
+{
+    margin:0;
+    padding:0;
+}
+html
+{
+    width:100%;
+    height:100%;
+    font-size:12px;
+    font-family:Arial, Helvetica, sans-serif;
+    -webkit-text-size-adjust:none;
+    background:#FFFFFF;
+}
+body
+{
+    padding:5px;
+}
+select
+{
+    height:20px;
+    line-height:20px;
+}
+.left
+{
+    float:left;
+}
+.freeze
+{
+    position:absolute;
+    text-align:center;
+    background:#343434;
+    color:#FFFFFF;
+    font-size:26px;
+    font-weight:bold;
+    filter:alpha(opacity=60);
+    opacity:0.6;
+}
+.vtop
+{
+    vertical-align:middle;
+    margin-top:-1px;
+}
+/*插件*/
+.plugin
+{
+    width:500px;
+    height:300px;
+}
+fieldset
+{
+    display:block;
+}
+/*本地配置*/
+.localconfig
+{
+    width:500px;
+    height: 800px;
+    padding:10px;
+    border:1px solid #7F9DB9;
+}
+.localconfig .tt
+{
+    width:150px;
+}
+.localconfig .txt
+{
+    width:200px;
+}
+.localconfig .txt2
+{
+    width:300px;
+}
+.localconfig .btn
+{
+
+    height:22px;
+    line-height:18px;
+}
+.localconfig .sel
+{
+    width:120px;
+}
+/*登录*/
+.login
+{
+    width:500px;
+    padding:10px;
+    border:1px solid #7F9DB9;
+}
+.login .tt
+{
+    width:100px;
+}
+.login .txt
+{
+    width:100px;
+}
+.login .btn
+{
+
+    height:22px;
+    line-height:18px;
+}
+.login .btn2
+{
+
+    height:22px;
+    line-height:18px;
+}
+.login .sel
+{
+    width:130px;
+}
+.login .sel2
+{
+    width:65px;
+}
+/*数字通道*/
+
+/*预览*/
+.preview
+{
+    width:500px;
+    height: 500px;
+    padding:0px;
+    padding-top:0;
+    margin-left:10px;
+    border:1px solid #7F9DB9;
+}
+.preview .tt
+{
+    width:100px;
+    height: 20px;
+    padding: 30px;
+}
+.preview .txt
+{
+    width:60px;
+    padding: 10px;
+}
+.preview .btn
+{
+    padding: 5px;
+    width: 70px;
+    height:22px;
+    line-height:15px;
+}
+
+.preview .btn2
+{
+    width:90px;
+    height:22px;
+    line-height:18px;
+}
+.preview .sel
+{
+    width:105px;
+}
+/*云台*/
+.ptz
+{
+    width:500px;
+    padding:10px;
+    margin-left:10px;
+    border:1px solid #7F9DB9;
+}
+.ptz .tt
+{
+    width:100px;
+}
+.ptz .txt
+{
+    width:60px;
+}
+.ptz .btn
+{
+
+    height:22px;
+    line-height:18px;
+}
+.ptz .btn2
+{
+
+    height:22px;
+    line-height:18px;
+}
+.ptz .sel
+{
+    width:65px;
+}
+/*视频参数*/
+/*回放*/
+.playback
+{
+    width:500px;
+    padding:10px;
+    margin-left:10px;
+    border:1px solid #7F9DB9;
+}
+.playback .tt
+{
+    width:90px;
+}
+.playback .txt
+{
+    width:140px;
+}
+.playback .btn
+{
+
+    height:22px;
+    line-height:18px;
+}
+.playback .btn2
+{
+
+    height:22px;
+    line-height:18px;
+}
+.playback .sel
+{
+    width:142px;
+}
+.playback .searchdiv
+{
+    height:100px;
+    overflow:hidden;
+    overflow-y:auto;
+    border:1px solid #7F9DB9;
+    font-size:11px;
+}
+.playback .searchlist th, .playback .searchlist td
+{
+    padding:2px;
+    border:1px solid #7F9DB9;
+    border-collapse:collapse;
+    white-space:nowrap;
+}
+/*系统维护*/
+
+/*操作信息*/
+.operate
+{
+    width:500px;
+    padding:10px;
+    border:1px solid #7F9DB9;
+}
+.operate .opinfo
+{
+    height:150px;
+    border:1px solid #7F9DB9;
+    overflow:auto;
+}
+/*事件回调*/
+.callback
+{
+    width:450px;
+    padding:10px;
+    margin-left:10px;
+    border:1px solid #7F9DB9;
+}
+.callback .cbinfo
+{
+    height:114px;
+    border:1px solid #7F9DB9;
+    overflow:auto;
+}
+/*IP解析*/
+
+/*内部导航栏*/
+/* ul li以横排显示 */
+
+/* 所有class为menu的div中的ul样式 */
+.menu ul
+{
+    list-style:none; /* 去掉ul前面的符号 */
+    margin: 0px; /* 与外界元素的距离为0 */
+    padding: 0px; /* 与内部元素的距离为0 */
+    width: auto; /* 宽度根据元素内容调整 */
+}
+/* 所有class为menu的div中的ul中的li样式 */
+.menu ul li
+{
+    float:left; /* 向左漂移，将竖排变为横排 */
+}
+/* 所有class为menu的div中的ul中的a样式(包括尚未点击的和点击过的样式) */
+.menu ul li a, .menu ul li a:visited
+{
+    background-color: #465c71; /* 背景色 */
+    border: 1px #4e667d solid; /* 边框 */
+    color: #dde4ec; /* 文字颜色 */
+    display: block; /* 此元素将显示为块级元素，此元素前后会带有换行符 */
+    line-height: 1.35em; /* 行高 */
+    padding: 4px 20px; /* 内部填充的距离 */
+    text-decoration: none; /* 不显示超链接下划线 */
+    white-space: nowrap; /* 对于文本内的空白处，不会换行，文本会在在同一行上继续，直到遇到 <br> 标签为止。 */
+}
+/* 所有class为menu的div中的ul中的a样式(鼠标移动到元素中的样式) */
+.menu ul li a:hover
+{
+    background-color: #bfcbd6; /* 背景色 */
+    color: #465c71; /* 文字颜色 */
+    text-decoration: none; /* 不显示超链接下划线 */
+}
+/* 所有class为menu的div中的ul中的a样式(鼠标点击元素时的样式) */
+.menu ul li a:active
+{
+    background-color: #465c71; /* 背景色 */
+    color: #cfdbe6; /* 文字颜色 */
+    text-decoration: none; /* 不显示超链接下划线 */
+}

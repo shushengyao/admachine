@@ -8,6 +8,7 @@
 <!--/*@thymesVar id="machine" type="com.xmlan.machine.module.advertisementMachine.entity.AdvertisementMachine"*/-->
 <!--/*@thymesVar id="userList" type="java.util.List<com.xmlan.machine.module.user.entity.SimpleUser>"*/-->
 <!--/*@thymesVar id="token" type="java.lang.String"*/-->
+<!--/*@thymesVar id="cameraIP" type="com.xmlan.machine.module.advertisementMachine.entity.AdvertisementMachine.cameraIP"*/-->
 <!--/* </editor-fold> */-->
 
 <body>
@@ -76,6 +77,24 @@
           <textarea id="remark" name="remark" class="materialize-textarea" th:text="${machine.remark}"></textarea>
           <label for="remark">备注</label>
         </div>
+        <div class="input-field col s6 m6 l6" >
+          <i class="material-icons prefix">code</i>
+          <input id="cameraIP" name="cameraIP" type="text" class="validate" placeholder="输入ip"
+                 th:value="${machine.cameraIP}"/>
+          <label for="cameraIP">摄像头IP</label>
+        </div>
+        <div class="input-field col s6 m6 l6" >
+          <i class="material-icons prefix">code</i>
+          <input id="cameraVerificationCode" name="cameraVerificationCode" type="text" class="validate" placeholder="输入6位大写英文设备验证码"
+                 th:value="${machine.cameraVerificationCode}"/>
+          <label for="cameraVerificationCode">摄像头设备验证码</label>
+        </div>
+        <div class="input-field col s12 m12 l12">
+          <i class="material-icons prefix">insert_comment</i>
+          <textarea id="cameraSequence" name="cameraSequence" class="materialize-textarea" placeholder="输入摄像头9位序列号" th:text="${machine.cameraSequence}"></textarea>
+          <label for="cameraSequence">摄像头序列号</label>
+        </div>
+
 
         <div class="input-field col s6 m6 l6 right-align">
           <button type="reset" class="waves-effect waves-light btn"><i class="material-icons left">clear</i>清空</button>

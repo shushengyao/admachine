@@ -9,6 +9,7 @@
 <!--/*@thymesVar id="codeNumber" type="java.lang.String"*/-->
 <!--/*@thymesVar id="addTime" type="java.lang.String"*/-->
 <!--/*@thymesVar id="deleteToken" type="java.lang.String"*/-->
+<!--/*@thymesVar id="open" type="java.lang.String"*/-->
 <!--/* </editor-fold> */-->
 
 <body>
@@ -26,6 +27,7 @@
   <div id="main-content" class="container">
     <div id="search-box">
       <form th:action="@{${adminPath}+'/advertisementMachine/list/1'}" method="post">
+        <input name="open" type="hidden" th:value="${open}">
         <ul class="collapsible popout" data-collapsible="accordion">
           <li>
             <div class="collapsible-header"><i class="material-icons">search</i>条件搜索</div>
@@ -63,6 +65,10 @@
     <table class="highlight responsive-table">
       <thead>
       <tr>
+        <th>
+          <input type="button" style="display:block" id="selectAll" value="全选">
+          <input type="button" style="display:none" id="closeAll" value="取消">
+        </th>
         <th>名称</th>
         <th>地址</th>
         <th>加入时间</th>
@@ -70,10 +76,15 @@
         <th>广告数</th>
         <th>灯</th>
         <th>充电状态</th>
+        <th>
+          <input type="button" style="display:block" id="openLight" value="开灯">
+        </th>
+        <th><input type="button" style="display:block" id="closeLight" value="关灯"></th>
       </tr>
       </thead>
       <tbody class="card">
-      <tr th:each="item:${page.list}" th:onclick="'javascript:detail(\''+*{item.id}+'\')'">
+        <tr th:each="item:${page.list}" th:onclick="'javascript:detail(\''+*{item.id}+'\')'">
+         <td><input type="checkbox" name="checkbox" th:value="*{item.id}"></td>
         <td th:text="*{item.name}">name</td>
         <td th:text="*{#strings.abbreviate(item.address,30)}">address</td>
         <td th:text="*{#strings.substring(item.addTime,0,10)}">addTime</td>
@@ -238,6 +249,12 @@
       <p id="detail-item-address">address</p>
       <h6 class="green-text text-darken-2">备注</h6>
       <p id="detail-item-remark">remark</p>
+      <h6 class="green-text text-darken-2">摄像头ip</h6>
+      <p id="detail-item-cameraIP">cameraIP</p>
+      <h6 class="green-text text-darken-2">摄像头序列号</h6>
+      <p id="detail-item-cameraSequence">cameraSequence</p>
+      <h6 class="green-text text-darken-2">摄像头设备验证码</h6>
+      <p id="detail-item-cameraVerificationCode">cameraVerificationCode</p>
     </div>
     <div class="modal-footer">
       <a href="#" class="modal-action modal-close waves-effect waves-green btn-flat">关闭</a>
@@ -264,6 +281,62 @@
 <th:block th:include="/common/footer::footer"/>
 <th:block th:include="/common/script::script"/>
 <script type="text/javascript">
+    jQuery(function($){
+        $("#selectAll").click(function(){
+            $("input[name='checkbox']").attr("checked","true");
+            document.getElementById("closeAll").style.display="block";
+            document.getElementById("selectAll").style.display="none";
+            // $('input:checkbox').prop("checked", false);
+        })
+        $("#closeAll").click(function(){
+            $("input[name='checkbox']").removeAttr("checked");
+            document.getElementById("selectAll").style.display="block";
+            document.getElementById("closeAll").style.display="none";
+        })
+        $("#openLight").click(function(){
+            var adIds = [];
+            $("input:checkbox[name=checkbox]:checked").each(function(i){
+                    // adIds = $(this).val();
+                    adIds.push($(this).val())
+                    // adIds += (","+$(this).val());
+            });
+            console.log(adIds)
+            var url = '[[${adminPath}]]/advertisementMachine/lightBatch';
+            var update='[[${adminPath}]]/advertisementMachine/list/1';
+            $.ajax({
+                url:url,
+                data:{"adIds":adIds,"operate":1},
+                traditional :true,
+                dataType:"json",
+                type:"post",
+                success:function (data) {
+                  console.log("开灯成功！")
+                },error:function () {
+                    console.log("开灯失败！")
+                }
+            });
+        })
+        $("#closeLight").click(function(){
+            var adIds = [];
+            $("input:checkbox[name=checkbox]:checked").each(function(i){
+                adIds.push($(this).val())
+            });
+            console.log(adIds)
+            var url = '[[${adminPath}]]/advertisementMachine/lightBatch';
+            $.ajax({
+                url:url,
+                data:{"adIds":adIds,"operate":0},
+                traditional :true,
+                dataType:"json",
+                type:"post",
+                success:function (data) {
+                    // console.log("关灯成功！")
+                },error:function () {
+                    // console.log("关灯失败！")
+                }
+            });
+        })
+    })
   $(function () {
     resize_footer(window.screen.width);
     $('#button-nav-menu').sideNav({
@@ -292,7 +365,6 @@
               $("#weather-pm25").text(data['weather'].pm25);
               $("#weather-humidity").text(data['weather'].humidity);
           },error:function () {
-              
           }
       });
   }
@@ -313,6 +385,9 @@
         $("#detail-item-status").text(data['status']);
         $("#detail-item-address").text(data['machine'].address);
         $("#detail-item-remark").text(data['machine'].remark);
+        $("#detail-item-cameraIP").text(data['machine'].cameraIP);
+        $("#detail-item-cameraSequence").text(data['machine'].cameraSequence);
+        $("#detail-item-cameraVerificationCode").text(data['machine'].cameraVerificationCode);
       },
       error: function () {
       }

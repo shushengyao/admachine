@@ -50,6 +50,10 @@ create table `advertisement_machine` (
   name       varchar(128) comment '广告机名称',
   address    varchar(8192) comment '广告机地址',
   longitude  double comment '经度',
+  cameraIP    varchar(100) comment '摄像头IP',
+  cameraSequence varchar(33) comment '摄像头序列号',
+  cameraVerificationCode varchar(33) comment '摄像头设备验证码',
+  accessToken varchar (100) comment 'accessToken一周一更新',
   latitude   double comment '纬度',
   addTime    datetime comment '添加时间',
   codeNumber varchar(512)       not null unique
