@@ -167,7 +167,12 @@
         from advertisement_machine t
         where userID = #{userID}
     </select>
-
+    <select id="findIdByCameraSequence" resultMap="advertisementMachineResultMap">
+        select
+        <include refid="columns"/>
+        from advertisement_machine t
+        where cameraSequence = #{cameraSequence}
+    </select>
     <select id="getByCodeNumber" resultMap="advertisementMachineResultMap">
         select
         <include refid="columns"/>

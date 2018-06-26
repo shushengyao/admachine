@@ -69,6 +69,10 @@ class AdvertisementMachineService extends BaseService<AdvertisementMachine, Adve
         dao.accessToken(accessToken)
         return DONE
     }
+
+    AdvertisementMachine findIdByCameraSequence(String cameraSequence){
+        return dao.findIdByCameraSequence(cameraSequence)
+    }
     AdvertisementMachine getByCodeNumber(String codeNumber) {
         return dao.getByCodeNumber(codeNumber)
     }

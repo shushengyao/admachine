@@ -133,6 +133,21 @@ public class AdvertisementMachineMobileServiceProvider extends BaseController {
     }
 
     /**
+     * 根据摄像头序列号获取设备验证码
+     *
+     * @return
+     */
+    @RequestMapping(value = "/getCameraVerificationCode",method = RequestMethod.POST,produces = "application/json; charset=utf-8")
+    @ResponseBody
+    public Map<String,String> getCameraVerificationCode(String cameraSequence){
+        Map<String,String> result = new HashMap<>();
+        AdvertisementMachine advertisementMachine =service.findIdByCameraSequence(cameraSequence);
+        String cameraVerificationCode =advertisementMachine.getCameraVerificationCode();
+        result.put("cameraVerificationCode",cameraVerificationCode);
+        return result;
+    }
+
+    /**
      * 通过最大经纬度和最小经纬度查询区域内的广告机
      * <p>
      * URL: /mob/machine/position/query

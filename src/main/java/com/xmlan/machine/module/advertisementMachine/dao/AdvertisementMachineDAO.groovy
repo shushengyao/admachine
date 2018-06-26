@@ -27,6 +27,13 @@ interface AdvertisementMachineDAO extends BaseDAO<AdvertisementMachine> {
     AdvertisementMachine getByCodeNumber(@Param("codeNumber") String codeNumber)
 
     /**
+     * 根据摄像头序列号查设备
+     * @param cameraSequence
+     * @return
+     */
+    AdvertisementMachine findIdByCameraSequence(@Param("cameraSequence") String cameraSequence)
+
+    /**
      * 更新定位坐标经纬度
      * @param longitude 经度
      * @param latitude 纬度
