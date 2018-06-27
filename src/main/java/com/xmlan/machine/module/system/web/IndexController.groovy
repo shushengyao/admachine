@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.ResponseBody
 import org.springframework.web.servlet.mvc.support.RedirectAttributes
 
 /**
@@ -31,10 +32,10 @@ class IndexController extends BaseController {
     @Autowired
     private SysLogService sysLogService
 
-    @RequestMapping(["/", "/index"])
-    String index() {
-        return "redirect:${adminPath}/main"
-    }
+//    @RequestMapping(["/", "/index"])
+//    String index() {
+//        return "redirect:${adminPath}/main"
+//    }
 
     @RequestMapping(['${adminPath}', '${adminPath}/main', '${adminPath}/login'])
     String main() {
