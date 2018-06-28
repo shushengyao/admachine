@@ -283,13 +283,12 @@
 <script type="text/javascript">
     jQuery(function($){
         $("#selectAll").click(function(){
-            $("input[name='checkbox']").attr("checked","true");
+            $("input[name='checkbox']").prop("checked","true");
             document.getElementById("closeAll").style.display="block";
             document.getElementById("selectAll").style.display="none";
-            // $('input:checkbox').prop("checked", false);
         })
         $("#closeAll").click(function(){
-            $("input[name='checkbox']").removeAttr("checked");
+            $("input[name='checkbox']").prop("checked",false);
             document.getElementById("selectAll").style.display="block";
             document.getElementById("closeAll").style.display="none";
         })
@@ -351,6 +350,25 @@
     $("#delete-modal").modal();
     $("#weather-modal").modal();
     toast('[[${message}]]');
+
+    //除了表头（第一行）以外所有的行添加click事件.
+    $("tr").slice(1).click(function () {
+      // 切换样式
+      $(this).toggleClass("tr_active");
+      // 找到checkbox对象
+      var chks = $("input[type='checkbox']",this);
+      var tag = $(this).attr("tag");
+      if(tag=="selected"){
+          // 之前已选中，设置为未选中
+          $(this).attr("tag","");
+          chks.prop("checked",false);
+      }else{
+          // 之前未选中，设置为选中
+          $(this).attr("tag","selected");
+          chks.prop("checked",true);
+      }
+    });
+
   });
 
   function weather(id) {
