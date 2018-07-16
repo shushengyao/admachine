@@ -111,5 +111,25 @@
         delete from advertisement
         where id = #{id}
     </delete>
+    <select id="findListByUserID"  resultMap="advertisementResultMap">
+        select
+        <include refid="columns"/>
+        from `advertisement` t
+        where t.userID = #{userID}
+    </select>
+
+    <select id="findMachineByUserID" resultMap="advertisementResultMap">
+        select
+        <include refid="columns"/>
+        from `advertisement` t
+        where t.userID = #{userID}
+    </select>
+
+    <select id="findListByMachineID" resultMap="advertisementResultMap">
+        select
+        <include refid="columns"/>
+        from `advertisement` t
+        where t.machineID = #{machine_id}
+    </select>
 
 </mapper>

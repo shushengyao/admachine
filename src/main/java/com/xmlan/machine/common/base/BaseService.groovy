@@ -52,6 +52,7 @@ abstract class BaseService<T, DAO extends BaseDAO<T>> extends BaseBean {
         dao.findList entity
     }
 
+
     /**
      * 插入对象
      * @param entity

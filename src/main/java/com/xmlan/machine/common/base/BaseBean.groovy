@@ -53,13 +53,21 @@ class BaseBean {
     // ========================= 标记类 ========================= //
 
     /**
-     * 管理员角色ID
+     * 开发者管理员角色ID
      */
     public static final int ADMIN_ROLE_ID = 1
     /**
      * ROOT管理员ID
      */
     public static final int ROOT_ADMIN_ID = 1
+    /**
+     * 设备所属管理员
+     */
+    public static final int MANAGE_ROLE_ID= 2
+    /**
+     * root2级管理者id
+     */
+    public static final int ROOT_MANAGE_ID= 2
 
     // ========================= 模块类 ========================= //
 

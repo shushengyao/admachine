@@ -1,5 +1,6 @@
 package com.xmlan.machine.module.user.entity
 
+import com.xmlan.machine.module.advertisementMachine.entity.AdvertisementMachine
 import org.hibernate.validator.constraints.Length
 
 import javax.validation.constraints.NotNull
@@ -28,6 +29,16 @@ class User implements Serializable {
     // 联系电话
     private String remark
     // 备注
+    private String founder
+    //创建人
+
+    String getFounder() {
+        return founder
+    }
+
+    void setFounder(String founder) {
+        this.founder = founder
+    }
 
     int getId() {
         return id

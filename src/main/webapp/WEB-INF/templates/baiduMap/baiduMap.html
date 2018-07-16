@@ -13,14 +13,16 @@
 <body>
 <th:block th:include="/common/header::header('baiduMap')"/>
 <div id="dg" style="z-index: 9999; position: fixed ! important; right: 50px; top: 100px;">
+    <!--<form id="baiduForm" th:action="@{${adminPath}+'/baiduMap/index'}">-->
     <ul>
         <li>
             <a class="btn-floating green waves-effect waves-light tooltipped" data-position="top"
-               data-delay="50" data-tooltip="查看所有灯杆显示" th:onclick="'javascript:index()'">
+               data-delay="50" data-tooltip="查看所有灯杆显示"  th:onclick="'javascript:index()'">
                 <i class="material-icons">location_on</i>
             </a>
         </li>
     </ul>
+    <!--</form>-->
 </div>
 <div style="width:1800px;height:800px;border:1px solid gray;margin-left: 300px" id="allmap"></div>
 <th:block th:include="/common/footer::footer"/>
@@ -32,10 +34,13 @@
     var points =[];
     var map = new BMap.Map("allmap");
     map.centerAndZoom(new BMap.Point(113.573229,22.377734), 15);
+
+
     function index() {
         $.ajax({
             url:'[[${adminPath}]]/baiduMap/index',
-            type:"GET",
+            type:"POST",
+            contentType: 'application/json',
             success:function (data) {
                 function add() {
                     for (var index in data) {
@@ -53,8 +58,9 @@
                     var convertor = new BMap.Convertor();
                     convertor.translate(points, 1, 5, translateCallback)
                 }, 1000);
-            },error:function () {
-                alert("操作失败")
+            },error:function (data) {
+                console.log("readyState :"+data.readyState)
+                console.log("status :"+data.status)
             }
         });
     }
@@ -64,7 +70,6 @@
 
     var geolocation = new BMap.Geolocation();
     geolocation.getCurrentPosition(function(r){
-        console.log(r.point)
         if(this.getStatus() == BMAP_STATUS_SUCCESS){
             var mk = new BMap.Marker(r.point);
             map.addOverlay(mk);//标出所在地

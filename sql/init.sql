@@ -36,10 +36,25 @@ create table `user` (
   addTime  datetime comment '加入时间',
   phone    varchar(16) comment '联系电话',
   remark   text comment '备注',
+  founder varchar(20)   not null
+  comment '创建人',
   primary key (id)
 )
   char set utf8
   comment '用户表';
+
+-- 创建用户和设备关联表,实现多对多查询等操作
+drop table if exists `machine_user`;
+create table `machine_user`(
+machine_id         int auto_increment not null
+comment '广告机id',
+user_id         int auto_increment not null
+comment '用户ID',
+primary key (machine_id),
+primary key (user_id)
+)
+  char set utf8
+  comment '设备用户关联表';
 
 -- 创建广告机表, 如果存在则抛弃旧表重新创建
 drop table if exists `advertisement_machine`;

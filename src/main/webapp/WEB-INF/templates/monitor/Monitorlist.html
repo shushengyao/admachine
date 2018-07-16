@@ -48,6 +48,7 @@
         $.ajax({
             url:"[[${adminPath}]]/monitor/index",
             type:"GET",
+            data:{"pageNo":1},
             success:function (machine) {
                 machineStr =eval('(' + machine + ')');
                 $.each(machineStr,function (idx, obj) {

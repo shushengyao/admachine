@@ -4,9 +4,11 @@ import com.xmlan.machine.common.base.BaseDAO
 import com.xmlan.machine.module.user.entity.User
 import org.apache.ibatis.annotations.Param
 import org.springframework.stereotype.Repository
+import org.springframework.web.bind.annotation.RequestParam
 
 /**
- * Created by ayakurayuki on 2017/12/12-10:51.
+ * yss
+ * 用户dao
  * Package: com.xmlan.machine.module.user.dao
  */
 @Repository
@@ -19,6 +21,12 @@ interface UserDAO extends BaseDAO<User> {
      * @return 修改影响的条目数
      */
     int changeRoleID(User user)
+    /**
+     * 根据创建人查询用户列表
+     * @param founder
+     * @return
+     */
+    List<User> findListByFounder(@Param("founder") String founder)
 
     /**
      * 修改密码
@@ -27,6 +35,18 @@ interface UserDAO extends BaseDAO<User> {
      * @return 修改影响的条目数
      */
     int changePassword(User user)
+    /**
+     * 根据使用者id查询创建者name
+     * @param userID
+     * @return
+     */
+    List<User> findListByUserID(@RequestParam("userID") int userID)
+    /**
+     * 根据创建人查询使用者id列表
+     * @param username
+     * @return
+     */
+    List<User> findUserIDByUsername(@RequestParam("username") String username)
 
     /**
      * 登录

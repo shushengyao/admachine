@@ -90,7 +90,18 @@ abstract class BaseController extends BaseBean {
         redirectAttributes.addFlashAttribute(keyMessage, stringBuilder.toString())
         logger.debug "Message added."
     }
-
+    /**
+     * 添加临时消息
+     * @param redirectAttributes
+     * @param messages
+     */
+    protected void addMessage( String... messages) {
+        def stringBuilder = new StringBuilder()
+        for (message in messages) {
+            stringBuilder.append(message).append(messages.length > 1 ? '<br/>' : StringUtils.EMPTY)
+        }
+        logger.debug "Message added."
+    }
     /**
      * 添加消息
      *

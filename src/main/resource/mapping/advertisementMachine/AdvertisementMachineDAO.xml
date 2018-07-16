@@ -23,6 +23,20 @@
         <result column="cameraSequence" property="cameraSequence"/>
         <result column="cameraVerificationCode" property="cameraVerificationCode"/>
         <result column="accessToken" property="accessToken"/>
+        <association property="userList" resultMap="userResultMap"/>
+    </resultMap>
+
+    <resultMap id="userResultMap" type="com.xmlan.machine.module.user.entity.User">
+        <id column="id" property="id"/>
+        <result column="username" property="username"/>
+        <result column="authname" property="authname"/>
+        <result column="password" property="password"/>
+        <result column="roleID" property="roleID"/>
+        <result column="address" property="address"/>
+        <result column="addTime" property="addTime"/>
+        <result column="phone" property="phone"/>
+        <result column="remark" property="remark"/>
+        <association property="advertisementMachineList" resultMap="advertisementMachineResultMap"/>
     </resultMap>
 
     <sql id="columns">
@@ -44,6 +58,18 @@
         t.accessToken as "accessToken"
     </sql>
 
+    <select id="adchineListByUserID" parameterType="int" resultType="com.xmlan.machine.module.advertisementMachine.entity.AdvertisementMachine">
+        SELECT DISTINCT
+           am.*
+        FROM
+            USER AS u
+        RIGHT JOIN machine_user AS m ON m.user_id = u.id
+        LEFT JOIN advertisement_machine AS am ON am.id = m.advertisement_machine_id
+        WHERE
+            u.id = #{userID}
+        GROUP BY am.id
+    </select>
+
     <select id="get" parameterType="java.lang.String" resultMap="advertisementMachineResultMap">
         select
         <include refid="columns"/>
@@ -56,6 +82,10 @@
         <include refid="columns"/>
         from advertisement_machine t
         order by t.addTime, convert(t.name using gbk) asc
+    </select>
+
+    <select id="findAllMachine" resultType="com.xmlan.machine.module.advertisementMachine.entity.AdvertisementMachine">
+        SELECT * FROM advertisement_machine
     </select>
 
     <select id="findList" parameterType="com.xmlan.machine.module.advertisementMachine.entity.AdvertisementMachine"
@@ -108,6 +138,19 @@
         </choose>
     </select>
 
+    <insert id="insertMachineToUser" parameterType="com.xmlan.machine.module.advertisementMachine.entity.AdvertisementMachine">
+        INSERT INTO machine_user(
+        machine_user.advertisement_machine_id,
+        machine_user.user_id
+        ) VALUES(
+        #{machine_id},
+        #{user_id}
+        );
+    </insert>
+    <delete id="deleteMachineForUser" parameterType="com.xmlan.machine.module.advertisementMachine.entity.AdvertisementMachine">
+        DELETE FROM machine_user
+        WHERE machine_user.user_id =#{user_id}
+    </delete>
     <insert id="insert" parameterType="com.xmlan.machine.module.advertisementMachine.entity.AdvertisementMachine">
         insert into advertisement_machine (
         id,
@@ -160,6 +203,7 @@
         delete from advertisement_machine
         where id = #{id}
     </delete>
+
 
     <select id="findAllADMachineByUser" resultMap="advertisementMachineResultMap">
         select

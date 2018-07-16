@@ -1,5 +1,7 @@
 package com.xmlan.machine.module.advertisementMachine.entity
 
+import com.xmlan.machine.module.user.entity.User
+
 import javax.validation.constraints.NotNull
 
 /**

@@ -13,11 +13,12 @@ import org.springframework.stereotype.Repository
 @Repository
 interface AdvertisementMachineDAO extends BaseDAO<AdvertisementMachine> {
 
+
     /**
      * 查看该用户的所有灯杆 (广告机)
      * @return 该用户的所有灯杆列表
      */
-    List<AdvertisementMachine> findAllADMachineByUser(@Param("userID") int userID)
+    List<AdvertisementMachine> findListByUserID(@Param("userID") int userID)
 
     /**
      * 通过机器码获取广告机
@@ -70,5 +71,32 @@ interface AdvertisementMachineDAO extends BaseDAO<AdvertisementMachine> {
      * @return 操作返回码
      */
     int checkedControl(@Param("id") int id, @Param("operate") int operate)
+    /**
+     * 根据id查询设备
+     * @return
+     */
+    /**
+     * 查询所有设备
+     * @return
+     */
+    List<AdvertisementMachine> findAllMachine()
+
+    List<AdvertisementMachine> adchineListByUserID(@Param("userID") int userID)
+
+    /**
+     * 把设备添加新的用户
+     * @param machine
+     * @param user_id
+     * @return
+     */
+    int insertMachineToUser(@Param("machine_id") int machine,@Param("user_id") int user_id)
+
+    /**
+     * 管理员把设备从用户名下删除
+     * @param user_id
+     * @return
+     */
+    int deleteMachineForUser(@Param("user_id") int user_id)
+
 
 }

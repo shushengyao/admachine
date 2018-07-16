@@ -9,6 +9,8 @@ import com.xmlan.machine.common.util.DateUtils
 import com.xmlan.machine.common.util.SessionUtils
 import com.xmlan.machine.common.util.StringUtils
 import com.xmlan.machine.common.util.TokenUtils
+import com.xmlan.machine.module.advertisement.entity.Advertisement
+import com.xmlan.machine.module.advertisementMachine.entity.AdvertisementMachine
 import com.xmlan.machine.module.advertisementMachine.service.AdvertisementMachineService
 import com.xmlan.machine.module.role.service.RoleService
 import com.xmlan.machine.module.user.entity.User
@@ -16,10 +18,12 @@ import com.xmlan.machine.module.user.service.UserService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
+import org.springframework.ui.ModelMap
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.servlet.mvc.support.RedirectAttributes
 
 import javax.servlet.http.HttpServletRequest
+import java.lang.reflect.Field
 
 /**
  * Created by ayakurayuki on 2017/12/13-14:26.
@@ -58,8 +62,15 @@ class UserController extends BaseController {
         return data
     }
 
+    /**
+     * 用户列表查询
+     * @param user
+     * @param pageNo
+     * @param model
+     * @return
+     */
     @RequestMapping(value = '/list/{pageNo}')
-    String list(User user, @PathVariable int pageNo, Model model) {
+    String list(User user, @PathVariable int pageNo, Model model,ModelMap modelMap) {
         if (StringUtils.isNotBlank(user.addTime)) {
             user.addTime = user.addTime.toString().substring 0, 10
         }
@@ -67,22 +78,38 @@ class UserController extends BaseController {
             user.roleID = -2
         }
 
-        List<User> list = service.findList(user, pageNo)
-        PageInfo<User> page = new PageInfo<>(list)
-        model.addAttribute "page", page
-        model.addAttribute "machineCount", advertisementMachineService.getMachineCountByUserID(list)
-
-        model.addAttribute "roleList", RoleCache.roleList
-        model.addAttribute "username", user.username
-        model.addAttribute "authname", user.authname
-        model.addAttribute "addTime", user.addTime
-        model.addAttribute "roleID", user.roleID.toString()
-
-        model.addAttribute "deleteToken", TokenUtils.getFormToken(request, "deleteToken")
-        model.addAttribute "passwdToken", TokenUtils.getFormToken(request, "passwdToken")
-        model.addAttribute "chgrpToken", TokenUtils.getFormToken(request, "chgrpToken")
+        User user2= modelMap.get("loginUser")
+        int userid = user2.id
+        if (userid == 1){
+            List<User> list = service.findList(user, pageNo)
+            PageInfo<User> page = new PageInfo<>(list)
+            model.addAttribute "page", page
+            model.addAttribute "machineCount", advertisementMachineService.getMachineCountByUserID(list)
+            model.addAttribute "roleList", RoleCache.roleList
+            model.addAttribute "username", list.username
+            model.addAttribute "authname", list.authname
+            model.addAttribute "addTime", list.addTime
+            model.addAttribute "roleID", list.roleID.toString()
+            model.addAttribute "deleteToken", TokenUtils.getFormToken(request, "deleteToken")
+            model.addAttribute "passwdToken", TokenUtils.getFormToken(request, "passwdToken")
+            model.addAttribute "chgrpToken", TokenUtils.getFormToken(request, "chgrpToken")
+        }else {
+            List<User> list = service.findListByUserID(userid)
+            PageInfo<User> page = new PageInfo<>(list)
+            model.addAttribute "page", page
+            model.addAttribute "machineCount", advertisementMachineService.getMachineCountByUserID(list)
+            model.addAttribute "roleList", RoleCache.roleList
+            model.addAttribute "username", list.username
+            model.addAttribute "authname", list.authname
+            model.addAttribute "addTime", list.addTime
+            model.addAttribute "roleID", list.roleID.toString()
+            model.addAttribute "deleteToken", TokenUtils.getFormToken(request, "deleteToken")
+            model.addAttribute "passwdToken", TokenUtils.getFormToken(request, "passwdToken")
+            model.addAttribute "chgrpToken", TokenUtils.getFormToken(request, "chgrpToken")
+        }
         "user/userList"
     }
+
 
     @RequestMapping(value = '/form')
     String form(User user, Model model) {

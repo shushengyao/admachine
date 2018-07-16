@@ -27,10 +27,12 @@ import com.xmlan.machine.module.advertisementMachine.entity.MachineSensor
 import com.xmlan.machine.module.advertisementMachine.service.AdvertisementMachineService
 import com.xmlan.machine.module.advertisementMachine.service.MachineSensorService
 import com.xmlan.machine.module.system.service.SysLogService
+import com.xmlan.machine.module.user.entity.User
 import com.xmlan.machine.module.user.service.UserService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
+import org.springframework.ui.ModelMap
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.servlet.mvc.support.RedirectAttributes
 
@@ -101,7 +103,7 @@ class AdvertisementMachineController extends BaseController {
      * 进入大气采集主页
      */
     @RequestMapping(value = "/atmosphere", produces = "application/json; charset=utf-8")
-    public String atmosphere (){
+    String atmosphere (){
         return "atmosphere/index";
     }
 
@@ -129,7 +131,7 @@ class AdvertisementMachineController extends BaseController {
      * @return
      */
     @RequestMapping(value = "/list/{pageNo}")
-    String list(AdvertisementMachine advertisementMachine, @PathVariable int pageNo, Model model) {
+    String list(HttpServletRequest request, AdvertisementMachine advertisementMachine, @PathVariable int pageNo, Model model, ModelMap modelMap) {
         // region 格式化查询条件
         if (StringUtils.isNotBlank(advertisementMachine.addTime) && advertisementMachine.addTime != StringUtils.SPACE) {
             advertisementMachine.addTime = "${advertisementMachine.addTime.substring(0, 10)} 00:00:00".toString()
@@ -140,23 +142,31 @@ class AdvertisementMachineController extends BaseController {
         if (advertisementMachine.addTime == StringUtils.SPACE) {
             advertisementMachine.addTime = ''
         }
-        // endregion
 
-        // region 执行查询
-        List<AdvertisementMachine> list = service.findList advertisementMachine, pageNo
-        PageInfo<AdvertisementMachine> page = new PageInfo<>(list)
-        model.addAttribute "page", page
-        model.addAttribute "adCount", advertisementService.getAdvertisementCount(list)
+        User user= modelMap.get("loginUser")
+        int userid = user.id
+        if (userid ==1) {
+            List<AdvertisementMachine> list = service.findAll()
+            PageInfo<AdvertisementMachine> page = new PageInfo<>(list)
+            model.addAttribute "page", page
+            model.addAttribute "adCount", advertisementService.getAdvertisementCount(list)
+            model.addAttribute "name", advertisementMachine.name
+            model.addAttribute "codeNumber", advertisementMachine.codeNumber
+            model.addAttribute "addTime", advertisementMachine.addTime
+            model.addAttribute "deleteToken", TokenUtils.getFormToken(request, "deleteToken")
+            model.addAttribute("open", TokenUtils.getFormToken(request, "open"))
+        }else {
+            List<AdvertisementMachine> list = service.adchineListByUserID(userid, pageNo)
+            PageInfo<AdvertisementMachine> page = new PageInfo<>(list)
+            model.addAttribute "page", page
+            model.addAttribute "adCount", advertisementService.getAdvertisementCount(list)
+            model.addAttribute "name", advertisementMachine.name
+            model.addAttribute "codeNumber", advertisementMachine.codeNumber
+            model.addAttribute "addTime", advertisementMachine.addTime
+            model.addAttribute "deleteToken", TokenUtils.getFormToken(request, "deleteToken")
+            model.addAttribute("open", TokenUtils.getFormToken(request, "open"))
+        }
         // endregion
-
-        // region 搜索条件继承
-        model.addAttribute "name", advertisementMachine.name
-        model.addAttribute "codeNumber", advertisementMachine.codeNumber
-        model.addAttribute "addTime", advertisementMachine.addTime
-        model.addAttribute "deleteToken", TokenUtils.getFormToken(request, "deleteToken")
-        model.addAttribute("open",TokenUtils.getFormToken(request,"open"))
-        // endregion
-
         "advertisementMachine/advertisementMachineList"
     }
 

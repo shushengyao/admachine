@@ -15,6 +15,27 @@
         <result column="addTime" property="addTime"/>
         <result column="phone" property="phone"/>
         <result column="remark" property="remark"/>
+        <association property="advertisementMachineList" resultMap="advertisementMachineResultMap"/>
+    </resultMap>
+
+    <resultMap id="advertisementMachineResultMap"
+               type="com.xmlan.machine.module.advertisementMachine.entity.AdvertisementMachine">
+        <id column="id" property="id"/>
+        <result column="userID" property="userID"/>
+        <result column="name" property="name"/>
+        <result column="address" property="address"/>
+        <result column="longitude" property="longitude"/>
+        <result column="latitude" property="latitude"/>
+        <result column="addTime" property="addTime"/>
+        <result column="codeNumber" property="codeNumber"/>
+        <result column="light" property="light"/>
+        <result column="charge" property="charge"/>
+        <result column="checked" property="checked"/>
+        <result column="remark" property="remark"/>
+        <result column="cameraIP" property="cameraIP"/>
+        <result column="cameraSequence" property="cameraSequence"/>
+        <result column="cameraVerificationCode" property="cameraVerificationCode"/>
+        <result column="accessToken" property="accessToken"/>
     </resultMap>
 
     <sql id="columns">
@@ -28,6 +49,14 @@
         t.phone as "phone",
         t.remark as "remark"
     </sql>
+
+    <select id="findListByUserID" resultType="com.xmlan.machine.module.user.entity.User">
+        SELECT
+            *
+        FROM
+            `user`
+        WHERE `user`.founder  = (SELECT `user`.founder FROM `user` WHERE id = #{userID})
+    </select>
 
     <select id="get" parameterType="java.lang.String" resultMap="userResultMap">
         select

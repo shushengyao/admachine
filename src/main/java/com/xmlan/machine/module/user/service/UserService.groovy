@@ -8,9 +8,11 @@ import com.xmlan.machine.common.util.StringUtils
 import com.xmlan.machine.module.advertisementMachine.dao.AdvertisementMachineDAO
 import com.xmlan.machine.module.user.dao.UserDAO
 import com.xmlan.machine.module.user.entity.User
+import org.apache.ibatis.annotations.Param
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import org.springframework.web.bind.annotation.RequestParam
 
 /**
  * Created by ayakurayuki on 2017/12/12-11:09.
@@ -30,7 +32,26 @@ class UserService extends BaseService<User, UserDAO> {
         entity.password = EncryptUtils.SHA256ForTenTimes(entity.password)
         return super.insert(entity)
     }
+    List<User> findListByFounder(@Param("founder")String founder){
+        dao.findListByFounder(founder)
+    }
 
+    /**
+     * 根据id查询创建者
+     * @param userID
+     * @return
+     */
+    List<User> findListByUserID(@RequestParam("userid") int userID){
+        dao.findListByUserID(userID)
+    }
+    /**
+     * 根据创建者查询用户id列表
+     * @param username
+     * @return
+     */
+    List<User> findUserIDByUsername(String username){
+        dao.findUserIDByUsername(username)
+    }
     @Override
     int delete(User entity) {
         if (entity.id == ADMIN_ROLE_ID) {

@@ -32,10 +32,10 @@ class IndexController extends BaseController {
     @Autowired
     private SysLogService sysLogService
 
-//    @RequestMapping(["/", "/index"])
-//    String index() {
-//        return "redirect:${adminPath}/main"
-//    }
+    @RequestMapping(["/", "/index"])
+    String index() {
+        return "redirect:${adminPath}/main"
+    }
 
     @RequestMapping(['${adminPath}', '${adminPath}/main', '${adminPath}/login'])
     String main() {

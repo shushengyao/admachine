@@ -38,6 +38,7 @@ class RoleService extends BaseService<Role, RoleDAO> {
         return super.delete(entity)
     }
 
+
     static List<RoleCount> getUserCount(List<Role> list) {
         List<RoleCount> counts = Lists.newArrayList()
         list.each {

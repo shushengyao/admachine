@@ -1,5 +1,6 @@
 package com.xmlan.machine.module.advertisement.service
 
+import com.github.pagehelper.PageHelper
 import com.google.common.collect.Lists
 import com.xmlan.machine.common.base.BaseService
 import com.xmlan.machine.common.cache.AdvertisementCache
@@ -13,6 +14,7 @@ import com.xmlan.machine.module.advertisement.entity.AdvertisementCount
 import com.xmlan.machine.module.advertisementMachine.entity.AdvertisementMachine
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.multipart.MultipartFile
 
 import javax.servlet.http.HttpServletRequest
@@ -44,6 +46,15 @@ class AdvertisementService extends BaseService<Advertisement, AdvertisementDAO> 
         return result
     }
 
+    /**
+     * 根据用户创建人查询广告列表
+     * @param userID
+     * @return
+     */
+    List<Advertisement> findListByUserID(@RequestParam("userID") int userID,@RequestParam("pageNo") int pageNo){
+        PageHelper.startPage pageNo, pageSize
+        dao.findListByUserID(userID)
+    }
     /**
      * 页面上传广告媒体资源
      * @param id 广告ID
@@ -111,6 +122,25 @@ class AdvertisementService extends BaseService<Advertisement, AdvertisementDAO> 
      */
     List<Advertisement> findList(Advertisement advertisement) {
         dao.findList advertisement
+    }
+
+    /**
+     * 根据用户id查询设备列表
+     * @param user_id
+     * @return
+     */
+    List<Advertisement> findMachineByUserID(@RequestParam("user_id") int user_id,@RequestParam("pageNo") int pageNo){
+        PageHelper.startPage pageNo, pageSize
+        dao.findMachineByUserID(user_id)
+    }
+
+    /**
+     * 根据设备id查询广告列表
+     * @param machine_id
+     * @return
+     */
+    List<Advertisement> findListByMachineID(int machine_id){
+        dao.findListByMachineID(machine_id)
     }
 
 }

@@ -13,6 +13,10 @@ import com.xmlan.machine.common.config.Global
 import com.xmlan.machine.common.util.*
 import com.xmlan.machine.module.advertisement.entity.Advertisement
 import com.xmlan.machine.module.advertisement.service.AdvertisementService
+import com.xmlan.machine.module.advertisementMachine.entity.AdvertisementMachine
+import com.xmlan.machine.module.advertisementMachine.service.AdvertisementMachineService
+import com.xmlan.machine.module.user.entity.User
+import com.xmlan.machine.module.user.service.UserService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
@@ -32,6 +36,11 @@ class AdvertisementController extends BaseController {
 
     @Autowired
     private AdvertisementService service
+    @Autowired
+    private UserService userService
+    @Autowired
+    private AdvertisementMachineService machineService
+
 
     /**
      * 页面属性
@@ -82,32 +91,73 @@ class AdvertisementController extends BaseController {
         if (StringUtils.isNotBlank(advertisement.addTime)) {
             advertisement.addTime = "${advertisement.addTime.substring(0, 10)} 00:00:00".toString()
         }
-        if (SessionUtils.getAdmin(request).roleID != ADMIN_ROLE_ID) {
-            // 角色不是管理员则限定仅查询属于自己的广告
-            advertisement.userID = SessionUtils.getAdmin(request).id
-        } else {
-            advertisement.userID = 0
-        }
+//        if (SessionUtils.getAdmin(request).roleID != ADMIN_ROLE_ID) {
+//            // 角色不是管理员则限定仅查询属于自己的广告
+//            advertisement.userID = SessionUtils.getAdmin(request).id
+//        } else {
+//            advertisement.userID = 0
+//        }
         // 分页
-        List<Advertisement> list = service.findList advertisement, pageNo
-        PageInfo<Advertisement> page = new PageInfo<>(list)
-        model.addAttribute "page", page
-        model.addAttribute "machineList", AdvertisementMachineCache.dropdownAdvertisementMachineList
-        model.addAttribute "name", advertisement.name
-        model.addAttribute "machineID", advertisement.machineID
-        model.addAttribute "time", advertisement.time
-        model.addAttribute "addTime", advertisement.addTime
-        if (SessionUtils.getAdmin(request).roleID != ADMIN_ROLE_ID) {
-            // 添加广告判断，普通用户没有广告机的时候不能添加广告
-            model.addAttribute "machines", AdvertisementMachineCache.getMachineCount(SessionUtils.getAdmin(request).id)
-        } else {
-            // 管理员则通过总的广告机数量判断可否添加广告
-            model.addAttribute "machines", AdvertisementMachineCache.machineCount
-        }
-        model.addAttribute "deleteToken", TokenUtils.getFormToken(request, "deleteToken")
-        model.addAttribute "uploadToken", TokenUtils.getFormToken(request, "uploadToken")
+        //获取有权限的人以及处理反馈字符
+        int user_id = advertisement.userID
+//        List<User> str = userService.findFounderByUserID(advertisement.userID)
+//        String usernam = str.username;
+//        String string = usernam.replace("[","").replace("]","");
+//        List<User> userList= userService.findUserIDByUsername(string)
+//        String userID1 = userList.id
+//        String userID2 = userID1.replace("[","").replace("]","");
+//        int userID = Integer.parseInt(userID2);
 
-        return "advertisement/advertisementList"
+        if (user_id==1){
+            List<Advertisement> advertisementList =service.findAll()
+            PageInfo<Advertisement> page = new PageInfo<>(advertisementList)
+            model.addAttribute "page", page
+            model.addAttribute "machineList", AdvertisementMachineCache.dropdownAdvertisementMachineList
+            model.addAttribute "name", advertisement.name
+            model.addAttribute "machineID", advertisement.machineID
+            model.addAttribute "time", advertisement.time
+            model.addAttribute "addTime", advertisement.addTime
+            if (SessionUtils.getAdmin(request).roleID != ADMIN_ROLE_ID) {
+                // 添加广告判断，普通用户没有广告机的时候不能添加广告
+                model.addAttribute "machines", AdvertisementMachineCache.getMachineCount(SessionUtils.getAdmin(request).id)
+            } else {
+                // 管理员则通过总的广告机数量判断可否添加广告
+                model.addAttribute "machines", AdvertisementMachineCache.machineCount
+            }
+        }else {
+            int machine_id;
+            Integer userID =user_id
+            List<AdvertisementMachine> machineList = machineService.adchineListByUserID(userID,pageNo)
+            for (int i=0;i<machineList.size();i++){
+                machine_id =machineList.get(i).id
+                List<Advertisement> advertisementList = service.findListByMachineID(machine_id)
+                PageInfo<Advertisement> page = new PageInfo<>(advertisementList)
+                model.addAttribute "page", page
+            }
+
+//            List<Advertisement> advertisementList = service.findMachineByUserID(userID,pageNo)
+//            for (int i=0;i<advertisementList.size();i++){
+//                machine_id= advertisementList.get(i).machineID
+//                List<Advertisement> advertisementLists =service.findListByMachineID(machine_id)
+//                PageInfo<Advertisement> page = new PageInfo<>(advertisementLists)
+//                model.addAttribute "page", page
+//            }
+            model.addAttribute "machineList", AdvertisementMachineCache.dropdownAdvertisementMachineList
+            model.addAttribute "name", advertisement.name
+            model.addAttribute "machineID", advertisement.machineID
+            model.addAttribute "time", advertisement.time
+            model.addAttribute "addTime", advertisement.addTime
+            if (SessionUtils.getAdmin(request).roleID != ADMIN_ROLE_ID) {
+                // 添加广告判断，普通用户没有广告机的时候不能添加广告
+                model.addAttribute "machines", AdvertisementMachineCache.getMachineCount(SessionUtils.getAdmin(request).id)
+            } else {
+                // 管理员则通过总的广告机数量判断可否添加广告
+                model.addAttribute "machines", AdvertisementMachineCache.machineCount
+            }
+            model.addAttribute "deleteToken", TokenUtils.getFormToken(request, "deleteToken")
+            model.addAttribute "uploadToken", TokenUtils.getFormToken(request, "uploadToken")
+        }
+        "advertisement/advertisementList"
     }
 
     /**

@@ -40,15 +40,6 @@
         }
     </style>
 </head>
-<!--/* <editor-fold desc="define"> */-->
-<!--/*@thymesVar id="adminPath" type="java.lang.String"*/-->
-<!--/*@thymesVar id="page" type="com.github.pagehelper.PageInfo<com.xmlan.machine.module.advertisementMachine.entity.AdvertisementMachine>"*/-->
-<!--/*@thymesVar id="adCount" type="java.util.List<com.xmlan.machine.module.advertisement.entity.AdvertisementCount>"*/-->
-<!--/*@thymesVar id="name" type="java.lang.String"*/-->
-<!--/*@thymesVar id="codeNumber" type="java.lang.String"*/-->
-<!--/*@thymesVar id="addTime" type="java.lang.String"*/-->
-<!--/*@thymesVar id="deleteToken" type="java.lang.String"*/-->
-<!--/* </editor-fold> */-->
 <body>
 <th:block th:include="/common/header::header('atmosphere')"/>
 <main style="z-index: 0;">
@@ -72,7 +63,6 @@
     </div>
     <div id="weather-modal" class="modal modal-fixed-footer" style="height: 150px">
         <h4  class="text" style=" text-align:center;">大气数据采集</h4>
-
             <tbody class="card">
             <ul class="weatherUl">
                 <th><li>广告机ID</li></th>
@@ -92,31 +82,6 @@
             </tbody>
             </ul>
     </div>
-    <!--<div id="pagination-div" class="center">-->
-        <!--<ul class="pagination">-->
-            <!--<li  class="disabled">-->
-                <!--<a href="#"><i class="material-icons">chevron_left</i></a>-->
-            <!--</li>-->
-            <!--<li  class="waves-effect">-->
-                <!--<a ><i-->
-                        <!--class="material-icons">chevron_left</i></a>-->
-            <!--</li>-->
-            <!--<th:block >-->
-                <!--<li  class="waves-effect" id="active-page">-->
-                    <!--<a href="#" ></a>-->
-                <!--</li>-->
-                <!--<li  class="waves-effect">-->
-                    <!--<a ></a>-->
-                <!--</li>-->
-            <!--</th:block>-->
-            <!--<li  class="disabled">-->
-                <!--<a href="#"><i class="material-icons">chevron_right</i></a>-->
-            <!--</li>-->
-            <!--<li  class="waves-effect">-->
-                <!--<a ><i class="material-icons">chevron_right</i></a>-->
-            <!--</li>-->
-        <!--</ul>-->
-    <!--</div>-->
 </main>
 <th:block th:include="/common/footer::footer"/>
 <th:block th:include="/common/script::script"/>
@@ -128,8 +93,9 @@
         $("#weather-modal").modal();
         toast('[[${message}]]');
         $.ajax({
-            url:"[[${adminPath}]]/monitor/index",
+            url:"[[${adminPath}]]/atmosphere/index",
             type:"GET",
+            data:{"pageNo":1},
             success:function (machine) {
                 machineStr =eval('(' + machine + ')');
                 $.each(machineStr,function (idx, obj) {
@@ -143,10 +109,11 @@
                         "</tr>";
                     $("table").append(tr);
                 });
-            },error:function () {
+            },error:function (data) {
+                console.log("readyState :"+data.readyState)
+                console.log("status :"+data.status)
             }
         });
-        index();
     })
     function winopen(id) {
         var url = '[[${adminPath}]]/advertisementMachine/weather/' + id;
@@ -163,14 +130,4 @@
             }
         });
         }
-    function index() {
-        $.ajax({
-            url:'[[${adminPath}]]/atmosphere/index',
-            type:"GET",
-            success:function (data) {
-            },error:function () {
-                alert("操作失败")
-            }
-        });
-    }
 </script>

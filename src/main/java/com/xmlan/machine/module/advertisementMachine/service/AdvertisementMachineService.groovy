@@ -1,5 +1,6 @@
 package com.xmlan.machine.module.advertisementMachine.service
 
+import com.github.pagehelper.PageHelper
 import com.google.common.collect.Lists
 import com.xmlan.machine.common.base.BaseService
 import com.xmlan.machine.common.cache.AdvertisementMachineCache
@@ -8,9 +9,11 @@ import com.xmlan.machine.module.advertisementMachine.entity.AdvertisementMachine
 import com.xmlan.machine.module.advertisementMachine.entity.AdvertisementMachineCount
 import com.xmlan.machine.module.advertisementMachine.entity.MachineSensor
 import com.xmlan.machine.module.user.entity.User
+import org.apache.ibatis.annotations.Param
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import org.springframework.web.bind.annotation.RequestParam
 
 /**
  * Created by ayakurayuki on 2017/12/13-08:53.
@@ -56,6 +59,8 @@ class AdvertisementMachineService extends BaseService<AdvertisementMachine, Adve
         machineSensorService.delete(sensorData)
         return super.delete(machine)
     }
+
+
 
     int updateLocation(int id, String longitude, String latitude) {
         if (AdvertisementMachineCache.get(id) != null) {
@@ -126,6 +131,13 @@ class AdvertisementMachineService extends BaseService<AdvertisementMachine, Adve
         }
         return counts
     }
+    List<AdvertisementMachine> findListByUserID(@RequestParam("userID") int userID,@RequestParam("pageNo") int pageNo){
+        PageHelper.startPage pageNo, pageSize
+        dao.findListByUserID(userID)
+    }
+    List<AdvertisementMachine> findListByUserID(@RequestParam("userID") int userID){
+        dao.findListByUserID(userID)
+    }
 
     /**
      * 提供给服务接口的列表查询
@@ -133,13 +145,14 @@ class AdvertisementMachineService extends BaseService<AdvertisementMachine, Adve
      * @return 查询列表
      */
     static List<AdvertisementMachine> findForProvider(AdvertisementMachine advertisementMachine) {
-        List<AdvertisementMachine> machineList = AdvertisementMachineCache.advertisementMachineList
+//        List<AdvertisementMachine> machineList = AdvertisementMachineCache.advertisementMachineList
         List<AdvertisementMachine> filteredList = Lists.newArrayList()
-        machineList.each {
-            if (it.userID == advertisementMachine.userID) {
-                filteredList.add(it)
-            }
-        }
+
+//        machineList.each {
+//            if (it.userID == advertisementMachine.userID) {
+//                filteredList.add(it)
+//            }
+//        }
         return filteredList
     }
 
@@ -174,6 +187,46 @@ class AdvertisementMachineService extends BaseService<AdvertisementMachine, Adve
             }
         }
         return filteredList
+    }
+
+    /**
+     * 查询所有设备
+     * @return
+     */
+    List<AdvertisementMachine> findAllMachine(){
+        dao.findAllMachine()
+    }
+
+    /**
+     * 根据用户id查询设备数据
+     * @param id
+     * @return
+     */
+    List<AdvertisementMachine> adchineListByUserID(@RequestParam("userID") int userID,@RequestParam("pageNo") int pageNo){
+        PageHelper.startPage pageNo, pageSize
+        dao.adchineListByUserID(userID)
+    }
+    List<AdvertisementMachine> adchineListByUserID(@RequestParam("userID") int userID){
+        dao.adchineListByUserID(userID)
+    }
+
+    /**
+     * 管理员把设备添加给新的用户
+     * @param machine_id
+     * @param user_id
+     * @return
+     */
+    int insertMachineToUser(@RequestParam("machine_id") int machine_id,@RequestParam("user_id") int user_id){
+        dao.insertMachineToUser(machine_id,user_id)
+    }
+
+    /**
+     * 管理员把设备从用户名下删除
+     * @param user_id
+     * @return
+     */
+    int deleteMachineForUser(@RequestParam("user_id") int user_id){
+        dao.deleteMachineForUser(user_id)
     }
 
 }

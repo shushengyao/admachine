@@ -5,11 +5,15 @@ import com.xmlan.machine.common.base.BaseController;
 import com.xmlan.machine.common.util.SessionUtils;
 import com.xmlan.machine.module.advertisementMachine.entity.AdvertisementMachine;
 import com.xmlan.machine.module.advertisementMachine.service.AdvertisementMachineService;
+import com.xmlan.machine.module.user.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -41,16 +45,18 @@ public class MapController extends BaseController {
      */
     @RequestMapping(value = "/index", produces = "application/json; charset=utf-8")
     @ResponseBody
-    Map index(AdvertisementMachine advertisementMachine){
-        List<AdvertisementMachine> list = service.findAll();
-        Map<Integer, Object> machine = Maps.newHashMap();
-        for (int i = 0;i<list.size();i++){
-            list.get(i).getUserID();
-            if (SessionUtils.getAdmin(request).getId() ==list.get(i).getUserID() ||SessionUtils.getAdmin(request).getRoleID() ==ADMIN_ROLE_ID ) {
-                advertisementMachine.setUserID(SessionUtils.getAdmin(request).getId());
-                machine.put(i,list.get(i));
-            }
+    List<AdvertisementMachine> index(ModelMap modelMap){
+        List<AdvertisementMachine> list;
+        Object object = modelMap.get("loginUser");
+        User user = (User) object;
+        int userid = user.getId();
+        if (userid==1){
+            list= service.findAllMachine();
+            return list;
+        }else {
+            list = service.adchineListByUserID(userid);
+            return list;
         }
-        return machine;
+
     }
 }

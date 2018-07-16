@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head th:include="/common/head::head('编辑用户 - 广告机管理后台')"></head>
 <!--/* <editor-fold desc="define"> */-->
 <!--/*@thymesVar id="adminPath" type="java.lang.String"*/-->
@@ -87,6 +87,11 @@
             <option th:each="item:${roleList}" th:value="*{item.id}" th:text="*{item.name}"></option>
           </select>
           <label for="roleID">所属角色</label>
+        </div>
+        <div class="input-field col s12 m3 l3">
+          <i class="material-icons prefix">assignment_ind</i>
+          <input id="founder" name="founder" th:value="${loginUser.username}"  type="text" />
+          <label for="founder">创建人:</label>
         </div>
         <div class="input-field col s12 m12 l12">
           <i class="material-icons prefix">place</i>

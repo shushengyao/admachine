@@ -5,9 +5,11 @@ import com.xmlan.machine.common.base.BaseController;
 import com.xmlan.machine.common.util.SessionUtils;
 import com.xmlan.machine.module.advertisementMachine.entity.AdvertisementMachine;
 import com.xmlan.machine.module.advertisementMachine.service.AdvertisementMachineService;
+import com.xmlan.machine.module.user.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -98,17 +100,20 @@ public class MonitorController extends BaseController {
      */
     @RequestMapping(value = "/index")
     @ResponseBody
-    public Map index(AdvertisementMachine advertisementMachine){
-        List<AdvertisementMachine> list = service.findAll();
-        Map<Integer, Object> machine = Maps.newHashMap();
-        for (int i=0;i<list.size();i++){
-            list.get(i).getUserID();
-            if (SessionUtils.getAdmin(request).getId() ==list.get(i).getUserID() ||SessionUtils.getAdmin(request).getRoleID() ==ADMIN_ROLE_ID ) {
-                advertisementMachine.setUserID(SessionUtils.getAdmin(request).getId());
-                machine.put(i,list.get(i));
-            }
+    public List<AdvertisementMachine> index(@RequestParam("pageNo") int pageNo, ModelMap modelMap){
+        if ("".equals(pageNo)){
+            pageNo=1;
         }
-        return machine;
+        User user=(User)modelMap.get("loginUser");
+        int userid = user.getId();
+        List<AdvertisementMachine> machineList;
+        if (userid==1){
+            machineList =service.findAllMachine();
+            return machineList;
+        }else {
+            machineList =service.adchineListByUserID(userid,pageNo);
+            return machineList;
+        }
     }
 
     /**

@@ -30,7 +30,7 @@
   </div>
   <br/>
   <div id="main-content" class="container">
-    <div id="search-box">
+    <div id="search-box" th:if="${loginUser.username=='xm'}">
       <form th:action="@{${adminPath}+'/user/list/1'}" method="post">
         <ul class="collapsible popout" data-collapsible="accordion">
           <li>
