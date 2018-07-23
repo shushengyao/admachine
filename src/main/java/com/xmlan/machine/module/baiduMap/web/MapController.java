@@ -50,7 +50,7 @@ public class MapController extends BaseController {
         Object object = modelMap.get("loginUser");
         User user = (User) object;
         int userid = user.getId();
-        if (userid==1){
+        if (userid==1 || userid == 10){
             list= service.findAllMachine();
             return list;
         }else {

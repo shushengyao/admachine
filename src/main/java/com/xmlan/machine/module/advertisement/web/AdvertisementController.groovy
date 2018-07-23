@@ -108,7 +108,7 @@ class AdvertisementController extends BaseController {
 //        String userID2 = userID1.replace("[","").replace("]","");
 //        int userID = Integer.parseInt(userID2);
 
-        if (user_id==1){
+        if (user_id==1 || user_id == 10){
             List<Advertisement> advertisementList =service.findAll()
             PageInfo<Advertisement> page = new PageInfo<>(advertisementList)
             model.addAttribute "page", page

@@ -44,6 +44,17 @@ class AdvertisementMachine implements Serializable {
     //摄像头accessToken
     private String accessToken
 
+    //用户列表
+    private List<User> userList
+
+    List<User> getUserList() {
+        return userList
+    }
+
+    void setUserList(List<User> userList) {
+        this.userList = userList
+    }
+
     String getAccessToken() {
         return accessToken
     }

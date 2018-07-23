@@ -386,7 +386,8 @@
                 var errinfo;
                 if(strErrorCode == EZUI_ERROR_ACCESSTOKEN_EXPIRE)
                 {
-                    errinfo = "accesstoken异常或失效，需要重新获取accesstoken，并传入到sdk";
+                    window.location.href ="Monitorlist";
+                    errinfo = "accesstoken异常或失效，更新accesstoken中...请重新打开摄像头!";
                 }
                 else if(strErrorCode == EZUI_ERROR_APPKEY_TOKEN_NOT_MATCH)
                 {

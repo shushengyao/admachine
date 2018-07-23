@@ -2,6 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:include="/common/head::head('广告机 - 广告机管理后台')"></head>
 <!--/* <editor-fold desc="define"> */-->
+<!--/*@thymesVar id="loginUser" type="com.xmlan.machine.module.user.entity.User"*/-->
 <!--/*@thymesVar id="adminPath" type="java.lang.String"*/-->
 <!--/*@thymesVar id="page" type="com.github.pagehelper.PageInfo<com.xmlan.machine.module.advertisementMachine.entity.AdvertisementMachine>"*/-->
 <!--/*@thymesVar id="adCount" type="java.util.List<com.xmlan.machine.module.advertisement.entity.AdvertisementCount>"*/-->
@@ -77,9 +78,9 @@
         <th>灯</th>
         <th>充电状态</th>
         <th>
-          <input type="button" style="display:block" id="openLight" value="开灯">
+          <input type="button" style="display:block" th:if="${loginUser.id!=10}"  id="openLight" value="开灯">
         </th>
-        <th><input type="button" style="display:block" id="closeLight" value="关灯"></th>
+        <th><input type="button" style="display:block" th:if="${loginUser.id!=10}" id="closeLight" value="关灯"></th>
       </tr>
       </thead>
       <tbody class="card">
@@ -120,15 +121,15 @@
                   <i class="material-icons">more_horiz</i>
                 </a>
               </li>
-              <li>
-                <a class="btn-floating green waves-effect waves-light tooltipped" data-position="top"
+              <li th:if="${loginUser.id!=10}">
+                <a  class="btn-floating green waves-effect waves-light tooltipped" data-position="top"
                    data-delay="50" data-tooltip="编辑"
                    th:href="@{${adminPath}+'/advertisementMachine/form?id='+${item.id}}">
                   <i class="material-icons">edit</i>
                 </a>
               </li>
-              <li>
-                <a class="btn-floating red darken-1 waves-effect waves-light tooltipped btn modal-trigger"
+              <li th:if="${loginUser.id!=10}">
+                <a  class="btn-floating red darken-1 waves-effect waves-light tooltipped btn modal-trigger"
                    data-position="top" data-delay="50" data-tooltip="删除" href="#delete-modal"
                    th:onclick="'javascript:prepareForDeleting(\''+${item.id}+'\')'">
                   <i class="material-icons">delete</i>
@@ -149,14 +150,14 @@
                   <i class="material-icons">more_horiz</i>
                 </a>
               </li>
-              <li>
-                <a class="btn-floating green waves-effect waves-light tooltipped" data-position="top"
+              <li th:if="${loginUser.id!=10}">
+                <a th:if="${loginUser.id!=10}" class="btn-floating green waves-effect waves-light tooltipped" data-position="top"
                    data-delay="50" data-tooltip="编辑"
                    th:href="@{${adminPath}+'/advertisementMachine/form?id='+${item.id}}">
                   <i class="material-icons">edit</i>
                 </a>
               </li>
-              <li>
+              <li th:if="${loginUser.id!=10}">
                 <a class="btn-floating red darken-1 waves-effect waves-light tooltipped btn modal-trigger"
                    data-position="top" data-delay="50" data-tooltip="删除" href="#delete-modal"
                    th:onclick="'javascript:prepareForDeleting(\''+${item.id}+'\')'">

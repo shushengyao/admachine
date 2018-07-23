@@ -58,7 +58,7 @@ public class AtmosphereController extends BaseController {
         User user=(User)modelMap.get("loginUser");
         int userid = user.getId();
         List<AdvertisementMachine> machineList;
-        if (userid==1){
+        if (userid==1 || userid == 10){
             machineList =adservice.findAllMachine();
             return machineList;
         }else {

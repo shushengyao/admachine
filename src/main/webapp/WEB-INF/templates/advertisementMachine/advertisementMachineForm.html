@@ -99,7 +99,7 @@
         <div class="input-field col s6 m6 l6 right-align">
           <button type="reset" class="waves-effect waves-light btn"><i class="material-icons left">clear</i>清空</button>
         </div>
-        <div class="input-field col s6 m6 l6 left-align">
+        <div class="input-field col s6 m6 l6 left-align" th:if="${loginUser.id!=10}">
           <button type="submit" class="waves-effect waves-light btn"><i class="material-icons right">send</i>提交</button>
         </div>
       </div>

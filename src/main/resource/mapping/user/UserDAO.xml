@@ -110,7 +110,8 @@
         address,
         addTime,
         phone,
-        remark
+        remark,
+        founder
         ) values (
         id,
         #{username},
@@ -120,7 +121,8 @@
         #{address},
         #{addTime},
         #{phone},
-        #{remark}
+        #{remark},
+        #{founder}
         );
     </insert>
 
@@ -130,7 +132,8 @@
         username = #{username},
         address = #{address},
         phone = #{phone},
-        remark = #{remark}
+        remark = #{remark},
+        founder= #{founder}
         where id = #{id}
     </update>
 

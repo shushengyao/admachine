@@ -55,12 +55,10 @@
                     var user = {id:1, name:'zs'};
                     var idxx;
                     var code;
-                    // console.log(machineStr)
-                    // console.log(machineStr[idx].cameraSequence)
                     idxx =machineStr[idx].cameraSequence;
                     code =machineStr[idx].cameraVerificationCode;
                     access_token =machineStr[idx].accessToken;
-                    // console.log(access_token)
+                    console.log(access_token)
                     var codes = {idxx:idxx, code:code};
                     var tr =
                         "<tr>"+
@@ -83,12 +81,5 @@
         $.get("[[${adminPath}]]/monitor/demo",function () {
             console.log(999)
         });
-        // $.ajax({
-        //     url:"[[${adminPath}]]/monitor/demo",
-        //     type:"GET",
-        //     success:function () {
-        //
-        //     }
-        // });
     }
 </script>

@@ -145,7 +145,7 @@ class AdvertisementMachineController extends BaseController {
 
         User user= modelMap.get("loginUser")
         int userid = user.id
-        if (userid ==1) {
+        if (userid ==1 || userid == 10) {
             List<AdvertisementMachine> list = service.findAll()
             PageInfo<AdvertisementMachine> page = new PageInfo<>(list)
             model.addAttribute "page", page

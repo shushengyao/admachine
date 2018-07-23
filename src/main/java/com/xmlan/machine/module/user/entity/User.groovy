@@ -32,6 +32,17 @@ class User implements Serializable {
     private String founder
     //创建人
 
+    //设备列表
+    private List<AdvertisementMachine> advertisementMachineList
+
+    List<AdvertisementMachine> getAdvertisementMachineList() {
+        return advertisementMachineList
+    }
+
+    void setAdvertisementMachineList(List<AdvertisementMachine> advertisementMachineList) {
+        this.advertisementMachineList = advertisementMachineList
+    }
+
     String getFounder() {
         return founder
     }

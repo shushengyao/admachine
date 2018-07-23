@@ -43,29 +43,29 @@ class CacheTask {
      */
     //每分钟一次0 0/1 * * * ?
     //0 0 0 21/6 * ?   21号开始，每6天执行一次
-    @Scheduled(cron = " 0 0 0 21/6 * ?")
-    void getToken() {
-        try {
-            Map<String, String> parms =new HashMap<>();
-            parms.put("appKey","51a534ebadf54c31a0848dc575dfa206");
-            parms.put("appSecret","8c32c67a73c87b9e461b2e3bdf58967a");
-            String post = HttpTools.httpRequestToString("https://open.ys7.com/api/lapp/token/get","post",parms);
-            System.err.print("post="+post);
-            JSONObject jsonObj= JSONObject.fromObject(post);
-            String value= jsonObj.getString("accessToken");
-            accessToken(value);
-//            accessToken("123456");
-//            System.out.println("执行当前时间"+formatter.format(Calendar.getInstance().getTime()));
-        } catch (Exception e) {
-            System.out.println("-------------定时器执行发生异常--------------");
-        }
-    }
+//    @Scheduled(cron = " 0 0 0 21/6 * ?")
+//    void getToken() {
+//        try {
+//            Map<String, String> parms =new HashMap<>();
+//            parms.put("appKey","51a534ebadf54c31a0848dc575dfa206");
+//            parms.put("appSecret","8c32c67a73c87b9e461b2e3bdf58967a");
+//            String post = HttpTools.httpRequestToString("https://open.ys7.com/api/lapp/token/get","post",parms);
+//            System.err.print("post="+post);
+//            JSONObject jsonObj= JSONObject.fromObject(post);
+//            String value= jsonObj.getString("accessToken");
+//            accessToken(value);
+////            accessToken("123456");
+////            System.out.println("执行当前时间"+formatter.format(Calendar.getInstance().getTime()));
+//        } catch (Exception e) {
+//            System.out.println("-------------定时器执行发生异常--------------");
+//        }
+//    }
 
     /**
      * 更新数据库accessToken字段值
      * @param accessToken
      */
-    void accessToken (String accessToken){
-        service.updateAccessToken(accessToken);
-    }
+//    void accessToken (String accessToken){
+//        service.updateAccessToken(accessToken);
+//    }
 }

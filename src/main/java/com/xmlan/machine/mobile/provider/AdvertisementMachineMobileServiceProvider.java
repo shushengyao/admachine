@@ -18,6 +18,7 @@ import com.xmlan.machine.common.util.StringUtils;
 import com.xmlan.machine.common.util.TokenUtils;
 import com.xmlan.machine.module.advertisementMachine.entity.AdvertisementMachine;
 import com.xmlan.machine.module.advertisementMachine.service.AdvertisementMachineService;
+import com.xmlan.machine.module.monitor.MonitorController;
 import com.xmlan.machine.module.system.service.SysLogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
@@ -134,7 +135,11 @@ public class AdvertisementMachineMobileServiceProvider extends BaseController {
      */
     @RequestMapping(value = "/getAccessToken",method = RequestMethod.POST,produces = "application/json; charset=utf-8")
     @ResponseBody
-    public Map<String,String> getAccessToken(){
+    public Map<String,String> getAccessToken(int errorCode){
+        if (errorCode == 0){
+            MonitorController monitorController= new MonitorController();
+            monitorController.updateToken();
+        }
         String token =service.get("34").getAccessToken();
         Map<String,String> result = new HashMap<>();
         result.put("accessToken",token);
