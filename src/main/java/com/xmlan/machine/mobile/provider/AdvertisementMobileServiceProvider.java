@@ -7,21 +7,17 @@ import cn.jpush.api.JPushClient;
 import cn.jpush.api.push.PushResult;
 import cn.jpush.api.push.model.PushPayload;
 import com.google.common.collect.Maps;
-import com.xmlan.machine.common.base.BaseController;
-import com.xmlan.machine.common.base.ModuleEnum;
-import com.xmlan.machine.common.base.ObjectEnum;
-import com.xmlan.machine.common.base.OperateEnum;
+import com.xmlan.machine.common.base.*;
 import com.xmlan.machine.common.cache.AdvertisementCache;
 import com.xmlan.machine.common.cache.AdvertisementMachineCache;
 import com.xmlan.machine.common.config.Global;
-import com.xmlan.machine.common.util.DateUtils;
-import com.xmlan.machine.common.util.PushUtils;
-import com.xmlan.machine.common.util.TokenUtils;
+import com.xmlan.machine.common.util.*;
 import com.xmlan.machine.module.advertisement.entity.Advertisement;
 import com.xmlan.machine.module.advertisement.service.AdvertisementService;
 import com.xmlan.machine.module.advertisementMachine.entity.AdvertisementMachine;
 import com.xmlan.machine.module.system.service.SysLogService;
 import com.xmlan.machine.module.user.entity.User;
+import com.xmlan.machine.module.xixun.controller.CallXwalkFn;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Controller;
@@ -30,6 +26,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -159,7 +157,6 @@ public class AdvertisementMobileServiceProvider extends BaseController {
      * URL: /mob/ad/uploadMedia
      * <p>
      * Method: Post
-     *
      * @param id    int 广告ID
      * @param time  int 播放时间（秒）
      * @param token String token身份验证
@@ -176,6 +173,72 @@ public class AdvertisementMobileServiceProvider extends BaseController {
             return map;
         }
         int responseCode = advertisementService.uploadMedia(String.valueOf(id), time, file);
+        return pushUpdate(id, responseCode, "新广告");
+    }
+
+    /**
+     * 手机端上传led广告
+     * @param id led的id
+     * @param led led的编号
+     * @param token 验证
+     * @param file 文件
+     * @return
+     * @throws IOException
+     */
+    @RequestMapping(value = "/uploadLed", method = RequestMethod.POST, produces = "application/json; charset=utf-8")
+    @ResponseBody
+    public Map uploadLed(int id,String led,String token,MultipartFile file) throws IOException {
+        if (!TokenUtils.validateToken(token)) {
+            HashMap<String, Object> map = Maps.newHashMap();
+            map.put(keyResponseCode, FAILURE);
+            map.put(keyMessage, "身份校验失败");
+            return map;
+        }
+        int responseCode = -3;
+//        if(files!=null&&files.length>0){
+//            //循环获取file数组中得文件
+//            for(int i = 0;i<files.length;i++){
+//                MultipartFile file = files[i];
+                //保存文件
+                UploadUtils.saveFile(file, BaseBean.path);
+//            }
+//        }
+        String filenameTemp;
+        String fil = file.getOriginalFilename();
+        String [] fileName = FileUtils.getFileName(BaseBean.path);
+        for(String name:fileName)
+        {
+            if (fil.equals(name)){
+                String name1 = name.substring(0,name.indexOf("."));
+                String name2 = name.substring(name.indexOf("."));
+                filenameTemp= BaseBean.path+name1+".html";
+                String call = BaseBean.XWALKURL+name1+".html";
+                File filename = new File(filenameTemp);
+                if (!filename.exists()) {
+                    filename.createNewFile();
+                }
+                if (name2.equals(".mp4")){
+                    boolean bea= FileUtils.writeToFile("<head><video loop=\"loop\" muted src=\""+name+"\" style=\"width: 128px;height: 256px\" controls=\"controls\" autoplay=\"autoplay\"></video></head>",filenameTemp);
+                    if (bea == true){
+                        CallXwalkFn callXwalkFn = new CallXwalkFn();
+                        callXwalkFn.callXwalkFn(call,led);
+                        responseCode = BaseBean.DONE;
+                    }
+                }else if (name2.equals(".png") || name2.equals(".jpg") || name2.equals(".jpeg")){
+                    boolean bea= FileUtils.writeToFile("<head><img src=\""+name+"\" style=\"width: 128px;height: 256px\"/></head>",filenameTemp);
+                    if (bea == true){
+                        CallXwalkFn callXwalkFn = new CallXwalkFn();
+                        callXwalkFn.callXwalkFn(call,led);
+                        responseCode = BaseBean.DONE;
+                    }
+                }else {
+                    responseCode = BaseBean.FAILURE;
+                }
+            }
+            else {
+                responseCode = BaseBean.FAILURE;
+            }
+        }
         return pushUpdate(id, responseCode, "新广告");
     }
 

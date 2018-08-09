@@ -22,6 +22,26 @@ final class UploadUtils {
 
     public static final String MEDIA_KEY = "media"
 
+
+
+    static boolean saveFile(MultipartFile file, String path) {
+        // 判断文件是否为空
+        if (!file.isEmpty()) {
+            try {
+                File filepath = new File(path);
+                if (!filepath.exists())
+                    filepath.mkdirs();
+                // 文件保存路径
+                String savePath = path + file.getOriginalFilename();
+                // 转存文件
+                file.transferTo(new File(savePath));
+                return true;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return false;
+    }
     static String uploadImages(Object request) {
         def imagePath = new File("${Global.mediaPath}/${Global.imageTag}".toString())
         if (!imagePath.exists()) imagePath.mkdirs()

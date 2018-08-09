@@ -56,6 +56,14 @@ class AdvertisementService extends BaseService<Advertisement, AdvertisementDAO> 
         dao.findListByUserID(userID)
     }
     /**
+     * 根据用户创建人查询广告列表
+     * @param userID
+     * @return
+     */
+    List<Advertisement> findListByUserID(@RequestParam("userID") int userID){
+        dao.findListByUserID(userID)
+    }
+    /**
      * 页面上传广告媒体资源
      * @param id 广告ID
      * @param request
@@ -98,6 +106,7 @@ class AdvertisementService extends BaseService<Advertisement, AdvertisementDAO> 
         update(advertisement)
         return DONE
     }
+
 
     /**
      * 获取广告数统计

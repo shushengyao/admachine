@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:include="/common/head::head('编辑led屏 - 广告机管理后台')"></head>
+<!--/* <editor-fold desc="define"> */-->
+<!--/*@thymesVar id="adminPath" type="java.lang.String"*/-->
+<!--/*@thymesVar id="loginUser" type="com.xmlan.machine.module.user.entity.User"*/-->
+<!--/*@thymesVar id="newEntityID" type="java.lang.Integer"*/-->
+<!--/*@thymesVar id="led_machine" type="com.xmlan.machine.module.led_machine.entity.Led_machine"*/-->
+<!--/*@thymesVar id="userList" type="java.util.List<com.xmlan.machine.module.user.entity.SimpleUser>"*/-->
+<!--/*@thymesVar id="token" type="java.lang.String"*/-->
+<!--/*@thymesVar id="cameraIP" type="com.xmlan.machine.module.advertisementMachine.entity.AdvertisementMachine.cameraIP"*/-->
+<!--/* </editor-fold> */-->
+<body>
+<th:block th:include="/common/header::header('xixunAD')"/>
+<main style="z-index: 0;">
+    <div class="page-title z-depth-1 blue-grey darken-2">
+        <div class="white-text">
+          <span class="flow-text">
+            <a class="btn-flat tooltipped" data-position="bottom" data-delay="50" data-tooltip="返回列表"
+               onclick="history.go(-1);"><i class="material-icons white-text">arrow_back</i></a><span
+                  th:text="${led_machine.id==newEntityID?'新增led屏幕':led_machine.name}"></span>
+          </span>
+        </div>
+    </div>
+    <br/>
+    <div id="main-content" class="container">
+            <input name="token" th:value="${token}" type="hidden"/>
+            <input id="user_id" name="user_id" type="hidden" class="validate" th:value="${loginUser.id}"/>
+            <div class="row">
+                <div class="input-field col s6 m6 l6">
+                    <i class="material-icons prefix">create</i>
+                    <input id="name" name="name" type="text" class="validate" placeholder="输入名称" required="required"
+                           th:value="${led_machine.name}"/>
+                    <label for="name">led屏幕名称</label>
+                </div>
+                <div class="input-field col s6 m6 l6">
+                    <i class="material-icons prefix">create</i>
+                    <input id="led" name="led" type="text" class="validate" placeholder="输入名称" required="required"
+                           th:value="${led_machine.led}"/>
+                    <label for="name">led板卡编号</label>
+                </div>
+                <div class="input-field col s12 m12 112">
+                    <i class="material-icons prefix">create</i>
+                    <input id="machine_id" name="machine_id" type="text" class="validate" placeholder="输入广告机id" required="required"
+                           th:value="${led_machine.machine_id}"/>
+                    <label for="name">广告机id</label>
+                </div>
+                <div class="input-field col s6 m6 l6 right-align">
+                    <button type="reset" class="waves-effect waves-light btn"><i class="material-icons left">clear</i>清空</button>
+                </div>
+                <div class="input-field col s6 m6 l6 left-align">
+                    <button type="submit" class="waves-effect waves-light btn" onclick="send()"><i class="material-icons right">send</i>提交</button>
+                </div>
+            </div>
+    </div>
+</main>
+<th:block th:include="/common/footer::footer"/>
+<th:block th:include="/common/script::script"/>
+</body>
+</html>
+<script type="text/javascript">
+    function send() {
+        var id = $('#id');
+        var name = $('#name');//led名称
+        var led = $('#led');//led编号
+        var machine_id = $('#machine_id');//广告机编号
+        var user_id = $('#user_id');//使用者id
+        var data = {
+            "id":id.val(),
+            "name": name.val(),
+            "led": led.val(),
+            "machine_id": machine_id.val(),
+            "user_id": user_id.val()
+        };
+        $.ajax({
+            url: "[[${adminPath}]]/xixunAD/save",
+            type: "post",
+            contentType: 'application/json',
+            data: JSON.stringify(data),
+            success: function (obj) {
+                console.log("新增或修改完毕")
+                window.location.href ="list/1";
+            },error:function () {
+                console.log("失败")
+            }
+        });
+    }
+</script>

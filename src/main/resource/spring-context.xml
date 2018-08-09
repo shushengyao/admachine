@@ -71,6 +71,8 @@
   <!-- <editor-fold desc="Validator"> -->
   <bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean"/>
   <!-- </editor-fold> -->
+  <!-- ApplicationContextUtil -->
+  <bean id="ApplicationContextUtil" class="com.xmlan.machine.common.timer.ApplicationContextUtil"></bean>
 
   <!-- <editor-fold desc="Transaction"> -->
   <tx:annotation-driven/>

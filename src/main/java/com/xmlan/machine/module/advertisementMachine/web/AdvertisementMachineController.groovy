@@ -159,7 +159,7 @@ class AdvertisementMachineController extends BaseController {
             List<AdvertisementMachine> list = service.adchineListByUserID(userid, pageNo)
             PageInfo<AdvertisementMachine> page = new PageInfo<>(list)
             model.addAttribute "page", page
-            model.addAttribute "adCount", advertisementService.getAdvertisementCount(list)
+//            model.addAttribute "adCount", advertisementService.getAdvertisementCount(list)
             model.addAttribute "name", advertisementMachine.name
             model.addAttribute "codeNumber", advertisementMachine.codeNumber
             model.addAttribute "addTime", advertisementMachine.addTime

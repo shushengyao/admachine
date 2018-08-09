@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<!--/*@thymesVar id="adminPath" type="java.lang.String"*/-->
+<!--/* <editor-fold desc="define"> */-->
+<!--/*@thymesVar id="loginUser" type="com.xmlan.machine.module.user.entity.User"*/-->
+<!--/*@thymesVar id="adminPath" type="java.lang.String"*/-->
+<!--/*@thymesVar id="page" type="com.github.pagehelper.PageInfo<com.xmlan.machine.module.advertisementMachine.entity.AdvertisementMachine>"*/-->
+<!--/*@thymesVar id="adCount" type="java.util.List<com.xmlan.machine.module.advertisement.entity.AdvertisementCount>"*/-->
+<!--/*@thymesVar id="name" type="java.lang.String"*/-->
+<!--/*@thymesVar id="codeNumber" type="java.lang.String"*/-->
+<!--/*@thymesVar id="addTime" type="java.lang.String"*/-->
+<!--/*@thymesVar id="deleteToken" type="java.lang.String"*/-->
+<!--/*@thymesVar id="open" type="java.lang.String"*/-->
+<!--/* </editor-fold> */-->
+<head th:include="/common/head::head('LED广告列表 - 广告机管理后台')">
+    <meta charset="UTF-8">
+    <title>led</title>
+    <script type="text/javascript" src="../../../static/application/js/xixunJs.js"></script>
+    <link rel="stylesheet" href="../../../static/application/css/ul.css"/>
+</head>
+    <body>
+    <th:block th:include="/common/header::header('xixunAD')"/>
+    <main style="z-index: 0;">
+        <tbody class="card">
+            <div id="main-content" class="container" style="height: 800px">
+                <table class="highlight responsive-table" >
+                    <thead>
+                    <tr>
+                        <th>名称</th>
+                        <th>所属板卡</th>
+                        <th>所属广告机</th>
+                        <th>所属厂商</th>
+                        <th>预览文件</th>
+                        <th>删除</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                </table>
+            </div>
+        </tbody>
+        <div id="detail-modal" class="modal modal-fixed-footer">
+            <div class="modal-content">
+                <h4>详情</h4>
+                <form th:action="@{${adminPath}+'/xixunAD/upload'}" method="post" enctype="multipart/form-data">
+                    <h6 class="green-text text-darken-2">led屏幕ID</h6>
+                    <p id="detail-id">id</p>
+                    <h6 class="green-text text-darken-2">led名称</h6>
+                    <p id="detail-name">name</p>
+                    <h6 class="green-text text-darken-2">led编号</h6>
+                    <p id="detail-code" >led</p>
+                    <h6 class="green-text text-darken-2">所属广告机id</h6>
+                    <p id="detail-machine_id">machine_id</p>
+                    <h6 class="green-text text-darken-2">所属用户id</h6>
+                    <p id="detail-user_id">user_id</p>
+                    <h6 class="green-text text-darken-2">上传文件并在led屏幕播放</h6>
+                    <p>选择文件:</p>
+                    <input type="file" name="files" accept="image/*,video/mp4">
+                    <input type="text" style="display: none" name="led" id="led_code" value="">
+                    <a class="material-icons"><input type="submit" value="提交">file_upload</a>
+                </form>
+                <form th:action="@{${adminPath}+'/xixunAD/clear'}" method="post">
+                    <input type="hidden" id="led_co" name="led_code" value="">
+                    <input class="date-picker" type="submit" value="清空屏幕字幕">
+                </form>
+            </div>
+            <div class="modal-footer">
+                <a href="#" class="modal-action modal-close waves-effect waves-green btn-flat">关闭</a>
+            </div>
+        </div>
+        <div id="update-modal" class="modal modal-fixed-footer">
+            <div class="modal-content">
+                <h4>更改</h4>
+                <h6 class="green-text text-darken-2">led屏幕id</h6>
+                <input id="update-id" value="id" readonly="readonly"/>
+                <h6 class="green-text text-darken-2">led名称</h6>
+                <input id="update-name" value="name"/>
+                <h6 class="green-text text-darken-2">led编号</h6>
+                <input id="update-led" value="led"/>
+                <h6 class="green-text text-darken-2">所属广告机id</h6>
+                <input id="update-machine_id" value="machine_id"/>
+                <h6 class="green-text text-darken-2">所属用户id</h6>
+                <input id="update-user_id" value="user_id" readonly="readonly"/>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="waves-effect waves-light btn" onclick="send()"><i class="material-icons right">send</i>提交</button>
+            </div>
+        </div>
+        <div id="operate-modal" class="modal modal-fixed-footer">
+            <div class="modal-content">
+                <h5>滚动字幕及背景颜色设置( * 号为必填项)</h5>
+                <h6>led编号</h6>
+                <input id="ledCode" type="text" value="" readonly="readonly">
+                <h6>选择背景颜色</h6>
+                <!--<input type="color" name="favcolor" value="" class="myColor" />-->
+                 <input type="color" value="" id="color" onchange="changeColor()">
+            　　<span id="colorInfo"></span>
+                <h6>选择播放内容</h6><font color="red" style="position:relative; top:2px;">*</font>
+                <input id="content" type="text" value="" required="required">
+                <h6>滚动播放次数(填0停止滚动，填负数永久滚动)</h6><font color="red" style="position:relative; top:2px;">*</font>
+                <input type="number" id="num" value="" required="required" placeholder="请输入数字">
+                <h6>进步间隔(步进间隔，单位毫秒)</h6><font color="red" style="position:relative; top:2px;">*</font>
+                <input type="number" id="interval" value="" required="required" placeholder="请输入数字">
+                <h6>进步距离(步进距离，单位像素)</h6><font color="red" style="position:relative; top:2px;">*</font>
+                <input type="number" id="step" value="" required="required" placeholder="请输入数字">
+                <h6>选择字幕前进方向</h6>
+                <select style="display: block" id="direction" autocomplete="off">
+                    <option  value="left" selected="selected">向左</option>
+                    <option value="right">向右</option>
+                </select>
+                <h6>选择字幕显示位置</h6>
+                <select id="align" style="display: block" autocomplete="off">
+                    <option  value="top">上</option>
+                    <option value="center" selected="selected">中</option>
+                    <option value="bottom">下</option>
+                </select>
+                <!--<div class="input-field col s12 m6 l6 left">-->
+                    <!--<button type="reset" class="waves-effect waves-light btn"><i class="material-icons left">clear</i>清空</button>-->
+                <!--</div>-->
+                <div class="input-field col s6 m6 l6 right">
+                    <button  onclick="operateTxt()" type="submit" class="waves-effect waves-light btn"><i class="material-icons right">send</i>提交</button>
+                </div>
+            </div>
+        </div>
+        <div th:if="${loginUser.id}==1">
+            <input class="" type="button" onclick="loadUrl()" value="开始测试">
+            <input class="" type="button" onclick="invokeJs()" value="第二部">
+            <!--<input class="" type="button" onclick="callCardService()" value="设置屏幕开关">-->
+        </div>
+        <div id="weather-modal" class="modal modal-fixed-footer" style="height: 300px;width: 200px">
+            <h4  class="text" style=" text-align:center;">led屏幕画面</h4>
+            <img id="imageID" src=""/>
+        </div>
+        <div id="fixed-add-btn" class="fixed-action-btn">
+            <a class="btn-floating btn-large waves-effect waves-light blue" onclick="return hasMachine()"
+               th:href="@{${adminPath}+'/xixunAD/form'}">
+                <i class="large material-icons">add</i>
+            </a>
+        </div>
+        <input id="user_id" type="hidden" th:value="${loginUser.id}">
+</main>
+<th:block th:include="/common/footer::footer"/>
+<th:block th:include="/common/script::script"/>
+</body>
+</html>
+<script type="text/javascript">
+    var led;
+    $(function () {
+        $("#detail-modal").modal();
+        $("#weather-modal").modal();
+        $("#update-modal").modal();
+        $("#operate-modal").modal();
+        var user =$("#user_id").val();
+        var color = document.getElementById("color"); 　　      　　　　　　　　//通过使用 getElementById() 来访问 <color> 元素
+        var colorInfo = document.getElementById("colorInfo");
+        colorInfo.style.color = color.value; 　　　　　　　　　　　　　　　　 //给<span>的字体加颜色
+        colorInfo.innerHTML = color.value;
+        $.ajax({
+            url:'[[${adminPath}]]/xixunAD/findList',
+            data:{"user_id":user},
+            type:"GET",
+            success:function (data) {
+                adStr =eval('(' + data + ')');
+                $.each(adStr,function (idx, obj) {
+                    var adid = adStr[idx].id;
+                    led = adStr[idx].led;
+                    var tr =
+                        "<tr>"+
+                        "<td>"+adStr[idx].name+"</td>"+
+                        "<td>"+adStr[idx].led+"</td>"+
+                        "<td>"+adStr[idx].machine_id+"</td>"+
+                        "<td>"+"骏牌"+"</td>"+
+                        "<td>"+"<a data-position=\"top\" data-delay=\"50\"  class=\"btn-floating blue waves-effect waves-light tooltipped btn modal-trigger\"" +
+                        " href='#weather-modal'onclick='getPicture(\""+led+"\")'>"+"查看"+"</a>"+"</td>"+
+                        "<td>"+"<a class='material-icons' onclick='deleteAD("+adid+")'>"+'delete'+"</a>"+"</td>"+
+                        "<td class=\"right-align hide-on-med-and-down\">\n" +
+                        "                <div class=\"fixed-action-btn horizontal\" style=\"position: relative; right: 0; top: 0;\">\n" +
+                        "                    <a class=\"btn-floating btn-large blue\"><i class=\"material-icons\">menu</i></a>\n" +
+                        "                    <ul>\n" +
+                        "                        <li>\n" +
+                        "                            <a class=\"btn-floating blue waves-effect waves-light tooltipped btn modal-trigger\"\n" +
+                        "                               data-position=\"top\" data-delay=\"50\" data-tooltip=\"查看详情\" href=\"#detail-modal\"\n" +
+                        "                               onclick='detail("+adid+")'>\n" +
+                        "                                <i class=\"material-icons\">more_horiz</i>\n" +
+                        "                            </a>\n" +
+                        "                        </li>\n" +
+                        "                        <li>\n" +
+                        "                           <a class=\"btn-floating green waves-effect waves-light tooltipped btn modal-trigger\" data-position=\"top\"\n" +
+                        "                                data-delay=\"50\" data-tooltip='编辑' href=\"#update-modal\"\n" +
+                        "                                onclick='update("+adid+")'>\n" +
+                        "                                <i class=\"material-icons\">edit</i>\n" +
+                        "                            </a>\n" +
+                        "                        </li>\n" +
+                        "                        <li>\n" +
+                        "                           <a class=\"btn-floating black waves-effect waves-light tooltipped btn modal-trigger\" data-position=\"top\"\n" +
+                        "                                data-delay=\"50\" data-tooltip='操作' href=\"#operate-modal\"\n" +
+                        "                                onclick='operate(\""+led+"\")'>\n" +
+                        "                                <i class=\"material-icons\">settings_applications</i>\n" +
+                        "                            </a>\n" +
+                        "                        </li>\n" +
+                        "                    </ul>\n" +
+                        "                </div>\n" +
+                        "            </td>"+
+                        "</tr>";
+                    $("table").append(tr);
+                });
+                startActivity();
+            },error:function (data) {
+                console.log("readyState :"+data.readyState)
+                console.log("status :"+data.status)
+            }
+        });
+    });
+    function changeColor(){ 　　　　　　　　　　　　　　　　　　　　 //改变颜色的事件
+        colorInfo.style.color = color.value;
+        colorInfo.innerHTML = color.value;
+    }
+    function sendFile() {
+        var led = $('#led_code');
+        $.ajax({
+            url:'[[${adminPath}]]/xixunAD/upload',
+            data:{"led":led},
+            enctype:"multipart/form-data",
+            type:'post',
+            success:function (data) {
+                window.location.href ="1";
+            },error:function () {
+                console.log("失败！")
+            }
+        });
+    }
+    function operateTxt() {
+        var led = $('#ledCode');
+        var type = 'invokeBuildInJs';//类型（固定）
+        var method = 'scrollMarquee';//内置js方法（固定）
+        var num = $('#num');//滚动次数
+        var color = $('#colorInfo').html();//选中背景颜色
+        var html = $('#content');//要滚动的文字
+        var interval = $('#interval');//进步间隔
+        var step = $('#step');//进步距离
+        var direction = $('#direction');//滚动方向左右
+        var align = $('#align');//显示位置上中下
+        // console.log(led)
+        var data = {
+            "type":type+led.val(),
+            "method": method,
+            "num": num.val(),
+            "html": html.val()+color,
+            "interval":interval.val(),
+            "step": step.val(),
+            "direction": direction.val(),
+            "align": align.val()
+        };
+
+        // console.log(data)
+        $.ajax({
+            url: "[[${adminPath}]]/xixunAD/InvokeBuildInJs",
+            type: "post",
+            contentType: 'application/json',
+            data: JSON.stringify(data),
+            success: function (obj) {
+                console.log("新增或修改完毕")
+                window.location.href ="1";
+            },error:function () {
+                console.log("失败")
+            }
+        });
+    }
+    function send() {
+        var id = $('#update-id');
+        var name = $('#update-name');//led名称
+        var led = $('#update-led');//led编号
+        var machine_id = $('#update-machine_id');//广告机编号
+        var user_id = $('#update-user_id');//使用者id
+        var data = {
+            "id":id.val(),
+            "name": name.val(),
+            "led": led.val(),
+            "machine_id": machine_id.val(),
+            "user_id": user_id.val()
+        };
+        console.log(data)
+        $.ajax({
+            url: "[[${adminPath}]]/xixunAD/save",
+            type: "post",
+            contentType: 'application/json',
+            data: JSON.stringify(data),
+            success: function (obj) {
+                console.log("新增或修改完毕")
+                window.location.href ="1";
+            },error:function () {
+                console.log("失败")
+            }
+        });
+    }
+    function operate(led) {
+        // console.log(led)
+        $("#ledCode").val(led);
+    }
+    function detail(id) {
+        $.ajax({
+            url:'[[${adminPath}]]/xixunAD/detail',
+            data:{"id":id},
+            type:'POST',
+            success:function (data) {
+                var jsonObj =  JSON.parse(data);
+                $("#detail-id").text(jsonObj[0].id);
+                $("#detail-name").text(jsonObj[0].name);
+                $("#detail-code").text(jsonObj[0].led);
+                $("#detail-machine_id").text(jsonObj[0].machine_id);
+                $("#detail-user_id").text(jsonObj[0].user_id);
+                var code = jsonObj[0].led;
+                $("#led_co").val(code);
+                $("#led_code").val(jsonObj[0].led);
+                console.log(code)
+            },error:function () {
+                console.log("失败！")
+            }
+        });
+    }
+    function update(id) {
+        $.ajax({
+            url:'[[${adminPath}]]/xixunAD/detail',
+            data:{"id":id},
+            type:'POST',
+            success:function (data) {
+                var jsonObj =  JSON.parse(data);
+                $("#update-id").val(jsonObj[0].id)
+                $("#update-name").val(jsonObj[0].name)
+                $("#update-code").val(jsonObj[0].led);
+                $("#update-machine_id").val(jsonObj[0].machine_id);
+                $("#update-user_id").val(jsonObj[0].user_id);
+            },error:function () {
+                console.log("失败！")
+            }
+        });
+    }
+    function deleteAD(id) {
+        $.ajax({
+            url:'[[${adminPath}]]/xixunAD/delete/',
+            data:{"id":id},
+            type:'GET',
+            success:function (data) {
+                window.location.href ="1";
+            },error:function () {
+                console.log("失败！")
+            }
+        });
+    }
+
+    $("#roll").click(function(){
+        $("#selectDiv").hide();
+        $("#rollDiv").show();
+        $("#controlDiv").hide();
+    });
+    $("#select").click(function(){
+        $("#rollDiv").hide();
+        $("#selectDiv").show();
+        $("#controlDiv").hide();
+    });
+    $("#control").click(function(){
+        $("#rollDiv").hide();
+        $("#controlDiv").show();
+        $("#selectDiv").hide();
+    });
+    function hasMachine() {
+        var machines = parseInt('[[${machines}]]');
+        if (machines === 0) {
+            toast("没有可用的广告机");
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    function getPicture (led) {
+        $.ajax({
+            url:'[[${adminPath}]]/xixunAD/getPicture',
+            data:{"led":led},
+            dataType: 'json',
+            type:'POST',
+            success:function (data) {
+                // console.log(data)
+                // data = data.replace(/\\n/g,' \n ');
+                // var str =data.substring(1,data.length - 1);
+                var base ="data:image/png;base64,"+data
+                $("#imageID").attr("src",base);
+            },error:function () {
+                console.log("失败！")
+            }
+        });
+    }
+
+    function startActivity() {
+        $.ajax({
+            url:'[[${adminPath}]]/xixunAD/startActivity',
+            type:"GET",
+            success:function () {
+                console.log("启动成功！")
+            },error:function () {
+                console.log("启动失败！")
+            }
+        });
+    }
+
+    function callCardService() {
+        $.ajax({
+            url:'[[${adminPath}]]/xixunAD/callCardService',
+            type:"GET",
+            success:function () {
+                console.log("设置成功！")
+            },error:function () {
+                console.log("设置失败！")
+            }
+        });
+    }
+    function clearPlayList() {
+        $.ajax({
+            url:'[[${adminPath}]]/xixunAD/clearPlayList',
+            type:"GET",
+            success:function () {
+                console.log("清除成功！")
+            },error:function () {
+                console.log("清除失败！")
+            }
+        });
+    }
+    function getFileLength() {
+        $.ajax({
+            url:'[[${adminPath}]]/xixunAD/getFileLength',
+            type:"GET",
+            success:function () {
+                console.log("查询成功！")
+            },error:function () {
+                console.log("查询失败！")
+            }
+        });
+    }
+    function setPlayList() {
+        $.ajax({
+            url:'[[${adminPath}]]/xixunAD/setPlayList',
+            type:"GET",
+            success:function () {
+                console.log("设置成功！")
+            },error:function () {
+                console.log("设置失败！")
+            }
+        });
+    }
+    function deleteFile() {
+        $.ajax({
+            url:'[[${adminPath}]]/xixunAD/deleteFile',
+            type:"GET",
+            success:function () {
+                console.log("删除成功！")
+            },error:function () {
+                console.log("删除失败！")
+            }
+        });
+    }
+
+    function loadUrl() {
+        $.ajax({
+            url:'[[${adminPath}]]/xixunAD/loadUrl',
+            type:"GET",
+            success:function () {
+                console.log("第一步成功！")
+            },error:function () {
+                console.log("第一步失败！")
+            }
+        });
+    }
+    function invokeJs() {
+        $.ajax({
+            url:'[[${adminPath}]]/xixunAD/invokeJs',
+            type:"GET",
+            success:function () {
+                console.log("第二步成功！")
+            },error:function () {
+                console.log("第二步失败！")
+            }
+        });
+    }
+
+    function InvokeBuildInJs() {
+        $.ajax({
+            url:'[[${adminPath}]]/xixunAD/InvokeBuildInJs',
+            type:"GET",
+            success:function () {
+                console.log("滚动字幕成功！")
+            },error:function () {
+                console.log("滚动字幕失败！")
+            }
+        });
+
+
+    }
+</script>

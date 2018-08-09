@@ -1,4 +1,4 @@
-package com.xmlan.machine.module.module.atmosphere;
+package com.xmlan.machine.module.atmosphere;
 
 import com.google.common.collect.Maps;
 import com.xmlan.machine.common.base.BaseController;

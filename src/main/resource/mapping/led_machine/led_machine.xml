@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.xmlan.machine.module.led_machine.dao.Led_machineDAO">
+    <resultMap id="led_machineResultMap" type="com.xmlan.machine.module.led_machine.entity.Led_machine">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="led" property="led"/>
+        <result column="machine_id" property="machine_id"/>
+        <result column="user_id" property="user_id"/>
+    </resultMap>
+    <sql id="columns">
+        t.id as "id",
+        t.name as "name",
+        t.led as "led",
+        t.machine_id as "machine_id",
+        t.user_id as "user_id"
+    </sql>
+
+    <select id="findAllByUserID" resultMap="led_machineResultMap">
+        select
+        <include refid="columns"/>
+        from led_machine t
+        where t.user_id = #{user_id}
+    </select>
+    <select id="findAll" resultType="com.xmlan.machine.module.led_machine.entity.Led_machine">
+        select
+        <include refid="columns"/>
+        from led_machine t
+    </select>
+    <insert id="insert" parameterType="com.xmlan.machine.module.led_machine.entity.Led_machine">
+        insert into led_machine (
+        id,
+        name,
+        led,
+        machine_id,
+        user_id
+        ) values (
+        id,
+        #{name},
+        #{led},
+        #{machine_id},
+        #{user_id}
+        );
+    </insert>
+    <update id="update" parameterType="com.xmlan.machine.module.led_machine.entity.Led_machine">
+        update led_machine
+        set
+        name = #{name},
+        led = #{led},
+        machine_id = #{machine_id},
+        user_id = #{user_id}
+        where id = #{id}
+    </update>
+
+    <delete id="delete" parameterType="com.xmlan.machine.module.led_machine.entity.Led_machine">
+        delete from led_machine
+        where id = #{id}
+    </delete>
+    <select id="select" resultMap="led_machineResultMap" parameterType="int">
+        select
+        <include refid="columns"/>
+        from led_machine t
+        <where>
+            <if test="_parameter != null and _parameter != ''">
+                t.id = #{_parameter}
+            </if>
+
+        </where>
+    </select>
+</mapper>

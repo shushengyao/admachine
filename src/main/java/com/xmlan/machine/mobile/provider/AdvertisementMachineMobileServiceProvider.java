@@ -18,6 +18,8 @@ import com.xmlan.machine.common.util.StringUtils;
 import com.xmlan.machine.common.util.TokenUtils;
 import com.xmlan.machine.module.advertisementMachine.entity.AdvertisementMachine;
 import com.xmlan.machine.module.advertisementMachine.service.AdvertisementMachineService;
+import com.xmlan.machine.module.led_machine.entity.Led_machine;
+import com.xmlan.machine.module.led_machine.service.Led_machineService;
 import com.xmlan.machine.module.monitor.MonitorController;
 import com.xmlan.machine.module.system.service.SysLogService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,22 +49,24 @@ public class AdvertisementMachineMobileServiceProvider extends BaseController {
     private final AdvertisementMachineService service;
     private final SysLogService sysLogService;
     private final ThreadPoolTaskExecutor taskExecutor;
+    private final Led_machineService led_machineService;
 
     /**
      * 构造器注入
-     *
-     * @param service       广告机Service
+     *  @param service       广告机Service
      * @param sysLogService 系统日志Service
      * @param taskExecutor  线程池
+     * @param led_machineService
      */
     @Autowired
     public AdvertisementMachineMobileServiceProvider(
             AdvertisementMachineService service,
             SysLogService sysLogService,
-            ThreadPoolTaskExecutor taskExecutor) {
+            ThreadPoolTaskExecutor taskExecutor, Led_machineService led_machineService) {
         this.service = service;
         this.sysLogService = sysLogService;
         this.taskExecutor = taskExecutor;
+        this.led_machineService = led_machineService;
     }
 
     /**
@@ -124,11 +128,26 @@ public class AdvertisementMachineMobileServiceProvider extends BaseController {
             List<AdvertisementMachine> machineList = service.adchineListByUserID(userID);
             return machineList;
         }
-
-//        AdvertisementMachine machine = new AdvertisementMachine();
-//        machine.setUserID(userID);
-//        return AdvertisementMachineService.findForProvider(machine);
-
+    }
+    /**
+     * 根据用户id查询ied屏幕列表
+     * @param userID
+     * @param token
+     * @return
+     */
+    @RequestMapping(value = "/findLed", method = RequestMethod.POST, produces = "application/json; charset=utf-8")
+    @ResponseBody
+    public List<Led_machine> findLed(int userID,String token){
+        if (!TokenUtils.validateToken(token)) {
+            return null;
+        }
+        if (userID == 1){
+            List<Led_machine> led_machineList =led_machineService.findAll();
+            return led_machineList;
+        }else {
+            List<Led_machine> led_machineList =led_machineService.findAllByUserID(userID);
+            return led_machineList;
+        }
     }
     /*
         手机端获取accessToken

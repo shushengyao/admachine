@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import java.util.HashMap;
 
 /**
- * 广告端 广告机服务接口
+ * 广告机板卡端 广告机服务接口
  * <p>
  * Package: com.xmlan.machine.service.provider
  *

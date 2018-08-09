@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:include="/common/head::head('编辑广告机 - 广告机管理后台')"></head>
+<!--/* <editor-fold desc="define"> */-->
+<!--/*@thymesVar id="adminPath" type="java.lang.String"*/-->
+<!--/*@thymesVar id="loginUser" type="com.xmlan.machine.module.user.entity.User"*/-->
+<!--/*@thymesVar id="newEntityID" type="java.lang.Integer"*/-->
+<!--/*@thymesVar id="machine" type="com.xmlan.machine.module.advertisementMachine.entity.AdvertisementMachine"*/-->
+<!--/*@thymesVar id="userList" type="java.util.List<com.xmlan.machine.module.user.entity.SimpleUser>"*/-->
+<!--/*@thymesVar id="token" type="java.lang.String"*/-->
+<!--/*@thymesVar id="cameraIP" type="com.xmlan.machine.module.advertisementMachine.entity.AdvertisementMachine.cameraIP"*/-->
+<!--/* </editor-fold> */-->
+
+<body>
+<h2>上传多个文件 实例</h2>
+<form th:action="@{${adminPath}+'/test/upload/'}" method="post"  enctype="multipart/form-data">
+    <p>选择文件:<input type="file" name="files"></p>
+    <p><input type="submit" value="提交"></p>
+</form>
+<h6>选择字幕前进方向</h6>
+<select id="direction">
+    <option  value="left">向左</option>
+    <option value="right">向右</option>
+</select>
+<h6>选择字幕显示位置</h6>
+<select id="align">
+    <option  value="top">上</option>
+    <option value="center">中</option>
+    <option value="bottom">下</option>
+</select>
+<select>
+    <option>1</option>
+    <option>2</option>
+</select>
+<SELECT NAME="Cats" SIZE="1">
+    <OPTION VALUE="1">Calico</OPTION>
+    <OPTION VALUE="2">Tortie</OPTION>
+    <OPTION VALUE="3" SELECTED>Siamese</OPTION>
+</SELECT>
+<select>
+    <option value="volvo">Volvo</option>
+    <option value="saab">Saab</option>
+    <option value="opel">Opel</option>
+    <option value="audi">Audi</option>
+</select>
+</body>
+</html>

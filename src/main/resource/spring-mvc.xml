@@ -78,9 +78,10 @@
 
     <!-- <editor-fold desc="Resource"> -->
     <mvc:resources location="/static/" mapping="/static/**"/>
-    <mvc:resources mapping="favicon.ico" location="/favicon.ico"/>
+    <mvc:resources location="/favicon.ico" mapping="/favicon.ico/" />
     <!-- </editor-fold> -->
 
+    <!--<bean  id ="applicationContextUtil"  class ="com.xmlan.machine.common.timer.ApplicationContextUtil" ></bean >-->
     <!-- <editor-fold desc="Resolver"> -->
     <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver"
           p:maxInMemorySize="1048576"

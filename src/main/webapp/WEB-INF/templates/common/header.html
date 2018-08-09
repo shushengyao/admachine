@@ -59,6 +59,14 @@
             </li>
           </th:block>
           <th:block th:switch="${module}">
+            <li class="active" th:case="'xixunAD'">
+              <a th:href="@{${adminPath}+'/xixunAD/list/1'}" class="waves-effect waves-teal">LED广告屏<i class="material-icons">format_indent_increase</i></a>
+            </li>
+            <li th:case="*">
+              <a th:href="@{${adminPath}+'/xixunAD/list/1'}" class="waves-effect waves-teal">LED广告屏<i class="material-icons">format_indent_increase</i></a>
+            </li>
+          </th:block>
+          <th:block th:switch="${module}">
             <li class="active" th:case="'baiduMap'">
               <a th:href="@{${adminPath}+'/baiduMap/map'}" class="waves-effect waves-teal">灯杆地图<i class="material-icons">location_on</i></a>
             </li>

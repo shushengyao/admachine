@@ -11,6 +11,21 @@ import org.springframework.transaction.annotation.Transactional
 @Transactional(readOnly = true)
 class BaseBean {
 
+    /**
+     * led服务器路径
+     */
+    public static final String path = "D:/RealtimeServer/public/";
+
+    /**
+     * led广告屏服务器地址
+     */
+    public static final String URL ="http://192.168.0.218:8081/command/"
+
+    /**
+     * XWALK路径
+     */
+    public static final String XWALKURL ="http://192.168.0.218:8081/"
+
     // ========================= 引导类 ========================= //
 
     /**

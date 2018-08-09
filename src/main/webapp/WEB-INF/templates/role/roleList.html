@@ -125,8 +125,8 @@
       </tbody>
     </table>
 
-    <div id="fixed-add-btn" class="fixed-action-btn" th:if="${loginUser.roleID==1}">
-      <a class="btn-floating btn-large waves-effect waves-light blue" th:href="@{${adminPath}+'/role/form'}">
+    <div id="fixed-add-btn" class="fixed-action-btn" th:if="${loginUser.roleID!=1}">
+      <a th:if="${loginUser.roleID!=1}" class="btn-floating btn-large waves-effect waves-light blue" th:href="@{${adminPath}+'/role/form'}">
         <i class="large material-icons">add</i>
       </a>
     </div>

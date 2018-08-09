@@ -23,6 +23,7 @@
         <result column="cameraSequence" property="cameraSequence"/>
         <result column="cameraVerificationCode" property="cameraVerificationCode"/>
         <result column="accessToken" property="accessToken"/>
+        <result column="LED" property="LED"/>
         <association property="userList" resultMap="userResultMap"/>
     </resultMap>
 
@@ -55,7 +56,8 @@
         t.cameraIP as "cameraIP",
         t.cameraSequence as "cameraSequence",
         t.cameraVerificationCode as "cameraVerificationCode",
-        t.accessToken as "accessToken"
+        t.accessToken as "accessToken",
+        t.LED as "LED"
     </sql>
 
     <select id="adchineListByUserID" parameterType="int" resultType="com.xmlan.machine.module.advertisementMachine.entity.AdvertisementMachine">
@@ -70,14 +72,14 @@
         GROUP BY am.id
     </select>
 
-    <select id="get" parameterType="java.lang.String" resultMap="advertisementMachineResultMap">
+    <select id="get" parameterType="java.lang.String" resultType="com.xmlan.machine.module.advertisementMachine.entity.AdvertisementMachine">
         select
         <include refid="columns"/>
         from advertisement_machine t
         where t.id = #{id}
     </select>
 
-    <select id="findAll" resultMap="advertisementMachineResultMap">
+    <select id="findAll" resultType="com.xmlan.machine.module.advertisementMachine.entity.AdvertisementMachine">
         select
         <include refid="columns"/>
         from advertisement_machine t
@@ -130,6 +132,9 @@
             <if test="accessToken != null and accessToken != ''">
                 and t.accessToken = #{'%',#{accessToken},'%'}
             </if>
+            <if test="LED != null and LED != ''">
+                and t.LED = #{'%',#{LED},'%'}
+            </if>
         </where>
         <choose>
             <otherwise>
@@ -167,7 +172,8 @@
         remark,
         cameraIP,
         cameraSequence,
-        cameraVerificationCode
+        cameraVerificationCode,
+        LED
         ) values (
         id,
         #{userID},
@@ -183,7 +189,8 @@
         #{remark},
         #{cameraIP},
         #{cameraSequence},
-        #{cameraVerificationCode}
+        #{cameraVerificationCode},
+        #{LED}
         );
     </insert>
 
@@ -196,7 +203,8 @@
         remark = #{remark},
         cameraIP = #{cameraIP},
         cameraSequence = #{cameraSequence},
-        cameraVerificationCode = #{cameraVerificationCode}
+        cameraVerificationCode = #{cameraVerificationCode},
+        LED = #{LED}
         where id = #{id}
     </update>
     <delete id="delete" parameterType="com.xmlan.machine.module.advertisementMachine.entity.AdvertisementMachine">

@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:include="/common/head::head('登录 - 广告机管理后台')"></head>
+<head th:include="/common/head::head('登录 - 智慧灯杆管理后台')"></head>
 <!--/*@thymesVar id="adminPath" type="java.lang.String"*/-->
 <!--/*@thymesVar id="loginUser" type="com.xmlan.machine.module.user.entity.User"*/-->
 <!--/*@thymesVar id="adminRoleID" type="java.lang.Integer"*/-->
@@ -17,7 +17,7 @@
   <div class="col s12 m6 l4 offset-m6 offset-l6" style="margin-left: 500px;margin-top: 100px">
     <div class="card card-panel hoverable blue-grey darken-1" >
       <div class="card-content white-text">
-        <span class="card-title center-align">广告机管理后台 登录</span>
+        <span class="card-title center-align">智慧灯杆管理后台 登录</span>
       </div>
       <div class="card-action">
         <form th:action="@{${adminPath}+'/auth'}" method="post">

@@ -100,13 +100,6 @@ class AdvertisementController extends BaseController {
         // 分页
         //获取有权限的人以及处理反馈字符
         int user_id = advertisement.userID
-//        List<User> str = userService.findFounderByUserID(advertisement.userID)
-//        String usernam = str.username;
-//        String string = usernam.replace("[","").replace("]","");
-//        List<User> userList= userService.findUserIDByUsername(string)
-//        String userID1 = userList.id
-//        String userID2 = userID1.replace("[","").replace("]","");
-//        int userID = Integer.parseInt(userID2);
 
         if (user_id==1 || user_id == 10){
             List<Advertisement> advertisementList =service.findAll()
@@ -240,7 +233,9 @@ class AdvertisementController extends BaseController {
      * @return
      */
     @RequestMapping(value = '/uploadMedia/{id}')
-    String uploadMedia(@PathVariable int id, HttpServletRequest request, RedirectAttributes attributes) {
+    String uploadMedia(@PathVariable int id, HttpServletRequest request, RedirectAttributes attributes,Map modelMap) {
+        User user= modelMap.get("loginUser")
+        int userID = user.id
         if (!TokenUtils.validateFormToken(request, "uploadToken", request.getParameter("uploadToken"))) {
             addMessage attributes, "本次提交的表单验证失败"
             return "redirect:$adminPath/advertisement/list/1"
@@ -251,6 +246,12 @@ class AdvertisementController extends BaseController {
             // 推送
             Thread.start { push(ad.machineID, id, "New ad media.") }
             addMessage attributes, "上传成功"
+            if (userID==6){
+                String url =  ad.url
+                String name =  url.substring(url.lastIndexOf("/") + 1)
+                System.out.print(name)
+                com.xmlan.machine.common.util.AddFile.main(name)
+            }
         }
         if (responseCode == FAILURE) {
             addMessage attributes, "上传失败，文件类型错误"

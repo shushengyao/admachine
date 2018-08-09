@@ -6,10 +6,12 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.servlet.LocaleResolver;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.UnsupportedEncodingException;
+import java.io.*;
 import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import sun.misc.BASE64Encoder;
+import sun.misc.BASE64Decoder;
 
 /**
  * 字符串工具类
@@ -321,4 +323,55 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
         return result.toString();
     }
 
+    /**
+     * @Description: 根据图片地址转换为base64编码字符串
+     * @Author:
+     * @CreateTime:
+     * @return
+     */
+    public static String getImageStr(String imgFile) {
+        InputStream inputStream = null;
+        byte[] data = null;
+        try {
+            inputStream = new FileInputStream(imgFile);
+            data = new byte[inputStream.available()];
+            inputStream.read(data);
+            inputStream.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        // 加密
+        BASE64Encoder encoder = new BASE64Encoder();
+        return encoder.encode(data);
+    }
+    /**
+     * @Description: 将base64编码字符串转换为图片
+     * @Author:
+     * @CreateTime:
+     * @param imgStr base64编码字符串
+     * @param path 图片路径-具体到文件
+     * @return
+     */
+    public static boolean generateImage(String imgStr, String path) {
+        if (imgStr == null)
+            return false;
+        BASE64Decoder decoder = new BASE64Decoder();
+        try {
+            // 解密
+            byte[] b = decoder.decodeBuffer(imgStr);
+            // 处理数据
+            for (int i = 0; i < b.length; ++i) {
+                if (b[i] < 0) {
+                    b[i] += 256;
+                }
+            }
+            OutputStream out = new FileOutputStream(path);
+            out.write(b);
+            out.flush();
+            out.close();
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
 }

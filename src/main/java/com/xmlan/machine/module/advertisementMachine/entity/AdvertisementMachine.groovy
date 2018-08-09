@@ -43,8 +43,17 @@ class AdvertisementMachine implements Serializable {
     private String cameraVerificationCode
     //摄像头accessToken
     private String accessToken
+     //led
+    private String LED
 
-    //用户列表
+    String getLED() {
+        return LED
+    }
+
+    void setLED(String LED) {
+        this.LED = LED
+    }
+//用户列表
     private List<User> userList
 
     List<User> getUserList() {

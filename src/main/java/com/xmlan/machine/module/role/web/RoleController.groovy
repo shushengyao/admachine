@@ -60,7 +60,12 @@ class RoleController extends BaseController {
         "role/roleList"
     }
 
-
+    @RequestMapping(value = "/form")
+    String form(Role role, Model model) {
+        model.addAttribute "role", role
+        model.addAttribute "token", TokenUtils.getFormToken(request)
+        "role/roleForm"
+    }
 
     @RequestMapping(value = "/save/{id}")
     String save(Role role,

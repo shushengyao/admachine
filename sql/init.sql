@@ -38,6 +38,7 @@ create table `user` (
   remark   text comment '备注',
   founder varchar(20)   not null
   comment '创建人',
+  LED     varchar(30)    comment'led屏幕',
   primary key (id)
 )
   char set utf8
@@ -80,6 +81,7 @@ create table `advertisement_machine` (
   check (light in (0, 1)),
   check (charge in (0, 1)),
   check (checked in (0, 1)),
+  LED  varchar comment 'led屏幕',
   primary key (id)
 )
   char set utf8
@@ -104,6 +106,21 @@ create table `advertisement` (
 )
   char set utf8
   comment '广告表';
+
+  -- 创建led屏幕表, 如果存在则抛弃旧表重新创建
+drop table if exists `led_machine`;
+create table `led_machine` (
+  id        int auto_increment not null
+  comment '广告ID',
+  name      varchar(255)
+  comment '广告名称',
+  led        varchar(255) comment 'led屏幕编号',
+  machine_id    int comment '所属广告机',
+  user_id int    comment '用户ID',
+  primary key (id)
+)
+  char set utf8
+  comment 'led广告表';
 
 -- 创建温湿度传感器数据表, 如果存在则抛弃旧表重新创建
 drop table if exists `machine_sensor`;
