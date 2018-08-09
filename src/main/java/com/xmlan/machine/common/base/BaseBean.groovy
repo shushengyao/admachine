@@ -19,12 +19,22 @@ class BaseBean {
     /**
      * led广告屏服务器地址
      */
-    public static final String URL ="http://192.168.0.218:8081/command/"
+//    public static final String URL ="http://192.168.0.218:8081/command/"
 
     /**
      * XWALK路径
      */
-    public static final String XWALKURL ="http://192.168.0.218:8081/"
+//    public static final String XWALKURL ="http://192.168.0.218:8081/"
+
+    /**
+     * led广告屏服务器地址
+     */
+    public static final String URL ="http://47.106.172.9:8081/command/"
+
+    /**
+     * XWALK路径
+     */
+    public static final String XWALKURL ="http://47.106.172.9:8081/"
 
     // ========================= 引导类 ========================= //
 

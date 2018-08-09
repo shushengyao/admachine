@@ -3,6 +3,8 @@ package com.xmlan.machine.module.xixun.controller;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import com.xmlan.machine.common.base.BaseBean;
@@ -118,6 +120,8 @@ public class XixunAD extends BaseController {
      */
     @RequestMapping(value = "/upload",method =RequestMethod.POST)
     public String upload(@RequestParam("files") MultipartFile[] files,HttpServletRequest request) throws IOException {
+        Date date = new Date();
+        String dataForm = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss").format(date);
         String filenameTemp;
         HttpServletRequest httpRequest = (HttpServletRequest)request;
         CommonsMultipartResolver commonsMultipartResolver = new CommonsMultipartResolver(httpRequest.getSession().getServletContext());
@@ -136,22 +140,22 @@ public class XixunAD extends BaseController {
         for(String name:fileName)
         {
             if (file.equals(name)){
-                String name1 = name.substring(0,name.indexOf("."));
+//                String name1 = name.substring(0,name.indexOf("."));
                 String name2 = name.substring(name.indexOf("."));
-                filenameTemp= BaseBean.path+name1+".html";
-                String call = BaseBean.XWALKURL+name1+".html";
+                filenameTemp= BaseBean.path+dataForm+".html";
+                String call = BaseBean.XWALKURL+dataForm+".html";
                 File filename = new File(filenameTemp);
                 if (!filename.exists()) {
                     filename.createNewFile();
                 }
                 if (name2.equals(".mp4")){
-                    boolean bea= FileUtils.writeToFile("<head><video loop=\"loop\" muted src=\""+name+"\" style=\"width: 128px;height: 256px\" controls=\"controls\" autoplay=\"autoplay\"></video></head>",filenameTemp);
+                    boolean bea= FileUtils.writeToFile("<head><style>body{margin:0;padding:0;}</style><video loop=\"loop\" muted src=\""+name+"\" style=\"width: 128px;height: 256px\" controls=\"controls\" autoplay=\"autoplay\"></video></head>",filenameTemp);
                     if (bea == true){
                         CallXwalkFn callXwalkFn = new CallXwalkFn();
                         callXwalkFn.callXwalkFn(call,led);
                     }
                 }else if (name2.equals(".png") || name2.equals(".jpg") || name2.equals(".jpeg")){
-                    boolean bea= FileUtils.writeToFile("<head><img src=\""+name+"\" style=\"width: 128px;height: 256px\"/></head>",filenameTemp);
+                    boolean bea= FileUtils.writeToFile("<head><style>body{margin:0;padding:0;}</style></head><img src=\""+name+"\" style=\"width: 128px;height: 256px\"/></head>",filenameTemp);
                     if (bea == true){
                         CallXwalkFn callXwalkFn = new CallXwalkFn();
                         callXwalkFn.callXwalkFn(call,led);

@@ -28,6 +28,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -188,6 +190,8 @@ public class AdvertisementMobileServiceProvider extends BaseController {
     @RequestMapping(value = "/uploadLed", method = RequestMethod.POST, produces = "application/json; charset=utf-8")
     @ResponseBody
     public Map uploadLed(int id,String led,String token,MultipartFile file) throws IOException {
+        Date date = new Date();
+        String dataForm = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss").format(date);
         if (!TokenUtils.validateToken(token)) {
             HashMap<String, Object> map = Maps.newHashMap();
             map.put(keyResponseCode, FAILURE);
@@ -209,23 +213,23 @@ public class AdvertisementMobileServiceProvider extends BaseController {
         for(String name:fileName)
         {
             if (fil.equals(name)){
-                String name1 = name.substring(0,name.indexOf("."));
+//                String name1 = name.substring(0,name.indexOf("."));
                 String name2 = name.substring(name.indexOf("."));
-                filenameTemp= BaseBean.path+name1+".html";
-                String call = BaseBean.XWALKURL+name1+".html";
+                filenameTemp= BaseBean.path+dataForm+".html";
+                String call = BaseBean.XWALKURL+dataForm+".html";
                 File filename = new File(filenameTemp);
                 if (!filename.exists()) {
                     filename.createNewFile();
                 }
                 if (name2.equals(".mp4")){
-                    boolean bea= FileUtils.writeToFile("<head><video loop=\"loop\" muted src=\""+name+"\" style=\"width: 128px;height: 256px\" controls=\"controls\" autoplay=\"autoplay\"></video></head>",filenameTemp);
+                    boolean bea= FileUtils.writeToFile("<head><style>body{margin:0;padding:0;}</style><video loop=\"loop\" muted src=\""+name+"\" style=\"width: 128px;height: 256px\" controls=\"controls\" autoplay=\"autoplay\"></video></head>",filenameTemp);
                     if (bea == true){
                         CallXwalkFn callXwalkFn = new CallXwalkFn();
                         callXwalkFn.callXwalkFn(call,led);
                         responseCode = BaseBean.DONE;
                     }
                 }else if (name2.equals(".png") || name2.equals(".jpg") || name2.equals(".jpeg")){
-                    boolean bea= FileUtils.writeToFile("<head><img src=\""+name+"\" style=\"width: 128px;height: 256px\"/></head>",filenameTemp);
+                    boolean bea= FileUtils.writeToFile("<head><style>body{margin:0;padding:0;}</style></head><body><img src=\""+name+"\" style=\"width: 128px;height: 256px\"/></head>",filenameTemp);
                     if (bea == true){
                         CallXwalkFn callXwalkFn = new CallXwalkFn();
                         callXwalkFn.callXwalkFn(call,led);
