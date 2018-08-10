@@ -3,7 +3,6 @@
          xmlns="http://xmlns.jcp.org/xml/ns/javaee"
          xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
          version="3.1">
-
     <display-name>admachine</display-name>
 
     <!-- Load Spring component -->
@@ -19,7 +18,10 @@
     <listener>
         <listener-class>com.xmlan.machine.common.listener.WelcomeListener</listener-class>
     </listener>
-
+    <!--NFDFlightDataTaskListener 定时器监听器-->
+    <!--<listener>-->
+        <!--<listener-class>com.xmlan.machine.common.timer.NFDFlightDataTaskListener</listener-class>-->
+    <!--</listener>-->
     <!-- Dispatcher configuration -->
     <servlet>
         <servlet-name>SpringMVC</servlet-name>
