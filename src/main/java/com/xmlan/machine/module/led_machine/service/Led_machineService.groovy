@@ -3,8 +3,6 @@ import org.springframework.stereotype.Service
 import com.xmlan.machine.common.base.BaseService
 import com.xmlan.machine.module.led_machine.dao.Led_machineDAO;
 import com.xmlan.machine.module.led_machine.entity.Led_machine
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 

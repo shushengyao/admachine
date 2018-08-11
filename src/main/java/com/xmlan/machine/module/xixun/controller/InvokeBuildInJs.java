@@ -1,10 +1,10 @@
 package com.xmlan.machine.module.xixun.controller;
 
 import com.google.gson.Gson;
-import com.squareup.okhttp.*;
 import com.xmlan.machine.common.base.BaseBean;
 import com.xmlan.machine.module.xixun.util.ClearData;
 import com.xmlan.machine.module.xixun.util.InvokeBuildInJsData;
+import okhttp3.*;
 
 import java.io.IOException;
 

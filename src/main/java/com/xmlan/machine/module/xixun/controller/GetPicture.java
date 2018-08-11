@@ -1,13 +1,13 @@
 package com.xmlan.machine.module.xixun.controller;
 
 import com.google.gson.Gson;
-import com.squareup.okhttp.*;
 import com.xmlan.machine.common.base.BaseBean;
 import com.xmlan.machine.common.util.StringUtils;
 import com.xmlan.machine.module.xixun.util.GetFileLengthData;
 import com.xmlan.machine.module.xixun.util.GetPictureData;
 //import scala.util.parsing.json.JSONObject;
 import net.sf.json.JSONObject;
+import okhttp3.*;
 
 import java.io.IOException;
 import java.net.URI;

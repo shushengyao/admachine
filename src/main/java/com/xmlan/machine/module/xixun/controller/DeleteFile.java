@@ -1,9 +1,8 @@
 package com.xmlan.machine.module.xixun.controller;
 
 import com.google.gson.Gson;
-import com.squareup.okhttp.*;
-import com.xmlan.machine.module.xixun.util.ClearData;
 import com.xmlan.machine.module.xixun.util.DeleteFileData;
+import okhttp3.*;
 
 import java.io.IOException;
 
