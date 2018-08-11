@@ -108,15 +108,15 @@
           </th:block>
         </ul>
 
-        <ul >
-          <li>
-            <a class="dropdown-button" href="#" data-activates="information">
-              <i class="material-icons right">notification_important</i>
-            </a>
-          </li>
-        </ul>
+        <!--<ul th:if="${loginUser.id!=1}">-->
+          <!--<li>-->
+            <!--<a class="dropdown-button" href="#" data-activates="information">-->
+              <!--<i class="material-icons right">notification_important</i>-->
+            <!--</a>-->
+          <!--</li>-->
+        <!--</ul>-->
 
-        <ul th:if="${loginUser.id!=10}" id="information" class="dropdown-content">
+        <ul th:if="${loginUser.id!=1}" id="information" class="dropdown-content">
           <li>
             <a th:href="@{${adminPath}+'/test/readInformation'}">已读消息（2）条</a>
           </li>
