@@ -23,7 +23,11 @@ class Operator {
             return false
         }
         if (obj instanceof Operator) {
-            return obj.operatorID == this.operatorID && obj.objectType == this.objectType && StringUtils.equals(obj.operatorName, this.operatorName)
+            try {
+                return obj.operatorID == this.operatorID && obj.objectType == this.objectType && StringUtils.equals(obj.operatorName, this.operatorName)
+            }catch (Exception e){
+                e.printStackTrace()
+            }
         } else {
             return false
         }
