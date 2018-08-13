@@ -2,8 +2,6 @@ package com.xmlan.machine.module.advertisement.dao
 
 import com.xmlan.machine.common.base.BaseDAO
 import com.xmlan.machine.module.advertisement.entity.Advertisement
-import com.xmlan.machine.module.advertisementMachine.entity.AdvertisementMachine
-import org.apache.ibatis.annotations.Param
 import org.springframework.stereotype.Repository
 import org.springframework.web.bind.annotation.RequestParam
 
