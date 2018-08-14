@@ -2,7 +2,6 @@ package com.xmlan.machine.module.xixun.controller;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -254,11 +253,11 @@ public class XixunAD extends BaseController {
     /**
      * 查询上传文件大小，验证是否成功上传
      */
-    @RequestMapping(value = "/getFileLength")
-    @org.springframework.web.bind.annotation.ResponseBody
-    public  void getFileLength() {
-        GetFileLength.main(null);
-    }
+//    @RequestMapping(value = "/getFileLength")
+//    @org.springframework.web.bind.annotation.ResponseBody
+//    public  void getFileLength() {
+//        GetFileLength.main(null);
+//    }
 
     /**
      * 设置播放列表
