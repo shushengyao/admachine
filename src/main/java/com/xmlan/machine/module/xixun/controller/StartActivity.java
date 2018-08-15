@@ -1,6 +1,7 @@
 package com.xmlan.machine.module.xixun.controller;
 
 import com.google.gson.Gson;
+import com.xmlan.machine.common.base.BaseBean;
 import com.xmlan.machine.module.xixun.util.StartActivityData;
 import okhttp3.*;
 
@@ -33,7 +34,7 @@ public class StartActivity {
         String jsonData = gson.toJson(data);
         StartActivity test = new StartActivity();
 //        String url = "http://192.168.6.104:8081/command/y10-518-00147"; //check this
-        String url = "http://192.168.0.218:8081/command/y10-518-00147"; //check this
+        String url = BaseBean.URL+"y10-518-00147"; //check this
         String result;
         try {
             result = test.post(url, jsonData);

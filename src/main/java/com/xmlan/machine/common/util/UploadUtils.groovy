@@ -24,15 +24,18 @@ final class UploadUtils {
 
 
 
-    static boolean saveFile(MultipartFile file, String path) {
+    static boolean saveFile(dataForm,MultipartFile file, String path) {
         // 判断文件是否为空
         if (!file.isEmpty()) {
+            String str = file.getOriginalFilename();
+            String fileType =str.substring(str.indexOf("."));
+            String fileName = dataForm+fileType
             try {
                 File filepath = new File(path);
                 if (!filepath.exists())
                     filepath.mkdirs();
                 // 文件保存路径
-                String savePath = path + file.getOriginalFilename();
+                String savePath = path + fileName
                 // 转存文件
                 file.transferTo(new File(savePath));
                 return true;

@@ -114,11 +114,11 @@ public class XixunAD extends BaseController {
 
     /**
      * 上传文件
-     * @param files
+     * @param file
      * @return
      */
     @RequestMapping(value = "/upload",method =RequestMethod.POST)
-    public String upload(@RequestParam("files") MultipartFile[] files,HttpServletRequest request) throws IOException {
+    public String upload(@RequestParam("file") MultipartFile file,HttpServletRequest request) throws IOException {
         Date date = new Date();
         String dataForm = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss").format(date);
         String filenameTemp;
@@ -126,19 +126,15 @@ public class XixunAD extends BaseController {
         CommonsMultipartResolver commonsMultipartResolver = new CommonsMultipartResolver(httpRequest.getSession().getServletContext());
         MultipartHttpServletRequest multipartRequest = commonsMultipartResolver.resolveMultipart(httpRequest);
         String led = multipartRequest.getParameter("led");
-        if(files!=null&&files.length>0){
-            //循环获取file数组中得文件
-            for(int i = 0;i<files.length;i++){
-                MultipartFile file = files[i];
                 //保存文件
-               UploadUtils.saveFile(file, BaseBean.path);
-            }
-        }
-        String file = files[0].getOriginalFilename();
+        String fil = file.getOriginalFilename();
+//        String filena = fil.substring(0,fil.indexOf("."));
+        UploadUtils.saveFile(dataForm,file, BaseBean.path);
         String [] fileName = FileUtils.getFileName(BaseBean.path);
         for(String name:fileName)
         {
-            if (file.equals(name)){
+            String name1 = name.substring(0,name.indexOf("."));
+            if (dataForm.equals(name1)){
 //                String name1 = name.substring(0,name.indexOf("."));
                 String name2 = name.substring(name.indexOf("."));
                 filenameTemp= BaseBean.path+dataForm+".html";
@@ -152,12 +148,14 @@ public class XixunAD extends BaseController {
                     if (bea == true){
                         CallXwalkFn callXwalkFn = new CallXwalkFn();
                         callXwalkFn.callXwalkFn(call,led);
+                        break;
                     }
                 }else if (name2.equals(".png") || name2.equals(".jpg") || name2.equals(".jpeg")){
                     boolean bea= FileUtils.writeToFile("<head><style>body{margin:0;padding:0;}</style></head><img src=\""+name+"\" style=\"width: 128px;height: 256px\"/></head>",filenameTemp);
                     if (bea == true){
                         CallXwalkFn callXwalkFn = new CallXwalkFn();
                         callXwalkFn.callXwalkFn(call,led);
+                        break;
                     }
                 }
             }

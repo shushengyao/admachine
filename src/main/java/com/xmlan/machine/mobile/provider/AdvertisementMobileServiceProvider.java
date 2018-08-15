@@ -198,21 +198,16 @@ public class AdvertisementMobileServiceProvider extends BaseController {
             map.put(keyMessage, "身份校验失败");
             return map;
         }
-        int responseCode = -3;
-//        if(files!=null&&files.length>0){
-//            //循环获取file数组中得文件
-//            for(int i = 0;i<files.length;i++){
-//                MultipartFile file = files[i];
-                //保存文件
-                UploadUtils.saveFile(file, BaseBean.path);
-//            }
-//        }
-        String filenameTemp;
         String fil = file.getOriginalFilename();
+        int responseCode = -3;
+//        String filena = fil.substring(0,fil.indexOf("."));
+        UploadUtils.saveFile(dataForm,file, BaseBean.path);
+        String filenameTemp;
         String [] fileName = FileUtils.getFileName(BaseBean.path);
         for(String name:fileName)
         {
-            if (fil.equals(name)){
+            String name1 = name.substring(0,name.indexOf("."));
+            if (dataForm.equals(name1)){
 //                String name1 = name.substring(0,name.indexOf("."));
                 String name2 = name.substring(name.indexOf("."));
                 filenameTemp= BaseBean.path+dataForm+".html";

@@ -79,7 +79,7 @@
         where t.id = #{id}
     </select>
 
-    <select id="findAll" resultType="com.xmlan.machine.module.advertisementMachine.entity.AdvertisementMachine">
+    <select id="findAll" resultMap="advertisementMachineResultMap">
         select
         <include refid="columns"/>
         from advertisement_machine t

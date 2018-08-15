@@ -213,10 +213,11 @@ class AdvertisementController extends BaseController {
      */
     @RequestMapping(value = "/delete")
     String delete(Advertisement advertisement, HttpServletRequest request, RedirectAttributes attributes) {
-        if (!TokenUtils.validateFormToken(request, "deleteToken", request.getParameter("deleteToken"))) {
-            addMessage attributes, "本次提交的表单验证失败"
-            return "redirect:$adminPath/advertisement/list/1"
-        }
+//        if (!TokenUtils.validateFormToken(request, "deleteToken", request.getParameter("deleteToken"))) {
+//            addMessage attributes, "本次提交的表单验证失败"
+//            return "redirect:$adminPath/advertisement/list/1"
+//        }
+        String sys =request.getParameter("deleteToken")
         if (service.delete(advertisement) == DATABASE_DO_NOTHING) {
             addMessage attributes, "这个操作没有删除任何广告"
         } else {
@@ -246,12 +247,6 @@ class AdvertisementController extends BaseController {
             // 推送
             Thread.start { push(ad.machineID, id, "New ad media.") }
             addMessage attributes, "上传成功"
-            if (userID==6){
-                String url =  ad.url
-                String name =  url.substring(url.lastIndexOf("/") + 1)
-                System.out.print(name)
-                com.xmlan.machine.common.util.AddFile.main(name)
-            }
         }
         if (responseCode == FAILURE) {
             addMessage attributes, "上传失败，文件类型错误"
