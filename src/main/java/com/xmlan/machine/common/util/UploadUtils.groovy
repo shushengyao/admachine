@@ -28,7 +28,7 @@ final class UploadUtils {
         // 判断文件是否为空
         if (!file.isEmpty()) {
             String str = file.getOriginalFilename();
-            String fileType =str.substring(str.indexOf("."));
+            String fileType =str.substring(str.lastIndexOf("."));
             String fileName = dataForm+fileType
             try {
                 File filepath = new File(path);
