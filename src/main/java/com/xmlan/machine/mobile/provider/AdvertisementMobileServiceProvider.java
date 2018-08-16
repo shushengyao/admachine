@@ -198,7 +198,7 @@ public class AdvertisementMobileServiceProvider extends BaseController {
             map.put(keyMessage, "身份校验失败");
             return map;
         }
-        String fil = file.getOriginalFilename();
+        int indexb = 0;
         int responseCode = -3;
 //        String filena = fil.substring(0,fil.indexOf("."));
         UploadUtils.saveFile(dataForm,file, BaseBean.path);
@@ -206,10 +206,11 @@ public class AdvertisementMobileServiceProvider extends BaseController {
         String [] fileName = FileUtils.getFileName(BaseBean.path);
         for(String name:fileName)
         {
-            String name1 = name.substring(0,name.indexOf("."));
+            indexb = name.lastIndexOf("."); //最后一个'.'号位置
+            String name1 = name.substring(0,indexb);
             if (dataForm.equals(name1)){
 //                String name1 = name.substring(0,name.indexOf("."));
-                String name2 = name.substring(name.indexOf("."));
+                String name2 = name.substring(indexb);
                 filenameTemp= BaseBean.path+dataForm+".html";
                 String call = BaseBean.XWALKURL+dataForm+".html";
                 File filename = new File(filenameTemp);
