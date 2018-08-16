@@ -162,6 +162,7 @@
                 adStr =eval('(' + data + ')');
                 $.each(adStr,function (idx, obj) {
                     var adid = adStr[idx].id;
+                    var ledco = adStr[idx].led;
                     led = adStr[idx].led;
                     var tr =
                         "<tr>"+
@@ -179,7 +180,7 @@
                         "                        <li>\n" +
                         "                            <a class=\"btn-floating blue waves-effect waves-light tooltipped btn modal-trigger\"\n" +
                         "                               data-position=\"top\" data-delay=\"50\" data-tooltip=\"查看详情\" href=\"#detail-modal\"\n" +
-                        "                               onclick='detail("+adid+")'>\n" +
+                        "                               onclick=\"detail('"+adid+"','"+ledco+"')\">\n" +
                         "                                <i class=\"material-icons\">more_horiz</i>\n" +
                         "                            </a>\n" +
                         "                        </li>\n" +
@@ -203,7 +204,6 @@
                         "</tr>";
                     $("table").append(tr);
                 });
-                startActivity();
             },error:function (data) {
                 console.log("readyState :"+data.readyState)
                 console.log("status :"+data.status)
@@ -296,7 +296,10 @@
         // console.log(led)
         $("#ledCode").val(led);
     }
-    function detail(id) {
+    function detail(id,led) {
+        // console.log(id)
+        // console.log(led)
+        startActivity(led);
         $.ajax({
             url:'[[${adminPath}]]/xixunAD/detail',
             data:{"id":id},
@@ -311,7 +314,6 @@
                 var code = jsonObj[0].led;
                 $("#led_co").val(code);
                 $("#led_code").val(jsonObj[0].led);
-                console.log(code)
             },error:function () {
                 console.log("失败！")
             }
@@ -390,10 +392,12 @@
         });
     }
 
-    function startActivity() {
+    function startActivity(led) {
+        console.log(led)
         $.ajax({
             url:'[[${adminPath}]]/xixunAD/startActivity',
             type:"GET",
+            data:{"led":led},
             success:function () {
                 console.log("启动成功！")
             },error:function () {

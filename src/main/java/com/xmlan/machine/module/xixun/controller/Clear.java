@@ -28,8 +28,7 @@ public class Clear {
         return response.body().string();
     }
 
-    public static void main(String[] args) {
-        String led_code =args[0];
+    public  void clea(String led_code) {
         Gson gson = new Gson();
         ClearData data = new ClearData();
         String jsonData = gson.toJson(data);

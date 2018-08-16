@@ -18,6 +18,7 @@ import com.xmlan.machine.module.advertisementMachine.entity.AdvertisementMachine
 import com.xmlan.machine.module.system.service.SysLogService;
 import com.xmlan.machine.module.user.entity.User;
 import com.xmlan.machine.module.xixun.controller.CallXwalkFn;
+import com.xmlan.machine.module.xixun.controller.XixunAD;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Controller;
@@ -209,7 +210,6 @@ public class AdvertisementMobileServiceProvider extends BaseController {
             indexb = name.lastIndexOf("."); //最后一个'.'号位置
             String name1 = name.substring(0,indexb);
             if (dataForm.equals(name1)){
-//                String name1 = name.substring(0,name.indexOf("."));
                 String name2 = name.substring(indexb);
                 filenameTemp= BaseBean.path+dataForm+".html";
                 String call = BaseBean.XWALKURL+dataForm+".html";
@@ -220,16 +220,12 @@ public class AdvertisementMobileServiceProvider extends BaseController {
                 if (name2.equals(".mp4")){
                     boolean bea= FileUtils.writeToFile("<head><style>body{margin:0;padding:0;}</style><video loop=\"loop\" muted src=\""+name+"\" style=\"width: 128px;height: 256px\" controls=\"controls\" autoplay=\"autoplay\"></video></head>",filenameTemp);
                     if (bea == true){
-                        CallXwalkFn callXwalkFn = new CallXwalkFn();
-                        callXwalkFn.callXwalkFn(call,led);
-                        responseCode = BaseBean.DONE;
+                        util(responseCode,call,led);
                     }
                 }else if (name2.equals(".png") || name2.equals(".jpg") || name2.equals(".jpeg")){
                     boolean bea= FileUtils.writeToFile("<head><style>body{margin:0;padding:0;}</style></head><body><img src=\""+name+"\" style=\"width: 128px;height: 256px\"/></head>",filenameTemp);
                     if (bea == true){
-                        CallXwalkFn callXwalkFn = new CallXwalkFn();
-                        callXwalkFn.callXwalkFn(call,led);
-                        responseCode = BaseBean.DONE;
+                       util(responseCode,call,led);
                     }
                 }else {
                     responseCode = BaseBean.FAILURE;
@@ -240,6 +236,14 @@ public class AdvertisementMobileServiceProvider extends BaseController {
             }
         }
         return pushUpdate(id, responseCode, "新广告");
+    }
+    private int util(int responseCode,String call,String led){
+        CallXwalkFn callXwalkFn = new CallXwalkFn();
+        callXwalkFn.callXwalkFn(call,led);
+        XixunAD xixunAD = new XixunAD();
+        xixunAD.clear(led);
+        responseCode = BaseBean.DONE;
+        return responseCode;
     }
 
     /**

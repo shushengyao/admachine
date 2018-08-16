@@ -29,12 +29,12 @@ public class StartActivity {
     }
 
     public static void main(String[] args) {
+        String led = args[0];
         Gson gson = new Gson();
         StartActivityData data = new StartActivityData();
         String jsonData = gson.toJson(data);
         StartActivity test = new StartActivity();
-//        String url = "http://192.168.6.104:8081/command/y10-518-00147"; //check this
-        String url = BaseBean.URL+"y10-518-00147"; //check this
+        String url = BaseBean.URL+led; //check this
         String result;
         try {
             result = test.post(url, jsonData);

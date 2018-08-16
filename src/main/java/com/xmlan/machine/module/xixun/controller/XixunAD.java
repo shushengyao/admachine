@@ -148,6 +148,7 @@ public class XixunAD extends BaseController {
                     if (bea == true){
                         CallXwalkFn callXwalkFn = new CallXwalkFn();
                         callXwalkFn.callXwalkFn(call,led);
+                        clear(led);
                         break;
                     }
                 }else if (name2.equals(".png") || name2.equals(".jpg") || name2.equals(".jpeg")){
@@ -155,6 +156,7 @@ public class XixunAD extends BaseController {
                     if (bea == true){
                         CallXwalkFn callXwalkFn = new CallXwalkFn();
                         callXwalkFn.callXwalkFn(call,led);
+                        clear(led);
                         break;
                     }
                 }
@@ -214,7 +216,8 @@ public class XixunAD extends BaseController {
      */
     @RequestMapping(value = "/clear")
     public String clear(@RequestParam("led_code") String led_code) {
-        Clear.main(new String[] {led_code});
+        Clear clear = new Clear();
+        clear.clea(led_code);
         return "redirect:list/1";
     }
 
@@ -288,8 +291,8 @@ public class XixunAD extends BaseController {
      */
     @RequestMapping(value = "/startActivity")
     @org.springframework.web.bind.annotation.ResponseBody
-    public  void startActivity() {
-        StartActivity.main(null);
+    public  void startActivity(@RequestParam(value = "led") String led) {
+        StartActivity.main(new String[] {led});
     }
 
     /**
