@@ -221,11 +221,13 @@ public class AdvertisementMobileServiceProvider extends BaseController {
                     boolean bea= FileUtils.writeToFile("<head><style>body{margin:0;padding:0;}</style><video loop=\"loop\" muted src=\""+name+"\" style=\"width: 128px;height: 256px\" controls=\"controls\" autoplay=\"autoplay\"></video></head>",filenameTemp);
                     if (bea == true){
                         util(responseCode,call,led);
+                        break;
                     }
                 }else if (name2.equals(".png") || name2.equals(".jpg") || name2.equals(".jpeg")){
                     boolean bea= FileUtils.writeToFile("<head><style>body{margin:0;padding:0;}</style></head><body><img src=\""+name+"\" style=\"width: 128px;height: 256px\"/></head>",filenameTemp);
                     if (bea == true){
                        util(responseCode,call,led);
+                       break;
                     }
                 }else {
                     responseCode = BaseBean.FAILURE;
