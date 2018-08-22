@@ -155,11 +155,21 @@ class AdvertisementMachineController extends BaseController {
             model.addAttribute "addTime", advertisementMachine.addTime
             model.addAttribute "deleteToken", TokenUtils.getFormToken(request, "deleteToken")
             model.addAttribute("open", TokenUtils.getFormToken(request, "open"))
+        }else if (user.roleID !=1){
+            List<AdvertisementMachine> list = service.generalFindList(userid, pageNo)
+            PageInfo<AdvertisementMachine> page = new PageInfo<>(list)
+            model.addAttribute "page", page
+            model.addAttribute "adCount", advertisementService.getAdvertisementCount(list)
+            model.addAttribute "name", advertisementMachine.name
+            model.addAttribute "codeNumber", advertisementMachine.codeNumber
+            model.addAttribute "addTime", advertisementMachine.addTime
+            model.addAttribute "deleteToken", TokenUtils.getFormToken(request, "deleteToken")
+            model.addAttribute("open", TokenUtils.getFormToken(request, "open"))
         }else {
             List<AdvertisementMachine> list = service.adchineListByUserID(userid, pageNo)
             PageInfo<AdvertisementMachine> page = new PageInfo<>(list)
             model.addAttribute "page", page
-//            model.addAttribute "adCount", advertisementService.getAdvertisementCount(list)
+            model.addAttribute "adCount", advertisementService.getAdvertisementCount(list)
             model.addAttribute "name", advertisementMachine.name
             model.addAttribute "codeNumber", advertisementMachine.codeNumber
             model.addAttribute "addTime", advertisementMachine.addTime
@@ -213,6 +223,7 @@ class AdvertisementMachineController extends BaseController {
         } else {
             advertisementMachine.id = id.toInteger()
             service.update advertisementMachine
+            service.insertMachineToUser(advertisementMachine.id,advertisementMachine.userID)
             addMessage redirectAttributes, "修改广告机成功"
         }
         "redirect:$adminPath/advertisementMachine/list/1"

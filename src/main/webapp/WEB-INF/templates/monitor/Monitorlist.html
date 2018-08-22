@@ -55,10 +55,10 @@
                     var user = {id:1, name:'zs'};
                     var idxx;
                     var code;
+                    var access_token;
                     idxx =machineStr[idx].cameraSequence;
                     code =machineStr[idx].cameraVerificationCode;
                     access_token =machineStr[idx].accessToken;
-                    console.log(access_token)
                     var codes = {idxx:idxx, code:code};
                     var tr =
                         "<tr>"+
@@ -79,7 +79,6 @@
     }
     function demo() {
         $.get("[[${adminPath}]]/monitor/demo",function () {
-            console.log(999)
         });
     }
 </script>

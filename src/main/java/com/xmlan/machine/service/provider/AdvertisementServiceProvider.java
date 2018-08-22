@@ -88,6 +88,7 @@ public class AdvertisementServiceProvider extends BaseController {
     public void media(@PathVariable("id") int id, HttpServletResponse response) {
         Advertisement advertisement = AdvertisementCache.get(id);
         MediaUtils.mediaTransfer(advertisement.getUrl(), response);
+        System.out.print(response);
     }
 
 }

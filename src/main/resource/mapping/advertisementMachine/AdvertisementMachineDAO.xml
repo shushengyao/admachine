@@ -24,7 +24,7 @@
         <result column="cameraVerificationCode" property="cameraVerificationCode"/>
         <result column="accessToken" property="accessToken"/>
         <result column="LED" property="LED"/>
-        <association property="userList" resultMap="userResultMap"/>
+        <collection property="userList" resultMap="userResultMap"/>
     </resultMap>
 
     <resultMap id="userResultMap" type="com.xmlan.machine.module.user.entity.User">
@@ -37,7 +37,7 @@
         <result column="addTime" property="addTime"/>
         <result column="phone" property="phone"/>
         <result column="remark" property="remark"/>
-        <association property="advertisementMachineList" resultMap="advertisementMachineResultMap"/>
+        <collection property="advertisementMachineList" resultMap="advertisementMachineResultMap"/>
     </resultMap>
 
     <sql id="columns">
@@ -59,13 +59,20 @@
         t.accessToken as "accessToken",
         t.LED as "LED"
     </sql>
-
     <select id="adchineListByUserID" parameterType="int" resultType="com.xmlan.machine.module.advertisementMachine.entity.AdvertisementMachine">
+        SELECT
+            am.*
+        FROM
+            advertisement_machine AS am
+        WHERE
+            am.userID = #{userID}
+    </select>
+
+    <select id="generalFindList" parameterType="int" resultType="com.xmlan.machine.module.advertisementMachine.entity.AdvertisementMachine">
         SELECT DISTINCT
            am.*
         FROM
-            USER AS u
-        RIGHT JOIN machine_user AS m ON m.user_id = u.id
+            USER AS u,machine_user AS m
         LEFT JOIN advertisement_machine AS am ON am.id = m.advertisement_machine_id
         WHERE
             u.id = #{userID}

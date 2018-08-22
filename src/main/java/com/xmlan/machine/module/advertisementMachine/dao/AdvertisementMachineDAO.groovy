@@ -79,9 +79,20 @@ interface AdvertisementMachineDAO extends BaseDAO<AdvertisementMachine> {
      * 查询所有设备
      * @return
      */
+//    List<AdvertisementMachine> findAll()
+
+    /**
+     * 普通用户查询设备列表
+     * @param userID
+     * @return
+     */
+    List<AdvertisementMachine> findOrdinaryADList(@Param("userID") int userID)
+
     List<AdvertisementMachine> findAllMachine()
 
     List<AdvertisementMachine> adchineListByUserID(@Param("userID") int userID)
+
+    List<AdvertisementMachine> generalFindList(@Param("userID") int userID)
 
     /**
      * 把设备添加新的用户

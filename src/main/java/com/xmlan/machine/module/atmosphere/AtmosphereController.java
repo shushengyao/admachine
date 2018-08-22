@@ -32,9 +32,6 @@ import java.util.Map;
 @RequestMapping("${adminPath}/atmosphere")
 public class AtmosphereController extends BaseController {
     @Autowired
-    protected MachineSensorService service;
-
-    @Autowired
     private AdvertisementMachineService adservice;
 
     /**
@@ -56,13 +53,16 @@ public class AtmosphereController extends BaseController {
             pageNo=1;
         }
         User user=(User)modelMap.get("loginUser");
-        int userid = user.getId();
+        int userID = user.getId();
         List<AdvertisementMachine> machineList;
-        if (userid==1 || userid == 10){
+        if (userID==1 || userID == 10){
             machineList =adservice.findAllMachine();
             return machineList;
+        }else if (user.getRoleID() ==1){
+            machineList =adservice.adchineListByUserID(userID,pageNo);
+            return machineList;
         }else {
-            machineList =adservice.adchineListByUserID(userid,pageNo);
+            machineList =adservice.generalFindList(userID,pageNo);
             return machineList;
         }
     }

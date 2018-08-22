@@ -154,8 +154,8 @@ public class AdvertisementMachineMobileServiceProvider extends BaseController {
      */
     @RequestMapping(value = "/getAccessToken",method = RequestMethod.POST,produces = "application/json; charset=utf-8")
     @ResponseBody
-    public Map<String,String> getAccessToken(int errorCode){
-        if (errorCode == 0){
+    public Map<String,String> getAccessToken(String errorCode){
+        if (errorCode == "errorCode"){
             MonitorController monitorController= new MonitorController();
             monitorController.updateToken();
         }

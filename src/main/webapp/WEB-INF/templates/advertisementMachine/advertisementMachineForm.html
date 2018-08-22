@@ -35,6 +35,7 @@
       <input id="charge" name="charge" type="hidden" class="validate" th:value="${machine.charge}"/>
       <input id="checked" name="checked" type="hidden" class="validate" th:value="${machine.checked}"/>
       <input id="addTime" name="addTime" type="hidden" class="validate" th:value="${machine.addTime}"/>
+      <input id="accessToken" name="accessToken" type="hidden" class="validate" th:value="${machine.accessToken}"/>
 
       <div class="row">
         <div class="input-field col s6 m6 l6">
@@ -72,10 +73,16 @@
           <label for="codeNumber">机器识别码</label>
         </div>
 
-        <div class="input-field col s12 m12 l12">
+        <div class="input-field col s12 m12 112">
           <i class="material-icons prefix">insert_comment</i>
           <textarea id="remark" name="remark" class="materialize-textarea" th:text="${machine.remark}"></textarea>
           <label for="remark">备注</label>
+        </div>
+        <div class="input-field col s6 m6 l6" >
+          <i class="material-icons prefix">format_indent_increase</i>
+          <input id="LED" name="LED" type="text" class="validate" placeholder="机器识别码"
+                 th:value="${machine.LED}"/>
+          <label for="LED">LED广告屏编号</label>
         </div>
         <div class="input-field col s6 m6 l6" >
           <i class="material-icons prefix">code</i>
@@ -89,9 +96,10 @@
                  th:value="${machine.cameraVerificationCode}"/>
           <label for="cameraVerificationCode">摄像头设备验证码</label>
         </div>
-        <div class="input-field col s12 m12 l12">
+        <div class="input-field col s6 m6 16">
           <i class="material-icons prefix">insert_comment</i>
-          <textarea id="cameraSequence" name="cameraSequence" class="materialize-textarea" placeholder="输入摄像头9位序列号" th:text="${machine.cameraSequence}"></textarea>
+          <input id="cameraSequence" name="cameraSequence" class="validate" type="text" placeholder="输入摄像头9位序列号"
+                    th:value="${machine.cameraSequence}"/>
           <label for="cameraSequence">摄像头序列号</label>
         </div>
 

@@ -188,6 +188,9 @@ class AdvertisementMachineService extends BaseService<AdvertisementMachine, Adve
         }
         return filteredList
     }
+    List<AdvertisementMachine> findAll(){
+        dao.findAll()
+    }
 
     /**
      * 查询所有设备
@@ -196,9 +199,16 @@ class AdvertisementMachineService extends BaseService<AdvertisementMachine, Adve
     List<AdvertisementMachine> findAllMachine(){
         dao.findAllMachine()
     }
+    /**
+     * 普通用户查询设备列表
+     * @return
+     */
+    List<AdvertisementMachine> findOrdinaryADList(){
+        dao.findOrdinaryADList()
+    }
 
     /**
-     * 根据用户id查询设备数据
+     * 管理员用户通过id查询设备数据
      * @param id
      * @return
      */
@@ -209,6 +219,19 @@ class AdvertisementMachineService extends BaseService<AdvertisementMachine, Adve
     List<AdvertisementMachine> adchineListByUserID(@RequestParam("userID") int userID){
         dao.adchineListByUserID(userID)
     }
+    /**
+     * 普通用户根据id查询设备列表
+     * @param userID
+     * @return
+     */
+    List<AdvertisementMachine> generalFindList(@RequestParam("userID") int userID,@RequestParam("pageNo") int pageNo){
+        PageHelper.startPage pageNo, pageSize
+        dao.generalFindList(userID)
+    }
+
+    List<AdvertisementMachine> generalFindList(@RequestParam("userID") int userID){
+        dao.generalFindList(userID)
+    }
 
     /**
      * 管理员把设备添加给新的用户
@@ -216,7 +239,7 @@ class AdvertisementMachineService extends BaseService<AdvertisementMachine, Adve
      * @param user_id
      * @return
      */
-    int insertMachineToUser(@RequestParam("machine_id") int machine_id,@RequestParam("user_id") int user_id){
+    int insertMachineToUser(int machine_id,int user_id){
         dao.insertMachineToUser(machine_id,user_id)
     }
 

@@ -20,6 +20,7 @@ import com.xmlan.machine.module.user.service.UserService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
+import org.springframework.ui.ModelMap
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.servlet.mvc.support.RedirectAttributes
 
@@ -84,7 +85,7 @@ class AdvertisementController extends BaseController {
      * @return
      */
     @RequestMapping(value = "/list/{pageNo}")
-    String list(Advertisement advertisement, @PathVariable int pageNo, Model model) {
+    String list(Advertisement advertisement, @PathVariable int pageNo, Model model, ModelMap modelMap) {
         if (advertisement.name == 'null') advertisement.name = StringUtils.EMPTY
         if (advertisement.addTime == 'null') advertisement.addTime = StringUtils.EMPTY
         if (advertisement.machineID < 1) advertisement.machineID = NEW_INSERT_ID
@@ -100,7 +101,7 @@ class AdvertisementController extends BaseController {
         // 分页
         //获取有权限的人以及处理反馈字符
         int user_id = advertisement.userID
-
+        User user= modelMap.get("loginUser")
         if (user_id==1 || user_id == 10){
             List<Advertisement> advertisementList =service.findAll()
             PageInfo<Advertisement> page = new PageInfo<>(advertisementList)
@@ -117,7 +118,7 @@ class AdvertisementController extends BaseController {
                 // 管理员则通过总的广告机数量判断可否添加广告
                 model.addAttribute "machines", AdvertisementMachineCache.machineCount
             }
-        }else {
+        }else if (user.roleID==1){
             int machine_id;
             Integer userID =user_id
             List<AdvertisementMachine> machineList = machineService.adchineListByUserID(userID,pageNo)
@@ -127,14 +128,6 @@ class AdvertisementController extends BaseController {
                 PageInfo<Advertisement> page = new PageInfo<>(advertisementList)
                 model.addAttribute "page", page
             }
-
-//            List<Advertisement> advertisementList = service.findMachineByUserID(userID,pageNo)
-//            for (int i=0;i<advertisementList.size();i++){
-//                machine_id= advertisementList.get(i).machineID
-//                List<Advertisement> advertisementLists =service.findListByMachineID(machine_id)
-//                PageInfo<Advertisement> page = new PageInfo<>(advertisementLists)
-//                model.addAttribute "page", page
-//            }
             model.addAttribute "machineList", AdvertisementMachineCache.dropdownAdvertisementMachineList
             model.addAttribute "name", advertisement.name
             model.addAttribute "machineID", advertisement.machineID
