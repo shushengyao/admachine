@@ -2,9 +2,13 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <th:block th:include="/common/head::head('广告机 - 广告机管理后台')"/>
-    <meta charset="UTF-8">
-    <title>Title</title>
 </head>
+<!--/* <editor-fold desc="define"> */-->
+<!--/*@thymesVar id="loginUser" type="com.xmlan.machine.module.user.entity.User"*/-->
+<!--/*@thymesVar id="adminPath" type="java.lang.String"*/-->
+<!--/*@thymesVar id="page" type="com.github.pagehelper.PageInfo<com.xmlan.machine.module.advertisementMachine.entity.AdvertisementMachine>"*/-->
+<!--/*@thymesVar id="name" type="java.lang.String"*/-->
+<!--/* </editor-fold> */-->
 <body>
 <th:block th:include="/common/header::header('monitor')"/>
 <main style="z-index: 0;">
@@ -25,13 +29,44 @@
                 <th>查看监控</th>
             </tr>
         </thead>
+        <tbody class="card">
+        <tr th:each="item:${page.list}">
+            <td th:text="*{item.name}">name</td>
+            <td th:text="*{#strings.abbreviate(item.address,30)}">address</td>
+            <td >开</td>
+            <td ><a class="btn-floating blue waves-effect waves-light tooltipped btn modal-trigger"
+                    data-position="top" data-delay="50" data-tooltip="查看实时监控"
+                    th:onmouseover="'javascript:callCamera(\''+*{item.cameraSequence}+'\',\''+*{item.cameraVerificationCode}+'\',\''+*{item.accessToken}+'\')'">查看</a></td>
+        </tr>
+        </tbody>
     </table>
-    <select>
-        <option value="volvo">Volvo</option>
-        <option value="saab">Saab</option>
-        <option value="opel">Opel</option>
-        <option value="audi">Audi</option>
-    </select>
+    <div id="pagination-div" class="center">
+        <ul class="pagination">
+            <li th:if="${!page.hasPreviousPage}" class="disabled">
+                <a href="#"><i class="material-icons">chevron_left</i></a>
+            </li>
+            <li th:if="${page.hasPreviousPage}" class="waves-effect">
+                <a th:href="@{${adminPath}+'/monitor/list/'+${page.prePage}}"><i
+                        class="material-icons">chevron_left</i></a>
+            </li>
+            <th:block th:each="number:${page.navigatepageNums}">
+                <li th:if="${number==page.pageNum}" class="waves-effect" id="active-page">
+                    <a href="#" th:text="${number}"></a>
+                </li>
+                <li th:if="${number!=page.pageNum}" class="waves-effect">
+                    <a th:href="@{${adminPath}+'/monitor/list/'+${number}}"
+                       th:text="${number}"></a>
+                </li>
+            </th:block>
+            <li th:if="${!page.hasNextPage}" class="disabled">
+                <a href="#"><i class="material-icons">chevron_right</i></a>
+            </li>
+            <li th:if="${page.hasNextPage}" class="waves-effect">
+                <a th:href="@{${adminPath}+'/monitor/list/'+${page.nextPage}}"><i
+                        class="material-icons">chevron_right</i></a>
+            </li>
+        </ul>
+    </div>
 </div>
 </main>
 <th:block th:include="/common/footer::footer"/>
@@ -41,10 +76,9 @@
 <script type="text/javascript">
     var machineStr;
     $(function () {
-        index();
+        // index();
     })
     function index() {
-
         $.ajax({
             url:"[[${adminPath}]]/monitor/index",
             type:"GET",
@@ -74,8 +108,8 @@
             }
         });
     }
-    function callCamera(idxx,code,access_token) {
-        window.location.href ="uikitDemo?cameraSequence="+idxx+'&cameraVerificationCode='+code+"&access_token="+access_token;
+    function callCamera(cameraSequence,cameraVerificationCode,access_token) {
+        window.location='/mng/monitor/uikit?cameraSequence='+cameraSequence+'&cameraVerificationCode='+cameraVerificationCode+'&access_token='+access_token
     }
     function demo() {
         $.get("[[${adminPath}]]/monitor/demo",function () {

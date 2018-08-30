@@ -16,7 +16,7 @@ import sun.misc.BASE64Decoder;
 /**
  * 字符串工具类
  *
- * @author Ayakura Yuki
+ * @author YSS
  * @date 2017/7/11
  */
 public class StringUtils extends org.apache.commons.lang3.StringUtils {
@@ -54,6 +54,28 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
         } catch (UnsupportedEncodingException e) {
             return EMPTY;
         }
+    }
+
+    /**
+     * 去除数组空元素
+     * @param str
+     * @return
+     */
+    public static String[] replaceNull(String[] str){
+        //用StringBuffer来存放数组中的非空元素，用“;”分隔
+        StringBuffer sb = new StringBuffer();
+        for(int i=0; i<str.length; i++) {
+            if("".equals(str[i])) {
+                continue;
+            }
+            sb.append(str[i]);
+            if(i != str.length - 1) {
+                sb.append(";");
+            }
+        }
+        //用String的split方法分割，得到数组
+        str = sb.toString().split(";");
+        return str;
     }
 
     /**

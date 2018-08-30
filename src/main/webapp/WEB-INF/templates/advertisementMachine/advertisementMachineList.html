@@ -12,11 +12,9 @@
 <!--/*@thymesVar id="deleteToken" type="java.lang.String"*/-->
 <!--/*@thymesVar id="open" type="java.lang.String"*/-->
 <!--/* </editor-fold> */-->
-
 <body>
 <th:block th:include="/common/header::header('machine')"/>
-
-<main style="z-index: 0;">
+<main style="z-index: 0;height: 80%">
   <div class="page-title z-depth-1 blue-grey darken-2">
     <div class="white-text">
       <span class="flow-text">
@@ -78,9 +76,16 @@
         <th>灯</th>
         <th>充电状态</th>
         <th>
-          <input type="button" style="display:block" th:if="${loginUser.id!=10}"  id="openLight" value="开灯">
+          <select id="control_light" class="amber-text" style="display: block">
+            <option value="1">正常开灯</option>
+            <option value="0">关灯</option>
+            <option value="2">20%亮度</option>
+            <option value="5">50%亮度</option>
+            <option value="8">80%亮度</option>
+            <option value="10">100%亮度</option>
+          </select>
+          <input class="amber-text blue" type="button" style="display:block;float: right" th:if="${loginUser.id!=10}"  id="openLight" value="控灯">
         </th>
-        <th><input type="button" style="display:block" th:if="${loginUser.id!=10}" id="closeLight" value="关灯"></th>
       </tr>
       </thead>
       <tbody class="card">
@@ -95,6 +100,10 @@
         </th:block>
         <th:block>
           <td th:if="${item.light==1}" th:text="开"></td>
+          <td th:if="${item.light==2}" th:text="'20%亮度'"></td>
+          <td th:if="${item.light==5}" th:text="'50%亮度'"></td>
+          <td th:if="${item.light==8}" th:text="'80%亮度'"></td>
+          <td th:if="${item.light==10}" th:text="'100%亮度'"></td>
           <td th:if="${item.light==0}" th:text="关"></td>
         </th:block>
         <th:block>
@@ -180,11 +189,15 @@
 
     <div id="pagination-div" class="center">
       <ul class="pagination">
+        <li  class="waves-effect">
+          <h6 >共<b th:text="${page.total}"></b>条结果</h6>
+          <a href="#"><i class="material-icons">chevron_left</i></a>
+        </li>
         <li th:if="${!page.hasPreviousPage}" class="disabled">
           <a href="#"><i class="material-icons">chevron_left</i></a>
         </li>
         <li th:if="${page.hasPreviousPage}" class="waves-effect">
-          <a th:href="@{${adminPath}+'/advertisementMachine/list/'+${page.prePage}+'?name='+${name}+'&codeNumber='+${codeNumber}+'&addTime='+${addTime}}"><i
+          <a th:href="@{${adminPath}+'/advertisementMachine/list/'+${page.prePage}}"><i
               class="material-icons">chevron_left</i></a>
         </li>
         <th:block th:each="number:${page.navigatepageNums}">
@@ -192,7 +205,7 @@
             <a href="#" th:text="${number}"></a>
           </li>
           <li th:if="${number!=page.pageNum}" class="waves-effect">
-            <a th:href="@{${adminPath}+'/advertisementMachine/list/'+${number}+'?name='+${name}+'&codeNumber='+${codeNumber}+'&addTime='+${addTime}}"
+            <a th:href="@{${adminPath}+'/advertisementMachine/list/'+${number}}"
                th:text="${number}"></a>
           </li>
         </th:block>
@@ -200,7 +213,7 @@
           <a href="#"><i class="material-icons">chevron_right</i></a>
         </li>
         <li th:if="${page.hasNextPage}" class="waves-effect">
-          <a th:href="@{${adminPath}+'/advertisementMachine/list/'+${page.nextPage}+'?name='+${name}+'&codeNumber='+${codeNumber}+'&addTime='+${addTime}}"><i
+          <a th:href="@{${adminPath}+'/advertisementMachine/list/'+${page.nextPage}}"><i
               class="material-icons">chevron_right</i></a>
         </li>
       </ul>
@@ -276,9 +289,7 @@
       </div>
     </form>
   </div>
-
 </main>
-
 <th:block th:include="/common/footer::footer"/>
 <th:block th:include="/common/script::script"/>
 <script type="text/javascript">
@@ -295,17 +306,17 @@
         })
         $("#openLight").click(function(){
             var adIds = [];
+            var operate = $("#control_light").val();
             $("input:checkbox[name=checkbox]:checked").each(function(i){
                     // adIds = $(this).val();
                     adIds.push($(this).val())
                     // adIds += (","+$(this).val());
             });
-            console.log(adIds)
             var url = '[[${adminPath}]]/advertisementMachine/lightBatch';
             var update='[[${adminPath}]]/advertisementMachine/list/1';
             $.ajax({
                 url:url,
-                data:{"adIds":adIds,"operate":1},
+                data:{"adIds":adIds,"operate":operate},
                 traditional :true,
                 dataType:"json",
                 type:"post",
@@ -313,26 +324,6 @@
                   console.log("开灯成功！")
                 },error:function () {
                     console.log("开灯失败！")
-                }
-            });
-        })
-        $("#closeLight").click(function(){
-            var adIds = [];
-            $("input:checkbox[name=checkbox]:checked").each(function(i){
-                adIds.push($(this).val())
-            });
-            console.log(adIds)
-            var url = '[[${adminPath}]]/advertisementMachine/lightBatch';
-            $.ajax({
-                url:url,
-                data:{"adIds":adIds,"operate":0},
-                traditional :true,
-                dataType:"json",
-                type:"post",
-                success:function (data) {
-                    // console.log("关灯成功！")
-                },error:function () {
-                    // console.log("关灯失败！")
                 }
             });
         })

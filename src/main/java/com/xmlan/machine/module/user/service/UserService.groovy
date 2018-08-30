@@ -41,7 +41,7 @@ class UserService extends BaseService<User, UserDAO> {
      * @param userID
      * @return
      */
-    List<User> findListByUserID(@RequestParam("userid") int userID){
+    List<User> findListByUserID(@RequestParam("userID") int userID){
         dao.findListByUserID(userID)
     }
     /**

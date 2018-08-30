@@ -13,6 +13,8 @@ interface BaseDAO<T> {
 
     List<T> findList(T t)
 
+//    List<T> findAll(T t)
+
     int insert(T t)
 
     int update(T t)

@@ -50,9 +50,7 @@ create table `machine_user`(
 machine_id         int auto_increment not null
 comment '广告机id',
 user_id         int auto_increment not null
-comment '用户ID',
-primary key (machine_id),
-primary key (user_id)
+comment '用户ID'
 )
   char set utf8
   comment '设备用户关联表';

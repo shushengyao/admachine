@@ -85,7 +85,7 @@ class AdvertisementController extends BaseController {
      * @return
      */
     @RequestMapping(value = "/list/{pageNo}")
-    String list(Advertisement advertisement, @PathVariable int pageNo, Model model, ModelMap modelMap) {
+    String list(AdvertisementMachine advertisementMachine,Advertisement advertisement, @PathVariable int pageNo, Model model, ModelMap modelMap) {
         if (advertisement.name == 'null') advertisement.name = StringUtils.EMPTY
         if (advertisement.addTime == 'null') advertisement.addTime = StringUtils.EMPTY
         if (advertisement.machineID < 1) advertisement.machineID = NEW_INSERT_ID
@@ -100,17 +100,12 @@ class AdvertisementController extends BaseController {
 //        }
         // 分页
         //获取有权限的人以及处理反馈字符
-        int user_id = advertisement.userID
+        int userID = advertisement.userID
         User user= modelMap.get("loginUser")
-        if (user_id==1 || user_id == 10){
-            List<Advertisement> advertisementList =service.findAll()
+        if (userID==1 || userID == 10){
+            List<Advertisement> advertisementList =service.findAll(pageNo)
             PageInfo<Advertisement> page = new PageInfo<>(advertisementList)
             model.addAttribute "page", page
-            model.addAttribute "machineList", AdvertisementMachineCache.dropdownAdvertisementMachineList
-            model.addAttribute "name", advertisement.name
-            model.addAttribute "machineID", advertisement.machineID
-            model.addAttribute "time", advertisement.time
-            model.addAttribute "addTime", advertisement.addTime
             if (SessionUtils.getAdmin(request).roleID != ADMIN_ROLE_ID) {
                 // 添加广告判断，普通用户没有广告机的时候不能添加广告
                 model.addAttribute "machines", AdvertisementMachineCache.getMachineCount(SessionUtils.getAdmin(request).id)
@@ -119,20 +114,9 @@ class AdvertisementController extends BaseController {
                 model.addAttribute "machines", AdvertisementMachineCache.machineCount
             }
         }else if (user.roleID==1){
-            int machine_id;
-            Integer userID =user_id
-            List<AdvertisementMachine> machineList = machineService.adchineListByUserID(userID,pageNo)
-            for (int i=0;i<machineList.size();i++){
-                machine_id =machineList.get(i).id
-                List<Advertisement> advertisementList = service.findListByMachineID(machine_id)
-                PageInfo<Advertisement> page = new PageInfo<>(advertisementList)
-                model.addAttribute "page", page
-            }
-            model.addAttribute "machineList", AdvertisementMachineCache.dropdownAdvertisementMachineList
-            model.addAttribute "name", advertisement.name
-            model.addAttribute "machineID", advertisement.machineID
-            model.addAttribute "time", advertisement.time
-            model.addAttribute "addTime", advertisement.addTime
+            List<AdvertisementMachine> machineList = service.findListByUserID(userID,pageNo)
+            PageInfo<Advertisement> page = new PageInfo<>(machineList)
+            model.addAttribute "page", page
             if (SessionUtils.getAdmin(request).roleID != ADMIN_ROLE_ID) {
                 // 添加广告判断，普通用户没有广告机的时候不能添加广告
                 model.addAttribute "machines", AdvertisementMachineCache.getMachineCount(SessionUtils.getAdmin(request).id)
@@ -140,9 +124,32 @@ class AdvertisementController extends BaseController {
                 // 管理员则通过总的广告机数量判断可否添加广告
                 model.addAttribute "machines", AdvertisementMachineCache.machineCount
             }
-            model.addAttribute "deleteToken", TokenUtils.getFormToken(request, "deleteToken")
-            model.addAttribute "uploadToken", TokenUtils.getFormToken(request, "uploadToken")
+        }else{
+            List<User> userList = userService.findListByUserID(userID)
+            for (int i=0 ; i < userList.size() ; i ++){
+                if (userList.get(i).roleID == 1){
+                    userID = userList.get(i).id
+                    List<AdvertisementMachine> machineList = service.findListByUserID(userID,pageNo)
+                    PageInfo<Advertisement> page = new PageInfo<>(machineList)
+                    model.addAttribute "page", page
+                    if (SessionUtils.getAdmin(request).roleID != ADMIN_ROLE_ID) {
+                        // 添加广告判断，普通用户没有广告机的时候不能添加广告
+                        model.addAttribute "machines", AdvertisementMachineCache.getMachineCount(SessionUtils.getAdmin(request).id)
+                    } else {
+                        // 管理员则通过总的广告机数量判断可否添加广告
+                        model.addAttribute "machines", AdvertisementMachineCache.machineCount
+                    }
+                    break
+                }
+            }
         }
+        model.addAttribute "machineList", AdvertisementMachineCache.dropdownAdvertisementMachineList
+        model.addAttribute "name", advertisement.name
+        model.addAttribute "machineID", advertisement.machineID
+        model.addAttribute "time", advertisement.time
+        model.addAttribute "addTime", advertisement.addTime
+        model.addAttribute "deleteToken", TokenUtils.getFormToken(request, "deleteToken")
+        model.addAttribute "uploadToken", TokenUtils.getFormToken(request, "uploadToken")
         "advertisement/advertisementList"
     }
 

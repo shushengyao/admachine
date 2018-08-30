@@ -1,5 +1,6 @@
 package com.xmlan.machine.module.atmosphere;
 
+import com.github.pagehelper.PageInfo;
 import com.google.common.collect.Maps;
 import com.xmlan.machine.common.base.BaseController;
 import com.xmlan.machine.common.util.SessionUtils;
@@ -35,35 +36,27 @@ public class AtmosphereController extends BaseController {
     private AdvertisementMachineService adservice;
 
     /**
-     * 进入主页
+     * 数据采集主页
      * @return
      */
-    @RequestMapping(value = "/list")
-    public String list(){
-        return "atmosphere/index";
-    }
-    /**
-     * 数据采集
-     * @return
-     */
-    @RequestMapping(value = "/index")
-    @ResponseBody
-    public List<AdvertisementMachine> index(ModelMap modelMap, @RequestParam("pageNo") int pageNo){
+    @RequestMapping(value = "/list/{pageNo}")
+    public  String list(AdvertisementMachine advertisementMachine,ModelMap modelMap, @PathVariable int pageNo,Model model){
         if ("".equals(pageNo)){
             pageNo=1;
         }
         User user=(User)modelMap.get("loginUser");
         int userID = user.getId();
+        advertisementMachine.setUserID(userID);
         List<AdvertisementMachine> machineList;
         if (userID==1 || userID == 10){
-            machineList =adservice.findAllMachine();
-            return machineList;
+            machineList =adservice.findAll(pageNo);
         }else if (user.getRoleID() ==1){
-            machineList =adservice.adchineListByUserID(userID,pageNo);
-            return machineList;
+            machineList =adservice.atmosphereListByUserID(userID,pageNo);
         }else {
             machineList =adservice.generalFindList(userID,pageNo);
-            return machineList;
         }
+        PageInfo<AdvertisementMachine> page = new PageInfo<>(machineList);
+        model.addAttribute( "page", page);
+        return "atmosphere/index";
     }
 }

@@ -2,6 +2,7 @@ package com.xmlan.machine.module.advertisement.dao
 
 import com.xmlan.machine.common.base.BaseDAO
 import com.xmlan.machine.module.advertisement.entity.Advertisement
+import org.apache.ibatis.annotations.Param
 import org.springframework.stereotype.Repository
 import org.springframework.web.bind.annotation.RequestParam
 
@@ -21,6 +22,8 @@ interface AdvertisementDAO extends BaseDAO<Advertisement> {
      */
     List<Advertisement> findListByUserID(@RequestParam("userID") int userID)
 
+    List<Advertisement> findAll()
+
     /**
      *
      * @param user_id
@@ -34,4 +37,10 @@ interface AdvertisementDAO extends BaseDAO<Advertisement> {
      * @return
      */
     List<Advertisement> findListByMachineID(@RequestParam("machine_id") int machine_id)
+    /**
+     * 更改广告所属设备
+     * @param userID
+     * @return
+     */
+    int updateUserID(@Param("userID") int userID,@Param("machineID") int machineID)
 }

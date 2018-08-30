@@ -79,8 +79,8 @@ class UserController extends BaseController {
         }
 
         User user2= modelMap.get("loginUser")
-        int userid = user2.id
-        if (userid == 1){
+        int userID = user2.id
+        if (userID == 1){
             List<User> list = service.findList(user, pageNo)
             PageInfo<User> page = new PageInfo<>(list)
             model.addAttribute "page", page
@@ -94,7 +94,7 @@ class UserController extends BaseController {
             model.addAttribute "passwdToken", TokenUtils.getFormToken(request, "passwdToken")
             model.addAttribute "chgrpToken", TokenUtils.getFormToken(request, "chgrpToken")
         }else {
-            List<User> list = service.findListByUserID(userid)
+            List<User> list = service.findListByUserID(userID)
             PageInfo<User> page = new PageInfo<>(list)
             model.addAttribute "page", page
             model.addAttribute "machineCount", advertisementMachineService.getMachineCountByUserID(list)

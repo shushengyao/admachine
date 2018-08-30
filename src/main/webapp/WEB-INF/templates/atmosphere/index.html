@@ -1,20 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <!--/* <editor-fold desc="define"> */-->
-    <!--/*@thymesVar id="adminPath" type="java.lang.String"*/-->
-    <!--/*@thymesVar id="page" type="com.github.pagehelper.PageInfo<com.xmlan.machine.module.advertisementMachine.entity.AdvertisementMachine>"*/-->
-    <!--/*@thymesVar id="adCount" type="java.util.List<com.xmlan.machine.module.advertisement.entity.AdvertisementCount>"*/-->
-    <!--/*@thymesVar id="name" type="java.lang.String"*/-->
-    <!--/*@thymesVar id="codeNumber" type="java.lang.String"*/-->
-    <!--/*@thymesVar id="addTime" type="java.lang.String"*/-->
-    <!--/*@thymesVar id="deleteToken" type="java.lang.String"*/-->
-    <!--/*@thymesVar id="open" type="java.lang.String"*/-->
-    <!--/* </editor-fold> */-->
     <th:block th:include="/common/head::head('广告机 - 广告机管理后台')"/>
-
-    <meta charset="UTF-8">
-    <title>Title</title>
     <style type="text/css">
         .weatherUl{
             width:700px;
@@ -40,17 +27,29 @@
         }
     </style>
 </head>
+<!--/* <editor-fold desc="define"> */-->
+<!--/*@thymesVar id="loginUser" type="com.xmlan.machine.module.user.entity.User"*/-->
+<!--/*@thymesVar id="adminPath" type="java.lang.String"*/-->
+<!--/*@thymesVar id="page" type="com.github.pagehelper.PageInfo<com.xmlan.machine.module.advertisementMachine.entity.AdvertisementMachine>"*/-->
+<!--/*@thymesVar id="adCount" type="java.util.List<com.xmlan.machine.module.advertisement.entity.AdvertisementCount>"*/-->
+<!--/*@thymesVar id="name" type="java.lang.String"*/-->
+<!--/*@thymesVar id="codeNumber" type="java.lang.String"*/-->
+<!--/*@thymesVar id="addTime" type="java.lang.String"*/-->
+<!--/*@thymesVar id="deleteToken" type="java.lang.String"*/-->
+<!--/*@thymesVar id="open" type="java.lang.String"*/-->
+<!--/* </editor-fold> */-->
 <body>
 <th:block th:include="/common/header::header('atmosphere')"/>
 <main style="z-index: 0;">
     <div class="page-title z-depth-1 blue-grey darken-2">
         <div class="white-text">
-      <span class="flow-text">
-        <a class="btn-flat"><i class="material-icons white-text">list</i></a>大气数据采集列表
-      </span>
+          <span class="flow-text">
+            <a class="btn-flat"><i class="material-icons white-text">list</i></a>大气数据采集列表
+          </span>
         </div>
     </div>
-    <div id="main-content" class="container" style="height: 800px">
+    <br/>
+    <div id="main-content" style="height: 700px" class="container">
         <table class="highlight responsive-table" >
             <thead>
             <tr>
@@ -59,8 +58,46 @@
                 <th>查看大气数据采集</th>
             </tr>
             </thead>
+            <tbody class="card">
+                <tr th:each="item:${page.list}">
+                    <td th:text="*{item.name}">name</td>
+                    <td th:text="*{#strings.abbreviate(item.address,30)}">address</td>
+                    <td ><a class="btn-floating blue waves-effect waves-light tooltipped btn modal-trigger"
+                            data-position="top" data-delay="50" data-tooltip="大气采集" href="#weather-modal"
+                            th:onmouseover="'javascript:weather(\''+*{item.id}+'\')'">查看</a></td>
+                </tr>
+            </tbody>
         </table>
+        <div id="pagination-div" class="center">
+            <ul class="pagination">
+                <li th:if="${!page.hasPreviousPage}" class="disabled">
+                    <a href="#"><i class="material-icons">chevron_left</i></a>
+                </li>
+                <li th:if="${page.hasPreviousPage}" class="waves-effect">
+                    <a th:href="@{${adminPath}+'/atmosphere/list/'+${page.prePage}}"><i
+                            class="material-icons">chevron_left</i></a>
+                </li>
+                <th:block th:each="number:${page.navigatepageNums}">
+                    <li th:if="${number==page.pageNum}" class="waves-effect" id="active-page">
+                        <a href="#" th:text="${number}"></a>
+                    </li>
+                    <li th:if="${number!=page.pageNum}" class="waves-effect">
+                        <a th:href="@{${adminPath}+'/atmosphere/list/'+${number}}"
+                           th:text="${number}"></a>
+                    </li>
+                </th:block>
+                <li th:if="${!page.hasNextPage}" class="disabled">
+                    <a href="#"><i class="material-icons">chevron_right</i></a>
+                </li>
+                <li th:if="${page.hasNextPage}" class="waves-effect">
+                    <a th:href="@{${adminPath}+'/atmosphere/list/'+${page.nextPage}}"><i
+                            class="material-icons">chevron_right</i></a>
+                </li>
+            </ul>
+        </div>
     </div>
+
+
     <div id="weather-modal" class="modal modal-fixed-footer" style="height: 150px">
         <h4  class="text" style=" text-align:center;">大气数据采集</h4>
             <tbody class="card">
@@ -85,37 +122,12 @@
 </main>
 <th:block th:include="/common/footer::footer"/>
 <th:block th:include="/common/script::script"/>
-
-</body>
-</html>
 <script type="text/javascript">
     $(function () {
         $("#weather-modal").modal();
         toast('[[${message}]]');
-        $.ajax({
-            url:"[[${adminPath}]]/atmosphere/index",
-            type:"GET",
-            data:{"pageNo":1},
-            success:function (machine) {
-                machineStr =eval('(' + machine + ')');
-                $.each(machineStr,function (idx, obj) {
-                    var adid = machineStr[idx].id;
-                    var tr =
-                        "<tr>"+
-                        "<td>"+machineStr[idx].name+"</td>"+
-                        "<td>"+machineStr[idx].address+"</td>"+
-                        "<td>"+"<a data-position=\"top\" data-delay=\"50\"  class=\"btn-floating blue waves-effect waves-light tooltipped btn modal-trigger\"" +
-                        " href='#weather-modal' onclick ='winopen("+adid+")'>"+"查看"+"</a>"+"</td>"+
-                        "</tr>";
-                    $("table").append(tr);
-                });
-            },error:function (data) {
-                console.log("readyState :"+data.readyState)
-                console.log("status :"+data.status)
-            }
-        });
     })
-    function winopen(id) {
+    function weather(id) {
         var url = '[[${adminPath}]]/advertisementMachine/weather/' + id;
         $.ajax({
             url:url,
@@ -129,5 +141,7 @@
             },error:function () {
             }
         });
-        }
+    }
 </script>
+</body>
+</html>

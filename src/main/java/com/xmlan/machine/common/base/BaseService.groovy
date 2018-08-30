@@ -40,6 +40,7 @@ abstract class BaseService<T, DAO extends BaseDAO<T>> extends BaseBean {
         dao.findAll()
     }
 
+
     /**
      * 条件查询
      * @param entity 控制条件所用的对象

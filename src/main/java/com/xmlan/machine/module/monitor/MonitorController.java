@@ -1,5 +1,6 @@
 package com.xmlan.machine.module.monitor;
 
+import com.github.pagehelper.PageInfo;
 import com.google.common.collect.Maps;
 import com.xmlan.machine.common.base.BaseController;
 import com.xmlan.machine.common.task.HttpTools;
@@ -12,9 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -36,6 +36,30 @@ import java.util.Map;
 public class MonitorController extends BaseController {
     @Autowired
     private AdvertisementMachineService service;
+
+    /**
+     * 打开所有监控
+     * @return
+     */
+    @RequestMapping(value = "/list/{pageNo}")
+    public String  list(@PathVariable("pageNo") int pageNo, Model model, ModelMap modelMap){
+        if ("".equals(pageNo)){
+            pageNo=1;
+        }
+        User user=(User)modelMap.get("loginUser");
+        int userID = user.getId();
+        List<AdvertisementMachine> machineList;
+        if (userID==1 || userID == 10){
+            machineList =service.findAll(pageNo);
+        }else if (user.getRoleID() ==1){
+            machineList =service.atmosphereListByUserID(userID,pageNo);
+        }else {
+            machineList =service.generalFindList(userID,pageNo);
+        }
+        PageInfo<AdvertisementMachine> page = new PageInfo<>(machineList);
+        model.addAttribute( "page", page);
+        return "monitor/Monitorlist";
+    }
 
     /**
      * 进入监控主页
@@ -97,27 +121,6 @@ public class MonitorController extends BaseController {
         return "monitor/Monitorlist";
     }
 
-    /**
-     * 打开所有监控
-     * @return
-     */
-    @RequestMapping(value = "/index")
-    @ResponseBody
-    public List<AdvertisementMachine> index(@RequestParam("pageNo") int pageNo, ModelMap modelMap){
-        if ("".equals(pageNo)){
-            pageNo=1;
-        }
-        User user=(User)modelMap.get("loginUser");
-        int userid = user.getId();
-        List<AdvertisementMachine> machineList;
-        if (userid==1 || userid == 10){
-            machineList =service.findAllMachine();
-            return machineList;
-        }else {
-            machineList =service.adchineListByUserID(userid,pageNo);
-            return machineList;
-        }
-    }
 
     /**
      * 调用萤石云demo主页
@@ -132,10 +135,11 @@ public class MonitorController extends BaseController {
      * 调用摄像头demo主页
      * @return
      */
-    @RequestMapping(value = "/uikitDemo")
-    public String uikitDemo (){
+    @RequestMapping(value = "/uikit")
+    public String uikit (){
         return "monitor/EZUIKit_Demo_IE8";
     }
+
 
     @RequestMapping(value = "/update")
     public String update(){

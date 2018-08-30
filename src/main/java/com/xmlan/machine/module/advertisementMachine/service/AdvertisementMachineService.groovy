@@ -41,7 +41,7 @@ class AdvertisementMachineService extends BaseService<AdvertisementMachine, Adve
     }
 
     private static boolean checkOperate(int operate) {
-        return operate == 0 ? true : operate == 1
+        return operate == 0 ? true : operate == 1 || operate ==2 || operate == 5 || operate ==8 || operate ==10
     }
 
     @Override
@@ -188,7 +188,12 @@ class AdvertisementMachineService extends BaseService<AdvertisementMachine, Adve
         }
         return filteredList
     }
-    List<AdvertisementMachine> findAll(){
+    List<AdvertisementMachine> findAll(advertisementMachine,pageNo){
+        PageHelper.startPage pageNo, pageSize
+        dao.findAll(advertisementMachine)
+    }
+    List<AdvertisementMachine> findAll(pageNo){
+        PageHelper.startPage pageNo, pageSize
         dao.findAll()
     }
 
@@ -212,12 +217,20 @@ class AdvertisementMachineService extends BaseService<AdvertisementMachine, Adve
      * @param id
      * @return
      */
+    List<AdvertisementMachine> adchineListByUserID(@RequestParam("advertisementMachine") AdvertisementMachine advertisementMachine,@RequestParam("pageNo") int pageNo){
+        PageHelper.startPage pageNo, pageSize
+        dao.adchineListByUserID(advertisementMachine)
+    }
     List<AdvertisementMachine> adchineListByUserID(@RequestParam("userID") int userID,@RequestParam("pageNo") int pageNo){
         PageHelper.startPage pageNo, pageSize
         dao.adchineListByUserID(userID)
     }
     List<AdvertisementMachine> adchineListByUserID(@RequestParam("userID") int userID){
         dao.adchineListByUserID(userID)
+    }
+    List<AdvertisementMachine> atmosphereListByUserID(@RequestParam("userID") int userID,@RequestParam("pageNo") int pageNo){
+        PageHelper.startPage pageNo, pageSize
+        dao.atmosphereListByUserID(userID)
     }
     /**
      * 普通用户根据id查询设备列表
@@ -231,6 +244,14 @@ class AdvertisementMachineService extends BaseService<AdvertisementMachine, Adve
 
     List<AdvertisementMachine> generalFindList(@RequestParam("userID") int userID){
         dao.generalFindList(userID)
+    }
+    /**
+     * 验证设备是否重复
+     * @param userID
+     * @return
+     */
+    List<AdvertisementMachine> findRepeat(@RequestParam("userID") int userID){
+        dao.findRepeat(userID)
     }
 
     /**

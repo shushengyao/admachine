@@ -107,6 +107,13 @@
         where id = #{id}
     </update>
 
+    <update id="updateUserID" parameterType="com.xmlan.machine.module.advertisement.entity.Advertisement">
+        update advertisement
+        set
+        userID = #{userID}
+        where machineID = #{machineID}
+    </update>
+
     <delete id="delete" parameterType="com.xmlan.machine.module.advertisement.entity.Advertisement">
         delete from advertisement
         where id = #{id}

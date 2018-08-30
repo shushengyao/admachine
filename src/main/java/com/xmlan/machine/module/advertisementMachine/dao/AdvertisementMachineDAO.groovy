@@ -79,8 +79,9 @@ interface AdvertisementMachineDAO extends BaseDAO<AdvertisementMachine> {
      * 查询所有设备
      * @return
      */
-//    List<AdvertisementMachine> findAll()
+    List<AdvertisementMachine> findAll(advertisementMachine)
 
+    List<AdvertisementMachine> findAll()
     /**
      * 普通用户查询设备列表
      * @param userID
@@ -90,8 +91,28 @@ interface AdvertisementMachineDAO extends BaseDAO<AdvertisementMachine> {
 
     List<AdvertisementMachine> findAllMachine()
 
+    /**
+     * 管理员用户查询
+     * @param userID
+     * @return
+     */
+    List<AdvertisementMachine> adchineListByUserID(advertisementMachine)
+
     List<AdvertisementMachine> adchineListByUserID(@Param("userID") int userID)
 
+    List<AdvertisementMachine> atmosphereListByUserID(@Param("userID") int userID)
+    /**
+     * 验证设备是否重复
+     * @param userID
+     * @return
+     */
+    List<AdvertisementMachine> findRepeat(@Param("userID") int userID)
+
+    /**
+     * 普通用户查询
+     * @param userID
+     * @return
+     */
     List<AdvertisementMachine> generalFindList(@Param("userID") int userID)
 
     /**

@@ -178,6 +178,10 @@
 
     <div id="pagination-div" class="center">
       <ul class="pagination">
+        <li  class="waves-effect">
+          <h6 >共<b th:text="${page.total}"></b>条结果</h6>
+          <a href="#"><i class="material-icons">chevron_left</i></a>
+        </li>
         <li th:if="${!page.hasPreviousPage}" class="disabled">
           <a href="#"><i class="material-icons">chevron_left</i></a>
         </li>

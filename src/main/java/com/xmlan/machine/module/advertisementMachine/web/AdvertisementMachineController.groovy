@@ -9,9 +9,6 @@ import cn.jpush.api.push.model.PushPayload
 import com.github.pagehelper.PageInfo
 import com.google.common.collect.Maps
 import com.xmlan.machine.common.base.BaseController
-import com.xmlan.machine.common.base.ModuleEnum
-import com.xmlan.machine.common.base.ObjectEnum
-import com.xmlan.machine.common.base.OperateEnum
 import com.xmlan.machine.common.cache.AdvertisementCache
 import com.xmlan.machine.common.cache.AdvertisementMachineCache
 import com.xmlan.machine.common.cache.UserCache
@@ -23,7 +20,6 @@ import com.xmlan.machine.common.util.StringUtils
 import com.xmlan.machine.common.util.TokenUtils
 import com.xmlan.machine.module.advertisement.service.AdvertisementService
 import com.xmlan.machine.module.advertisementMachine.entity.AdvertisementMachine
-import com.xmlan.machine.module.advertisementMachine.entity.MachineSensor
 import com.xmlan.machine.module.advertisementMachine.service.AdvertisementMachineService
 import com.xmlan.machine.module.advertisementMachine.service.MachineSensorService
 import com.xmlan.machine.module.system.service.SysLogService
@@ -144,38 +140,29 @@ class AdvertisementMachineController extends BaseController {
         }
 
         User user= modelMap.get("loginUser")
-        int userid = user.id
-        if (userid ==1 || userid == 10) {
-            List<AdvertisementMachine> list = service.findAll()
+        int userID = user.id
+        advertisementMachine.userID= userID
+        if (userID ==1 || userID == 10) {
+            List<AdvertisementMachine> list = service.findAll(advertisementMachine,pageNo)
             PageInfo<AdvertisementMachine> page = new PageInfo<>(list)
             model.addAttribute "page", page
             model.addAttribute "adCount", advertisementService.getAdvertisementCount(list)
-            model.addAttribute "name", advertisementMachine.name
-            model.addAttribute "codeNumber", advertisementMachine.codeNumber
-            model.addAttribute "addTime", advertisementMachine.addTime
-            model.addAttribute "deleteToken", TokenUtils.getFormToken(request, "deleteToken")
-            model.addAttribute("open", TokenUtils.getFormToken(request, "open"))
         }else if (user.roleID !=1){
-            List<AdvertisementMachine> list = service.generalFindList(userid, pageNo)
+            List<AdvertisementMachine> list = service.generalFindList(advertisementMachine, pageNo)
             PageInfo<AdvertisementMachine> page = new PageInfo<>(list)
             model.addAttribute "page", page
             model.addAttribute "adCount", advertisementService.getAdvertisementCount(list)
-            model.addAttribute "name", advertisementMachine.name
-            model.addAttribute "codeNumber", advertisementMachine.codeNumber
-            model.addAttribute "addTime", advertisementMachine.addTime
-            model.addAttribute "deleteToken", TokenUtils.getFormToken(request, "deleteToken")
-            model.addAttribute("open", TokenUtils.getFormToken(request, "open"))
         }else {
-            List<AdvertisementMachine> list = service.adchineListByUserID(userid, pageNo)
+            List<AdvertisementMachine> list = service.adchineListByUserID(advertisementMachine, pageNo)
             PageInfo<AdvertisementMachine> page = new PageInfo<>(list)
             model.addAttribute "page", page
             model.addAttribute "adCount", advertisementService.getAdvertisementCount(list)
-            model.addAttribute "name", advertisementMachine.name
-            model.addAttribute "codeNumber", advertisementMachine.codeNumber
-            model.addAttribute "addTime", advertisementMachine.addTime
-            model.addAttribute "deleteToken", TokenUtils.getFormToken(request, "deleteToken")
-            model.addAttribute("open", TokenUtils.getFormToken(request, "open"))
         }
+        model.addAttribute "name", advertisementMachine.name
+        model.addAttribute "codeNumber", advertisementMachine.codeNumber
+        model.addAttribute "addTime", advertisementMachine.addTime
+        model.addAttribute "deleteToken", TokenUtils.getFormToken(request, "deleteToken")
+        model.addAttribute("open", TokenUtils.getFormToken(request, "open"))
         // endregion
         "advertisementMachine/advertisementMachineList"
     }
@@ -192,8 +179,10 @@ class AdvertisementMachineController extends BaseController {
     }
 
     @RequestMapping(value = "/save/{id}")
-    String save(AdvertisementMachine advertisementMachine,
+    String save(AdvertisementMachine advertisementMachine,ModelMap modelMap,
                 @PathVariable String id, HttpServletRequest request, Model model, RedirectAttributes redirectAttributes) {
+        User user= modelMap.get("loginUser")
+        int userID = user.id
         if (!TokenUtils.validateFormToken(request, request.getParameter("token"))) {
             addMessage redirectAttributes, "本次提交的表单验证失败"
             return "redirect:$adminPath/advertisementMachine/list/1"
@@ -217,13 +206,30 @@ class AdvertisementMachineController extends BaseController {
         }
 
         if (StringUtils.equals(id, NEW_INSERT_ID.toString())) {
-            advertisementMachine.addTime = DateUtils.dateTime
-            service.insert advertisementMachine
-            addMessage redirectAttributes, "创建广告机成功"
+            List<AdvertisementMachine> list =service.findRepeat(userID)
+            if (list.size() !=0){
+                for (AdvertisementMachine ad:list){
+                    if (ad.codeNumber.equals(advertisementMachine.codeNumber)){
+                        addMessage redirectAttributes, "设备验证码重复！"
+                        break
+                    }
+                }
+                advertisementMachine.addTime = DateUtils.dateTime
+                service.insert advertisementMachine
+                addMessage redirectAttributes, "创建广告机成功"
+            }else {
+                advertisementMachine.addTime = DateUtils.dateTime
+                service.insert advertisementMachine
+                addMessage redirectAttributes, "创建广告机成功"
+            }
+
         } else {
+            int user_id =advertisementMachine.userID
+            int machineID = Integer.parseInt(id)
             advertisementMachine.id = id.toInteger()
             service.update advertisementMachine
             service.insertMachineToUser(advertisementMachine.id,advertisementMachine.userID)
+            int result = advertisementService.updateUserID(user_id,machineID)
             addMessage redirectAttributes, "修改广告机成功"
         }
         "redirect:$adminPath/advertisementMachine/list/1"
@@ -260,8 +266,7 @@ class AdvertisementMachineController extends BaseController {
      */
     @RequestMapping(value = "/lightBatch", produces = "application/json; charset=utf-8",method = RequestMethod.POST)
     @ResponseBody
-    HashMap<String, Object> lightBatch(RedirectAttributes redirectAttributes,HttpServletRequest request,
-            @RequestParam(value = "adIds") Integer[] adIds,@RequestParam(value = "operate") int operate) {
+    HashMap<String, Object> lightBatch(@RequestParam(value = "adIds") Integer[] adIds,@RequestParam(value = "operate") int operate) {
         HashMap<String, Object> map = Maps.newHashMap();
         for(int id : adIds) {
             int responseCode = service.lightControl(id, operate);

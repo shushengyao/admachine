@@ -44,10 +44,10 @@
           </th:block>
           <th:block th:switch="${module}">
             <li class="active" th:case="'atmosphere'">
-              <a th:href="@{${adminPath}+'/atmosphere/list'}" class="waves-effect waves-teal" >大气采集<i class="material-icons">wb_sunny</i></a>
+              <a th:href="@{${adminPath}+'/atmosphere/list/1'}" class="waves-effect waves-teal" >大气采集<i class="material-icons">wb_sunny</i></a>
             </li>
             <li th:case="*">
-              <a th:href="@{${adminPath}+'/atmosphere/list'}" class="waves-effect waves-teal">大气采集<i class="material-icons">wb_sunny</i></a>
+              <a th:href="@{${adminPath}+'/atmosphere/list/1'}" class="waves-effect waves-teal">大气采集<i class="material-icons">wb_sunny</i></a>
             </li>
           </th:block>
           <th:block th:switch="${module}">
@@ -76,10 +76,10 @@
           </th:block>
           <th:block th:switch="${module}">
             <li class="active" th:case="'monitor'">
-              <a th:href="@{${adminPath}+'/monitor/Monitorlist'}" class="waves-effect waves-teal">监控管理<i class="material-icons">missed_video_call</i></a>
+              <a th:href="@{${adminPath}+'/monitor/list/1'}" class="waves-effect waves-teal">监控管理<i class="material-icons">missed_video_call</i></a>
             </li>
             <li th:case="*">
-              <a th:href="@{${adminPath}+'/monitor/Monitorlist'}" class="waves-effect waves-teal">监控管理<i class="material-icons">missed_video_call</i></a>
+              <a th:href="@{${adminPath}+'/monitor/list/1'}" class="waves-effect waves-teal">监控管理<i class="material-icons">missed_video_call</i></a>
             </li>
           </th:block>
           <th:block th:switch="${module}">

@@ -46,8 +46,23 @@ class AdvertisementService extends BaseService<Advertisement, AdvertisementDAO> 
         return result
     }
 
+    List<Advertisement> findAll(pageNo){
+        PageHelper.startPage pageNo, pageSize
+        dao.findAll()
+    }
     /**
-     * 根据用户创建人查询广告列表
+     * 更改广告所属人
+     * @param userID
+     * @param machineID
+     * @return
+     */
+    int updateUserID(@RequestParam("user_id") int userID,@RequestParam("machineID") int machineID){
+        dao.updateUserID(userID,machineID)
+        return DONE
+    }
+
+    /**
+     * 一般管理员查询广告列表
      * @param userID
      * @return
      */
@@ -55,11 +70,7 @@ class AdvertisementService extends BaseService<Advertisement, AdvertisementDAO> 
         PageHelper.startPage pageNo, pageSize
         dao.findListByUserID(userID)
     }
-    /**
-     * 根据用户创建人查询广告列表
-     * @param userID
-     * @return
-     */
+
     List<Advertisement> findListByUserID(@RequestParam("userID") int userID){
         dao.findListByUserID(userID)
     }
