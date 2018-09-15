@@ -94,39 +94,30 @@
         </where>
     </select>
 
-    <select id="generalFindList" parameterType="int" resultType="com.xmlan.machine.module.advertisementMachine.entity.AdvertisementMachine">
+    <select id="generalFindList" resultMap="advertisementMachineResultMap">
         SELECT DISTINCT
-           t.*
+        t.*
         FROM
-            USER AS u,machine_user AS m
-        LEFT JOIN advertisement_machine AS t ON t.id = m.advertisement_machine_id
+        advertisement_machine AS t
+        WHERE
+        id = (
+        SELECT
+        machine_user.advertisement_machine_id
+        FROM
+        machine_user
         <where>
-            <if test="userID != null and userID != ''">
-                t.userID = #{userID}
-            </if>
-            <if test="name != null and name != ''">
+            machine_user.user_id = #{userID}
+            <if test='name!=null and name!=""'>
                 and t.name like concat('%',#{name},'%')
             </if>
-            <if test="address != null and address != ''">
-                and t.address like concat('%',#{address},'%')
+            <if test="codeNumber != null and codeNumber != ''">
+                and t.codeNumber = #{codeNumber}
             </if>
             <if test='addTime != null and addTime != "" and addTime != " "'>
                 and t.addTime between #{addTime} and concat(left(#{addTime}, 10), ' 23:59:59')
             </if>
-            <if test='codeNumber != null and codeNumber != ""'>
-                and t.codeNumber = #{codeNumber}
-            </if>
-            <if test="remark != null and remark != ''">
-                and t.remark like concat('%',#{remark},'%')
-            </if>
-            <if test="longitude != null and longitude != ''">
-                and t.longitude = #{longitude}
-            </if>
-            <if test="latitude != null and latitude != ''">
-                and t.latitude = #{latitude}
-            </if>
         </where>
-        GROUP BY am.id
+        )
     </select>
 
     <select id="findRepeat" resultMap="advertisementMachineResultMap">

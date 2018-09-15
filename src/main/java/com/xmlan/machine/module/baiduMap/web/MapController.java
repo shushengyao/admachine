@@ -1,11 +1,14 @@
 package com.xmlan.machine.module.baiduMap.web;
 
+
 import com.google.common.collect.Maps;
 import com.xmlan.machine.common.base.BaseController;
 import com.xmlan.machine.common.util.SessionUtils;
 import com.xmlan.machine.module.advertisementMachine.entity.AdvertisementMachine;
 import com.xmlan.machine.module.advertisementMachine.service.AdvertisementMachineService;
 import com.xmlan.machine.module.user.entity.User;
+import net.sf.json.JSON;
+import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -57,6 +60,12 @@ public class MapController extends BaseController {
             list = service.adchineListByUserID(userid);
             return list;
         }
-
+    }
+    public static void main(String[] args){
+//        String res="{\"data\":{\"access_token\":\"5a7040ccf66bafd06acd39b6f61c19230eaba426755509646d6da23ddd9fb206\",\"expires_second\":36000},\"rlt_code\":\"HH0000\",\"rlt_msg\":\"成功\"}";
+//        JSONObject jsonObject= JSON.parseObject(res);
+//        String data = jsonObject.getString("data");
+//        JSONObject jsondata= JSON.parseObject(data);
+//        String token = jsondata.getString("access_token");
     }
 }

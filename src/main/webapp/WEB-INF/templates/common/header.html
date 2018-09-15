@@ -43,6 +43,14 @@
             </li>
           </th:block>
           <th:block th:switch="${module}">
+            <li class="active" th:case="'circuit'">
+              <a th:href="@{${adminPath}+'/circuit/index'}" class="waves-effect waves-teal" >路灯电路管理<i class="material-icons">format_paint</i></a>
+            </li>
+            <li th:case="*">
+              <a th:href="@{${adminPath}+'/circuit/index'}" class="waves-effect waves-teal">路灯电路管理<i class="material-icons">format_paint</i></a>
+            </li>
+          </th:block>
+          <th:block th:switch="${module}">
             <li class="active" th:case="'atmosphere'">
               <a th:href="@{${adminPath}+'/atmosphere/list/1'}" class="waves-effect waves-teal" >大气采集<i class="material-icons">wb_sunny</i></a>
             </li>

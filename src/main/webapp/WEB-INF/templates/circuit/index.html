@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org";style="height: 100%">
+<head>
+    <th:block th:include="/common/head::head('广告机 - 广告机管理后台')"/>
+    <script type="text/javascript" src="../../../static/application/js/echarts.min.js"></script>
+</head>
+<!--/* <editor-fold desc="define"> */-->
+<!--/*@thymesVar id="loginUser" type="com.xmlan.machine.module.user.entity.User"*/-->
+<!--/*@thymesVar id="adminPath" type="java.lang.String"*/-->
+<!--/*@thymesVar id="page" type="com.github.pagehelper.PageInfo<com.xmlan.machine.module.advertisementMachine.entity.AdvertisementMachine>"*/-->
+<!--/*@thymesVar id="adCount" type="java.util.List<com.xmlan.machine.module.advertisement.entity.AdvertisementCount>"*/-->
+<!--/*@thymesVar id="name" type="java.lang.String"*/-->
+<!--/*@thymesVar id="codeNumber" type="java.lang.String"*/-->
+<!--/*@thymesVar id="addTime" type="java.lang.String"*/-->
+<!--/*@thymesVar id="deleteToken" type="java.lang.String"*/-->
+<!--/*@thymesVar id="open" type="java.lang.String"*/-->
+<!--/* </editor-fold> */-->
+<body style="height: 800px; margin: 0">
+<th:block th:include="/common/header::header('circuit')"/>
+<main style="z-index: 0;">
+    <div id="container" style="height: 800px">
+
+    </div>
+</main>
+<th:block th:include="/common/footer::footer"/>
+<th:block th:include="/common/script::script"/>
+<script type="text/javascript">
+    var dom = document.getElementById("container");
+    var myChart = echarts.init(dom);
+    var app = {};
+    option = null;
+    option = {
+        title: {
+            text: '路灯电路管理'
+        },
+        tooltip : {
+            trigger: 'axis',
+            axisPointer: {
+                type: 'cross',
+                label: {
+                    backgroundColor: '#6a7985'
+                }
+            }
+        },
+        legend: {
+            data:['邮件营销','联盟广告','视频广告','直接访问','搜索引擎']
+        },
+        toolbox: {
+            feature: {
+                saveAsImage: {}
+            }
+        },
+        grid: {
+            left: '3%',
+            right: '4%',
+            bottom: '3%',
+            containLabel: true
+        },
+        xAxis : [
+            {
+                type : 'category',
+                boundaryGap : false,
+                data : ['周一','周二','周三','周四','周五','周六','周日']
+            }
+        ],
+        yAxis : [
+            {
+                type : 'value'
+            }
+        ],
+        series : [
+            {
+                name:'一号广告机',
+                type:'line',
+                stack: '总量',
+                areaStyle: {normal: {}},
+                data:[221, 219, 220, 222, 220, 223, 220]
+            },
+            {
+                name:'二号广告机',
+                type:'line',
+                stack: '总量',
+                areaStyle: {normal: {}},
+                data:[223, 222, 224, 220, 225, 221, 220]
+            },
+            {
+                name:'789797',
+                type:'line',
+                stack: '总量',
+                areaStyle: {normal: {}},
+                data:[150, 232, 201, 154, 190, 330, 410]
+            },
+            {
+                name:'474747',
+                type:'line',
+                stack: '总量',
+                areaStyle: {normal: {}},
+                data:[320, 332, 301, 334, 390, 330, 320]
+            },
+            {
+                name:'456456474',
+                type:'line',
+                stack: '总量',
+                areaStyle: {normal: {}},
+                data:[320, 332, 301, 334, 390, 330, 320]
+            },
+            {
+                name:'465456454',
+                type:'line',
+                stack: '总量',
+                areaStyle: {normal: {}},
+                data:[320, 332, 301, 334, 390, 330, 320]
+            }
+
+        ]
+    };
+    if (option && typeof option === "object") {
+        myChart.setOption(option, true);
+    }
+</script>
+</body>
+</html>

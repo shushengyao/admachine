@@ -237,12 +237,13 @@ class AdvertisementMachineService extends BaseService<AdvertisementMachine, Adve
      * @param userID
      * @return
      */
-    List<AdvertisementMachine> generalFindList(@RequestParam("userID") int userID,@RequestParam("pageNo") int pageNo){
+    List<AdvertisementMachine> generalFindList(@RequestParam("advertisementMachine") AdvertisementMachine advertisementMachine,@RequestParam("pageNo") int pageNo){
         PageHelper.startPage pageNo, pageSize
-        dao.generalFindList(userID)
+        dao.generalFindList(advertisementMachine)
     }
 
-    List<AdvertisementMachine> generalFindList(@RequestParam("userID") int userID){
+    List<AdvertisementMachine> generalFindList(@RequestParam("userID") int userID,@RequestParam("pageNo") int pageNo){
+        PageHelper.startPage pageNo, pageSize
         dao.generalFindList(userID)
     }
     /**

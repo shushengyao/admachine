@@ -113,6 +113,8 @@ interface AdvertisementMachineDAO extends BaseDAO<AdvertisementMachine> {
      * @param userID
      * @return
      */
+    List<AdvertisementMachine> generalFindList(advertisementMachine)
+
     List<AdvertisementMachine> generalFindList(@Param("userID") int userID)
 
     /**

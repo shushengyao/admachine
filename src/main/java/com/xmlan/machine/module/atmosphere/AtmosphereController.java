@@ -53,7 +53,7 @@ public class AtmosphereController extends BaseController {
         }else if (user.getRoleID() ==1){
             machineList =adservice.atmosphereListByUserID(userID,pageNo);
         }else {
-            machineList =adservice.generalFindList(userID,pageNo);
+            machineList =adservice.generalFindList(advertisementMachine,pageNo);
         }
         PageInfo<AdvertisementMachine> page = new PageInfo<>(machineList);
         model.addAttribute( "page", page);

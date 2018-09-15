@@ -1,5 +1,8 @@
 package com.xmlan.machine.module.monitor;
 
+
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageInfo;
 import com.google.common.collect.Maps;
 import com.xmlan.machine.common.base.BaseController;
@@ -8,7 +11,7 @@ import com.xmlan.machine.common.util.SessionUtils;
 import com.xmlan.machine.module.advertisementMachine.entity.AdvertisementMachine;
 import com.xmlan.machine.module.advertisementMachine.service.AdvertisementMachineService;
 import com.xmlan.machine.module.user.entity.User;
-import net.sf.json.JSONObject;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -42,19 +45,20 @@ public class MonitorController extends BaseController {
      * @return
      */
     @RequestMapping(value = "/list/{pageNo}")
-    public String  list(@PathVariable("pageNo") int pageNo, Model model, ModelMap modelMap){
+    public String  list(AdvertisementMachine advertisementMachine,@PathVariable("pageNo") int pageNo, Model model, ModelMap modelMap){
         if ("".equals(pageNo)){
             pageNo=1;
         }
         User user=(User)modelMap.get("loginUser");
         int userID = user.getId();
+        advertisementMachine.setUserID(userID);
         List<AdvertisementMachine> machineList;
         if (userID==1 || userID == 10){
             machineList =service.findAll(pageNo);
         }else if (user.getRoleID() ==1){
             machineList =service.atmosphereListByUserID(userID,pageNo);
         }else {
-            machineList =service.generalFindList(userID,pageNo);
+            machineList =service.generalFindList(advertisementMachine,pageNo);
         }
         PageInfo<AdvertisementMachine> page = new PageInfo<>(machineList);
         model.addAttribute( "page", page);
@@ -145,7 +149,7 @@ public class MonitorController extends BaseController {
     public String update(){
         updateToken();
         System.out.print("更新accessToken");
-        return "monitor/EZUIKit_Demo_IE8";
+        return "monitor/Monitorlist";
     }
 
     /**
@@ -156,11 +160,23 @@ public class MonitorController extends BaseController {
         parms.put("appKey","51a534ebadf54c31a0848dc575dfa206");
         parms.put("appSecret","8c32c67a73c87b9e461b2e3bdf58967a");
         String post = HttpTools.httpRequestToString("https://open.ys7.com/api/lapp/token/get","post",parms);
-        System.err.print("post="+post);
-        JSONObject jsonObj= JSONObject.fromObject(post);
-        String value= jsonObj.getString("accessToken");
-        accessToken(value);
+        JSONObject jsonObj= JSON.parseObject(post);
+        String data = jsonObj.getString("data");
+        JSONObject jsondata= JSON.parseObject(data);
+        String token= jsondata.getString("accessToken");
+        accessToken(token);
     }
+//    public static void main(String[] args){
+//        String post ="{\"data\":{\"accessToken\":\"at.1rwk0g8h0p5meyqqaxuaigx668akbgfd-2kpgl7456q-0xxivp3-flvlz1tnu\",\"expireTime\":1537325846082},\"code\":\"200\",\"msg\":\"操作成功!\"}";
+////        System.out.print(post);
+//        JSONObject jsonObj= JSON.parseObject(post);
+//        String data = jsonObj.getString("data");
+//        JSONObject jsondata= JSON.parseObject(data);
+//        String value= jsondata.getString("accessToken");
+////        String token = value.toString();
+//        System.out.print(value);
+////        System.out.print(post);
+//    }
 
     /**
      * 更新数据库accessToken字段值

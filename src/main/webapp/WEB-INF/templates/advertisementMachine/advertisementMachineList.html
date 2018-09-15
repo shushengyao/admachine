@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:include="/common/head::head('广告机 - 广告机管理后台')"></head>
+<head th:include="/common/head::head('广告机 - 广告机管理后台')">
+</head>
 <!--/* <editor-fold desc="define"> */-->
 <!--/*@thymesVar id="loginUser" type="com.xmlan.machine.module.user.entity.User"*/-->
 <!--/*@thymesVar id="adminPath" type="java.lang.String"*/-->
@@ -13,6 +14,7 @@
 <!--/*@thymesVar id="open" type="java.lang.String"*/-->
 <!--/* </editor-fold> */-->
 <body>
+<script type="text/javascript" src="../../../static/application/js/echarts.min.js"></script>
 <th:block th:include="/common/header::header('machine')"/>
 <main style="z-index: 0;height: 80%">
   <div class="page-title z-depth-1 blue-grey darken-2">
@@ -219,24 +221,7 @@
       </ul>
     </div>
   </div>
-  <div id="weather-modal" class="modal modal-fixed-footer" style="height: 200px">
-    <h4  class="text" style=" text-align:center;">大气数据采集</h4>
-    <table border="5">
-      <tr>
-        <th>广告机ID</th>
-        <th>温度</th>
-        <th>湿度</th>
-        <th>pm2.5</th>
-        <th>亮度</th>
-      </tr>
-      <tr>
-        <th><h6 id="weather-machineID">id</h6></th>
-        <td><h6 id="weather-temperature">temperature</h6></td>
-        <td><h6 id="weather-humidity">humidity</h6></td>
-        <td><h6 id="weather-pm25">pm25</h6></td>
-        <td><h6 id="weather-brightness">brightness</h6></td>
-      </tr>
-    </table>
+  <div id="weather-modal" style="height: 500px;width: 500px" class="modal modal-fixed-footer">
   </div>
   <div id="detail-modal" class="modal modal-fixed-footer">
     <div class="modal-content">
@@ -363,21 +348,58 @@
 
   });
 
-  function weather(id) {
-      var url = '[[${adminPath}]]/advertisementMachine/weather/' + id;
-      $.ajax({
-          url:url,
-          type:"GET",
-          success:function (data) {
-              $("#weather-machineID").text(data['weather'].machineID);
-              $("#weather-temperature").text(data['weather'].temperature);
-              $("#weather-brightness").text(data['weather'].brightness);
-              $("#weather-pm25").text(data['weather'].pm25);
-              $("#weather-humidity").text(data['weather'].humidity);
-          },error:function () {
-          }
-      });
-  }
+    function weather(id) {
+        var url = '[[${adminPath}]]/advertisementMachine/weather/' + id;
+        $.ajax({
+            url:url,
+            type:"GET",
+            success:function (data) {
+                var id = data['weather'].id;
+                var temperature = data['weather'].temperature;
+                var brightness = data['weather'].brightness;
+                var pm25 = data['weather'].pm25;
+                var humidity = data['weather'].humidity;
+                var dom = document.getElementById("weather-modal");
+                var myChart = echarts.init(dom);
+                var app = {};
+                option = null;
+                option = {
+                    title: {
+                        text:'id为'+id+ '号设备大气数据信息柱状显示图',
+                        x: '10',
+                        y: '10',
+                        textStyle: {
+                            fontWeight: 'normal',
+                            fontSize: 24,
+                            color: "blue",
+                        }
+                    },
+                    xAxis: {
+                        type: 'category',
+                        data: ['温度', '湿度', '空气污染指数', '亮度']
+                    },
+                    yAxis: {
+                        type: 'value'
+                    },
+                    series: [{
+                        label: {
+                            normal: {
+                                show: true,
+                                position: 'inside',
+                                // formatter: '{c},({d}%)'//多值的嵌套
+                            }
+                        },
+                        data: [temperature, brightness, pm25, humidity],
+                        type: 'bar'
+                    }]
+                };
+                if (option && typeof option === "object") {
+                    myChart.setOption(option, true);
+                }
+            },error:function () {
+            }
+        });
+    }
   function detail(id) {
     var url = '[[${adminPath}]]/advertisementMachine/detail/' + id;
     $.ajax({
