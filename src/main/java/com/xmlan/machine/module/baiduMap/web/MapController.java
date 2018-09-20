@@ -48,24 +48,20 @@ public class MapController extends BaseController {
      */
     @RequestMapping(value = "/index", produces = "application/json; charset=utf-8")
     @ResponseBody
-    List<AdvertisementMachine> index(ModelMap modelMap){
+    List<AdvertisementMachine> index(AdvertisementMachine advertisementMachine,ModelMap modelMap){
         List<AdvertisementMachine> list;
         Object object = modelMap.get("loginUser");
         User user = (User) object;
-        int userid = user.getId();
-        if (userid==1 || userid == 10){
+        int userID = user.getId();
+        advertisementMachine.setUserID(userID);
+        if (userID==1 || userID == 10){
             list= service.findAllMachine();
             return list;
+        }else if (user.getRoleID() ==1){
+            list =service.atmosphereListByUserID(userID);
         }else {
-            list = service.adchineListByUserID(userid);
-            return list;
+            list =service.generalFindList(advertisementMachine);
         }
-    }
-    public static void main(String[] args){
-//        String res="{\"data\":{\"access_token\":\"5a7040ccf66bafd06acd39b6f61c19230eaba426755509646d6da23ddd9fb206\",\"expires_second\":36000},\"rlt_code\":\"HH0000\",\"rlt_msg\":\"成功\"}";
-//        JSONObject jsonObject= JSON.parseObject(res);
-//        String data = jsonObject.getString("data");
-//        JSONObject jsondata= JSON.parseObject(data);
-//        String token = jsondata.getString("access_token");
+        return list;
     }
 }

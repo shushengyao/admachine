@@ -144,18 +144,12 @@ public class MonitorController extends BaseController {
         return "monitor/EZUIKit_Demo_IE8";
     }
 
-
-    @RequestMapping(value = "/update")
-    public String update(){
-        updateToken();
-        System.out.print("更新accessToken");
-        return "monitor/Monitorlist";
-    }
-
     /**
      * 更新accesstoken
+     * @return
      */
-    public void updateToken(){
+    @RequestMapping(value = "/update")
+    public String update(){
         Map<String, String> parms =new HashMap<>();
         parms.put("appKey","51a534ebadf54c31a0848dc575dfa206");
         parms.put("appSecret","8c32c67a73c87b9e461b2e3bdf58967a");
@@ -163,9 +157,16 @@ public class MonitorController extends BaseController {
         JSONObject jsonObj= JSON.parseObject(post);
         String data = jsonObj.getString("data");
         JSONObject jsondata= JSON.parseObject(data);
-        String token= jsondata.getString("accessToken");
-        accessToken(token);
+        String accessToken= jsondata.getString("accessToken");
+        service.updateAccessToken(accessToken);
+        System.out.print("更新accessToken");
+        return "monitor/Monitorlist";
     }
+
+    /**
+     * 更新accesstoken
+     */
+
 //    public static void main(String[] args){
 //        String post ="{\"data\":{\"accessToken\":\"at.1rwk0g8h0p5meyqqaxuaigx668akbgfd-2kpgl7456q-0xxivp3-flvlz1tnu\",\"expireTime\":1537325846082},\"code\":\"200\",\"msg\":\"操作成功!\"}";
 ////        System.out.print(post);
@@ -178,11 +179,4 @@ public class MonitorController extends BaseController {
 ////        System.out.print(post);
 //    }
 
-    /**
-     * 更新数据库accessToken字段值
-     * @param accessToken
-     */
-    public void accessToken (String accessToken){
-        service.updateAccessToken(accessToken);
-    }
 }

@@ -82,7 +82,7 @@
             </if>
         </where>
     </select>
-    <select id="atmosphereListByUserID" resultMap="advertisementMachineResultMap">
+    <select id="atmosphereListByUserID" resultType="com.xmlan.machine.module.advertisementMachine.entity.AdvertisementMachine">
         SELECT
         t.*
         FROM
@@ -304,6 +304,13 @@
         where codeNumber = #{codeNumber}
     </select>
 
+    <select id="getAD" resultMap="advertisementMachineResultMap">
+        select
+        <include refid="columns"/>
+        from advertisement_machine t
+        where id = #{id}
+    </select>
+
     <update id="updateLocation">
         update advertisement_machine
         set
@@ -311,7 +318,7 @@
         latitude = #{latitude}
         where id = #{id}
     </update>
-    <update id="accessToken">
+    <update id="updateAccessToken">
         update advertisement_machine
         set
         accessToken =#{accessToken}

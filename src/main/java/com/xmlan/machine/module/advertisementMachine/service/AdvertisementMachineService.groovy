@@ -71,7 +71,7 @@ class AdvertisementMachineService extends BaseService<AdvertisementMachine, Adve
         }
     }
     int updateAccessToken(String accessToken){
-        dao.accessToken(accessToken)
+        dao.updateAccessToken(accessToken)
         return DONE
     }
 
@@ -228,6 +228,9 @@ class AdvertisementMachineService extends BaseService<AdvertisementMachine, Adve
     List<AdvertisementMachine> adchineListByUserID(@RequestParam("userID") int userID){
         dao.adchineListByUserID(userID)
     }
+    List<AdvertisementMachine> atmosphereListByUserID(@RequestParam("userID") int userID){
+        dao.atmosphereListByUserID(userID)
+    }
     List<AdvertisementMachine> atmosphereListByUserID(@RequestParam("userID") int userID,@RequestParam("pageNo") int pageNo){
         PageHelper.startPage pageNo, pageSize
         dao.atmosphereListByUserID(userID)
@@ -239,6 +242,9 @@ class AdvertisementMachineService extends BaseService<AdvertisementMachine, Adve
      */
     List<AdvertisementMachine> generalFindList(@RequestParam("advertisementMachine") AdvertisementMachine advertisementMachine,@RequestParam("pageNo") int pageNo){
         PageHelper.startPage pageNo, pageSize
+        dao.generalFindList(advertisementMachine)
+    }
+    List<AdvertisementMachine> generalFindList(@RequestParam("advertisementMachine") AdvertisementMachine advertisementMachine){
         dao.generalFindList(advertisementMachine)
     }
 
@@ -272,6 +278,15 @@ class AdvertisementMachineService extends BaseService<AdvertisementMachine, Adve
      */
     int deleteMachineForUser(@RequestParam("user_id") int user_id){
         dao.deleteMachineForUser(user_id)
+    }
+
+    /**
+     * 根据id查询单台设备信息
+     * @param user_id
+     * @return
+     */
+    AdvertisementMachine getAD(int id){
+        dao.getAD(id)
     }
 
 }

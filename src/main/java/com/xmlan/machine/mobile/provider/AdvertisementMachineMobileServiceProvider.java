@@ -6,6 +6,8 @@ import cn.jiguang.common.resp.APIRequestException;
 import cn.jpush.api.JPushClient;
 import cn.jpush.api.push.PushResult;
 import cn.jpush.api.push.model.PushPayload;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.Maps;
 import com.xmlan.machine.common.base.BaseController;
 import com.xmlan.machine.common.base.ModuleEnum;
@@ -13,6 +15,7 @@ import com.xmlan.machine.common.base.ObjectEnum;
 import com.xmlan.machine.common.base.OperateEnum;
 import com.xmlan.machine.common.cache.AdvertisementMachineCache;
 import com.xmlan.machine.common.config.Global;
+import com.xmlan.machine.common.task.HttpTools;
 import com.xmlan.machine.common.util.PushUtils;
 import com.xmlan.machine.common.util.StringUtils;
 import com.xmlan.machine.common.util.TokenUtils;
@@ -155,15 +158,21 @@ public class AdvertisementMachineMobileServiceProvider extends BaseController {
     @RequestMapping(value = "/getAccessToken",method = RequestMethod.POST,produces = "application/json; charset=utf-8")
     @ResponseBody
     public Map<String,String> getAccessToken(String errorCode){
-        if (errorCode == "errorCode"){
-            MonitorController monitorController= new MonitorController();
-            monitorController.updateToken();
-        }
-        String token =service.get("34").getAccessToken();
+        Map<String, String> parms =new HashMap<>();
+        parms.put("appKey","51a534ebadf54c31a0848dc575dfa206");
+        parms.put("appSecret","8c32c67a73c87b9e461b2e3bdf58967a");
+        String post = HttpTools.httpRequestToString("https://open.ys7.com/api/lapp/token/get","post",parms);
+        JSONObject jsonObj= JSON.parseObject(post);
+        String data = jsonObj.getString("data");
+        JSONObject jsondata= JSON.parseObject(data);
+        String accessToken= jsondata.getString("accessToken");
+        service.updateAccessToken(accessToken);
+        String token =service.getAD(34).getAccessToken();
         Map<String,String> result = new HashMap<>();
         result.put("accessToken",token);
         return result;
     }
+
 
     /**
      * 根据摄像头序列号获取设备验证码

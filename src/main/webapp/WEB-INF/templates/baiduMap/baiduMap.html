@@ -1,87 +1,206 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <th:block th:include="/common/head::head('广告机 - 广告机管理后台')"/>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
-    <style type="text/css">
-        html {width: 100%;height: 100%;overflow: hidden;margin:0;font-family:"微软雅黑";}
-    </style>
-    <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=XzxEh6hT4dGzncjHCQEv9KLFEDOtaOQW"></script>
-    <title>批量转换</title>
+    <script type="text/javascript" src="http://api.map.baidu.com/getscript?v=2.0&ak=XzxEh6hT4dGzncjHCQEv9KLFEDOtaOQW&services=&t=20180823194355"></script>
 </head>
-<!--/*@thymesVar id="adminPath" type="java.lang.String"*/-->
 <body>
+<main style="z-index: 0;padding-left: 0px">
 <th:block th:include="/common/header::header('baiduMap')"/>
-<div id="dg" style="z-index: 9999; position: fixed ! important; right: 50px; top: 100px;">
-    <!--<form id="baiduForm" th:action="@{${adminPath}+'/baiduMap/index'}">-->
-    <ul>
-        <li>
-            <a class="btn-floating green waves-effect waves-light tooltipped" data-position="top"
-               data-delay="50" data-tooltip="查看所有灯杆显示"  th:onclick="'javascript:index()'">
-                <i class="material-icons">location_on</i>
-            </a>
-        </li>
-    </ul>
-    <!--</form>-->
-</div>
-<div style="width:1800px;height:800px;border:1px solid gray;margin-left: 300px" id="allmap"></div>
+    <div id="detail-modal" class="modal modal-fixed-footer">
+        <div class="modal-content">
+            <h4>详情</h4>
+            <h6 class="green-text text-darken-2">广告机ID</h6>
+            <p id="detail-item-id">id</p>
+            <h6 class="green-text text-darken-2">名称</h6>
+            <p id="detail-item-name">name</p>
+            <h6 class="green-text text-darken-2">加入时间</h6>
+            <p id="detail-item-add-time">addTime</p>
+            <h6 class="green-text text-darken-2">所属用户</h6>
+            <p id="detail-item-user-id">userID -> username</p>
+            <h6 class="green-text text-darken-2">机器识别码</h6>
+            <p id="detail-item-code-number">codeNumber</p>
+            <h6 class="green-text text-darken-2">坐标经度</h6>
+            <p id="detail-item-longitude">longitude</p>
+            <h6 class="green-text text-darken-2">坐标维度</h6>
+            <p id="detail-item-latitude">latitude</p>
+            <h6 class="green-text text-darken-2">广告数</h6>
+            <p id="detail-item-ads">ads count</p>
+            <h6 class="green-text text-darken-2">状态 (灯/充电)</h6>
+            <p id="detail-item-status">status</p>
+            <h6 class="green-text text-darken-2">地址</h6>
+            <p id="detail-item-address">address</p>
+            <h6 class="green-text text-darken-2">备注</h6>
+            <p id="detail-item-remark">remark</p>
+            <h6 class="green-text text-darken-2">摄像头ip</h6>
+            <p id="detail-item-cameraIP">cameraIP</p>
+            <h6 class="green-text text-darken-2">摄像头序列号</h6>
+            <p id="detail-item-cameraSequence">cameraSequence</p>
+            <h6 class="green-text text-darken-2">摄像头设备验证码</h6>
+            <p id="detail-item-cameraVerificationCode">cameraVerificationCode</p>
+        </div>
+        <div class="modal-footer">
+            <a href="javascript:closeDiv()" class="modal-action modal-close waves-effect waves-green btn-flat">关闭</a>
+        </div>
+    </div>
+<div style="width:100%;height:100%" id="allmap"></div>
+</main>
 <th:block th:include="/common/footer::footer"/>
 <th:block th:include="/common/script::script"/>
-</body>
-</html>
 <script type="text/javascript">
-    var convertor = new BMap.Convertor();
-    var points =[];
+    //创建地图
     var map = new BMap.Map("allmap");
-    map.centerAndZoom(new BMap.Point(113.573229,22.377734), 15);
-
-
-    function index() {
+    map.centerAndZoom(new BMap.Point(113.57379, 22.378131), 11);  // 设置中心点
+    // map.centerAndZoom( "珠海");
+    // map.setCurrentCity("珠海");
+    map.addControl(new BMap.MapTypeControl());
+    map.enableScrollWheelZoom(true);
+    var points = new Array();
+    $(function () {
+        toast('[[${message}]]');
+        $("#detail-modal").modal();
         $.ajax({
-            url:'[[${adminPath}]]/baiduMap/index',
-            type:"POST",
+            url: '[[${adminPath}]]/baiduMap/index',
+            type: "POST",
             contentType: 'application/json',
-            success:function (data) {
-                function add() {
-                    for (var index in data) {
-                        points=points.concat([new BMap.Point(data[index].longitude, data[index].latitude)]);
+            success: function (data) {
+                for (var index in data) {
+                    if (data[index].longitude != 0 && data[index].latitude != 0) {
+                        var obj = {"lng":data[index].longitude,"lat": data[index].latitude,"status":data[index].light,"url":data[index].id,"id":data[index].id,"name":data[index].name};
+                        points[index] = obj;
                     }
                 }
-                add();
-                translateCallback = function (data){
-                    for (var i = 0; i < points.length; i++) {
-                        map.addOverlay(new BMap.Marker(points[i]));
-                        map.setCenter(points[i]);
-                    }
+                addMarker(points);
+            }
+        });
+        $("#openAll").click(function(){
+            var adIds = [];
+            var operate = $("#control_light").val();
+            $("input:checkbox[name=checkbox]:checked").each(function(i){
+                // adIds = $(this).val();
+                adIds.push($(this).val())
+                // adIds += (","+$(this).val());
+            });
+            var url = '[[${adminPath}]]/advertisementMachine/lightBatch';
+            var update='[[${adminPath}]]/advertisementMachine/list/1';
+            $.ajax({
+                url:url,
+                data:{"adIds":adIds,"operate":operate},
+                traditional :true,
+                dataType:"json",
+                type:"post",
+                success:function (data) {
+                    console.log("开灯成功！")
+                },error:function () {
+                    console.log("开灯失败！")
                 }
-                setTimeout(function(){
-                    var convertor = new BMap.Convertor();
-                    convertor.translate(points, 1, 5, translateCallback)
-                }, 1000);
-            },error:function (data) {
-                console.log("readyState :"+data.readyState)
-                console.log("status :"+data.status)
+            });
+        })
+    });
+    //创建标注点并添加到地图中
+    function addMarker(points) {
+        //循环建立标注点
+        for(var i =0; i< points.length;i++) {
+            var point = new BMap.Point(points[i].lng, points[i].lat); //将标注点转化成地图上的点
+            var icon = new BMap.Icon('../../../static/application/image/normal.png', new BMap.Size(40, 50), {
+                anchor: new BMap.Size(40, 50)
+            });
+            var marker = new BMap.Marker(point,{icon: icon}); //将点转化成标注点
+            map.addOverlay(marker);  //将标注点添加到地图上
+            // //添加监听事件
+            (function() {
+                var thePoint = points[i];
+                marker.addEventListener("click",
+                    function() {
+                        showInfo(this,thePoint);
+                    });
+            })();
+        }
+    }
+    function showInfo(thisMarker,point) {
+        var status;
+        if (point.status == 0) {
+            status ="关闭";
+        }else if (point.status == 1){
+            status = "打开";
+        } else if (point.status == 2){
+            status = "20%亮度";
+        } else if (point.status == 5){
+            status = "50%亮度";
+        } else if (point.status == 8){
+            status = "80%亮度";
+        } else {
+            status = "100%亮度";
+        }
+        //获取点的信息
+        var sContent =
+            '<ul style="margin:0 0 5px 0;padding:0.2em 0">'
+            +'<li style="line-height: 26px;font-size: 15px;">'
+            +'<span style="width: 50px;display: inline-block;">id：</span>' + point.id + '</li>'
+            +'<li style="line-height: 26px;font-size: 15px;">'
+            +'<span style="width: 50px;display: inline-block;">名称：</span>' + point.name + '</li>'
+            +'<li style="line-height: 26px;font-size: 15px;"><span style="width: 150px;display: inline-block;">查看灯杆信息：</span>' +
+            '<a class="btn-floating blue waves-effect waves-light tooltipped btn modal-trigger"' +
+            ' href="javascript:openDiv()" onclick="detail('+point.id+')" data-position="top" data-delay="50" data-tooltip="查看详情">详情</a></li>'
+            +'<li style="line-height: 26px;font-size: 15px;"><span style="width: 150px;display: inline-block;">当前灯杆亮度状态：</span>'
+            +'<select id="control_light" style="display: block;width: 90px;height: 20px"><option selected>'+status+'</option><option value="0">关灯</option><option value="1">开灯</option>' +
+            '<option value="2">20%亮度</option><option value="5">50%亮度</option><option value="8">80%亮度</option><option value="10">100%亮度</option></select>' +
+            '<input type="button" value="设置" id="updataLight" onclick=\"updataLight('+point.id+')"\></input></<br>' + '</li>'
+            +'<li style="width: 150px;display: inline-block;">查看实时摄像：<a href="javascript:callCamera('+point.cameraSequence+','+point.cameraVerificationCode+','+point.accessToken+')">详情</a></li>'
+            +'</ul>';
+        var infoWindow = new BMap.InfoWindow(sContent); //创建信息窗口对象
+        thisMarker.openInfoWindow(infoWindow); //图片加载完后重绘infoWindow
+    }
+    function detail(id) {
+        var url = '[[${adminPath}]]/advertisementMachine/detail/' + id;
+        $.ajax({
+            url: url,
+            type: "GET",
+            success: function (data) {
+                $("#detail-item-id").text(data['machine'].id);
+                $("#detail-item-name").text(data['machine'].name);
+                $("#detail-item-add-time").text(data['machine'].addTime);
+                $("#detail-item-user-id").text(data['owner']);
+                $("#detail-item-code-number").text(data['machine'].codeNumber);
+                $("#detail-item-longitude").text(data['machine'].longitude);
+                $("#detail-item-latitude").text(data['machine'].latitude);
+                $("#detail-item-ads").text(data['ads']);
+                $("#detail-item-status").text(data['status']);
+                $("#detail-item-address").text(data['machine'].address);
+                $("#detail-item-remark").text(data['machine'].remark);
+                $("#detail-item-cameraIP").text(data['machine'].cameraIP);
+                $("#detail-item-cameraSequence").text(data['machine'].cameraSequence);
+                $("#detail-item-cameraVerificationCode").text(data['machine'].cameraVerificationCode);
+            },
+            error: function () {
             }
         });
     }
-
-    var point = new BMap.Point(113.183251,22.684053);
-    map.centerAndZoom(point,12);
-
-    var geolocation = new BMap.Geolocation();
-    geolocation.getCurrentPosition(function(r){
-        if(this.getStatus() == BMAP_STATUS_SUCCESS){
-            var mk = new BMap.Marker(r.point);
-            map.addOverlay(mk);//标出所在地
-            map.panTo(r.point);//地图中心移动
-            var point = new BMap.Point(r.point.lng,r.point.lat);//用所定位的经纬度查找所在地省市街道等信息
-            var gc = new BMap.Geocoder();
-            gc.getLocation(point, function(rs){
-                var addComp = rs.addressComponents;
-                alert(rs.address);//地址信息
-            });
-        }else {
-            alert('failed'+this.getStatus());
-        }
-    },{enableHighAccuracy: true})
+    function openDiv() {
+        $('#detail-modal').show();
+    }
+    function closeDiv() {
+        $('#detail-modal').hide();
+    }
+    function updataLight(id) {
+        console.log(id)
+        var operate = $("#control_light").val();
+        var url = '[[${adminPath}]]/advertisementMachine/lightBatch';
+        $.ajax({
+            url:url,
+            data:{"adIds":id,"operate":operate},
+            traditional :true,
+            dataType:"json",
+            type:"post",
+            success:function (data) {
+                console.log("开灯成功！")
+            },error:function () {
+                console.log("开灯失败！")
+            }
+        });
+    }
+    function callCamera(cameraSequence,cameraVerificationCode,access_token) {
+        window.location='/mng/monitor/uikit?cameraSequence='+cameraSequence+'&cameraVerificationCode='+cameraVerificationCode+'&access_token='+access_token
+    }
 </script>
+</body>
+</html>

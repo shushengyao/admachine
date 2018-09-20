@@ -47,7 +47,7 @@ interface AdvertisementMachineDAO extends BaseDAO<AdvertisementMachine> {
      * @param accessToken
      * @return
      */
-    int accessToken(@Param("accessToken") String accessToken)
+    int updateAccessToken(@Param("accessToken") String accessToken)
     /**
      * 灯光控制
      * @param id 广告机ID
@@ -132,5 +132,10 @@ interface AdvertisementMachineDAO extends BaseDAO<AdvertisementMachine> {
      */
     int deleteMachineForUser(@Param("user_id") int user_id)
 
-
+    /**
+     * 根据设备id查询单台设备信息
+     * @param user_id
+     * @return
+     */
+    AdvertisementMachine getAD(int id)
 }
