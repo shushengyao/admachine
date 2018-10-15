@@ -24,6 +24,7 @@
                 <img th:if="${loginUser.getUsername()=='junpai'}" src="../../../static/application/image/20180525.jpg" alt="logo" class="center-block" style="height: 150px;width: 150px;margin-left: 50px" />
                 <img th:if="${loginUser.getUsername()=='xm'}" src="../../../static/application/image/logo.png" alt="logo" class="center-block" />
               <img th:if="${loginUser.getUsername()=='test'}" src="../../../static/application/image/test.jpg" alt="logo" class="center-block" />
+              <img th:if="${loginUser.getUsername()=='youwei'}" src="../../../static/application/image/youwei.jpg" alt="logo" class="center-block" style="height: 150px"/>
             </a>
           </li>
           <th:block th:switch="${module}">
