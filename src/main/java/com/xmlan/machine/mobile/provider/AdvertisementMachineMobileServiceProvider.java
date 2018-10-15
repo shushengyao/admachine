@@ -128,7 +128,7 @@ public class AdvertisementMachineMobileServiceProvider extends BaseController {
             List<AdvertisementMachine> machineList = service.findAllMachine();
             return machineList;
         }else {
-            List<AdvertisementMachine> machineList = service.adchineListByUserID(userID);
+            List<AdvertisementMachine> machineList = service.atmosphereListByUserID(userID);
             return machineList;
         }
     }

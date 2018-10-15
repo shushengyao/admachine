@@ -225,7 +225,6 @@ class AdvertisementMachineService extends BaseService<AdvertisementMachine, Adve
         dao.adchineListByUserID(advertisementMachine)
     }
     List<AdvertisementMachine> adchineListByUserID(@RequestParam("advertisementMachine") AdvertisementMachine advertisementMachine){
-        PageHelper.startPage pageNo, pageSize
         dao.adchineListByUserID(advertisementMachine)
     }
     List<AdvertisementMachine> adchineListByUserID(@RequestParam("userID") int userID,@RequestParam("pageNo") int pageNo){
