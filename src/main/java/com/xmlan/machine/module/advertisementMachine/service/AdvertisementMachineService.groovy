@@ -192,6 +192,9 @@ class AdvertisementMachineService extends BaseService<AdvertisementMachine, Adve
         PageHelper.startPage pageNo, pageSize
         dao.findAll(advertisementMachine)
     }
+    List<AdvertisementMachine> findAllMachine(advertisementMachine){
+        dao.findAll(advertisementMachine)
+    }
     List<AdvertisementMachine> findAll(pageNo){
         PageHelper.startPage pageNo, pageSize
         dao.findAll()
@@ -218,6 +221,10 @@ class AdvertisementMachineService extends BaseService<AdvertisementMachine, Adve
      * @return
      */
     List<AdvertisementMachine> adchineListByUserID(@RequestParam("advertisementMachine") AdvertisementMachine advertisementMachine,@RequestParam("pageNo") int pageNo){
+        PageHelper.startPage pageNo, pageSize
+        dao.adchineListByUserID(advertisementMachine)
+    }
+    List<AdvertisementMachine> adchineListByUserID(@RequestParam("advertisementMachine") AdvertisementMachine advertisementMachine){
         PageHelper.startPage pageNo, pageSize
         dao.adchineListByUserID(advertisementMachine)
     }

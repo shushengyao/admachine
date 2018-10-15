@@ -2,8 +2,24 @@
 <head>
     <th:block th:include="/common/head::head('广告机 - 广告机管理后台')"/>
     <script type="text/javascript" src="http://api.map.baidu.com/getscript?v=2.0&ak=XzxEh6hT4dGzncjHCQEv9KLFEDOtaOQW&services=&t=20180823194355"></script>
+    <script type="text/javascript" src="../../../static/application/js/echarts.min_1.js"></script>
+    <style>
+         #container div{width:200px;height:100px;}
+         .box1{float: left;}
+         .box2{float:left;}
+        .pageDiv ul {
+            text-align:center;list-style-type:none;
+        }
+        .pageDiv ul li{
+            display:inline;list-style-type:none;
+        }
+    </style>
 </head>
 <body>
+<!--/*@thymesVar id="loginUser" type="com.xmlan.machine.module.user.entity.User"*/-->
+<!--/*@thymesVar id="page" type="com.github.pagehelper.PageInfo<com.xmlan.machine.module.advertisementMachine.entity.AdvertisementMachine>"*/-->
+<!--/*@thymesVar id="adminPath" type="java.lang.String"*/-->
+<!--/*@thymesVar id="adminRoleID" type="java.lang.Integer"*/-->
 <main style="z-index: 0;padding-left: 0px">
 <th:block th:include="/common/header::header('baiduMap')"/>
     <div id="detail-modal" class="modal modal-fixed-footer">
@@ -42,22 +58,140 @@
             <a href="javascript:closeDiv()" class="modal-action modal-close waves-effect waves-green btn-flat">关闭</a>
         </div>
     </div>
-<div style="width:100%;height:100%" id="allmap"></div>
+<div style="width:100%;height:100%" id="allmap">
+</div>
+<div class="mapController" id="dg" style="z-index: 9999; position: fixed ! important; right: 50px; top: 15%;">
+    <ul>
+        <li>
+            <div style="overflow: hidden;" class="fc-event cyan ui-draggable ui-draggable-handle">
+                <div class="box1">
+                <h6 style="float: left">用户共计</h6>
+                </div>
+                <div class="box2">
+                <input id="allLight" style="margin: 0px;padding: 0px;float: left;font-size: 15px;width: 50px;text-align: center;height: 40px">
+                </div>
+                <div class="box1">
+                    <h6 style="float: left">台路灯</h6>
+                </div>
+            </div>
+            <div style="overflow: hidden;margin-top: 5px" class="fc-event cyan ui-draggable ui-draggable-handle">
+                <div class="box1">
+                    <h6 style="float: left">有</h6>
+                </div>
+                <div class="box2">
+                    <input id="okLight" style="margin: 0px;padding: 0px;float: left;font-size: 15px;width: 50px;text-align: center; height: 40px;">
+                </div>
+                <div class="box1">
+                    <h6 style="float: left">台路灯有位置信息</h6>
+                </div>
+            </div>
+        </li>
+
+        <li>
+            <div class="col s12 m3 l3 center">
+                <p>
+                    <a class="btn btn-large waves-effect waves-light red darken-4" id="triggerBtn">查看所有路灯概况</a>
+                </p>
+            </div>
+        </li>
+
+        <li>
+            <div class="col s12 m3 l3 center">
+                <p>
+                    <a class="btn btn-large waves-effect waves-light blue darken-4" onclick="groupBatch()">分组批量控制路灯</a>
+                </p>
+            </div>
+        </li>
+    </ul>
+</div>
+<div id="myModal" class="modal modal-fixed-footer" style=";background-color: #e4e4e4;height: 1400px;width: 1600px;position: absolute;left: 50%;top: 50%;transform: translate(-50%,-50%);">
+    <span id="closeBtn" style="margin-left: 95%" class="close">关闭</span>
+    <div id="circuit" style="height: 1200px;width: 1400px;margin-top: 0px;margin-left: 150px">
+    </div>
+</div>
+
+<div id="groupBatch" class="groupBatch" style="z-index:9999;position:fixed;margin-left: 20%; top: 80%;border:5px solid #a9c9e2;background:#e8f5fe;width: 70%;height: 10%;display: none">
+    <div style="display: flex;float: left">
+            <h5 style="width: 150px;height: 45px;margin: 20px">当前分组：</h5>
+            <select style="display: inline-block;width: 200px;height: 45px;float: left;margin: 10px">
+                <option>-- 请选择 --</option>
+                <option>第一街区</option>
+                <option>第二街区</option>
+                <option>第三街区</option>
+            </select>
+            <button style="display: flex;width: 80px;height: 45px;float: left;margin-top: 10px;background-color: #00c1de;text-align: center;" onclick="addGroup()">添加分组</button>
+        <button style="display: flex;width: 80px;height: 45px;float: left;margin-top: 10px;background-color: #00c1de;text-align: center;" id="updateGroup" onclick="updateGroup()">编辑分组</button>
+            <select style="display: inline-block;width: 200px;height: 45px;float: left;margin: 10px;margin-left: 100px">
+                <option>-- 请选择 --</option>
+                <option value="1">正常开灯</option>
+                <option value="0">关灯</option>
+                <option value="2">20%亮度</option>
+                <option value="5">50%亮度</option>
+                <option value="8">80%亮度</option>
+                <option value="10">100%亮度</option>
+            </select>
+            <button style="display: flex;width: 80px;height: 45px;float: left;margin-top: 10px;background-color: #00c1de;text-align: center;">确认控制</button>
+            <a href="javascript:closeBatch()" class="material-icons" style="margin-left: 300px;">clear</a>
+    </div>
+</div>
+<div id="updateGroupDiv" class="groupBatch" style="z-index:9999;position:fixed;margin-left: 20%; top: 30%;border:5px solid #a9c9e2;background:#e8f5fe;width: 50%;height: 40%;display: none">
+    <h5 style="text-align: center">分组列表</h5>
+    <a href="javascript:closeGroup()" class="material-icons" style="margin-left: 900px;">clear</a>
+    <table class="highlight responsive-table" >
+        <thead>
+        <tr>
+            <th>分组名称</th>
+            <th>删除</th>
+        </tr>
+        </thead>
+    </table>
+</div>
+    <form>
+        <div id="addGroupDiv" class="groupBatch" style="z-index:9999;position:fixed;margin-left: 20%; top: 20%;border:5px solid #a9c9e2;background:#e8f5fe;width: 50%;height: 60%;display: none">
+            <h5 style="text-align: center">添加分组</h5>
+            <a href="javascript:closeGroup()" class="material-icons" style="margin-left: 900px;">clear</a>
+            <table class="highlight responsive-table" >
+                <thead>
+                <tr>
+                    <th>选中</th>
+                    <th>id</th>
+                    <th>设备名称</th>
+                    <th>设备地址</th>
+                </tr>
+                </thead>
+            </table>
+            <div style="position:absolute; bottom:100px;">
+                <input  name="checkbox" value="2" type="checkbox">确认选择
+                <input id="txt" value=""  style="width:500px;" readonly="readonly" type="text">
+                <input id="groupName" type="text" placeholder="输入分组名称" style="width: 200px" name="ok">
+                <button type="button">确认加入分组</button>
+            </div>
+            <div class="pageDiv"style="position:absolute; bottom:0px;margin-left: 30%">
+                <ul >
+                    <li>页面显示<a id="pageCount"></a>条结果</li>
+                    <li><a onclick="previousPage()">上一页</a></li>
+                    <li><a onclick="nextPage()">下一页</a></li>
+                </ul>
+            </div>
+        </div>
+    </form>
 </main>
 <th:block th:include="/common/footer::footer"/>
 <th:block th:include="/common/script::script"/>
 <script type="text/javascript">
     //创建地图
     var map = new BMap.Map("allmap");
+    var pageCount;
     map.centerAndZoom(new BMap.Point(113.57379, 22.378131), 11);  // 设置中心点
     // map.centerAndZoom( "珠海");
     // map.setCurrentCity("珠海");
     map.addControl(new BMap.MapTypeControl());
     map.enableScrollWheelZoom(true);
     var points = new Array();
+    var firstPage = 0;
     $(function () {
-        toast('[[${message}]]');
         $("#detail-modal").modal();
+        toast('[[${message}]]');
         $.ajax({
             url: '[[${adminPath}]]/baiduMap/index',
             type: "POST",
@@ -69,6 +203,9 @@
                         points[index] = obj;
                     }
                 }
+                $("#allLight").val(data.length) ;
+                points = points.filter(function(n) { return n; });//去数组空值，假值
+                $("#okLight").val(points.length);
                 addMarker(points);
             }
         });
@@ -95,7 +232,221 @@
                 }
             });
         })
+        var dom = document.getElementById("circuit");
+        var myChart = echarts.init(dom);
+
+        var xAxisData = [];
+        var data1 = [];
+        var data2 = [];
+        for (var i = 0; i < 100; i++) {
+            xAxisData.push('类目' + i);
+            data1.push((Math.sin(i / 5) * (i / 5 -10) + i / 6) * 5);
+            data2.push((Math.cos(i / 5) * (i / 5 -10) + i / 6) * 5);
+        }
+
+        option = {
+            title: {
+                text: '柱状图动画延迟'
+            },
+            legend: {
+                data: ['bar', 'bar2'],
+                align: 'left'
+            },
+            toolbox: {
+                // y: 'bottom',
+                feature: {
+                    magicType: {
+                        type: ['stack', 'tiled']
+                    },
+                    dataView: {},
+                    saveAsImage: {
+                        pixelRatio: 2
+                    }
+                }
+            },
+            tooltip: {},
+            xAxis: {
+                data: xAxisData,
+                silent: false,
+                splitLine: {
+                    show: false
+                }
+            },
+            yAxis: {
+            },
+            series: [{
+                name: 'bar',
+                type: 'bar',
+                data: data1,
+                animationDelay: function (idx) {
+                    return idx * 10;
+                }
+            }, {
+                name: 'bar2',
+                type: 'bar',
+                data: data2,
+                animationDelay: function (idx) {
+                    return idx * 10 + 100;
+                }
+            }],
+            animationEasing: 'elasticOut',
+            animationDelayUpdate: function (idx) {
+                return idx * 5;
+            }
+        };
+
+        myChart.setOption(option);
+
     });
+    function previousPage() {
+        firstPage = firstPage-1;
+        if (firstPage = 0){
+            firstPage = 0
+        }
+        var group = document.getElementById("addGroupDiv").style.display ="block";
+        var closeGroup = document.getElementById("updateGroupDiv").style.display ="none";
+        $('#addGroupDiv table tr').html("");
+        $.ajax({
+            url:'[[${adminPath}]]/machineGroup/machineList/'+firstPage,
+            dataType:"json",
+            type:"post",
+            success:function (data,status) {
+                pageCount = data.length;
+                $('#pageCount').text(pageCount);
+                // console.log(data[0])
+                // machineStr =eval('(' + data + ')');
+                $.each(data,function (idx, obj) {
+                    var id =data[idx].id;
+                    var name =data[idx].name;
+                    var address =data[idx].address;
+                    var tr =
+                        "<tr>"+
+                        "<td><input type=\"checkbox\" name=\"checkbox\"></td>"+
+                        "<td>"+id+"</td>"+
+                        "<td>"+name+"</td>"+
+                        "<td>"+address+"</td>"+
+                        "</tr>";
+                    $("table").append(tr);
+                });
+            },error:function () {
+            }
+        });
+    }
+    function nextPage() {
+        firstPage = firstPage+1;
+        var group = document.getElementById("addGroupDiv").style.display ="block";
+        var closeGroup = document.getElementById("updateGroupDiv").style.display ="none";
+        $('#addGroupDiv table tr').html("");
+        $.ajax({
+            url:'[[${adminPath}]]/machineGroup/machineList/'+firstPage,
+            dataType:"json",
+            type:"post",
+            success:function (data,status) {
+                pageCount = data.length;
+                $('#pageCount').text(pageCount);
+                // console.log(data[0])
+                // machineStr =eval('(' + data + ')');
+                $.each(data,function (idx, obj) {
+                    var id =data[idx].id;
+                    var name =data[idx].name;
+                    var address =data[idx].address;
+                    var tr =
+                        "<tr>"+
+                        "<td><input type=\"checkbox\" name=\"checkbox\"></td>"+
+                        "<td>"+id+"</td>"+
+                        "<td>"+name+"</td>"+
+                        "<td>"+address+"</td>"+
+                        "</tr>";
+                    $("table").append(tr);
+                });
+            },error:function () {
+
+            }
+        });
+    }
+    function groupBatch() {
+        var group = document.getElementById("groupBatch").style.display ="block";
+    }
+
+    $('input[name="checkbox"]').change(function(){
+        console.log(789789)
+        var result="";
+        $("input[name='checkbox']:checked").each(function(){
+            result+=$(this).val()+'、';
+        });
+        if(result!=""){
+            result=result.substring(0,result.lastIndexOf('、'));
+        }
+        $("#txt").val(result);
+    });
+    function checkboxOnclick() {
+        var result="";
+        console.log(111)
+        $("input[name='checkbox']:checked").each(function(){
+            result+=$(this).val()+'、';
+        });
+        if(result!=""){
+            result=result.substring(0,result.lastIndexOf('、'));
+        }
+        $("#txt").val(result);
+    }
+    function addGroup() {
+        var group = document.getElementById("addGroupDiv").style.display ="block";
+        var closeGroup = document.getElementById("updateGroupDiv").style.display ="none";
+        $('#addGroupDiv table tr').html("");
+        $.ajax({
+            url:'[[${adminPath}]]/machineGroup/machineList/1',
+            dataType:"json",
+            type:"post",
+            success:function (data,status) {
+                pageCount = data.length;
+                $('#pageCount').text(pageCount);
+                // console.log(data[0])
+                // machineStr =eval('(' + data + ')');
+                $.each(data,function (idx, obj) {
+                    var id =data[idx].id;
+                    var name =data[idx].name;
+                    var address =data[idx].address;
+                    var tr =
+                        "<tr>"+
+                        "<td><input type=\"checkbox\" name=\"checkbox\"  value="+id+" onclick=\"checkboxOnclick(this)\" ></td>"+
+                        "<td>"+id+"</td>"+
+                        "<td>"+name+"</td>"+
+                        "<td>"+address+"</td>"+
+                        "</tr>";
+                    $("table").append(tr);
+                });
+            },error:function () {
+                console.log(456)
+            }
+        });
+    }
+
+    //添加编辑分组页面
+    function updateGroup() {
+        var group = document.getElementById("updateGroupDiv").style.display ="block";
+        var closeGroup = document.getElementById("addGroupDiv").style.display ="none";
+        $('#updateGroupDiv table tr').html("");
+        $.ajax({
+            url:'[[${adminPath}]]/machineGroup/groupList',
+            type:"GET",
+            success:function (machine) {
+                console.log(machine)
+                machineStr =eval('(' + machine + ')');
+                $.each(machineStr,function (idx, obj) {
+                    var name;
+                    name =machineStr[idx].groupName;
+                    var tr =
+                        "<tr>"+
+                        "<td>"+name+"</td>"+
+                        "<td>"+"删除"+"</td>"+
+                        "</tr>";
+                    $("table").append(tr);
+                });
+            }
+        });
+
+    }
     //创建标注点并添加到地图中
     function addMarker(points) {
         //循环建立标注点
@@ -181,6 +532,13 @@
     function closeDiv() {
         $('#detail-modal').hide();
     }
+    function closeBatch() {
+        $('#groupBatch').hide();
+    }
+    function closeGroup() {
+        $('#addGroupDiv').hide();
+        $('#updateGroupDiv').hide();
+    }
     function updataLight(id) {
         console.log(id)
         var operate = $("#control_light").val();
@@ -201,6 +559,53 @@
     function callCamera(cameraSequence,cameraVerificationCode,access_token) {
         window.location='/mng/monitor/uikit?cameraSequence='+cameraSequence+'&cameraVerificationCode='+cameraVerificationCode+'&access_token='+access_token
     }
+
+    /*
+    模态框弹出
+     */
+    (function() {
+        /*建立模态框对象*/
+        var modalBox = {};
+        /*获取模态框*/
+        modalBox.modal = document.getElementById("myModal");
+        /*获得trigger按钮*/
+        modalBox.triggerBtn = document.getElementById("triggerBtn");
+        /*获得关闭按钮*/
+        modalBox.closeBtn = document.getElementById("closeBtn");
+        /*模态框显示*/
+        modalBox.show = function() {
+            this.modal.style.display = "block";
+        }
+        /*模态框关闭*/
+        modalBox.close = function() {
+            this.modal.style.display = "none";
+        }
+        /*当用户点击模态框内容之外的区域，模态框也会关闭*/
+        modalBox.outsideClick = function() {
+            var modal = this.modal;
+            window.onclick = function(event) {
+                if(event.target == modal) {
+                    modal.style.display = "none";
+                }
+            }
+        }
+        /*模态框初始化*/
+        modalBox.init = function() {
+            var that = this;
+            this.triggerBtn.onclick = function() {
+                that.show();
+                var mychar = document.getElementById("dg").style.display ="none";
+            }
+            this.closeBtn.onclick = function() {
+                that.close();
+                var mych = document.getElementById("dg").style.display ="block";
+            }
+            this.outsideClick();
+        }
+        modalBox.init();
+
+    })();
+
 </script>
 </body>
 </html>

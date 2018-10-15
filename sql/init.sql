@@ -55,6 +55,21 @@ comment '用户ID'
   char set utf8
   comment '设备用户关联表';
 
+  -- 创建设备分组表 machine_group
+drop table if exists `machine_group`;
+create table `machine_group`(
+id int auto_increment not null,
+machineID varchar(255)
+comment '广告机id',
+userID
+comment '用户ID',
+light int comment '路灯亮度',
+groupName varchar(255) comment '组名'
+)
+  char set utf8
+  comment '设备分组表';
+
+
 -- 创建广告机表, 如果存在则抛弃旧表重新创建
 drop table if exists `advertisement_machine`;
 create table `advertisement_machine` (

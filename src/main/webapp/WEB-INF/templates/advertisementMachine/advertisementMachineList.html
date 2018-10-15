@@ -354,7 +354,8 @@
             url:url,
             type:"GET",
             success:function (data) {
-                var id = data['weather'].id;
+                console.log(data)
+                var id = data['weather'].machineID;
                 var temperature = data['weather'].temperature;
                 var brightness = data['weather'].brightness;
                 var pm25 = data['weather'].pm25;

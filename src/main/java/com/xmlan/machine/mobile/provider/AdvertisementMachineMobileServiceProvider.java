@@ -158,15 +158,17 @@ public class AdvertisementMachineMobileServiceProvider extends BaseController {
     @RequestMapping(value = "/getAccessToken",method = RequestMethod.POST,produces = "application/json; charset=utf-8")
     @ResponseBody
     public Map<String,String> getAccessToken(String errorCode){
-        Map<String, String> parms =new HashMap<>();
-        parms.put("appKey","51a534ebadf54c31a0848dc575dfa206");
-        parms.put("appSecret","8c32c67a73c87b9e461b2e3bdf58967a");
-        String post = HttpTools.httpRequestToString("https://open.ys7.com/api/lapp/token/get","post",parms);
-        JSONObject jsonObj= JSON.parseObject(post);
-        String data = jsonObj.getString("data");
-        JSONObject jsondata= JSON.parseObject(data);
-        String accessToken= jsondata.getString("accessToken");
-        service.updateAccessToken(accessToken);
+        if (errorCode.equals("error")  ){
+            Map<String, String> parms =new HashMap<>();
+            parms.put("appKey","51a534ebadf54c31a0848dc575dfa206");
+            parms.put("appSecret","8c32c67a73c87b9e461b2e3bdf58967a");
+            String post = HttpTools.httpRequestToString("https://open.ys7.com/api/lapp/token/get","post",parms);
+            JSONObject jsonObj= JSON.parseObject(post);
+            String data = jsonObj.getString("data");
+            JSONObject jsondata= JSON.parseObject(data);
+            String accessToken= jsondata.getString("accessToken");
+            service.updateAccessToken(accessToken);
+        }
         String token =service.getAD(34).getAccessToken();
         Map<String,String> result = new HashMap<>();
         result.put("accessToken",token);

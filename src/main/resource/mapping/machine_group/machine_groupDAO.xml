@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xmlan.machine.module.machineGroup.dao.MachineGroupDAO">
+    <resultMap id="machine_groupResultMap" type="com.xmlan.machine.module.machineGroup.entity.MachineGroup">
+        <id column="id" property="id"/>
+        <result column="userID" property="userID"/>
+        <result column="machineID" property="machineID"/>
+        <result column="light" property="light"/>
+        <result column="groupName" property="groupName"/>
+    </resultMap>
+    <sql id="columns">
+        t.id as "id",
+        t.userID as "userID",
+        t.machineID as "machineID",
+        t.light as "light",
+        t.groupName as "groupName"
+    </sql>
+
+    <select id="findAllByUserID" resultType="com.xmlan.machine.module.machineGroup.entity.MachineGroup">
+        select
+        <include refid="columns"/>
+        from machine_group t
+        where t.userID = #{userID}
+    </select>
+
+    <select id="findAll" resultType="com.xmlan.machine.module.machineGroup.entity.MachineGroup">
+        select
+        *
+        from machine_group
+    </select>
+
+    <insert id="insert" parameterType="com.xmlan.machine.module.machineGroup.entity.MachineGroup">
+        insert into machine_group (
+        id,userID, machineID, light,groupName
+        )values (
+        id,#{userID},#{machineID},#{light},#{groupName}
+        );
+    </insert>
+
+    <update id="update" parameterType="com.xmlan.machine.module.machineGroup.entity.MachineGroup">
+        update machine_group
+        set
+        machineID = #{machineID},
+        light = #{light},
+        groupName = #{groupName}
+        where userID = #{userID}
+    </update>
+
+    <delete id="dalete" parameterType="com.xmlan.machine.module.machineGroup.entity.MachineGroup">
+        delete from machine_group
+        where userID = #{userID}
+    </delete>
+</mapper>
