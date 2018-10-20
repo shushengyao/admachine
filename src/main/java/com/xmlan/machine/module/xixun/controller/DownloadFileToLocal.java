@@ -3,18 +3,19 @@ package com.xmlan.machine.module.xixun.controller;
 import com.google.gson.Gson;
 import com.xmlan.machine.common.base.BaseBean;
 import com.xmlan.machine.module.xixun.util.ClearPlayListData;
+import com.xmlan.machine.module.xixun.util.DownloadFileToLocalData;
 import okhttp3.*;
 
 import java.io.IOException;
 
 /**
- * 清除播放列表
+ * 媒体文件上传到led控制卡内存
  * @program: admachine
  * @description: controller
  * @author: YSS
- * @create: 2018-07-26 15:01
+ * @create: 2018-10-20 09:55
  **/
-public class ClearPlayList {
+public class DownloadFileToLocal {
     public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
     private OkHttpClient client = new OkHttpClient();
 
@@ -28,13 +29,15 @@ public class ClearPlayList {
         return response.body().string();
     }
 
-    public void clearPlayList(String led) {
+    public  void DownloadFileToLocal(String call,String led_code) {
         Gson gson = new Gson();
-        ClearPlayListData data = new ClearPlayListData();
+        DownloadFileToLocalData data = new DownloadFileToLocalData();
+        data.url = data.url + call;
+        data.path = data.path + call;
         String jsonData = gson.toJson(data);
-        ClearPlayList test = new ClearPlayList();
+        DownloadFileToLocal test = new DownloadFileToLocal();
 //        String url = "http://192.168.6.104:8081/command/y10-518-00147"; //check this
-        String url = BaseBean.URL + led; //check this
+        String url = BaseBean.URL +led_code; //check this
         String result;
         try {
             result = test.post(url, jsonData);

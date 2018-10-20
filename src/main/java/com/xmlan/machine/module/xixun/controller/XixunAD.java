@@ -113,6 +113,27 @@ public class XixunAD extends BaseController {
     }
 
     /**
+     * 集中处理上传媒体信息然后重定向处理
+     * @param file
+     * @param redirectAttributes
+     * @param request
+     * @return
+     */
+//    @RequestMapping(value = "/uploadFile",method =RequestMethod.POST)
+    public String uploadFile(@RequestParam("file") MultipartFile file,RedirectAttributes redirectAttributes,HttpServletRequest request){
+        String oldName = file.getOriginalFilename();
+        int indexb = oldName.lastIndexOf(".");
+        String type = oldName.substring(indexb);
+        if (type.equals(".mp4")){
+            return "redirect:downloadFileToLocal";
+        }else if (type.equals(".png") || type.equals(".jpg") || type.equals(".jpeg")){
+            return "redirect:upload";
+        }else {
+           return  "redirect:list/1";
+        }
+    }
+
+    /**
      * 上传文件
      * @param file
      * @return
@@ -143,23 +164,30 @@ public class XixunAD extends BaseController {
                 if (!filename.exists()) {
                     filename.createNewFile();
                 }
-                if (name2.equals(".mp4")){
-                    boolean bea= FileUtils.writeToFile("<head><style>body{margin:0;padding:0;}</style><video loop=\"loop\" muted src=\""+name+"\" style=\"width: 128px;height: 256px\" controls=\"controls\" autoplay=\"autoplay\"></video></head>",filenameTemp);
-                    if (bea == true){
-                        CallXwalkFn callXwalkFn = new CallXwalkFn();
-                        callXwalkFn.callXwalkFn(call,led);
-                        clear(led);
-                        break;
-                    }
-                }else if (name2.equals(".png") || name2.equals(".jpg") || name2.equals(".jpeg")){
-                    boolean bea= FileUtils.writeToFile("<head><style>body{margin:0;padding:0;}</style></head><img src=\""+name+"\" style=\"width: 128px;height: 256px\"/></head>",filenameTemp);
-                    if (bea == true){
-                        CallXwalkFn callXwalkFn = new CallXwalkFn();
-                        callXwalkFn.callXwalkFn(call,led);
-                        clear(led);
-                        break;
-                    }
+                boolean bea= FileUtils.writeToFile("<head><style>body{margin:0;padding:0;}</style></head><img src=\""+name+"\" style=\"width: 128px;height: 128px\"/></head>",filenameTemp);
+                if (bea == true){
+                    CallXwalkFn callXwalkFn = new CallXwalkFn();
+                    callXwalkFn.callXwalkFn(call,led);
+                    clear(led);
+                    break;
                 }
+//                if (name2.equals(".mp4")){
+//                    boolean bea= FileUtils.writeToFile("<head><style>body{margin:0;padding:0;}</style><video loop=\"loop\" muted src=\""+name+"\" style=\"width: 128px;height: 128px\" controls=\"controls\" autoplay=\"autoplay\"></video></head>",filenameTemp);
+//                    if (bea == true){
+//                        CallXwalkFn callXwalkFn = new CallXwalkFn();
+//                        callXwalkFn.callXwalkFn(call,led);
+//                        clear(led);
+//                        break;
+//                    }
+//                }else if (name2.equals(".png") || name2.equals(".jpg") || name2.equals(".jpeg")){
+//                    boolean bea= FileUtils.writeToFile("<head><style>body{margin:0;padding:0;}</style></head><img src=\""+name+"\" style=\"width: 128px;height: 128px\"/></head>",filenameTemp);
+//                    if (bea == true){
+//                        CallXwalkFn callXwalkFn = new CallXwalkFn();
+//                        callXwalkFn.callXwalkFn(call,led);
+//                        clear(led);
+//                        break;
+//                    }
+//                }
             }
         }
         return "redirect:list/1";
@@ -260,14 +288,7 @@ public class XixunAD extends BaseController {
 //        GetFileLength.main(null);
 //    }
 
-    /**
-     * 设置播放列表
-     */
-    @RequestMapping(value = "/setPlayList")
-    @org.springframework.web.bind.annotation.ResponseBody
-    public  void setPlayList() {
-        DeleteFile.main(null);
-    }
+
     /**
      * 开关屏幕
      */
@@ -278,13 +299,25 @@ public class XixunAD extends BaseController {
     }
 
     /**
+     * 设置播放列表
+     */
+//    @RequestMapping(value = "/setPlayList")
+//    @org.springframework.web.bind.annotation.ResponseBody
+    public  void setPlayList(String led,String fileName) {
+        SetPlayList setPlayList = new SetPlayList();
+        setPlayList.setPlayList(led,fileName);
+    }
+    /**
      * 清除播放列表
      */
     @RequestMapping(value = "/clearPlayList")
     @org.springframework.web.bind.annotation.ResponseBody
-    public  void clearPlayList() {
-        ClearPlayList.main(null);
+    public  String clearPlayList(@RequestParam(value = "led_code") String led) {
+        ClearPlayList clearPlayList = new ClearPlayList();
+        clearPlayList.clearPlayList(led);
+        return "redirect:list/1";
     }
+
 
     /**
      * 启动xwalk
@@ -319,6 +352,23 @@ public class XixunAD extends BaseController {
         return s;
     }
 
-
-
+    /**
+     * 媒体文件上传到led板卡内存
+     * @param
+     */
+    @RequestMapping(value = "/downloadFileToLocal",method =RequestMethod.POST)
+    public String downloadFileToLocal(@RequestParam("file") MultipartFile file,HttpServletRequest request) throws IOException{
+        Date date = new Date();
+        String dataForm = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss").format(date);
+        HttpServletRequest httpRequest = (HttpServletRequest)request;
+        CommonsMultipartResolver commonsMultipartResolver = new CommonsMultipartResolver(httpRequest.getSession().getServletContext());
+        MultipartHttpServletRequest multipartRequest = commonsMultipartResolver.resolveMultipart(httpRequest);
+        String led = multipartRequest.getParameter("led");
+        String fileName = UploadUtils.saveFile(dataForm,file, BaseBean.path);
+        DownloadFileToLocal downloadFileToLocal = new DownloadFileToLocal();
+        downloadFileToLocal.DownloadFileToLocal(fileName,led);
+        setPlayList(led,fileName);
+        clear(led);
+        return "redirect:list/1";
+    }
 }

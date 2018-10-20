@@ -18,6 +18,8 @@ import com.xmlan.machine.module.advertisementMachine.entity.AdvertisementMachine
 import com.xmlan.machine.module.system.service.SysLogService;
 import com.xmlan.machine.module.user.entity.User;
 import com.xmlan.machine.module.xixun.controller.CallXwalkFn;
+import com.xmlan.machine.module.xixun.controller.DownloadFileToLocal;
+import com.xmlan.machine.module.xixun.controller.SetPlayList;
 import com.xmlan.machine.module.xixun.controller.XixunAD;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
@@ -26,7 +28,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
+import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -201,6 +206,12 @@ public class AdvertisementMobileServiceProvider extends BaseController {
         }
         int indexb = 0;
         int responseCode = -3;
+        String oldName = file.getOriginalFilename();
+        int index = oldName.lastIndexOf(".");
+        String type = oldName.substring(index);
+        if (type.equals(".mp4")){
+            mp4(responseCode,oldName,led);
+        }
 //        String filena = fil.substring(0,fil.indexOf("."));
         UploadUtils.saveFile(dataForm,file, BaseBean.path);
         String filenameTemp;
@@ -217,14 +228,8 @@ public class AdvertisementMobileServiceProvider extends BaseController {
                 if (!filename.exists()) {
                     filename.createNewFile();
                 }
-                if (name2.equals(".mp4")){
-                    boolean bea= FileUtils.writeToFile("<head><style>body{margin:0;padding:0;}</style><video loop=\"loop\" muted src=\""+name+"\" style=\"width: 128px;height: 256px\" controls=\"controls\" autoplay=\"autoplay\"></video></head>",filenameTemp);
-                    if (bea == true){
-                        util(responseCode,call,led);
-                        break;
-                    }
-                }else if (name2.equals(".png") || name2.equals(".jpg") || name2.equals(".jpeg")){
-                    boolean bea= FileUtils.writeToFile("<head><style>body{margin:0;padding:0;}</style></head><body><img src=\""+name+"\" style=\"width: 128px;height: 256px\"/></head>",filenameTemp);
+                if (name2.equals(".png") || name2.equals(".jpg") || name2.equals(".jpeg")){
+                    boolean bea= FileUtils.writeToFile("<head><style>body{margin:0;padding:0;}</style></head><body><img src=\""+name+"\" style=\"width: 128px;height: 128px\"/></head>",filenameTemp);
                     if (bea == true){
                        util(responseCode,call,led);
                        break;
@@ -246,6 +251,21 @@ public class AdvertisementMobileServiceProvider extends BaseController {
         xixunAD.clear(led);
         responseCode = BaseBean.DONE;
         return responseCode;
+    }
+    private int mp4(int responseCode,String fileName,String led) throws IOException{
+        Date date = new Date();
+        String dataForm = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss").format(date);
+        HttpServletRequest httpRequest = (HttpServletRequest)request;
+        CommonsMultipartResolver commonsMultipartResolver = new CommonsMultipartResolver(httpRequest.getSession().getServletContext());
+        MultipartHttpServletRequest multipartRequest = commonsMultipartResolver.resolveMultipart(httpRequest);
+        DownloadFileToLocal downloadFileToLocal = new DownloadFileToLocal();
+        downloadFileToLocal.DownloadFileToLocal(fileName,led);
+        setPlayList(led,fileName);
+        return responseCode;
+    }
+    public  void setPlayList(String led,String fileName) throws IOException{
+        SetPlayList setPlayList = new SetPlayList();
+        setPlayList.setPlayList(led,fileName);
     }
 
     /**

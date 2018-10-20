@@ -41,7 +41,9 @@
         <div id="detail-modal" class="modal modal-fixed-footer">
             <div class="modal-content">
                 <h4>详情</h4>
-                <form th:action="@{${adminPath}+'/xixunAD/upload'}" method="post" enctype="multipart/form-data">
+                <!--<form th:action="@{${adminPath}+'/xixunAD/downloadFileToLocal'}" method="post" enctype="multipart/form-data">-->
+                <form th:action="@{${adminPath}+'/xixunAD/upload'}" method="post" id="fromFile" enctype="multipart/form-data">
+                <!--<form th:action="@{${adminPath}+'/xixunAD/uploadFile'}" method="post" enctype="multipart/form-data">-->
                     <h6 class="green-text text-darken-2">led屏幕ID</h6>
                     <p id="detail-id">id</p>
                     <h6 class="green-text text-darken-2">led名称</h6>
@@ -54,13 +56,28 @@
                     <p id="detail-user_id">user_id</p>
                     <h6 class="green-text text-darken-2">上传文件并在led屏幕播放</h6>
                     <p>选择文件:</p>
-                    <input type="file" name="file" accept="image/*,video/mp4">
+                    <select id="typeSel" style="display: block;width: 200px" class="form-control">
+                        <option value="image/*">图片</option>
+                    </select>
+                    <input type="file" name="file" id="fileInput" accept="image/*">
                     <input type="text" style="display: none" name="led" id="led_code" value="">
-                    <a class="material-icons"><input type="submit" value="提交">file_upload</a>
+                    <a class="material-icons"><input type="submit" value="提交图片文件">file_upload</a>
+                </form>
+                <select style="display: block;width: 200px" class="form-control">
+                    <option value="image/*">视频</option>
+                </select>
+                <form th:action="@{${adminPath}+'/xixunAD/downloadFileToLocal'}" method="post" enctype="multipart/form-data">
+                    <input type="file" name="file"  accept="video/*">
+                    <input type="text" style="display: none" name="led" value="">
+                    <a class="material-icons"><input type="submit" value="提交视频文件">file_upload</a>
                 </form>
                 <form th:action="@{${adminPath}+'/xixunAD/clear'}" method="post">
                     <input type="hidden" id="led_co" name="led_code" value="">
                     <input class="date-picker" type="submit" value="清空屏幕字幕">
+                </form>
+                <form th:action="@{${adminPath}+'/xixunAD/clearPlayList'}" method="post">
+                    <input type="hidden" id="led_" name="led_code" value="">
+                    <input class="date-picker" type="submit" value="清空视频播放">
                 </form>
             </div>
             <div class="modal-footer">
@@ -164,12 +181,13 @@
                     var adid = adStr[idx].id;
                     var ledco = adStr[idx].led;
                     led = adStr[idx].led;
+                    // console.log(adStr)
                     var tr =
                         "<tr>"+
                         "<td>"+adStr[idx].name+"</td>"+
                         "<td>"+adStr[idx].led+"</td>"+
                         "<td>"+adStr[idx].machine_id+"</td>"+
-                        "<td>"+"骏牌"+"</td>"+
+                        "<td>"+"测试"+"</td>"+
                         "<td>"+"<a data-position=\"top\" data-delay=\"50\"  class=\"btn-floating blue waves-effect waves-light tooltipped btn modal-trigger\"" +
                         " href='#weather-modal'onclick='getPicture(\""+led+"\")'>"+"查看"+"</a>"+"</td>"+
                         "<td>"+"<a class='material-icons' onclick='deleteAD("+adid+")'>"+'delete'+"</a>"+"</td>"+
@@ -214,6 +232,17 @@
         colorInfo.style.color = color.value;
         colorInfo.innerHTML = color.value;
     }
+    // document.getElementById("typeSel").addEventListener("change",function () {
+    //     var file= document.getElementById('fileInput');
+    //     var type = $("#typeSel").val();
+    //     file.setAttribute('accept',type);
+    //     if (type == "video/*") {
+    //         var url = document.getElementById("fromFile").action = "@{${adminPath}+'/xixunAD/downloadFileToLocal";
+    //         console.log(url)
+    //     }else {
+    //         document.getElementById("fromFile").action = "@{${adminPath}+'/xixunAD/upload";
+    //     }
+    // });
     function sendFile() {
         var led = $('#led_code');
         $.ajax({
@@ -312,6 +341,7 @@
                 $("#detail-user_id").text(jsonObj[0].user_id);
                 var code = jsonObj[0].led;
                 $("#led_co").val(code);
+                $("#led_").val(code);
                 $("#led_code").val(jsonObj[0].led);
             },error:function () {
                 console.log("失败！")

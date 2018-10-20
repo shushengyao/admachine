@@ -8,10 +8,9 @@ package com.xmlan.machine.module.xixun.util;
  **/
 public class SetPlayListData {
     public String type = "setPlayList";
-    public String[] list = {"_.jpg","xmlan.jpg"};
-    public String[] pathList = {"_.jpg","xmlan.jpg"};
-    public int width = 200;
-    public int height = 640;
+    public String[] list = new String[1] ;
+    public int width = 128;
+    public int height = 128;
     public int top = 0;
-    public int left = 100;
+    public int left = 0;
 }

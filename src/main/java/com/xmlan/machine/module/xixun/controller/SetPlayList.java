@@ -1,6 +1,7 @@
 package com.xmlan.machine.module.xixun.controller;
 
 import com.google.gson.Gson;
+import com.xmlan.machine.common.base.BaseBean;
 import com.xmlan.machine.module.xixun.util.SetPlayListData;
 import okhttp3.*;
 
@@ -26,13 +27,14 @@ public class SetPlayList {
         return response.body().string();
     }
 
-    public static void main(String[] args) {
+    public void setPlayList(String led,String fileName) {
         Gson gson = new Gson();
         SetPlayListData data = new SetPlayListData();
+        data.list[0] = "/data/data/com.xixun.xy.conn/files/local/abc/"+fileName;
         String jsonData = gson.toJson(data);
         SetPlayList test = new SetPlayList();
-//        String url = "http://192.168.6.104:8081/command/y10-518-00147"; //check this
-        String url = "http://192.168.0.218:8081/command/y10-518-00147"; //check this
+//        String url = "http://192.168.0.218:8081/command/y10-518-00147"; //check this
+        String url = BaseBean.URL+led; //check this
         String result;
         try {
             result = test.post(url, jsonData);
