@@ -24,7 +24,7 @@ final class UploadUtils {
 
 
 
-    static boolean saveFile(dataForm,MultipartFile file, String path) {
+    static String saveFile(dataForm,MultipartFile file, String path) {
         // 判断文件是否为空
         if (!file.isEmpty()) {
             String str = file.getOriginalFilename();
@@ -38,12 +38,12 @@ final class UploadUtils {
                 String savePath = path + fileName
                 // 转存文件
                 file.transferTo(new File(savePath));
-                return true;
+                return fileName;
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
-        return false;
+        return "";
     }
     static String uploadImages(Object request) {
         def imagePath = new File("${Global.mediaPath}/${Global.imageTag}".toString())
