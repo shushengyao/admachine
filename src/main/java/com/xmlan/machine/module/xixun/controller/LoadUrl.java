@@ -1,6 +1,7 @@
 package com.xmlan.machine.module.xixun.controller;
 
 import com.google.gson.Gson;
+import com.xmlan.machine.common.base.BaseBean;
 import com.xmlan.machine.module.xixun.util.LoadUrlData;
 import okhttp3.*;
 
@@ -26,12 +27,13 @@ public class LoadUrl {
         return response.body().string();
     }
 
-    public static void main(String[] args) {
+    public void loadUrl(String led) {
         Gson gson = new Gson();
         LoadUrlData data = new LoadUrlData();
         String jsonData = gson.toJson(data);
         LoadUrl test = new LoadUrl();
-        String url = "http://192.168.0.218:8081/command/y10-518-00147"; //check this
+        String url = BaseBean.URL +led;
+//        String url = "http://192.168.0.218:8081/command/y10-518-00147"; //check this
         String result;
         try {
             result = test.post(url, jsonData);

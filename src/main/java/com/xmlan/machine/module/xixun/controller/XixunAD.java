@@ -134,7 +134,7 @@ public class XixunAD extends BaseController {
     }
 
     /**
-     * 上传文件
+     * 上传图片文件
      * @param file
      * @return
      */
@@ -143,52 +143,28 @@ public class XixunAD extends BaseController {
         Date date = new Date();
         String dataForm = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss").format(date);
         String filenameTemp;
+
         HttpServletRequest httpRequest = (HttpServletRequest)request;
         CommonsMultipartResolver commonsMultipartResolver = new CommonsMultipartResolver(httpRequest.getSession().getServletContext());
         MultipartHttpServletRequest multipartRequest = commonsMultipartResolver.resolveMultipart(httpRequest);
+
         String led = multipartRequest.getParameter("led");
-        int indexb = 0;
-//        String filena = fil.substring(0,fil.indexOf("."));
         UploadUtils.saveFile(dataForm,file, BaseBean.path);
-        String [] fileName = FileUtils.getFileName(BaseBean.path);
-        for(String name:fileName)
-        {
-            indexb = name.lastIndexOf("."); //最后一个'.'号位置
-            String name1 = name.substring(0,indexb);
-            if (dataForm.equals(name1)){
-//                String name1 = name.substring(0,name.indexOf("."));
-                String name2 = name.substring(indexb);
-                filenameTemp= BaseBean.path+dataForm+".html";
-                String call = BaseBean.XWALKURL+dataForm+".html";
-                File filename = new File(filenameTemp);
-                if (!filename.exists()) {
-                    filename.createNewFile();
-                }
-                boolean bea= FileUtils.writeToFile("<head><style>body{margin:0;padding:0;}</style></head><img src=\""+name+"\" style=\"width: 128px;height: 128px\"/></head>",filenameTemp);
-                if (bea == true){
-                    CallXwalkFn callXwalkFn = new CallXwalkFn();
-                    callXwalkFn.callXwalkFn(call,led);
-                    clear(led);
-                    break;
-                }
-//                if (name2.equals(".mp4")){
-//                    boolean bea= FileUtils.writeToFile("<head><style>body{margin:0;padding:0;}</style><video loop=\"loop\" muted src=\""+name+"\" style=\"width: 128px;height: 128px\" controls=\"controls\" autoplay=\"autoplay\"></video></head>",filenameTemp);
-//                    if (bea == true){
-//                        CallXwalkFn callXwalkFn = new CallXwalkFn();
-//                        callXwalkFn.callXwalkFn(call,led);
-//                        clear(led);
-//                        break;
-//                    }
-//                }else if (name2.equals(".png") || name2.equals(".jpg") || name2.equals(".jpeg")){
-//                    boolean bea= FileUtils.writeToFile("<head><style>body{margin:0;padding:0;}</style></head><img src=\""+name+"\" style=\"width: 128px;height: 128px\"/></head>",filenameTemp);
-//                    if (bea == true){
-//                        CallXwalkFn callXwalkFn = new CallXwalkFn();
-//                        callXwalkFn.callXwalkFn(call,led);
-//                        clear(led);
-//                        break;
-//                    }
-//                }
+        String fileName = UploadUtils.saveFile(dataForm,file, BaseBean.path);
+        filenameTemp= BaseBean.path+"demo.html";
+        File filename = new File(filenameTemp);
+        if (filename.exists()) {
+//            filename.createNewFile();
+            if (filename.delete()){
+                filename.createNewFile();
             }
+        }
+        boolean bea= FileUtils.writeToFile("<head><style>body{margin:0;padding:0;}</style></head><img src=\""+fileName+"\" style=\"width: 128px;height: 128px\"/></head>",filenameTemp);
+        if (bea == true){
+//                    CallXwalkFn callXwalkFn = new CallXwalkFn();
+//                    callXwalkFn.callXwalkFn(call,led);
+            LoadUrl loadUrl =new  LoadUrl();
+            loadUrl.loadUrl(led);
         }
         return "redirect:list/1";
     }
@@ -226,8 +202,9 @@ public class XixunAD extends BaseController {
      */
     @RequestMapping(value = "/loadUrl")
     @org.springframework.web.bind.annotation.ResponseBody
-    public  void loadUrl() {
-        LoadUrl.main(null);
+    public  void loadUrl(@RequestParam("led_code") String led_code) {
+        LoadUrl loadUrl =new  LoadUrl();
+        loadUrl.loadUrl(led_code);
     }
 
     /**

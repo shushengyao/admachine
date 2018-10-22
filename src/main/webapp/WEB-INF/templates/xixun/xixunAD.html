@@ -68,7 +68,7 @@
                 </select>
                 <form th:action="@{${adminPath}+'/xixunAD/downloadFileToLocal'}" method="post" enctype="multipart/form-data">
                     <input type="file" name="file"  accept="video/*">
-                    <input type="text" style="display: none" name="led" value="">
+                    <input type="text" style="display: none" name="led" id="led" value="">
                     <a class="material-icons"><input type="submit" value="提交视频文件">file_upload</a>
                 </form>
                 <form th:action="@{${adminPath}+'/xixunAD/clear'}" method="post">
@@ -79,6 +79,7 @@
                     <input type="hidden" id="led_" name="led_code" value="">
                     <input class="date-picker" type="submit" value="清空视频播放">
                 </form>
+                <input class="" type="button" onclick="loadUrl()" value="覆盖屏幕">
             </div>
             <div class="modal-footer">
                 <a href="#" class="modal-action modal-close waves-effect waves-green btn-flat">关闭</a>
@@ -139,7 +140,6 @@
             </div>
         </div>
         <div th:if="${loginUser.id}==1">
-            <input class="" type="button" onclick="loadUrl()" value="开始测试">
             <input class="" type="button" onclick="invokeJs()" value="第二部">
             <!--<input class="" type="button" onclick="callCardService()" value="设置屏幕开关">-->
         </div>
@@ -327,7 +327,7 @@
     function detail(id,led) {
         // console.log(id)
         // console.log(led)
-        startActivity(led);
+        // startActivity(led);
         $.ajax({
             url:'[[${adminPath}]]/xixunAD/detail',
             data:{"id":id},
@@ -339,10 +339,11 @@
                 $("#detail-code").text(jsonObj[0].led);
                 $("#detail-machine_id").text(jsonObj[0].machine_id);
                 $("#detail-user_id").text(jsonObj[0].user_id);
-                var code = jsonObj[0].led;
+                var code =led;
                 $("#led_co").val(code);
                 $("#led_").val(code);
                 $("#led_code").val(jsonObj[0].led);
+                $("#led").val(code);
             },error:function () {
                 console.log("失败！")
             }
@@ -492,11 +493,13 @@
     }
 
     function loadUrl() {
+        var led_code = $("#led_co").val();
         $.ajax({
             url:'[[${adminPath}]]/xixunAD/loadUrl',
             type:"GET",
+            data:{"led_code":led_code},
             success:function () {
-                console.log("第一步成功！")
+                console.log(led_code)
             },error:function () {
                 console.log("第一步失败！")
             }
