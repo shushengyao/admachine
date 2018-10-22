@@ -30,6 +30,7 @@ public class LoadUrl {
     public void loadUrl(String led) {
         Gson gson = new Gson();
         LoadUrlData data = new LoadUrlData();
+        data.url = BaseBean.XWALKURL+"demo.html";
         String jsonData = gson.toJson(data);
         LoadUrl test = new LoadUrl();
         String url = BaseBean.URL +led;
