@@ -163,6 +163,7 @@ public class XixunAD extends BaseController {
         if (bea == true){
 //                    CallXwalkFn callXwalkFn = new CallXwalkFn();
 //                    callXwalkFn.callXwalkFn(call,led);
+            clear(led);
             LoadUrl loadUrl =new  LoadUrl();
             loadUrl.loadUrl(led);
         }

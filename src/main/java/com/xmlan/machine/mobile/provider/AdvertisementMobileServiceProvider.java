@@ -17,10 +17,7 @@ import com.xmlan.machine.module.advertisement.service.AdvertisementService;
 import com.xmlan.machine.module.advertisementMachine.entity.AdvertisementMachine;
 import com.xmlan.machine.module.system.service.SysLogService;
 import com.xmlan.machine.module.user.entity.User;
-import com.xmlan.machine.module.xixun.controller.CallXwalkFn;
-import com.xmlan.machine.module.xixun.controller.DownloadFileToLocal;
-import com.xmlan.machine.module.xixun.controller.SetPlayList;
-import com.xmlan.machine.module.xixun.controller.XixunAD;
+import com.xmlan.machine.module.xixun.controller.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Controller;
@@ -209,55 +206,39 @@ public class AdvertisementMobileServiceProvider extends BaseController {
         String oldName = file.getOriginalFilename();
         int index = oldName.lastIndexOf(".");
         String type = oldName.substring(index);
+        String fileName = UploadUtils.saveFile(dataForm,file, BaseBean.path);
         if (type.equals(".mp4")){
-            mp4(responseCode,oldName,led);
-        }
-//        String filena = fil.substring(0,fil.indexOf("."));
-        UploadUtils.saveFile(dataForm,file, BaseBean.path);
-        String filenameTemp;
-        String [] fileName = FileUtils.getFileName(BaseBean.path);
-        for(String name:fileName)
-        {
-            indexb = name.lastIndexOf("."); //最后一个'.'号位置
-            String name1 = name.substring(0,indexb);
-            if (dataForm.equals(name1)){
-                String name2 = name.substring(indexb);
-                filenameTemp= BaseBean.path+dataForm+".html";
-                String call = BaseBean.XWALKURL+dataForm+".html";
-                File filename = new File(filenameTemp);
-                if (!filename.exists()) {
+            mp4(responseCode,fileName,led);
+        } else if (type.equals(".png") || type.equals(".jpg") || type.equals(".jpeg") || type.equals(".gif")) {
+            String filenameTemp= BaseBean.path+"demo.html";
+            String call = BaseBean.XWALKURL+dataForm+".html";
+            File filename = new File(filenameTemp);
+            if (filename.exists()) {
+//            filename.createNewFile();
+                if (filename.delete()){
                     filename.createNewFile();
                 }
-                if (name2.equals(".png") || name2.equals(".jpg") || name2.equals(".jpeg")){
-                    boolean bea= FileUtils.writeToFile("<head><style>body{margin:0;padding:0;}</style></head><body><img src=\""+name+"\" style=\"width: 128px;height: 128px\"/></head>",filenameTemp);
-                    if (bea == true){
-                       util(responseCode,call,led);
-                       break;
-                    }
-                }else {
-                    responseCode = BaseBean.FAILURE;
-                }
             }
-            else {
+            boolean bea= FileUtils.writeToFile("<head><style>body{margin:0;padding:0;}</style></head><body><img src=\""+fileName+"\" style=\"width: 128px;height: 128px\"/></head>",filenameTemp);
+            if (bea == true){
+                XixunAD xixunAD = new XixunAD();
+                xixunAD.clear(led);
+                util(responseCode,call,led);
+            }else {
                 responseCode = BaseBean.FAILURE;
             }
         }
         return pushUpdate(id, responseCode, "新广告");
     }
     private int util(int responseCode,String call,String led){
-        CallXwalkFn callXwalkFn = new CallXwalkFn();
-        callXwalkFn.callXwalkFn(call,led);
-        XixunAD xixunAD = new XixunAD();
-        xixunAD.clear(led);
+//        CallXwalkFn callXwalkFn = new CallXwalkFn();
+//        callXwalkFn.callXwalkFn(call,led);
+        LoadUrl loadUrl =new  LoadUrl();
+        loadUrl.loadUrl(led);
         responseCode = BaseBean.DONE;
         return responseCode;
     }
     private int mp4(int responseCode,String fileName,String led) throws IOException{
-        Date date = new Date();
-        String dataForm = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss").format(date);
-        HttpServletRequest httpRequest = (HttpServletRequest)request;
-        CommonsMultipartResolver commonsMultipartResolver = new CommonsMultipartResolver(httpRequest.getSession().getServletContext());
-        MultipartHttpServletRequest multipartRequest = commonsMultipartResolver.resolveMultipart(httpRequest);
         DownloadFileToLocal downloadFileToLocal = new DownloadFileToLocal();
         downloadFileToLocal.DownloadFileToLocal(fileName,led);
         setPlayList(led,fileName);
@@ -266,7 +247,10 @@ public class AdvertisementMobileServiceProvider extends BaseController {
     public  void setPlayList(String led,String fileName) throws IOException{
         SetPlayList setPlayList = new SetPlayList();
         setPlayList.setPlayList(led,fileName);
+        XixunAD xixunAD = new XixunAD();
+        xixunAD.clear(led);
     }
+
 
     /**
      * 手动推送通知广告机需要更新列表
