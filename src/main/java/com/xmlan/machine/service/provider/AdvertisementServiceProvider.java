@@ -85,10 +85,9 @@ public class AdvertisementServiceProvider extends BaseController {
      */
     @RequestMapping("/media/{id}")
     @ResponseBody
-    public void media(@PathVariable("id") int id, HttpServletResponse response) {
+    public void media(@PathVariable("id") int id, HttpServletResponse response) throws Exception {
         Advertisement advertisement = AdvertisementCache.get(id);
         MediaUtils.mediaTransfer(advertisement.getUrl(), response);
-        System.out.print(response);
     }
 
 }

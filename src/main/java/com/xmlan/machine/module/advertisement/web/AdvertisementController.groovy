@@ -1,11 +1,17 @@
 package com.xmlan.machine.module.advertisement.web
 
 import cn.jiguang.common.ClientConfig
+import cn.jiguang.common.resp.APIConnectionException
 import cn.jiguang.common.resp.APIRequestException
 import cn.jpush.api.JPushClient
+import cn.jpush.api.push.PushResult
+import cn.jpush.api.push.model.PushPayload
 import com.github.pagehelper.PageInfo
 import com.google.common.collect.Maps
 import com.xmlan.machine.common.base.BaseController
+import com.xmlan.machine.common.base.ModuleEnum
+import com.xmlan.machine.common.base.ObjectEnum
+import com.xmlan.machine.common.base.OperateEnum
 import com.xmlan.machine.common.cache.AdvertisementCache
 import com.xmlan.machine.common.cache.AdvertisementMachineCache
 import com.xmlan.machine.common.cache.UserCache
@@ -15,6 +21,7 @@ import com.xmlan.machine.module.advertisement.entity.Advertisement
 import com.xmlan.machine.module.advertisement.service.AdvertisementService
 import com.xmlan.machine.module.advertisementMachine.entity.AdvertisementMachine
 import com.xmlan.machine.module.advertisementMachine.service.AdvertisementMachineService
+import com.xmlan.machine.module.system.service.SysLogService
 import com.xmlan.machine.module.user.entity.User
 import com.xmlan.machine.module.user.service.UserService
 import org.springframework.beans.factory.annotation.Autowired
@@ -41,6 +48,7 @@ class AdvertisementController extends BaseController {
     private UserService userService
     @Autowired
     private AdvertisementMachineService machineService
+    private final SysLogService sysLogService;
 
 
     /**
@@ -192,14 +200,10 @@ class AdvertisementController extends BaseController {
         if (id == NEW_INSERT_ID) {
             advertisement.addTime = DateUtils.dateTime
             service.insert advertisement
-            // 推送
-            Thread.start { push(advertisement.machineID, advertisement.id, "New advertisement.") }
             addMessage redirectAttributes, "创建广告成功"
         } else {
             advertisement.id = id
             service.update advertisement
-            // 推送
-            Thread.start { push(advertisement.machineID, advertisement.id, "An advertisement updated.") }
             addMessage redirectAttributes, "修改广告成功"
         }
         "redirect:$adminPath/advertisement/list/1"
@@ -213,12 +217,15 @@ class AdvertisementController extends BaseController {
      */
     @RequestMapping(value = "/delete")
     String delete(Advertisement advertisement, HttpServletRequest request, RedirectAttributes attributes) {
-//        if (!TokenUtils.validateFormToken(request, "deleteToken", request.getParameter("deleteToken"))) {
-//            addMessage attributes, "本次提交的表单验证失败"
-//            return "redirect:$adminPath/advertisement/list/1"
-//        }
-        String sys =request.getParameter("deleteToken")
-        if (service.delete(advertisement) == DATABASE_DO_NOTHING) {
+        if (!TokenUtils.validateFormToken(request, "deleteToken", request.getParameter("deleteToken"))) {
+            addMessage attributes, "本次提交的表单验证失败"
+            return "redirect:$adminPath/advertisement/list/1"
+        }
+//        String sys =request.getParameter("deleteToken")
+
+        Advertisement advertisementCach = AdvertisementCache.get(advertisement.id);
+        pushUpdate(advertisementCach.id,DONE,"删除广告")
+        if (service.delete(advertisementCach) == DATABASE_DO_NOTHING) {
             addMessage attributes, "这个操作没有删除任何广告"
         } else {
             addMessage attributes, "删除广告成功"
@@ -243,9 +250,7 @@ class AdvertisementController extends BaseController {
         }
         def responseCode = service.uploadMedia(String.valueOf(id), request)
         if (responseCode == DONE) {
-            def ad = AdvertisementCache.get(id)
-            // 推送
-            Thread.start { push(ad.machineID, id, "New ad media.") }
+            pushUpdate(id,DEFAULT,"上传文件")
             addMessage attributes, "上传成功"
         }
         if (responseCode == FAILURE) {
@@ -277,13 +282,54 @@ class AdvertisementController extends BaseController {
         map['type'] = TYPE_MEDIA_UPDATE
         map['needUpdate'] = YES
         def pushClient = new JPushClient(Global.masterSecret, Global.appKey, null, ClientConfig.instance)
-        def payload = PushUtils.buildPayload(machine.toString(), message, map)
+        def payload = PushUtils.buildPayload(String.valueOf(machine.id), message, map)
         try {
             def result = pushClient.sendPush(payload)
-            logger.trace result
+            logger.trace result.originalContent
         } catch (APIRequestException e) {
             logger.error "API exception with: ${e.message}"
+        }catch (APIConnectionException e) {
+            map.put(keyResponseCode, ERROR_API_CONNECTION_EXCEPTION);
+            map.put(keyMessage, "Push connect error.");
+            logger.error("API exception with: " + e.getMessage());
         }
     }
+    private HashMap<String, Object> pushUpdate(int id, int responseCode, String message) {
+        // 获取广告对象
+        Advertisement advertisement = AdvertisementCache.get(id);
+        // 获取广告机对象
+        AdvertisementMachine machine = AdvertisementMachineCache.get(advertisement.getMachineID());
+        // 封装推送体数据
+        HashMap<String, Integer> pushData = Maps.newHashMap();
+        // 添加推送体数据内容（广告ID）
+        pushData.put("advertisementID", advertisement.getId());
+        pushData.put("type", TYPE_MEDIA_UPDATE);
+        pushData.put("needUpdate", YES);
+        // 创建推送客户端
+        JPushClient client = new JPushClient(Global.getMasterSecret(), Global.getAppKey(), null, ClientConfig.getInstance());
+        // 创建预处理推送体
+        PushPayload payload = PushUtils.buildPayload(String.valueOf(machine.getId()), message, pushData);
+        PushResult result;
+        HashMap<String, Object> map = Maps.newHashMap();
+        try {
+            result = client.sendPush(payload);
+            if (responseCode == DEFAULT) {
+                map.put(keyResponseCode, result.statusCode);
+            } else {
+                map.put(keyResponseCode, responseCode);
+            }
+            map.put(keyMessage, message);
+            logger.trace(result.getOriginalContent());
+        }catch (APIConnectionException e) {
+            map.put(keyResponseCode, ERROR_API_CONNECTION_EXCEPTION);
+            map.put(keyMessage, "Push connect error.");
+            logger.error("API exception with: " + e.getMessage());
+        } catch (APIRequestException e) {
+            map.put(keyResponseCode, ERROR_API_REQUEST_EXCEPTION);
+            map.put(keyMessage, "Push request error.");
+            logger.error("API exception with: " + e.getMessage());
+        }
+    }
+
 
 }

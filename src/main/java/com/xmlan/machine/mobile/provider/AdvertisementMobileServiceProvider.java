@@ -231,8 +231,6 @@ public class AdvertisementMobileServiceProvider extends BaseController {
         return pushUpdate(id, responseCode, "新广告");
     }
     private int util(int responseCode,String call,String led){
-//        CallXwalkFn callXwalkFn = new CallXwalkFn();
-//        callXwalkFn.callXwalkFn(call,led);
         LoadUrl loadUrl =new  LoadUrl();
         loadUrl.loadUrl(led);
         responseCode = BaseBean.DONE;
