@@ -159,7 +159,7 @@ public class XixunAD extends BaseController {
                 filename.createNewFile();
             }
         }
-        boolean bea= FileUtils.writeToFile("<head><style>body{margin:0;padding:0;}</style></head><img src=\""+fileName+"\" style=\"width: 128px;height: 128px\"/></head>",filenameTemp);
+        boolean bea= FileUtils.writeToFile("<head><style>body{margin:0;padding:0;}</style></head><img src=\""+fileName+"\" style=\"width: 128px;height: 256px\"/></head>",filenameTemp);
         if (bea == true){
 //                    CallXwalkFn callXwalkFn = new CallXwalkFn();
 //                    callXwalkFn.callXwalkFn(call,led);
@@ -191,6 +191,14 @@ public class XixunAD extends BaseController {
     public String update(@RequestParam("id") int id){
         int i = led_machineService.delete(id);
         return "xixun/xixunAD";
+    }
+
+    /**
+     * 查询天气
+     * @param args
+     */
+    public static void main(String[] args){
+
     }
 
     public String updateBack(){
