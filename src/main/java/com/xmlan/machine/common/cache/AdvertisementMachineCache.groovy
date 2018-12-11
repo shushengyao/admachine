@@ -10,6 +10,9 @@ import com.xmlan.machine.module.advertisementMachine.dao.MachineSensorDAO
 import com.xmlan.machine.module.advertisementMachine.entity.AdvertisementMachine
 import com.xmlan.machine.module.advertisementMachine.entity.MachineSensor
 import com.xmlan.machine.module.advertisementMachine.entity.SimpleAdvertisementMachine
+import com.xmlan.machine.module.machineGroup.dao.MachineGroupDAO
+import com.xmlan.machine.module.machineGroup.entity.MachineGroup
+import com.xmlan.machine.module.machineGroup.entity.SimpleMachineGroup
 
 /**
  * Created by ayakurayuki on 2017/12/29-10:35.

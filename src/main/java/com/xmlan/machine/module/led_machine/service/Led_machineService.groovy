@@ -15,7 +15,7 @@ import java.util.List;
 @Service("Led_machineService")
 class Led_machineService extends BaseService<Led_machine,Led_machineDAO> {
     /**
-     * 根据设备id查询led广告列表
+     * 根据用户id查询led广告列表
      * @param machine_id
      * @return
      */

@@ -23,7 +23,6 @@
         <id column="id" property="id"/>
         <result column="userID" property="userID"/>
         <result column="name" property="name"/>
-        <result column="address" property="address"/>
         <result column="longitude" property="longitude"/>
         <result column="latitude" property="latitude"/>
         <result column="addTime" property="addTime"/>
@@ -36,6 +35,12 @@
         <result column="cameraSequence" property="cameraSequence"/>
         <result column="cameraVerificationCode" property="cameraVerificationCode"/>
         <result column="accessToken" property="accessToken"/>
+        <result column="LED" property="LED"/>
+        <result column="city" property="city"/>
+        <result column="cityCode" property="cityCode"/>
+        <result column="updateTime" property="updateTime"/>
+        <result column="addrStr" property="addrStr"/>
+        <result column="singLampID" property="singLampID"/>
     </resultMap>
 
     <sql id="columns">

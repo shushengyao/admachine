@@ -21,8 +21,15 @@
     <cache name="advertisementCache" maxEntriesLocalHeap="2000" eternal="true" overflowToDisk="true"
            memoryStoreEvictionPolicy="LFU"/>
 
+    <!-- 分组缓存 -->
+    <cache name="machineGroupCache" maxEntriesLocalHeap="2000" eternal="true" overflowToDisk="true"
+           memoryStoreEvictionPolicy="LFU"></cache>
+
     <!-- 广告机缓存 -->
     <cache name="advertisementMachineCache" maxEntriesLocalHeap="2000" eternal="true" overflowToDisk="true"
            memoryStoreEvictionPolicy="LFU"/>
+    <!--led查询缓存-->
+    <cache name="ledCache" maxEntriesLocalHeap="2000" eternal="true" overflowToDisk="true"
+           memoryStoreEvictionPolicy="LFU"></cache>
 
 </ehcache>

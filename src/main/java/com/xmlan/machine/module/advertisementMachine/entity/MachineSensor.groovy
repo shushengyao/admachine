@@ -12,6 +12,9 @@ class MachineSensor implements Serializable {
     String humidity
     String pm25
     String brightness
+    String pm10
+    String eCo2
+    String tVoc
     String machineID
 
     int getId() {
@@ -61,5 +64,29 @@ class MachineSensor implements Serializable {
 
     String getMachineID() {
         return machineID
+    }
+
+    String getPm10() {
+        return pm10
+    }
+
+    void setPm10(String pm10) {
+        this.pm10 = pm10
+    }
+
+    String geteCo2() {
+        return eCo2
+    }
+
+    void seteCo2(String eCo2) {
+        this.eCo2 = eCo2
+    }
+
+    String gettVoc() {
+        return tVoc
+    }
+
+    void settVoc(String tVoc) {
+        this.tVoc = tVoc
     }
 }

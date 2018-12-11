@@ -17,8 +17,6 @@ class AdvertisementMachine implements Serializable {
     private int userID
     // 广告机名称
     private String name
-    // 地址
-    private String address
     // 经度
     private String longitude
     // 纬度
@@ -45,6 +43,50 @@ class AdvertisementMachine implements Serializable {
     private String accessToken
      //led
     private String LED
+    private String city;
+    private String cityCode;//城市编码
+    private String updateTime;//定位更新时间
+    private String addrStr;//定位地址
+
+    private int singLampID;String getCityCode() {
+        return cityCode
+    }
+
+    void setCityCode(String cityCode) {
+        this.cityCode = cityCode
+    }
+
+    String getUpdateTime() {
+        return updateTime
+    }
+
+    void setUpdateTime(String updateTime) {
+        this.updateTime = updateTime
+    }
+
+    String getAddrStr() {
+        return addrStr
+    }
+
+    void setAddrStr(String addrStr) {
+        this.addrStr = addrStr
+    }
+
+    String getCity() {
+        return city
+    }
+
+    void setCity(String city) {
+        this.city = city
+    }
+
+    int getSingLampID() {
+        return singLampID
+    }
+
+    void setSingLampID(int singLampID) {
+        this.singLampID = singLampID
+    }
 
     String getLED() {
         return LED
@@ -113,13 +155,6 @@ class AdvertisementMachine implements Serializable {
         this.name = name
     }
 
-    String getAddress() {
-        return address
-    }
-
-    void setAddress(String address) {
-        this.address = address
-    }
 
     String getLongitude() {
         return longitude

@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:include="/common/head::head('广告机 - 广告机管理后台')">
+</head>
+<style type="text/css">
+    th{white-space: nowrap;}
+</style>
+<!--/*@thymesVar id="adminPath" type="java.lang.String"*/-->
+<!--/*@thymesVar id="page" type="com.github.pagehelper.PageInfo<com.xmlan.machine.module.singLamp.entity.SingLamp>"*/-->
+<!--/*@thymesVar id="loginUser" type="com.xmlan.machine.module.user.entity.User"*/-->
+</head>
+<body>
+<script type="text/javascript" src="../../../static/application/js/echarts.min.js"></script>
+<th:block th:include="/common/header::header('singLamp')"/>
+<main style="z-index: 0;height: 80%">
+    <div class="page-title z-depth-1 blue-grey darken-2">
+        <div class="white-text">
+      <span class="flow-text">
+        <a class="btn-flat"><i class="material-icons white-text">list</i></a>单灯控制器数据列表
+      </span>
+        </div>
+    </div>
+    <div  style="overflow:scroll;width: 100%">
+        <form th:action="@{${adminPath}+'/advertisementMachine/list/1'}" method="post">
+        </form>
+        <table cellpadding="0" cellspacing="0" class="highlight" style="width: 100%;border: 1px">
+            <thead>
+                <tr>
+                    <th>所属灯杆ID</th>
+                    <th>用户ID</th>
+                    <th>最新数据更新时间</th>
+                    <th>故障位</th>
+                    <th>电压</th>
+                    <th>电流</th>
+                    <th>频率</th>
+                    <th>电网PF</th>
+                    <th>电网有功</th>
+                    <th>电网无功</th>
+                    <th>温度</th>
+                    <th>亮灯</th>
+                    <th>工作时间</th>
+                    <th>累计时间</th>
+                    <th>本次用电量</th>
+                    <th>累计用电量</th>
+                    <th>灯头照度值</th>
+                    <th>当天负载峰值功率</th>
+                    <th>历史负载峰值功率</th>
+                    <th>当日用电</th>
+                    <th>经济收益</th>
+                    <th>CO2减排量</th>
+                    <th>月用电</th>
+                    <th>当月经济收益</th>
+                    <th>当月CO2排放量</th>
+                    <th>年电量</th>
+                    <th>当年经济收益</th>
+                    <th>当年CO2减排量</th>
+                </tr>
+            </thead>
+            <tbody class="card">
+            <tr th:each="item:${page.list}">
+                <td th:text="*{item.machineID}">machineID</td>
+                <td th:text="*{item.userID}">userID</td>
+                <td th:text="*{item.updateTime}">updateTime</td>
+                <td th:text="*{item.currError}">currError</td>
+                <td th:text="*{item.gridVolt}">gridVolt</td>
+                <td th:text="*{item.gridCurr}">gridCurr</td>
+                <td th:text="*{item.gridFreq}">gridFreq</td>
+                <td th:text="*{item.gridPF}">gridPF</td>
+                <td th:text="*{item.gridAP}">gridAP</td>
+                <td th:text="*{item.gridRP}">gridRP</td>
+                <td th:text="*{item.temperature}">temperature</td>
+                <td th:text="*{item.ledDim}">ledDim</td>
+                <td th:text="*{item.workTime}">workTime</td>
+                <td th:text="*{item.workTimeT}">workTimeT</td>
+                <td th:text="*{item.energyTonight}">energyTonight</td>
+                <td th:text="*{item.energyTotal}">energyTotal</td>
+                <td th:text="*{item.ledLux}">ledLux</td>
+                <td th:text="*{item.ppkToday}">ppkToday</td>
+                <td th:text="*{item.ppkHistory}">ppkHistory</td>
+                <td th:text="*{item.energyToday}">energyToday</td>
+                <td th:text="*{item.saveMoneyT}">saveMoneyT</td>
+                <td th:text="*{item.cO2T}">cO2T</td>
+                <td th:text="*{item.energyMonth}">energyMonth</td>
+                <td th:text="*{item.saveMoneyMonth}">saveMoneyMonth</td>
+                <td th:text="*{item.cO2Month}">cO2Month</td>
+                <td th:text="*{item.gridEnergyYear}">gridEnergyYear</td>
+                <td th:text="*{item.saveMoneyYear}">saveMoneyYear</td>
+                <td th:text="*{item.cO2Year}">cO2Year</td>
+                <td>
+                    <a th:if="${loginUser.id ==1}" class="btn-floating blue waves-effect waves-light tooltipped btn modal-trigger" data-position="top"
+                        data-delay="50" data-tooltip="编辑"
+                        th:href="@{${adminPath}+'/singLamp/form/'+${item.id}}">
+                        <i class="material-icons">edit</i>
+                    </a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <div id="pagination-div" class="center">
+            <ul class="pagination">
+                <li th:if="${!page.hasPreviousPage}" class="disabled">
+                    <a href="#"><i class="material-icons">chevron_left</i></a>
+                </li>
+                <li th:if="${page.hasPreviousPage}" class="waves-effect">
+                    <a th:href="@{${adminPath}+'/singLamp/list/'+${page.prePage}}"><i
+                            class="material-icons">chevron_left</i></a>
+                </li>
+                <th:block th:each="number:${page.navigatepageNums}">
+                    <li th:if="${number==page.pageNum}" class="waves-effect" id="active-page">
+                        <a href="#" th:text="${number}"></a>
+                    </li>
+                    <li th:if="${number!=page.pageNum}" class="waves-effect">
+                        <a th:href="@{${adminPath}+'/singLamp/list/'+${number}}"
+                           th:text="${number}"></a>
+                    </li>
+                </th:block>
+                <li th:if="${!page.hasNextPage}" class="disabled">
+                    <a href="#"><i class="material-icons">chevron_right</i></a>
+                </li>
+                <li th:if="${page.hasNextPage}" class="waves-effect">
+                    <a th:href="@{${adminPath}+'/singLamp/list/'+${page.nextPage}}"><i
+                            class="material-icons">chevron_right</i></a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</main>
+<th:block th:include="/common/footer::footer"/>
+<th:block th:include="/common/script::script"/>
+</body>
+</html>
+<script type="text/javascript">
+    function detail(id) {
+        var url = '[[${adminPath}]]/singLamp/detail/' + id;
+        $.ajax({
+            url:url,
+            dataType:"JSON",
+            type:"GET",
+            success:function (data) {
+                // if (data.length == 0){
+                //     document.getElementById("typediv1").style.visibility="hidden";
+                //     $("#detail-singLamp-updateTime").text("该设备无单灯控制器数据");
+                // } else {
+                //     document.getElementById("typediv1").style.visibility="visible";
+                //     $("#detail-singLamp-updateTime").text(data[0].updateTime);
+                //     $("#currError").text(data[0].currError);
+                //     $("#gridVolt").text(data[0].gridVolt);
+                //     $("#gridCurr").text(data[0].gridCurr);
+                //     $("#gridPF").text(data[0].gridPF);
+                //     $("#gridAP").text(data[0].gridAP);
+                //     $("#gridRP").text(data[0].gridRP);
+                //     $("#gridFreq").text(data[0].gridFreq);
+                //     $("#temperature").text(data[0].temperature);
+                //     $("#ledDim").text(data[0].ledDim);
+                //     $("#ppkToday").text(data[0].ppkToday);
+                //     $("#workTime").text(data[0].workTime);
+                //     $("#workTimeT").text(data[0].workTimeT);
+                //     $("#energyTonight").text(data[0].energyTonight);
+                //     $("#energyTotal").text(data[0].energyTotal);
+                //     $("#ledLux").text(data[0].ledLux);
+                //     $("#ppkHistory").text(data[0].ppkHistory);
+                //     $("#energyToday").text(data[0].energyToday);
+                //     $("#saveMoneyT").text(data[0].saveMoneyT);
+                //     $("#cO2T").text(data[0].cO2T);
+                //     $("#energyMonth").text(data[0].energyMonth);
+                //     $("#saveMoneyMonth").text(data[0].saveMoneyMonth);
+                //     $("#cO2Month").text(data[0].cO2Month);
+                //     $("#gridEnergyYear").text(data[0].gridEnergyYear);
+                //     $("#saveMoneyYear").text(data[0].saveMoneyYear);
+                //     $("#cO2Year").text(data[0].cO2Year);
+                // }
+            }
+        });
+    }
+
+</script>

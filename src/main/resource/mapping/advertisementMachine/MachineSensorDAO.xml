@@ -11,6 +11,9 @@
         <result column="humidity" property="humidity"/>
         <result column="pm25" property="pm25"/>
         <result column="brightness" property="brightness"/>
+        <result column="pm10" property="pm10"/>
+        <result column="eCo2" property="eCo2"/>
+        <result column="tVoc" property="tVoc"/>
         <result column="machineID" property="machineID"/>
     </resultMap>
 
@@ -20,6 +23,9 @@
         t.humidity as "humidity",
         t.pm25 as "pm25",
         t.brightness as "brightness",
+        t.pm10 as "pm10",
+        t.eCo2 as "eCo2",
+        t.tVoc as "tVoc",
         t.machineID as "machineID"
     </sql>
 
@@ -73,6 +79,9 @@
         humidity,
         pm25,
         brightness,
+        pm10,
+        eCo2,
+        tVoc,
         machineID
         ) values (
         id,
@@ -80,6 +89,9 @@
         #{humidity},
         #{pm25},
         #{brightness},
+        #{pm10},
+        #{eCo2},
+        #{tVoc},
         #{machineID}
         );
     </insert>
@@ -90,7 +102,10 @@
         temperature = #{temperature},
         humidity = #{humidity},
         pm25 = #{pm25},
-        brightness = #{brightness}
+        brightness = #{brightness},
+        pm10 = #{pm10},
+        eCo2 = #{eCo2},
+        tVoc = #{tVoc}
         where machineID = #{machineID}
     </update>
 

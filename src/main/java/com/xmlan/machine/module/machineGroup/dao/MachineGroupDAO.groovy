@@ -2,6 +2,7 @@ package com.xmlan.machine.module.machineGroup.dao;
 
 import com.xmlan.machine.common.base.BaseDAO;
 import com.xmlan.machine.module.machineGroup.entity.MachineGroup
+import org.apache.ibatis.annotations.Param
 import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -19,5 +20,6 @@ interface MachineGroupDAO extends BaseDAO<MachineGroup> {
 
     List<MachineGroup> findAllByUserID(int userID)
 
-    int delete(@RequestParam("userID") int userID)
+    int deleteGroup(@Param("id") int id)
+
 }

@@ -10,7 +10,6 @@
         <id column="id" property="id"/>
         <result column="userID" property="userID"/>
         <result column="name" property="name"/>
-        <result column="address" property="address"/>
         <result column="longitude" property="longitude"/>
         <result column="latitude" property="latitude"/>
         <result column="addTime" property="addTime"/>
@@ -24,6 +23,11 @@
         <result column="cameraVerificationCode" property="cameraVerificationCode"/>
         <result column="accessToken" property="accessToken"/>
         <result column="LED" property="LED"/>
+        <result column="city" property="city"/>
+        <result column="cityCode" property="cityCode"/>
+        <result column="updateTime" property="updateTime"/>
+        <result column="addrStr" property="addrStr"/>
+        <result column="singLampID" property="singLampID"/>
         <collection property="userList" resultMap="userResultMap"/>
     </resultMap>
 
@@ -44,7 +48,6 @@
         t.id as "id",
         t.userID as "userID",
         t.name as "name",
-        t.address as "address",
         t.longitude as "longitude",
         t.latitude as "latitude",
         date_format(t.addTime, '%Y-%m-%d %H:%i:%s') as "addTime",
@@ -57,7 +60,12 @@
         t.cameraSequence as "cameraSequence",
         t.cameraVerificationCode as "cameraVerificationCode",
         t.accessToken as "accessToken",
-        t.LED as "LED"
+        t.LED as "LED",
+        t.city as "city",
+        t.cityCode as "cityCode",
+        t.updateTime as "updateTime",
+        t.addrStr as "addrStr",
+        t.singLampID as "singLampID"
     </sql>
     <select id="adchineListByUserID" resultMap="advertisementMachineResultMap">
         SELECT
@@ -70,9 +78,6 @@
             </if>
             <if test="name != null and name != ''">
                 and t.name like concat('%',#{name},'%')
-            </if>
-            <if test="address != null and address != ''">
-                and t.address like concat('%',#{address},'%')
             </if>
             <if test='addTime != null and addTime != "" and addTime != " "'>
                 and t.addTime between #{addTime} and concat(left(#{addTime}, 10), ' 23:59:59')
@@ -141,9 +146,6 @@
             <if test="name != null and name != ''">
                 and t.name like concat('%',#{name},'%')
             </if>
-            <if test="address != null and address != ''">
-                and t.address like concat('%',#{address},'%')
-            </if>
             <if test='addTime != null and addTime != "" and addTime != " "'>
                 and t.addTime between #{addTime} and concat(left(#{addTime}, 10), ' 23:59:59')
             </if>
@@ -174,9 +176,6 @@
             <if test="name != null and name != ''">
                 and t.name like concat('%',#{name},'%')
             </if>
-            <if test="address != null and address != ''">
-                and t.address like concat('%',#{address},'%')
-            </if>
             <if test='addTime != null and addTime != "" and addTime != " "'>
                 and t.addTime between #{addTime} and concat(left(#{addTime}, 10), ' 23:59:59')
             </if>
@@ -191,21 +190,6 @@
             </if>
             <if test="latitude != null and latitude != ''">
                 and t.latitude = #{latitude}
-            </if>
-            <if test="cameraIP != null and cameraIP != ''">
-                and t.cameraIP = #{'%',#{cameraIP},'%'}
-            </if>
-            <if test="cameraSequence != null and cameraSequence != ''">
-                and t.cameraSequence = #{'%',#{cameraSequence},'%'}
-            </if>
-            <if test="cameraVerificationCode != null and cameraVerificationCode != ''">
-                and t.cameraVerificationCode = #{'%',#{cameraVerificationCode},'%'}
-            </if>
-            <if test="accessToken != null and accessToken != ''">
-                and t.accessToken = #{'%',#{accessToken},'%'}
-            </if>
-            <if test="LED != null and LED != ''">
-                and t.LED = #{'%',#{LED},'%'}
             </if>
         </where>
         <choose>
@@ -233,7 +217,6 @@
         id,
         userID,
         name,
-        address,
         longitude,
         latitude,
         addTime,
@@ -245,12 +228,16 @@
         cameraIP,
         cameraSequence,
         cameraVerificationCode,
-        LED
+        LED,
+        city,
+        cityCode,
+        updateTime,
+        addrStr,
+        singLamp
         ) values (
         id,
         #{userID},
         #{name},
-        #{address},
         #{longitude},
         #{latitude},
         #{addTime},
@@ -262,7 +249,12 @@
         #{cameraIP},
         #{cameraSequence},
         #{cameraVerificationCode},
-        #{LED}
+        #{LED},
+        #{city},
+        #{cityCode},
+        #{updateTime},
+        #{addrStr},
+        #{singLamp}
         );
     </insert>
 
@@ -271,7 +263,6 @@
         set
         userID = #{userID},
         name = #{name},
-        address = #{address},
         remark = #{remark},
         cameraIP = #{cameraIP},
         cameraSequence = #{cameraSequence},
@@ -315,7 +306,11 @@
         update advertisement_machine
         set
         longitude = #{longitude},
-        latitude = #{latitude}
+        latitude = #{latitude},
+        updateTime = #{updateTime},
+        city = #{city},
+        cityCode = #{cityCode},
+        addrStr = #{addrStr}
         where id = #{id}
     </update>
     <update id="updateAccessToken">
@@ -341,5 +336,15 @@
         where id = #{id}
     </update>
 
+    <update id="updateCity">
+        update advertisement_machine
+        set city = #{city}
+        where id = #{id}
+    </update>
 
+    <update id="updateSingLampID">
+        update advertisement_machine
+        set singLampID = #{singLampID}
+        where id = #{id}
+    </update>
 </mapper>

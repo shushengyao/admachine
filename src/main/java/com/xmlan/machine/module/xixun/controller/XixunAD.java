@@ -159,7 +159,7 @@ public class XixunAD extends BaseController {
                 filename.createNewFile();
             }
         }
-        boolean bea= FileUtils.writeToFile("<head><style>body{margin:0;padding:0;}</style></head><img src=\""+fileName+"\" style=\"width: 128px;height: 256px\"/></head>",filenameTemp);
+        boolean bea= FileUtils.writeToFile("<head><style>body{margin:0;padding:0;}</style></head><img src=\""+fileName+"\" style=\"width: 192px;height: 192px\"/></head>",filenameTemp);
         if (bea == true){
 //                    CallXwalkFn callXwalkFn = new CallXwalkFn();
 //                    callXwalkFn.callXwalkFn(call,led);

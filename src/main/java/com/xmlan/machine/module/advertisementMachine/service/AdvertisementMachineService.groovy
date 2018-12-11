@@ -60,11 +60,19 @@ class AdvertisementMachineService extends BaseService<AdvertisementMachine, Adve
         return super.delete(machine)
     }
 
+    int updateCity(int id,String city){
+        dao.updateCity(id,city)
+        return DONE
+    }
 
+    int updateSingLampID(int id,int singLampID){
+        dao.updateSingLampID(id,singLampID)
+        return DONE
+    }
 
-    int updateLocation(int id, String longitude, String latitude) {
+    int updateLocation(int id, String longitude, String latitude,String updateTime, String cityCode,String city, String addrStr) {
         if (AdvertisementMachineCache.get(id) != null) {
-            dao.updateLocation(id, longitude, latitude)
+            dao.updateLocation(id, longitude, latitude,updateTime,cityCode,city,addrStr)
             return DONE
         } else {
             return NO_SUCH_ROW

@@ -265,17 +265,10 @@ class AdvertisementMachineController extends BaseController {
      * @return
      */
     @RequestMapping(value = "/lightBatch", produces = "application/json; charset=utf-8",method = RequestMethod.POST)
-    @ResponseBody
-    HashMap<String, Object> lightBatch(@RequestParam(value = "adIds") Integer[] adIds,@RequestParam(value = "operate") int operate) {
-        HashMap<String, Object> map = Maps.newHashMap();
+    String lightBatch(@RequestParam(value = "adIds") Integer[] adIds,@RequestParam(value = "operate") int operate) {
         for(int id : adIds) {
             int responseCode = service.lightControl(id, operate);
-            map.put(keyResponseCode, responseCode);
-            if (responseCode == NO_SUCH_ROW) {
-                map.put(keyMessage, "目标路灯不存在");
-            } else if (responseCode == ERROR_REQUEST) {
-                map.put(keyMessage, "操作码不正确");
-            } else if (responseCode == DONE) {
+            if (responseCode == DONE) {
                 HashMap<String, Integer> command = Maps.newHashMap();
                 command.put("id", id);
                 command.put("operate", operate);
@@ -283,24 +276,17 @@ class AdvertisementMachineController extends BaseController {
                 JPushClient pushClient = new JPushClient(Global.getMasterSecret(), Global.getAppKey(), null, ClientConfig.getInstance());
                 PushPayload payload = PushUtils.buildPayload(String.valueOf(id), "Light switch.", command);
                 try {
-                    map.put(keyMessage, operate == 1 ? "开灯！" : "关灯！");
                     PushResult result = pushClient.sendPush(payload);
                     logger.trace(result);
                 } catch (APIRequestException e) {
-                    map.put(keyMessage, "Push request error.");
-                    map.put(keyResponseCode, ERROR_API_REQUEST_EXCEPTION);
                     logger.error("API exception with: " + e.getMessage());
                 } catch (APIConnectionException e) {
-                    map.put(keyMessage, "Push connect error.");
-                    map.put(keyResponseCode, ERROR_API_CONNECTION_EXCEPTION);
                     logger.error("API exception with: " + e.getMessage());
+                    System.err.print(e.getMessage())
                 }
-            } else {
-                map.put(keyResponseCode, PASS);
-                map.put(keyMessage, "系统繁忙");
             }
         }
-        return map;
+        "redirect:$adminPath/advertisementMachine/list/1"
     }
 
 }

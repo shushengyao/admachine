@@ -90,7 +90,7 @@ public class AdvertisementMachineServiceProvider extends BaseController {
         }
         advertisementMachine.setName(StringUtils.EMPTY);
         advertisementMachine.setUserID(-2);
-        advertisementMachine.setAddress(StringUtils.EMPTY);
+        advertisementMachine.setAddrStr(StringUtils.EMPTY);
         advertisementMachine.setLongitude("0.0");
         advertisementMachine.setLatitude("0.0");
         advertisementMachine.setLight(0);
@@ -124,12 +124,13 @@ public class AdvertisementMachineServiceProvider extends BaseController {
      */
     @RequestMapping(value = "/gps/update/{id}", produces = "application/json; charset=utf-8")
     @ResponseBody
-    public HashMap<String, Object> gpsUpdate(@PathVariable("id") int id, String longitude, String latitude) {
+    public HashMap<String, Object> gpsUpdate(@PathVariable("id") int id, String longitude, String latitude,String updateTime, String cityCode,String city, String addrStr) {
         HashMap<String, Object> map = Maps.newHashMap();
         if (NumberUtils.isNumber(longitude) && NumberUtils.isNumber(latitude)) {
-            int responseCode = service.updateLocation(id, longitude, latitude);
+            int responseCode = service.updateLocation(id, longitude, latitude,updateTime,cityCode,city,addrStr);
             if (responseCode == DONE) {
                 map.put(keyResponseCode, DONE);
+
                 map.put(keyMessage, "Updated!");
             } else {
                 map.put(keyResponseCode, responseCode);
@@ -138,6 +139,27 @@ public class AdvertisementMachineServiceProvider extends BaseController {
         } else {
             map.put(keyResponseCode, DATABASE_DO_NOTHING);
             map.put(keyMessage, "Longitude or Latitude is not a number.");
+        }
+        return map;
+    }
+
+    /**
+     * 更新设备城市名称
+     * @param id
+     * @param city
+     * @return
+     */
+    @RequestMapping(value = "/updateCity/{id}", method = RequestMethod.POST, produces = "application/json; charset=utf-8")
+    @ResponseBody
+    public HashMap<String,Object> updateCity(@PathVariable("id") int id,String city){
+        HashMap<String, Object> map = Maps.newHashMap();
+        int responseCode = service.updateCity(id,city);
+        if (responseCode == DONE) {
+            map.put(keyResponseCode, DONE);
+            map.put(keyMessage, "Updated!");
+        } else {
+            map.put(keyResponseCode, responseCode);
+            map.put(keyMessage, "Update failed!");
         }
         return map;
     }

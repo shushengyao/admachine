@@ -91,10 +91,10 @@
       </tr>
       </thead>
       <tbody class="card">
-        <tr th:each="item:${page.list}" th:onclick="'javascript:detail(\''+*{item.id}+'\')'">
+        <tr th:each="item:${page.list}">
          <td><input type="checkbox" name="checkbox" th:value="*{item.id}"></td>
         <td th:text="*{item.name}">name</td>
-        <td th:text="*{#strings.abbreviate(item.address,30)}">address</td>
+        <td th:text="*{#strings.abbreviate(item.addrStr,30)}">addrStr</td>
         <td th:text="*{#strings.substring(item.addTime,0,10)}">addTime</td>
         <td th:text="*{#strings.abbreviate(item.codeNumber,15)}">codeNumber</td>
         <th:block th:each="count:${adCount}">
@@ -116,7 +116,13 @@
           <div class="fixed-action-btn horizontal" style="position: relative; right: 0; top: 0;">
             <a class="btn-floating btn-large blue"><i class="material-icons">menu</i></a>
             <ul>
-
+              <li>
+                <a class="btn-floating blue waves-effect waves-light tooltipped btn modal-trigger"
+                   data-position="top" data-delay="50" data-tooltip="查看电路数据" href="#detail-singLamp"
+                   th:onmouseover="'javascript:singLampData(\''+*{item.id}+'\')'">
+                  <i class="material-icons">list_alt</i>
+                </a>
+              </li>
               <li>
                 <a class="btn-floating blue waves-effect waves-light tooltipped btn modal-trigger"
                    data-position="top" data-delay="50" data-tooltip="大气采集" href="#weather-modal"
@@ -245,7 +251,7 @@
       <h6 class="green-text text-darken-2">状态 (灯/充电)</h6>
       <p id="detail-item-status">status</p>
       <h6 class="green-text text-darken-2">地址</h6>
-      <p id="detail-item-address">address</p>
+      <p id="detail-item-addrStr">addrStr</p>
       <h6 class="green-text text-darken-2">备注</h6>
       <p id="detail-item-remark">remark</p>
       <h6 class="green-text text-darken-2">摄像头ip</h6>
@@ -254,6 +260,56 @@
       <p id="detail-item-cameraSequence">cameraSequence</p>
       <h6 class="green-text text-darken-2">摄像头设备验证码</h6>
       <p id="detail-item-cameraVerificationCode">cameraVerificationCode</p>
+    </div>
+    <div class="modal-footer">
+      <a href="#" class="modal-action modal-close waves-effect waves-green btn-flat">关闭</a>
+    </div>
+  </div>
+  <div id="detail-singLamp" class="modal modal-fixed-footer">
+    <div class="modal-content">
+      <h4>详情</h4>最新更新时间：<p id="detail-singLamp-updateTime" style="color: red"></p>
+        <div id="typediv1">
+     <table id="singLampTable" class="highlight">
+       <tr>
+         <th>故障位</th><th>电压</th><th>电流</th><th>频率</th>
+       </tr>
+       <tr>
+         <th id="currError">currError</th><th id="gridVolt">gridVolt</th><th id="gridCurr">gridCurr</th><th id="gridFreq">gridFreq</th>
+       </tr>
+       <tr>
+         <th>电网PF</th><th>电网有功</th><th>电网无功</th><th>温度</th>
+       </tr>
+       <tr>
+         <th id="gridPF">gridPF</th><th id="gridAP">gridAP</th><th id="gridRP">gridRP</th><th id="temperature">temperature</th>
+       </tr>
+       <tr>
+         <th>亮灯</th><th>工作时间</th><th>累计时间</th><th>本次用电量</th>
+       </tr>
+       <tr>
+         <th id="ledDim">ledDim</th><th id="workTime">workTime</th><th id="workTimeT">workTimeT</th><th id="energyTonight">energyTonight</th>
+       </tr>
+       <tr>
+         <th>累计用电量</th><th>灯头照度值</th><th>当天负载峰值功率</th><th>历史负载峰值功率</th>
+       </tr>
+       <tr>
+         <th id="energyTotal">energyTotal</th><th id="ledLux">ledLux</th><th id="ppkToday">ppkToday</th><th id="ppkHistory">ppkHistory</th>
+       </tr>
+       <tr>
+         <th>当日用电</th><th>经济收益</th><th>CO2减排量</th><th>月用电</th>
+       </tr>
+       <tr>
+         <th id="energyToday">energyToday</th><th id="saveMoneyT">saveMoneyT</th><th id="cO2T">cO2T</th><th id="energyMonth">energyMonth</th>
+       </tr>
+       <tr>
+         <th>当月经济收益</th><th>当月CO2排放量</th><th>年电量</th><th>当年经济收益</th>
+       </tr>
+       <tr>
+         <th id="saveMoneyMonth">saveMoneyMonth</th><th id="cO2Month">cO2Month</th><th id="gridEnergyYear">gridEnergyYear</th><th id="saveMoneyYear">saveMoneyYear</th>
+       </tr>
+       <tr><th>当年CO2减排量</th></tr>
+       <tr><th id="cO2Year">cO2Year</th></tr>
+     </table>
+        </div>
     </div>
     <div class="modal-footer">
       <a href="#" class="modal-action modal-close waves-effect waves-green btn-flat">关闭</a>
@@ -306,9 +362,10 @@
                 dataType:"json",
                 type:"post",
                 success:function (data) {
-                  console.log("开灯成功！")
+                    window.location='/mng/advertisementMachine/list/1'
                 },error:function () {
-                    console.log("开灯失败！")
+
+                    window.location='/mng/advertisementMachine/list/1'
                 }
             });
         })
@@ -326,6 +383,7 @@
     $("#detail-modal").modal();
     $("#delete-modal").modal();
     $("#weather-modal").modal();
+    $("#detail-singLamp").modal();
     toast('[[${message}]]');
 
     //除了表头（第一行）以外所有的行添加click事件.
@@ -347,6 +405,48 @@
     });
 
   });
+    function singLampData(id) {
+        var url = '[[${adminPath}]]/singLamp/detail/' + id;
+        $.ajax({
+            url:url,
+            dataType:"JSON",
+            type:"GET",
+            success:function (data) {
+                if (data.length == 0){
+                    document.getElementById("typediv1").style.visibility="hidden";
+                    $("#detail-singLamp-updateTime").text("该设备无单灯控制器数据");
+                } else {
+                    document.getElementById("typediv1").style.visibility="visible";
+                    $("#detail-singLamp-updateTime").text(data[0].updateTime);
+                    $("#currError").text(data[0].currError);
+                    $("#gridVolt").text(data[0].gridVolt);
+                    $("#gridCurr").text(data[0].gridCurr);
+                    $("#gridPF").text(data[0].gridPF);
+                    $("#gridAP").text(data[0].gridAP);
+                    $("#gridRP").text(data[0].gridRP);
+                    $("#gridFreq").text(data[0].gridFreq);
+                    $("#temperature").text(data[0].temperature);
+                    $("#ledDim").text(data[0].ledDim);
+                    $("#ppkToday").text(data[0].ppkToday);
+                    $("#workTime").text(data[0].workTime);
+                    $("#workTimeT").text(data[0].workTimeT);
+                    $("#energyTonight").text(data[0].energyTonight);
+                    $("#energyTotal").text(data[0].energyTotal);
+                    $("#ledLux").text(data[0].ledLux);
+                    $("#ppkHistory").text(data[0].ppkHistory);
+                    $("#energyToday").text(data[0].energyToday);
+                    $("#saveMoneyT").text(data[0].saveMoneyT);
+                    $("#cO2T").text(data[0].cO2T);
+                    $("#energyMonth").text(data[0].energyMonth);
+                    $("#saveMoneyMonth").text(data[0].saveMoneyMonth);
+                    $("#cO2Month").text(data[0].cO2Month);
+                    $("#gridEnergyYear").text(data[0].gridEnergyYear);
+                    $("#saveMoneyYear").text(data[0].saveMoneyYear);
+                    $("#cO2Year").text(data[0].cO2Year);
+                }
+            }
+        });
+    }
 
     function weather(id) {
         var url = '[[${adminPath}]]/advertisementMachine/weather/' + id;
@@ -354,7 +454,6 @@
             url:url,
             type:"GET",
             success:function (data) {
-                console.log(data)
                 var id = data['weather'].machineID;
                 var temperature = data['weather'].temperature;
                 var brightness = data['weather'].brightness;
@@ -416,7 +515,7 @@
         $("#detail-item-latitude").text(data['machine'].latitude);
         $("#detail-item-ads").text(data['ads']);
         $("#detail-item-status").text(data['status']);
-        $("#detail-item-address").text(data['machine'].address);
+        $("#detail-item-addrStr").text(data['machine'].addrStr);
         $("#detail-item-remark").text(data['machine'].remark);
         $("#detail-item-cameraIP").text(data['machine'].cameraIP);
         $("#detail-item-cameraSequence").text(data['machine'].cameraSequence);

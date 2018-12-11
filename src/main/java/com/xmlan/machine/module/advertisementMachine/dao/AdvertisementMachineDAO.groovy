@@ -35,12 +35,22 @@ interface AdvertisementMachineDAO extends BaseDAO<AdvertisementMachine> {
     AdvertisementMachine findIdByCameraSequence(@Param("cameraSequence") String cameraSequence)
 
     /**
+     * 更新灯杆城市名称
+     * @param id
+     * @param city
+     * @return
+     */
+    int updateCity(@Param("id") int id,@Param("city") String city)
+
+    int updateSingLampID(@Param("id") int id,@Param("singLampID") int singLampID)
+    /**
      * 更新定位坐标经纬度
      * @param longitude 经度
      * @param latitude 纬度
      * @return 操作返回码
      */
-    int updateLocation(@Param("id") int id, @Param("longitude") String longitude, @Param("latitude") String latitude)
+    int updateLocation(@Param("id") int id, @Param("longitude") String longitude, @Param("latitude") String latitude,@Param("updateTime") String updateTime,
+                       @Param("cityCode") String cityCode,@Param("city") String city, @Param("addrStr") String addrStr)
 
     /**
      * 更新摄像头的accessToken

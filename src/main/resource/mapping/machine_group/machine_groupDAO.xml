@@ -48,8 +48,8 @@
         where userID = #{userID}
     </update>
 
-    <delete id="dalete" parameterType="com.xmlan.machine.module.machineGroup.entity.MachineGroup">
+    <delete id="deleteGroup" parameterType="com.xmlan.machine.module.machineGroup.entity.MachineGroup">
         delete from machine_group
-        where userID = #{userID}
+        where id = #{id}
     </delete>
 </mapper>

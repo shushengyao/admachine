@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xmlan.machine.module.singLamp.dao.SingLampDAO">
+    <resultMap id="singLampResultMap" type="com.xmlan.machine.module.singLamp.entity.SingLamp">
+        <id column="id" property="id"/>
+        <result column="machineID" property="machineID"/>
+        <result column="userID" property="userID"/>
+        <result column="updateTime" property="updateTime"/>
+        <result column="currError" property="currError"/>
+        <result column="gridVolt" property="gridVolt"/>
+        <result column="gridCurr" property="gridCurr"/>
+        <result column="gridFreq" property="gridFreq"/>
+        <result column="gridPF" property="gridPF"/>
+        <result column="gridAP" property="gridAP"/>
+        <result column="gridRP" property="gridRP"/>
+        <result column="temperature" property="temperature"/>
+        <result column="ledDim" property="ledDim"/>
+        <result column="workTime" property="workTime"/>
+        <result column="workTimeT" property="workTimeT"/>
+        <result column="energyTonight" property="energyTonight"/>
+        <result column="energyTotal" property="energyTotal"/>
+        <result column="ledLux" property="ledLux"/>
+        <result column="ppkToday" property="ppkToday"/>
+        <result column="ppkHistory" property="ppkHistory"/>
+        <result column="energyToday" property="energyToday"/>
+        <result column="saveMoneyT" property="saveMoneyT"/>
+        <result column="cO2T" property="cO2T"/>
+        <result column="energyMonth" property="energyMonth"/>
+        <result column="saveMoneyMonth" property="saveMoneyMonth"/>
+        <result column="cO2Month" property="cO2Month"/>
+        <result column="gridEnergyYear" property="gridEnergyYear"/>
+        <result column="saveMoneyYear" property="saveMoneyYear"/>
+        <result column="cO2Year" property="cO2Year"/>
+    </resultMap>
+    <sql id="columns">
+        t.id as "id",
+        t.machineID as "machineID",
+        t.userID as "userID",
+        t.currError as "currError",
+        t.updateTime as "updateTime",
+        t.gridVolt as "gridVolt",
+        t.gridCurr as "gridCurr",
+        t.gridFreq as "gridFreq",
+        t.gridPF as "gridPF",
+        t.gridAP as "gridAP",
+        t.gridRP as "gridRP",
+        t.temperature as "temperature",
+        t.ledDim as "ledDim",
+        t.workTime as "workTime",
+        t.workTimeT as "workTimeT",
+        t.energyTonight as "energyTonight",
+        t.energyTotal as "energyTotal",
+        t.ledLux as "ledLux",
+        t.ppkToday as "ppkToday",
+        t.ppkHistory as "ppkHistory",
+        t.energyToday as "energyToday",
+        t.saveMoneyT as "saveMoneyT",
+         t.cO2T as "cO2T",
+        t.energyMonth as "energyMonth",
+        t.saveMoneyMonth as "saveMoneyMonth",
+        t.cO2Month as "cO2Month",
+        t.gridEnergyYear as "gridEnergyYear",
+        t.saveMoneyYear as "saveMoneyYear",
+        t.cO2Year as "cO2Year"
+    </sql>
+    <select id="findListByUserID" resultType="com.xmlan.machine.module.singLamp.entity.SingLamp">
+        SELECT
+        t.*
+        FROM
+        singlelampdata AS t
+        <where>
+            <if test="userID != null and userID != ''">
+                t.userID = #{userID}
+            </if>
+        </where>
+    </select>
+    <select id="findListByID" resultType="com.xmlan.machine.module.singLamp.entity.SingLamp">
+        SELECT
+        t.*
+        FROM
+        singlelampdata AS t
+        where id =#{id}
+    </select>
+    <select id="findListByMachineID" resultType="com.xmlan.machine.module.singLamp.entity.SingLamp">
+        SELECT
+        t.*
+        FROM
+        singlelampdata AS t
+        where machineID =#{machineID}
+    </select>
+    <select id="findAll" resultMap="singLampResultMap">
+        select <include refid="columns"/>
+        from
+        singlelampdata as t
+    </select>
+    <insert id="insertSingLamp" parameterType="com.xmlan.machine.module.singLamp.entity.SingLamp">
+        <selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="id">
+            SELECT LAST_INSERT_ID() AS id
+        </selectKey>
+        insert into
+        singlelampdata (id,machineID, userID,updateTime, currError, gridVolt, gridCurr, gridFreq, gridPF, gridAP,
+        gridRP, temperature, ledDim, workTime, workTimeT, energyTonight, energyTotal, ledLux, ppkToday,
+        ppkHistory, energyToday, saveMoneyT, cO2T, energyMonth, saveMoneyMonth, cO2Month, gridEnergyYear, saveMoneyYear, cO2Year
+        ) values (
+         id,#{machineID},#{userID},#{updateTime},#{currError},#{gridVolt},#{gridCurr},#{gridFreq},#{gridPF},#{gridAP},#{gridRP},
+         #{temperature},#{ledDim},#{workTime},#{workTimeT},#{energyTonight},#{energyTotal},#{ledLux},#{ppkToday},
+         #{ppkHistory},#{energyToday},#{saveMoneyT},#{cO2T},#{energyMonth},#{saveMoneyMonth},#{cO2Month},#{gridEnergyYear},#{saveMoneyYear},#{cO2Year}
+        );
+    </insert>
+    <update id="update" parameterType="com.xmlan.machine.module.singLamp.entity.SingLamp">
+        update singlelampdata
+        set machineID = #{machineID},userID = #{userID},currError = #{currError},gridVolt = #{userID},gridCurr = #{gridCurr},gridFreq = #{gridFreq},gridPF = #{gridPF},gridAP = #{gridAP},
+        gridRP = #{gridRP},temperature = #{temperature},ledDim = #{ledDim},workTime = #{workTime},workTimeT = #{workTimeT},energyTonight = #{energyTonight},energyTotal = #{energyTotal},
+        ledLux = #{ledLux},ppkToday = #{ppkToday},ppkHistory = #{ppkHistory},energyToday = #{energyToday},saveMoneyT = #{saveMoneyT},cO2T = #{cO2T},energyMonth = #{energyMonth},
+        saveMoneyMonth = #{saveMoneyMonth},cO2Month = #{cO2Month},gridEnergyYear = #{gridEnergyYear},saveMoneyYear = #{saveMoneyYear},cO2Year = #{cO2Year}
+        where id = #{id}
+    </update>
+</mapper>

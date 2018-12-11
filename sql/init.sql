@@ -95,6 +95,11 @@ create table `advertisement_machine` (
   check (charge in (0, 1)),
   check (checked in (0, 1)),
   LED  varchar comment 'led屏幕',
+  city  varchar comment '城市',
+  updateTime  varchar comment '定位更新时间',
+  cityCode  varchar comment '城市编码',
+  addrStr  varchar comment '定位地址',
+  singLampID     int comment '单灯控制器ID',
   primary key (id)
 )
   char set utf8
@@ -143,13 +148,57 @@ create table `machine_sensor` (
   temperature varchar(64) comment '温度',
   humidity    varchar(64) comment '湿度',
   pm25        varchar(64) comment 'PM2.5',
-  brightness  varchar(64) comment 'PM10',
+  brightness  varchar(64) comment '亮度',
+  pm10 varchar(64) comment 'pm10',
+  eCo2    varchar(64) comment 'eCo2',
+  tVoc varchar(64) comment 'tVoc',
   machineID   int                not null unique
   comment '机器标识码(注册码)',
   primary key (id)
 )
   char set utf8
   comment '传感器参数';
+
+
+  SET FOREIGN_KEY_CHECKS=0;
+
+-- ----------------------------
+-- Table structure for singlelampdata
+-- ----------------------------
+DROP TABLE IF EXISTS `singlelampdata`;
+CREATE TABLE `singlelampdata` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `machineID` int(13) DEFAULT NULL,
+  `userID` int(13) DEFAULT NULL,
+  `updateTime` datetime DEFAULT NULL COMMENT '更新时间',
+  `currError` double(64,0) DEFAULT NULL COMMENT '故障位',
+  `gridVolt` double(64,0) DEFAULT NULL COMMENT '电压',
+  `gridCurr` double(64,0) DEFAULT NULL COMMENT '电流',
+  `gridFreq` double(64,0) DEFAULT NULL COMMENT '频率',
+  `gridPF` double(64,0) DEFAULT NULL COMMENT '电网PF',
+  `gridAP` double(64,0) DEFAULT NULL COMMENT '电网有功',
+  `gridRP` double(64,0) DEFAULT NULL COMMENT '电网无功',
+  `temperature` double(64,0) DEFAULT NULL COMMENT '温度',
+  `ledDim` double(64,0) DEFAULT NULL COMMENT '亮灯',
+  `workTime` double(64,0) DEFAULT NULL COMMENT '亮灯时间',
+  `workTimeT` double(64,0) DEFAULT NULL COMMENT '累计时间',
+  `energyTonight` double(64,0) DEFAULT NULL COMMENT '本次用电量',
+  `energyTotal` double(64,0) DEFAULT NULL COMMENT '累计用电量',
+  `ledLux` double(64,0) DEFAULT NULL COMMENT '灯头照度值',
+  `ppkToday` double(64,0) DEFAULT NULL COMMENT '当天负载峰值功率',
+  `ppkHistory` double(64,0) DEFAULT NULL COMMENT '历史负载峰值功率',
+  `energyToday` double(64,0) DEFAULT NULL COMMENT '当日用电',
+  `saveMoneyT` double(64,0) DEFAULT NULL COMMENT '经济收益',
+  `cO2T` double(64,0) DEFAULT NULL COMMENT 'CO2减排量',
+  `energyMonth` double(64,0) DEFAULT NULL COMMENT '月用电',
+  `saveMoneyMonth` double(64,0) DEFAULT NULL COMMENT '当月经济收益',
+  `cO2Month` double(64,0) DEFAULT NULL COMMENT '当月CO2排放量',
+  `gridEnergyYear` double(64,0) DEFAULT NULL COMMENT '年电量',
+  `saveMoneyYear` double(64,0) DEFAULT NULL COMMENT '当年经济收益',
+  `cO2Year` double(64,0) DEFAULT NULL COMMENT '当年CO2减排量',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 
 -- 创建操作记录表, 本表用于持久化所有用户以及广告机发出的操作记录, 同理如果存在则抛弃旧表重新创建
 drop table if exists `sys_log`;

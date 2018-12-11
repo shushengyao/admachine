@@ -2,16 +2,32 @@ package com.xmlan.machine.common.task
 
 import com.xmlan.machine.common.cache.AdvertisementCache
 import com.xmlan.machine.common.cache.AdvertisementMachineCache
+import com.xmlan.machine.common.cache.LedCache
+import com.xmlan.machine.common.cache.MachineGroupCache
 import com.xmlan.machine.common.cache.RoleCache
 import com.xmlan.machine.common.cache.UserCache
 import com.xmlan.machine.common.util.CacheUtils
+import com.xmlan.machine.module.advertisementMachine.entity.AdvertisementMachine
+import com.xmlan.machine.module.advertisementMachine.entity.MachineSensor
 import com.xmlan.machine.module.advertisementMachine.service.AdvertisementMachineService
+import com.xmlan.machine.module.advertisementMachine.service.MachineSensorService
+import com.xmlan.machine.module.led_machine.entity.Led_machine
+import com.xmlan.machine.module.led_machine.service.Led_machineService
+import com.xmlan.machine.module.machineGroup.entity.MachineGroup
+import com.xmlan.machine.module.machineGroup.service.MachineGroupService
+import com.xmlan.machine.module.xixun.controller.Clear
+import com.xmlan.machine.module.xixun.controller.InvokeBuildInJs
+import com.xmlan.machine.module.xixun.util.InvokeBuildInJsData
 import net.sf.json.JSONObject
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Component
+import org.springframework.ui.Model
+import org.springframework.ui.ModelMap
+
+import java.text.SimpleDateFormat
 
 /**
  * 缓存刷新调度任务和定时器任务 <br/>
@@ -22,6 +38,10 @@ import org.springframework.stereotype.Component
 class CacheTask {
     @Autowired
     AdvertisementMachineService service;
+    @Autowired
+    Led_machineService led_machineService
+    @Autowired
+    MachineSensorService sensorService
 
     private Logger logger = LogManager.getLogger(CacheTask.class)
 
@@ -33,8 +53,10 @@ class CacheTask {
         CacheUtils.cacheManager.clearAll()
         AdvertisementMachineCache.initialCacheMap()
         AdvertisementCache.initialCacheMap()
+        LedCache.initialCacheMap()
+//        MachineGroupCache.initialCacheMap()
         UserCache.initialCacheMap()
-        RoleCache.initialCacheMap()
+//        RoleCache.initialCacheMap()
         logger.info "缓存刷新"
     }
 

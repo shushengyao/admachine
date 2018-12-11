@@ -36,6 +36,17 @@
                     </tr>
                     </thead>
                 </table>
+                <div id="deleteLed" class="modal" style="display: none;margin-top: 10%">
+                    <div class="modal-content">
+                        <h4>注意！</h4>
+                        <input id="delete-confirm-id" name="id" type="hidden"/>
+                        <p>是否要删除广告 <span id="delete-name"></span> ?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <a href="#" id="deleteOff" class="modal-action modal-close waves-effect waves-green btn-flat">不是</a>
+                        <button type="submit" id="deleteOk" class="modal-action modal-close waves-effect btn-flat">是</button>
+                    </div>
+                </div>
             </div>
         </tbody>
         <div id="detail-modal" class="modal modal-fixed-footer">
@@ -103,6 +114,7 @@
                 <button type="submit" class="waves-effect waves-light btn" onclick="send()"><i class="material-icons right">send</i>提交</button>
             </div>
         </div>
+
         <div id="operate-modal" class="modal modal-fixed-footer">
             <div class="modal-content">
                 <h5>滚动字幕及背景颜色设置( * 号为必填项)</h5>
@@ -232,17 +244,6 @@
         colorInfo.style.color = color.value;
         colorInfo.innerHTML = color.value;
     }
-    // document.getElementById("typeSel").addEventListener("change",function () {
-    //     var file= document.getElementById('fileInput');
-    //     var type = $("#typeSel").val();
-    //     file.setAttribute('accept',type);
-    //     if (type == "video/*") {
-    //         var url = document.getElementById("fromFile").action = "@{${adminPath}+'/xixunAD/downloadFileToLocal";
-    //         console.log(url)
-    //     }else {
-    //         document.getElementById("fromFile").action = "@{${adminPath}+'/xixunAD/upload";
-    //     }
-    // });
     function sendFile() {
         var led = $('#led_code');
         $.ajax({
@@ -279,8 +280,6 @@
             "direction": direction.val(),
             "align": align.val()
         };
-
-        // console.log(data)
         $.ajax({
             url: "[[${adminPath}]]/xixunAD/InvokeBuildInJs",
             type: "post",
@@ -321,13 +320,9 @@
         });
     }
     function operate(led) {
-        // console.log(led)
         $("#ledCode").val(led);
     }
     function detail(id,led) {
-        // console.log(id)
-        // console.log(led)
-        // startActivity(led);
         $.ajax({
             url:'[[${adminPath}]]/xixunAD/detail',
             data:{"id":id},
@@ -367,18 +362,27 @@
         });
     }
     function deleteAD(id) {
-        $.ajax({
-            url:'[[${adminPath}]]/xixunAD/delete/',
-            data:{"id":id},
-            type:'GET',
-            success:function (data) {
-                window.location.href ="1";
-            },error:function () {
-                console.log("失败！")
-            }
+        var  deleteLed = document.getElementById("deleteLed").style.display ="block";
+        $("#deleteOk").on("click",function(){
+            var canshu=$(this).attr("var");
+            var  del = document.getElementById("deleteLed").style.display ="none";
+            $.ajax({
+                url:'[[${adminPath}]]/xixunAD/delete/',
+                data:{"id":id},
+                type:'GET',
+                success:function (data) {
+                    window.location.href ="1";
+                },error:function () {
+                    console.log("失败！")
+                }
+            });
         });
-    }
+        $("#deleteOff").on("click",function(){
+            var canshu=$(this).attr("var");
+            var  del = document.getElementById("deleteLed").style.display ="none";
+        });
 
+    }
     $("#roll").click(function(){
         $("#selectDiv").hide();
         $("#rollDiv").show();

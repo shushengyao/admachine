@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:include="/common/head::head('编辑单灯控制器信息 - 广告机管理后台')"></head>
+<!--/* <editor-fold desc="define"> */-->
+<!--/*@thymesVar id="adminPath" type="java.lang.String"*/-->
+<!--/*@thymesVar id="loginUser" type="com.xmlan.machine.module.user.entity.User"*/-->
+<!--/*@thymesVar id="adminRoleID" type="java.lang.Integer"*/-->
+<!--/*@thymesVar id="id" type="java.lang.Integer"*/-->
+<!--/*@thymesVar id="userList" type="java.util.List<com.xmlan.machine.module.user.entity.SimpleUser>"*/-->
+<!--/*@thymesVar id="machineList" type="java.util.List<com.xmlan.machine.module.advertisementMachine.entity.SimpleAdvertisementMachine>"*/-->
+<!--/*@thymesVar id="singLamp" type="java.util.List<com.xmlan.machine.module.singLamp.entity.SingLamp>"*/-->
+<body>
+<th:block th:include="/common/header::header('singLamp')"/>
+<main style="z-index: 0;">
+    <div class="page-title z-depth-1 blue-grey darken-2">
+        <div class="white-text">
+      <span class="flow-text">
+        <a class="btn-flat tooltipped" data-position="bottom" data-delay="50" data-tooltip="返回列表"
+           onclick="history.go(-1);"><i class="material-icons white-text">arrow_back</i></a><span
+              th:text="${'编辑id为  '+singLamp[0].id+'  单灯控制器信息'}"></span>
+      </span>
+        </div>
+    </div>
+    <br/>
+    <div id="main-content" class="container">
+        <form th:action="@{${adminPath}+'/singLamp/save/'+${singLamp[0].id}}" method="post">
+            <input name="id" type="hidden" class="validate" required="required" th:value="${singLamp[0].id}"/>
+            <input name="updateTime" type="hidden" class="validate" required="required" th:value="${singLamp[0].updateTime}"/>
+            <input name="currError" type="hidden" class="validate" required="required" th:value="${singLamp[0].currError}"/>
+            <input name="gridVolt" type="hidden" class="validate" required="required" th:value="${singLamp[0].gridVolt}"/>
+            <input name="gridCurr" type="hidden" class="validate" required="required" th:value="${singLamp[0].gridCurr}"/>
+            <input name="gridFreq" type="hidden" class="validate" required="required" th:value="${singLamp[0].gridFreq}"/>
+            <input name="gridPF" type="hidden" class="validate" required="required" th:value="${singLamp[0].gridPF}"/>
+            <input name="gridAP" type="hidden" class="validate" required="required" th:value="${singLamp[0].gridAP}"/>
+            <input name="gridRP" type="hidden" class="validate" required="required" th:value="${singLamp[0].gridRP}"/>
+            <input name="temperature" type="hidden" class="validate" required="required" th:value="${singLamp[0].temperature}"/>
+            <input name="ledDim" type="hidden" class="validate" required="required" th:value="${singLamp[0].ledDim}"/>
+            <input name="workTime" type="hidden" class="validate" required="required" th:value="${singLamp[0].workTime}"/>
+            <input name="workTimeT" type="hidden" class="validate" required="required" th:value="${singLamp[0].workTimeT}"/>
+            <input name="energyTonight" type="hidden" class="validate" required="required" th:value="${singLamp[0].energyTonight}"/>
+            <input name="energyTotal" type="hidden" class="validate" required="required" th:value="${singLamp[0].energyTotal}"/>
+            <input name="ledLux" type="hidden" class="validate" required="required" th:value="${singLamp[0].ledLux}"/>
+            <input name="ppkToday" type="hidden" class="validate" required="required" th:value="${singLamp[0].ppkToday}"/>
+            <input name="ppkHistory" type="hidden" class="validate" required="required" th:value="${singLamp[0].ppkHistory}"/>
+            <input name="energyToday" type="hidden" class="validate" required="required" th:value="${singLamp[0].energyToday}"/>
+            <input name="saveMoneyT" type="hidden" class="validate" required="required" th:value="${singLamp[0].saveMoneyT}"/>
+            <input name="cO2T" type="hidden" class="validate" required="required" th:value="${singLamp[0].cO2T}"/>
+            <input name="energyMonth" type="hidden" class="validate" required="required" th:value="${singLamp[0].energyMonth}"/>
+            <input name="saveMoneyMonth" type="hidden" class="validate" required="required" th:value="${singLamp[0].saveMoneyMonth}"/>
+            <input name="cO2Month" type="hidden" class="validate" required="required" th:value="${singLamp[0].cO2Month}"/>
+            <input name="gridEnergyYear" type="hidden" class="validate" required="required" th:value="${singLamp[0].gridEnergyYear}"/>
+            <input name="saveMoneyYear" type="hidden" class="validate" required="required" th:value="${singLamp[0].saveMoneyYear}"/>
+            <input name="cO2Year" type="hidden" class="validate" required="required" th:value="${singLamp[0].cO2Year}"/>
+            <div class="row">
+                <div class="input-field col s6 m6 l6">
+                    <i class="material-icons prefix">personal_video</i>
+                    <select id="machineID" name="machineID">
+                        <option th:each="item:${machineList}" th:value="${item.id}" th:text="${item.name}"
+                                th:if="${item.id==singLamp[0].machineID}" selected="selected"></option>
+                        <option th:each="item:${machineList}" th:value="${item.id}" th:text="${item.name}"></option>
+                    </select>
+                    <label for="machineID">所属广告机</label>
+                </div>
+                <div class="input-field col s6 m6 l6" th:if="${loginUser.roleID==adminRoleID}">
+                    <i class="material-icons prefix">account_circle</i>
+                    <select id="userID" name="userID">
+                        <option th:each="item:${userList}" th:value="*{item.id}" th:text="*{item.username}"
+                                th:if="${item.id==singLamp[0].userID}" selected="selected"></option>
+                        <option th:each="item:${userList}" th:value="*{item.id}" th:text="*{item.username}"></option>
+                    </select>
+                    <label for="userID">所属用户</label>
+                </div>
+                <div class="row">
+                    <div class="input-field col s6 m6 l6 right-align">
+                        <button type="reset" class="waves-effect waves-light btn"><i class="material-icons left">clear</i>清空</button>
+                    </div>
+                    <div class="input-field col s6 m6 l6 left-align">
+                        <button type="submit" class="waves-effect waves-light btn"><i class="material-icons right">send</i>提交</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+    </div>
+</main>
+<th:block th:include="/common/footer::footer"/>
+<th:block th:include="/common/script::script"/>
+</body>
+</html>
+<script type="text/javascript">
+    $(function () {
+        $("#machineID").material_select();
+        var roleID = '[[${loginUser.roleID}]]';
+        if (roleID === '1') {
+            $("#userID").material_select();
+        }
+    });
+</script> 

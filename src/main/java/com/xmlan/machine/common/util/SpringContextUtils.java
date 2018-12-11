@@ -1,5 +1,6 @@
 package com.xmlan.machine.common.util;
 
+import com.xmlan.machine.module.led_machine.dao.Led_machineDAO;
 import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,6 +36,7 @@ public class SpringContextUtils implements ApplicationContextAware, DisposableBe
 
     /**
      * 从静态变量applicationContext中取得Bean, 自动转型为所赋值对象的类型.
+     * @param name
      */
     @SuppressWarnings("unchecked")
     public static <T> T getBean(String name) {
