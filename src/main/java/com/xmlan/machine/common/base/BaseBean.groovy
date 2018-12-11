@@ -53,7 +53,9 @@ class BaseBean {
     /**
      * 新插入的ID
      */
-    public static final int NEW_INSERT_ID = -2
+    public  final int NEW_INSERT_ID = -2
+
+    public  final int NEW_ID = 0
     /**
      * 失败
      */
