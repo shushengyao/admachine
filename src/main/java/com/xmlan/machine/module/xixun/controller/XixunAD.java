@@ -115,12 +115,10 @@ public class XixunAD extends BaseController {
     /**
      * 集中处理上传媒体信息然后重定向处理
      * @param file
-     * @param redirectAttributes
-     * @param request
      * @return
      */
 //    @RequestMapping(value = "/uploadFile",method =RequestMethod.POST)
-    public String uploadFile(@RequestParam("file") MultipartFile file,RedirectAttributes redirectAttributes,HttpServletRequest request){
+    public String uploadFile(@RequestParam("file") MultipartFile file){
         String oldName = file.getOriginalFilename();
         int indexb = oldName.lastIndexOf(".");
         String type = oldName.substring(indexb);
@@ -149,23 +147,36 @@ public class XixunAD extends BaseController {
         MultipartHttpServletRequest multipartRequest = commonsMultipartResolver.resolveMultipart(httpRequest);
 
         String led = multipartRequest.getParameter("led");
+        StartActivity.main(new  String[]{led});
+
         UploadUtils.saveFile(dataForm,file, BaseBean.path);
         String fileName = UploadUtils.saveFile(dataForm,file, BaseBean.path);
-        filenameTemp= BaseBean.path+"demo.html";
+        filenameTemp= BaseBean.path+dataForm+".html";
+//        filenameTemp = BaseBean.XWALKURL+dataForm+".html";
+        String call = BaseBean.XWALKURL+dataForm+".html";
         File filename = new File(filenameTemp);
-        if (filename.exists()) {
-//            filename.createNewFile();
+        if (!filename.exists()) {
+            filename.createNewFile();
             if (filename.delete()){
                 filename.createNewFile();
             }
         }
-        boolean bea= FileUtils.writeToFile("<head><style>body{margin:0;padding:0;}</style></head><img src=\""+fileName+"\" style=\"width: 192px;height: 192px\"/></head>",filenameTemp);
+        ScreenWidth width = new ScreenWidth();
+        ScreenHeight height = new ScreenHeight();
+        String screenWidth = width.getScreenWidth(led);
+        String screeHeight = height.getScreenHeight(led);
+        boolean bea;
+        if (fileName.substring(fileName.lastIndexOf(".")).equals(".mp4")){
+            bea = FileUtils.writeToFile("<head><style>body{margin:0;padding:0;}</style></head><video loop = \"loop\" muted src=\"" + fileName + "\" style=\"width: " + screenWidth + "px;height: " + screeHeight + "px\" controls=\"controls\" autoplay = \"autoplay\"/></head>", filenameTemp);
+        }else {
+            bea = FileUtils.writeToFile("<head><style>body{margin:0;padding:0;}</style></head><img src=\"" + fileName + "\" style=\"width: " + screenWidth + "px;height: " + screeHeight + "px\"/></head>", filenameTemp);
+        }
         if (bea == true){
-//                    CallXwalkFn callXwalkFn = new CallXwalkFn();
-//                    callXwalkFn.callXwalkFn(call,led);
+            CallXwalkFn callXwalkFn = new CallXwalkFn();
+            callXwalkFn.callXwalkFn(call,led);
             clear(led);
-            LoadUrl loadUrl =new  LoadUrl();
-            loadUrl.loadUrl(led);
+//            LoadUrl loadUrl =new  LoadUrl();
+//            loadUrl.loadUrl(led);
         }
         return "redirect:list/1";
     }
@@ -334,12 +345,11 @@ public class XixunAD extends BaseController {
 //        GetPicture.main(null);
         GetPicture getPicture = new GetPicture();
         String s =getPicture.getStr(led);
-        System.out.print(led);
         return s;
     }
 
     /**
-     * 媒体文件上传到led板卡内存
+     * 媒体文件上传到led板卡内存然后播放(无法控制播放素材尺寸，暂弃)
      * @param
      */
     @RequestMapping(value = "/downloadFileToLocal",method =RequestMethod.POST)

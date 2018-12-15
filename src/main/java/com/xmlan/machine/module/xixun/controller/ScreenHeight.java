@@ -1,20 +1,20 @@
 package com.xmlan.machine.module.xixun.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import com.google.gson.Gson;
 import com.xmlan.machine.common.base.BaseBean;
-import com.xmlan.machine.module.xixun.util.ClearData;
+import com.xmlan.machine.module.xixun.util.ScreenHeightData;
 import okhttp3.*;
 
 import java.io.IOException;
 
 /**
- * 清除
  * @program: admachine
- * @description: controller
+ * @description: con
  * @author: YSS
- * @create: 2018-07-25 10:11
+ * @create: 2018-12-15 13:45
  **/
-public class Clear {
+public class ScreenHeight {
     public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
     private OkHttpClient client = new OkHttpClient();
 
@@ -28,18 +28,21 @@ public class Clear {
         return response.body().string();
     }
 
-    public  void clea(String led_code) {
+    public String getScreenHeight(String led_code) {
         Gson gson = new Gson();
-        ClearData data = new ClearData();
+        ScreenHeightData data = new ScreenHeightData();
         String jsonData = gson.toJson(data);
         Clear test = new Clear();
         String url = BaseBean.URL +led_code; //check this
         String result;
         try {
             result = test.post(url, jsonData);
-            System.out.print(result);
+            JSONObject jsStr = JSONObject.parseObject(result);
+            String height = jsStr.get("result").toString();
+            return height;
         } catch (IOException e) {
             e.printStackTrace();
         }
+        return "64";
     }
 }

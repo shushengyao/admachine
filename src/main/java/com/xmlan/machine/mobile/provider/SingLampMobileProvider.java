@@ -55,13 +55,13 @@ public class SingLampMobileProvider {
      */
     @RequestMapping(value = "/detail")
     @ResponseBody
-    public List<SingLamp> singLampDetail(String token,int id){
+    public List<SingLamp> singLampDetail(String token,int machineID){
         if (!TokenUtils.validateToken(token)) {
             return null;
         }
         List<SingLamp> list = new ArrayList<>();
         try {
-            list = singLampService.findListByMachineID(id);
+            list = singLampService.findListByMachineID(machineID);
         }catch (Exception e){
             e.printStackTrace();
         }

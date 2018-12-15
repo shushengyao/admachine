@@ -62,7 +62,7 @@ public class SensorMobileServiceProvider extends BaseController {
 
     @RequestMapping(value = "/pushLED", method = RequestMethod.POST, produces = "application/json; charset=utf-8")
     @ResponseBody
-    public HashMap pushLED(String ledID,String machineID,String inf){
+    public HashMap pushLED(String led,String machineID,String inf){
 //        int id = Integer.parseInt(ledID);
         int machineID_ =Integer.parseInt(machineID);
         HashMap<String,String> hashMap= new HashMap<>();
@@ -85,12 +85,11 @@ public class SensorMobileServiceProvider extends BaseController {
             }
             info = city + "时间：" + dataForm + "-----实时温度：" + sensorList.getTemperature() + "℃—空气湿度：" + sensorList.getHumidity() + "%RH—环境亮度：" + sensorList.getBrightness() + "cd/m²—空气污染指数：" + sensorList.getPm25() + "μg/m³#030303";
         }
-        System.err.print(info);
-//        if (push(ledID,info)==true){
-//            hashMap.put("result","success");
-//        }else {
-//            hashMap.put("result","error");
-//        }
+        if (push(led,info)==true){
+            hashMap.put("result","success");
+        }else {
+            hashMap.put("result","error");
+        }
         return hashMap;
     }
 
