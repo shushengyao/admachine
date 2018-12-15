@@ -107,8 +107,10 @@
                 <input id="update-led" value="led"/>
                 <h6 class="green-text text-darken-2">所属广告机id</h6>
                 <input id="update-machine_id" value="machine_id"/>
-                <h6 class="green-text text-darken-2">所属用户id</h6>
-                <input id="update-user_id" value="user_id" readonly="readonly"/>
+                <div th:if="${loginUser.id}==1">
+                    <h6 class="green-text text-darken-2">所属用户id</h6>
+                    <input id="update-user_id" value="user_id"/>
+                </div>
             </div>
             <div class="modal-footer">
                 <button type="submit" class="waves-effect waves-light btn" onclick="send()"><i class="material-icons right">send</i>提交</button>
