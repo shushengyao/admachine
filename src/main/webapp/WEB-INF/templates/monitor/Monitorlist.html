@@ -32,7 +32,7 @@
         <tbody class="card">
         <tr th:each="item:${page.list}">
             <td th:text="*{item.name}">name</td>
-            <td th:text="*{#strings.abbreviate(item.address,30)}">address</td>
+            <td th:text="*{#strings.abbreviate(item.addrStr,30)}">address</td>
             <td >开</td>
             <td ><a class="btn-floating blue waves-effect waves-light tooltipped btn modal-trigger"
                     data-position="top" data-delay="50" data-tooltip="查看实时监控"

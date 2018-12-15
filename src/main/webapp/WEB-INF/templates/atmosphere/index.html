@@ -62,7 +62,7 @@
             <tbody class="card">
                 <tr th:each="item:${page.list}">
                     <td th:text="*{item.name}">name</td>
-                    <td th:text="*{#strings.abbreviate(item.address,30)}">address</td>
+                    <td th:text="*{#strings.abbreviate(item.addrStr,30)}">address</td>
                     <td ><a class="btn-floating blue waves-effect waves-light tooltipped btn modal-trigger"
                             data-position="top" data-delay="50" data-tooltip="大气采集" href="#weather-modal"
                             th:onmouseover="'javascript:weather(\''+*{item.id}+'\')'">查看</a></td>
