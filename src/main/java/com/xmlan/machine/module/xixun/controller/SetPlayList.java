@@ -27,10 +27,12 @@ public class SetPlayList {
         return response.body().string();
     }
 
-    public void setPlayList(String led,String fileName) {
+    public void setPlayList(String led,String fileName,int width,int height) {
         Gson gson = new Gson();
         SetPlayListData data = new SetPlayListData();
         data.list[0] = "/data/data/com.xixun.xy.conn/files/local/abc/"+fileName;
+        data.width = width;
+        data.height = height;
         String jsonData = gson.toJson(data);
         SetPlayList test = new SetPlayList();
 //        String url = "http://192.168.0.218:8081/command/y10-518-00147"; //check this

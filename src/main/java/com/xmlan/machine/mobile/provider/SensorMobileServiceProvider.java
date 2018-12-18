@@ -12,6 +12,7 @@ import com.xmlan.machine.module.led_machine.entity.Led_machine;
 import com.xmlan.machine.module.led_machine.service.Led_machineService;
 import com.xmlan.machine.module.xixun.controller.Clear;
 import com.xmlan.machine.module.xixun.controller.InvokeBuildInJs;
+import com.xmlan.machine.module.xixun.controller.LoadUrl;
 import com.xmlan.machine.module.xixun.util.InvokeBuildInJsData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -105,7 +106,7 @@ public class SensorMobileServiceProvider extends BaseController {
         }catch (Exception e){
             return false;
         }finally {
-            timer.schedule(new Task(led), 25000);
+            timer.schedule(new Task(led), 60000);
         }
     }
     class Task extends TimerTask {
@@ -117,6 +118,8 @@ public class SensorMobileServiceProvider extends BaseController {
         public void run() {
             Clear clear = new Clear();
             clear.clea(param);
+            LoadUrl loadUrl =new  LoadUrl();
+            loadUrl.loadUrl(param);
         }
     }
 }

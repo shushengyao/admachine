@@ -263,6 +263,7 @@
         set
         userID = #{userID},
         name = #{name},
+        addrStr = #{addrStr},
         remark = #{remark},
         cameraIP = #{cameraIP},
         cameraSequence = #{cameraSequence},

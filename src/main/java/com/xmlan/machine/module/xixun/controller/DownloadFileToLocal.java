@@ -36,7 +36,6 @@ public class DownloadFileToLocal {
         data.path = data.path + call;
         String jsonData = gson.toJson(data);
         DownloadFileToLocal test = new DownloadFileToLocal();
-//        String url = "http://192.168.6.104:8081/command/y10-518-00147"; //check this
         String url = BaseBean.URL +led_code; //check this
         String result;
         try {

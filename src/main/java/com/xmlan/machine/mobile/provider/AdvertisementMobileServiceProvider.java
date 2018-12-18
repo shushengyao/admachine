@@ -201,82 +201,57 @@ public class AdvertisementMobileServiceProvider extends BaseController {
             map.put(keyMessage, "身份校验失败");
             return map;
         }
-        int indexb = 0;
         int responseCode = -3;
-        String filenameTemp;
         String oldName = file.getOriginalFilename();
         int index = oldName.lastIndexOf(".");
-//        String type = oldName.substring(index);
+        String type = oldName.substring(index);
         String fileName = UploadUtils.saveFile(dataForm,file, BaseBean.path);
-        filenameTemp= BaseBean.path+dataForm+".html";
-//        filenameTemp = BaseBean.XWALKURL+dataForm+".html";
-        String call = BaseBean.XWALKURL+dataForm+".html";
-        File filename = new File(filenameTemp);
-        if (!filename.exists()) {
-            filename.createNewFile();
-            if (filename.delete()){
-                filename.createNewFile();
-            }
-        }
         ScreenWidth width = new ScreenWidth();
         ScreenHeight height = new ScreenHeight();
-        String screenWidth = width.getScreenWidth(led);
+        String screenWidth =  width.getScreenWidth(led);
         String screeHeight = height.getScreenHeight(led);
-        boolean bea;
-        if (fileName.substring(fileName.lastIndexOf(".")).equals(".mp4")){
-            bea = FileUtils.writeToFile("<head><style>body{margin:0;padding:0;}</style></head><video loop = \"loop\" muted src=\"" + fileName + "\" style=\"width: " + screenWidth + "px;height: " + screeHeight + "px\" controls=\"controls\" autoplay = \"autoplay\"/></head>", filenameTemp);
-        }else {
-            bea = FileUtils.writeToFile("<head><style>body{margin:0;padding:0;}</style></head><img src=\"" + fileName + "\" style=\"width: " + screenWidth + "px;height: " + screeHeight + "px\"/></head>", filenameTemp);
+        if (type.equals(".mp4")){
+            mp4(responseCode,fileName,led,screenWidth,screeHeight);
+        } else if (type.equals(".png") || type.equals(".jpg") || type.equals(".jpeg") || type.equals(".gif")) {
+            String filenameTemp= BaseBean.path+"demo.html";
+            String call = BaseBean.XWALKURL+dataForm+".html";
+            File filename = new File(filenameTemp);
+            if (filename.exists()) {
+//            filename.createNewFile();
+                if (filename.delete()){
+                    filename.createNewFile();
+                }
+            }
+            boolean bea= FileUtils.writeToFile("<head><style>body{margin:0;padding:0;}</style><body><img src=\""+fileName+"\" style=\"width: "+screenWidth+"px;height: "+screeHeight+"px\"/></head>",filenameTemp);
+            if (bea == true){
+                XixunAD xixunAD = new XixunAD();
+                xixunAD.clear(led);
+                util(responseCode,call,led);
+            }else {
+                responseCode = BaseBean.FAILURE;
+            }
         }
-        if (bea == true){
-            CallXwalkFn callXwalkFn = new CallXwalkFn();
-            callXwalkFn.callXwalkFn(call,led);
-            XixunAD xixunAD = new XixunAD();
-            xixunAD.clear(led);
-            responseCode = BaseBean.DONE;
-//            LoadUrl loadUrl =new  LoadUrl();
-//            loadUrl.loadUrl(led);
-        }else {
-            responseCode = BaseBean.FAILURE;
-        }
-//        if (type.equals(".mp4")){
-//            mp4(responseCode,fileName,led);
-//        } else if (type.equals(".png") || type.equals(".jpg") || type.equals(".jpeg") || type.equals(".gif")) {
-//            String filenameTemp= BaseBean.path+"demo.html";
-//            String call = BaseBean.XWALKURL+dataForm+".html";
-//            File filename = new File(filenameTemp);
-//            if (filename.exists()) {
-////            filename.createNewFile();
-//                if (filename.delete()){
-//                    filename.createNewFile();
-//                }
-//            }
-//            boolean bea= FileUtils.writeToFile("<head><style>body{margin:0;padding:0;}</style></head><body><img src=\""+fileName+"\" style=\"width: 128px;height: 256px\"/></head>",filenameTemp);
-//            if (bea == true){
-//                XixunAD xixunAD = new XixunAD();
-//                xixunAD.clear(led);
-//                util(responseCode,call,led);
-//            }else {
-//                responseCode = BaseBean.FAILURE;
-//            }
-//        }
         return pushUpdate(id, responseCode, "新广告");
     }
     private int util(int responseCode,String call,String led){
+//        CallXwalkFn callXwalkFn = new CallXwalkFn();
+//        callXwalkFn.callXwalkFn(call,led);
         LoadUrl loadUrl =new  LoadUrl();
         loadUrl.loadUrl(led);
         responseCode = BaseBean.DONE;
         return responseCode;
     }
-    private int mp4(int responseCode,String fileName,String led) throws IOException{
+    private int mp4(int responseCode,String fileName,String led,String width,String height) throws IOException{
         DownloadFileToLocal downloadFileToLocal = new DownloadFileToLocal();
         downloadFileToLocal.DownloadFileToLocal(fileName,led);
-        setPlayList(led,fileName);
+        int swidth = Integer.parseInt(width);
+        int sheight = Integer.parseInt(height);
+        setPlayList(led,fileName,swidth,sheight);
         return responseCode;
     }
-    public  void setPlayList(String led,String fileName) throws IOException{
+    public  void setPlayList(String led,String fileName,int width,int height){
         SetPlayList setPlayList = new SetPlayList();
-        setPlayList.setPlayList(led,fileName);
+        setPlayList.setPlayList(led,fileName,width,height);
         XixunAD xixunAD = new XixunAD();
         xixunAD.clear(led);
     }
