@@ -233,7 +233,7 @@
         cityCode,
         updateTime,
         addrStr,
-        singLamp
+        singLampID
         ) values (
         id,
         #{userID},
@@ -254,7 +254,7 @@
         #{cityCode},
         #{updateTime},
         #{addrStr},
-        #{singLamp}
+        #{singLampID}
         );
     </insert>
 
