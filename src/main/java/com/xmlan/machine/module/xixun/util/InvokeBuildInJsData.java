@@ -15,5 +15,5 @@ public class InvokeBuildInJsData {
     public Number interval = 10;//步进间隔，单位毫秒，注意类型为Number
     public Number step = 1;//步进距离，单位像素，注意类型为Number
     public String direction = "left";//往左滚动，可填值left、 right
-    public String align = "center";//在上方显示，可填值top、center、bottom
+    public String align = "top";//在上方显示，可填值top、center、bottom
 }

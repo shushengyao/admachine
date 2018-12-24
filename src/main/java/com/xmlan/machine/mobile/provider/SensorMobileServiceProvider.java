@@ -13,6 +13,7 @@ import com.xmlan.machine.module.led_machine.service.Led_machineService;
 import com.xmlan.machine.module.xixun.controller.Clear;
 import com.xmlan.machine.module.xixun.controller.InvokeBuildInJs;
 import com.xmlan.machine.module.xixun.controller.LoadUrl;
+import com.xmlan.machine.module.xixun.controller.ScreenHeight;
 import com.xmlan.machine.module.xixun.util.InvokeBuildInJsData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -70,8 +71,10 @@ public class SensorMobileServiceProvider extends BaseController {
         MachineSensor sensorList;
         String info;
         String city = "珠海";
-
         sensorList = sensorService.getByMachineID(machineID_);
+        ScreenHeight height = new ScreenHeight();
+        int screeHeight = Integer.parseInt(height.getScreenHeight(led));
+        String size = String.valueOf(screeHeight/12);
         if (inf.equals("1")){
             info = inf;
         }else {
@@ -84,7 +87,7 @@ public class SensorMobileServiceProvider extends BaseController {
             if (machine.getCity()!=null || !machine.getCity().equals(unknownObject)){
                 city = machine.getCity();
             }
-            info = "地点"+city + "<br/>时间：" + dataForm + "<br/>温度：" + sensorList.getTemperature() + "℃&nbsp;&nbsp;湿度：" + sensorList.getHumidity() + "%RH<br/>环境亮度：" + sensorList.getBrightness() + "cd/m²<br/>空气污染指数：" + sensorList.getPm25() + "μg/m³#030303";
+            info = "<i style=\"font-size:"+size+"px\">地点"+city + "<br/>时间：" + dataForm + "<br/>温度：" + sensorList.getTemperature() + "℃&nbsp;&nbsp;湿度：" + sensorList.getHumidity() + "%RH<br/>环境亮度：" + sensorList.getBrightness() + "cd/m²<br/>空气污染指数：" + sensorList.getPm25() + "μg/m³</i>#030303";
         }
         if (push(led,info)==true){
             hashMap.put("result","success");
