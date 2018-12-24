@@ -48,7 +48,9 @@ class AdvertisementMachine implements Serializable {
     private String updateTime;//定位更新时间
     private String addrStr;//定位地址
 
-    private int singLampID;String getCityCode() {
+    private int singLampID;
+
+    String getCityCode() {
         return cityCode
     }
 

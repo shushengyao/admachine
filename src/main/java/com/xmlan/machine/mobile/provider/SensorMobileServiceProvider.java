@@ -84,7 +84,7 @@ public class SensorMobileServiceProvider extends BaseController {
             if (machine.getCity()!=null || !machine.getCity().equals(unknownObject)){
                 city = machine.getCity();
             }
-            info = city + "时间：" + dataForm + "-----实时温度：" + sensorList.getTemperature() + "℃—空气湿度：" + sensorList.getHumidity() + "%RH—环境亮度：" + sensorList.getBrightness() + "cd/m²—空气污染指数：" + sensorList.getPm25() + "μg/m³#030303";
+            info = "地点"+city + "<br/>时间：" + dataForm + "<br/>温度：" + sensorList.getTemperature() + "℃&nbsp;&nbsp;湿度：" + sensorList.getHumidity() + "%RH<br/>环境亮度：" + sensorList.getBrightness() + "cd/m²<br/>空气污染指数：" + sensorList.getPm25() + "μg/m³#030303";
         }
         if (push(led,info)==true){
             hashMap.put("result","success");
@@ -118,8 +118,8 @@ public class SensorMobileServiceProvider extends BaseController {
         public void run() {
             Clear clear = new Clear();
             clear.clea(param);
-            LoadUrl loadUrl =new  LoadUrl();
-            loadUrl.loadUrl(param);
+//            LoadUrl loadUrl =new  LoadUrl();
+//            loadUrl.loadUrl(param);
         }
     }
 }
