@@ -149,36 +149,27 @@ public class XixunAD extends BaseController {
         MultipartHttpServletRequest multipartRequest = commonsMultipartResolver.resolveMultipart(httpRequest);
 
         String led = multipartRequest.getParameter("led");
-        StartActivity.main(new  String[]{led});
-
         UploadUtils.saveFile(dataForm,file, BaseBean.path);
         String fileName = UploadUtils.saveFile(dataForm,file, BaseBean.path);
-        filenameTemp= BaseBean.path+dataForm+".html";
-//        filenameTemp = BaseBean.XWALKURL+dataForm+".html";
-        String call = BaseBean.XWALKURL+dataForm+".html";
+        filenameTemp= BaseBean.path+"demo.html";
         File filename = new File(filenameTemp);
-        if (!filename.exists()) {
-            filename.createNewFile();
+        ScreenWidth width = new ScreenWidth();
+        ScreenHeight height = new ScreenHeight();
+        String screenWidth =  width.getScreenWidth(led);
+        String screeHeight = height.getScreenHeight(led);
+        if (filename.exists()) {
+//            filename.createNewFile();
             if (filename.delete()){
                 filename.createNewFile();
             }
         }
-        ScreenWidth width = new ScreenWidth();
-        ScreenHeight height = new ScreenHeight();
-        String screenWidth = width.getScreenWidth(led);
-        String screeHeight = height.getScreenHeight(led);
-        boolean bea;
-        if (fileName.substring(fileName.lastIndexOf(".")).equals(".mp4")){
-            bea = FileUtils.writeToFile("<head><style>body{margin:0;padding:0;}</style></head><video loop = \"loop\" muted src=\"" + fileName + "\" style=\"width: " + screenWidth + "px;height: " + screeHeight + "px\" controls=\"controls\" autoplay = \"autoplay\"/></head>", filenameTemp);
-        }else {
-            bea = FileUtils.writeToFile("<head><style>body{margin:0;padding:0;}</style></head><img src=\"" + fileName + "\" style=\"width: " + screenWidth + "px;height: " + screeHeight + "px\"/></head>", filenameTemp);
-        }
+        boolean bea= FileUtils.writeToFile("<head><style>body{margin:0;padding:0;}</style></head><img src=\""+fileName+"\" style=\"width: "+screenWidth+"px;height: "+screeHeight+"px\"/></head>",filenameTemp);
         if (bea == true){
-            CallXwalkFn callXwalkFn = new CallXwalkFn();
-            callXwalkFn.callXwalkFn(call,led);
+//                    CallXwalkFn callXwalkFn = new CallXwalkFn();
+//                    callXwalkFn.callXwalkFn(call,led);
             clear(led);
-//            LoadUrl loadUrl =new  LoadUrl();
-//            loadUrl.loadUrl(led);
+            LoadUrl loadUrl =new  LoadUrl();
+            loadUrl.loadUrl(led);
         }
         return "redirect:list/1";
     }
