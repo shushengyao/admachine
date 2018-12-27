@@ -15,12 +15,14 @@ import com.xmlan.machine.common.util.*;
 import com.xmlan.machine.module.advertisement.entity.Advertisement;
 import com.xmlan.machine.module.advertisement.service.AdvertisementService;
 import com.xmlan.machine.module.advertisementMachine.entity.AdvertisementMachine;
+import com.xmlan.machine.module.led_machine.service.Led_machineService;
 import com.xmlan.machine.module.system.service.SysLogService;
 import com.xmlan.machine.module.user.entity.User;
 import com.xmlan.machine.module.xixun.controller.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -48,6 +50,8 @@ import java.util.Map;
 @Controller
 @RequestMapping("${mobilePath}/ad")
 public class AdvertisementMobileServiceProvider extends BaseController {
+    @Autowired
+    private Led_machineService led_machineService;
 
     private final AdvertisementService advertisementService;
     private final SysLogService sysLogService;
@@ -192,7 +196,8 @@ public class AdvertisementMobileServiceProvider extends BaseController {
      */
     @RequestMapping(value = "/uploadLed", method = RequestMethod.POST, produces = "application/json; charset=utf-8")
     @ResponseBody
-    public Map uploadLed(int id,String led,String token,MultipartFile file) throws IOException {
+    public Map uploadLed(int id, String led, String token, MultipartFile file, String authname) throws IOException {
+        HashMap<String, Integer> pushData = Maps.newHashMap();
         Date date = new Date();
         String dataForm = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss").format(date);
         if (!TokenUtils.validateToken(token)) {
@@ -213,31 +218,45 @@ public class AdvertisementMobileServiceProvider extends BaseController {
         if (type.equals(".mp4")){
             mp4(responseCode,fileName,led,screenWidth,screeHeight);
         } else if (type.equals(".png") || type.equals(".jpg") || type.equals(".jpeg") || type.equals(".gif")) {
-            String filenameTemp= BaseBean.path+"demo.html";
+            String filenameTemp= BaseBean.path+authname+".html";
             String call = BaseBean.XWALKURL+dataForm+".html";
             File filename = new File(filenameTemp);
-            if (filename.exists()) {
-//            filename.createNewFile();
-                if (filename.delete()){
-                    filename.createNewFile();
-                }
+            if (!filename.exists()) {
+                filename.createNewFile();
+            }
+            if (filename.delete()){
+                filename.createNewFile();
             }
             boolean bea= FileUtils.writeToFile("<head><style>body{margin:0;padding:0;}</style><body><img src=\""+fileName+"\" style=\"width: "+screenWidth+"px;height: "+screeHeight+"px\"/></head>",filenameTemp);
             if (bea == true){
                 XixunAD xixunAD = new XixunAD();
                 xixunAD.clear(led);
-                util(responseCode,call,led);
+                util(responseCode,call,led,authname);
             }else {
                 responseCode = BaseBean.FAILURE;
             }
         }
-        return pushUpdate(id, responseCode, "新广告");
+        String play_list =fileName;
+        boolean updatePlayList = led_machineService.updatePlayList(play_list,led);
+        taskExecutor.execute(()->
+                sysLogService.log(
+                        ModuleEnum.Advertisement,
+                        OperateEnum.Update,
+                        TokenUtils.validateTokenGetUser(token).getId(),
+                        ObjectEnum.User,
+                        "在手机上手动推送更新led广告"
+                )
+        );
+        logger.info(updatePlayList);
+        pushData.put("type", TYPE_MEDIA_UPDATE);
+        pushData.put("responseCode", responseCode);
+        return pushData;
     }
-    private int util(int responseCode,String call,String led){
+    private int util(int responseCode,String call,String led,String authname){
 //        CallXwalkFn callXwalkFn = new CallXwalkFn();
 //        callXwalkFn.callXwalkFn(call,led);
         LoadUrl loadUrl =new  LoadUrl();
-        loadUrl.loadUrl(led);
+        loadUrl.loadUrl(led,authname);
         responseCode = BaseBean.DONE;
         return responseCode;
     }

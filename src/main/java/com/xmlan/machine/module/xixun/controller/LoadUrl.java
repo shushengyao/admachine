@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.xmlan.machine.common.base.BaseBean;
 import com.xmlan.machine.module.xixun.util.LoadUrlData;
 import okhttp3.*;
+import org.springframework.ui.ModelMap;
 
 import java.io.IOException;
 
@@ -27,10 +28,10 @@ public class LoadUrl {
         return response.body().string();
     }
 
-    public void loadUrl(String led) {
+    public void loadUrl(String led,String authname) {
         Gson gson = new Gson();
         LoadUrlData data = new LoadUrlData();
-        data.url = BaseBean.XWALKURL+"demo.html";
+        data.url = BaseBean.XWALKURL+ authname+".html";
         String jsonData = gson.toJson(data);
         LoadUrl test = new LoadUrl();
         String url = BaseBean.URL +led;

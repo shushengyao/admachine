@@ -17,6 +17,7 @@ import com.xmlan.machine.module.xixun.controller.ScreenHeight;
 import com.xmlan.machine.module.xixun.util.InvokeBuildInJsData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -64,7 +65,7 @@ public class SensorMobileServiceProvider extends BaseController {
 
     @RequestMapping(value = "/pushLED", method = RequestMethod.POST, produces = "application/json; charset=utf-8")
     @ResponseBody
-    public HashMap pushLED(String led,String machineID,String inf){
+    public HashMap pushLED(String led, String machineID, String inf, String authname){
 //        int id = Integer.parseInt(ledID);
         int machineID_ =Integer.parseInt(machineID);
         HashMap<String,String> hashMap= new HashMap<>();
@@ -89,7 +90,7 @@ public class SensorMobileServiceProvider extends BaseController {
             }
             info = "<i style=\"font-size:"+size+"px\">地点"+city + "<br/>时间：" + dataForm + "<br/>温度：" + sensorList.getTemperature() + "℃&nbsp;&nbsp;湿度：" + sensorList.getHumidity() + "%RH<br/>环境亮度：" + sensorList.getBrightness() + "cd/m²<br/>空气污染指数：" + sensorList.getPm25() + "μg/m³</i>#030303";
         }
-        if (push(led,info)==true){
+        if (push(led,info,authname)==true){
             hashMap.put("result","success");
         }else {
             hashMap.put("result","error");
@@ -97,32 +98,43 @@ public class SensorMobileServiceProvider extends BaseController {
         return hashMap;
     }
 
-    public boolean push(String led,String info) {
+    public boolean push(String led,String info,String authname) {
         Timer timer = new Timer();
         InvokeBuildInJs inJs = new InvokeBuildInJs();
         InvokeBuildInJsData inJsData = new InvokeBuildInJsData();
         inJsData.html = info;
         inJsData.type = "invokeBuildInJs"+led;
+        boolean mp4 = false;
+        String playList = led_machineService.selectPlayList(led);
+        if (playList.substring(playList.lastIndexOf(".")).equals(".mp4")){
+            mp4 = true;
+        }
         try {
             inJs.invokeBuildInJs(inJsData);
             return true;
         }catch (Exception e){
             return false;
         }finally {
-            timer.schedule(new Task(led), 60000);
+            timer.schedule(new Task(led,mp4,authname), 60000);
         }
     }
     class Task extends TimerTask {
         private String param;
-        public Task(String param) {
+        private boolean mp4;
+        private String authname;
+        public Task(String param,boolean mp4,String authname) {
             this.param = param;
+            this.mp4 = mp4;
+            this.authname = authname;
         }
         @Override
         public void run() {
             Clear clear = new Clear();
             clear.clea(param);
-//            LoadUrl loadUrl =new  LoadUrl();
-//            loadUrl.loadUrl(param);
+            if (mp4 != true){
+                LoadUrl loadUrl =new  LoadUrl();
+                loadUrl.loadUrl(param,authname);
+            }
         }
     }
 }

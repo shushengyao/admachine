@@ -1,8 +1,11 @@
 package com.xmlan.machine.module.led_machine.service
+
+import org.apache.ibatis.annotations.Param
 import org.springframework.stereotype.Service
 import com.xmlan.machine.common.base.BaseService
 import com.xmlan.machine.module.led_machine.dao.Led_machineDAO;
 import com.xmlan.machine.module.led_machine.entity.Led_machine
+import org.springframework.web.bind.annotation.RequestParam
 
 import java.util.List;
 
@@ -32,6 +35,12 @@ class Led_machineService extends BaseService<Led_machine,Led_machineDAO> {
 
     List<Led_machine> findAll(){
         dao.findAll()
+    }
+    boolean updatePlayList(@RequestParam("play_list")String play_list, @RequestParam("led")String led){
+        dao.updatePlayList(play_list,led)
+    }
+    String selectPlayList(String led){
+        dao.selectPlayList(led)
     }
 
 }

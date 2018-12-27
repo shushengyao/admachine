@@ -14,10 +14,12 @@ import com.xmlan.machine.common.util.TokenUtils;
 import com.xmlan.machine.common.util.UploadUtils;
 import com.xmlan.machine.module.led_machine.entity.Led_machine;
 import com.xmlan.machine.module.led_machine.service.Led_machineService;
+import com.xmlan.machine.module.user.entity.User;
 import com.xmlan.machine.module.xixun.util.InvokeBuildInJsData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
@@ -139,10 +141,12 @@ public class XixunAD extends BaseController {
      * @return
      */
     @RequestMapping(value = "/upload",method =RequestMethod.POST)
-    public String upload(@RequestParam("file") MultipartFile file,HttpServletRequest request) throws IOException {
+    public String upload(@RequestParam("file") MultipartFile file, HttpServletRequest request, ModelMap modelMap) throws IOException {
         Date date = new Date();
         String dataForm = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss").format(date);
         String filenameTemp;
+        User user=(User)modelMap.get("loginUser");
+        String authname = user.getAuthname();
 
         HttpServletRequest httpRequest = (HttpServletRequest)request;
         CommonsMultipartResolver commonsMultipartResolver = new CommonsMultipartResolver(httpRequest.getSession().getServletContext());
@@ -151,17 +155,17 @@ public class XixunAD extends BaseController {
         String led = multipartRequest.getParameter("led");
         UploadUtils.saveFile(dataForm,file, BaseBean.path);
         String fileName = UploadUtils.saveFile(dataForm,file, BaseBean.path);
-        filenameTemp= BaseBean.path+"demo.html";
+        filenameTemp= BaseBean.path+authname+".html";
         File filename = new File(filenameTemp);
         ScreenWidth width = new ScreenWidth();
         ScreenHeight height = new ScreenHeight();
         String screenWidth =  width.getScreenWidth(led);
         String screeHeight = height.getScreenHeight(led);
-        if (filename.exists()) {
-//            filename.createNewFile();
-            if (filename.delete()){
-                filename.createNewFile();
-            }
+        if (!filename.exists()) {
+            filename.createNewFile();
+        }
+        if (filename.delete()){
+            filename.createNewFile();
         }
         boolean bea= FileUtils.writeToFile("<head><style>body{margin:0;padding:0;}</style></head><img src=\""+fileName+"\" style=\"width: "+screenWidth+"px;height: "+screeHeight+"px\"/></head>",filenameTemp);
         if (bea == true){
@@ -169,8 +173,11 @@ public class XixunAD extends BaseController {
 //                    callXwalkFn.callXwalkFn(call,led);
             clear(led);
             LoadUrl loadUrl =new  LoadUrl();
-            loadUrl.loadUrl(led);
+            loadUrl.loadUrl(led,authname);
+
         }
+        String play_list =fileName;
+        led_machineService.updatePlayList(play_list,led);
         return "redirect:list/1";
     }
 
@@ -215,9 +222,10 @@ public class XixunAD extends BaseController {
      */
     @RequestMapping(value = "/loadUrl")
     @org.springframework.web.bind.annotation.ResponseBody
-    public  void loadUrl(@RequestParam("led_code") String led_code) {
+    public  void loadUrl(@RequestParam("led_code") String led_code,ModelMap modelMap) {
+        String authname = (String)modelMap.get("loginUser");
         LoadUrl loadUrl =new  LoadUrl();
-        loadUrl.loadUrl(led_code);
+        loadUrl.loadUrl(led_code,authname);
     }
 
     /**

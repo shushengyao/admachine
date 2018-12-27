@@ -20,6 +20,9 @@ public class Led_machine implements Serializable {
     private int machine_id;
     //所属用户id
     private int user_id;
+    //播放列表
+    private String play_list;
+
 
     public int getId() {
         return id;
@@ -61,4 +64,11 @@ public class Led_machine implements Serializable {
         this.user_id = user_id;
     }
 
+    public String getPlay_list() {
+        return play_list;
+    }
+
+    public void setPlay_list(String play_list) {
+        this.play_list = play_list;
+    }
 }

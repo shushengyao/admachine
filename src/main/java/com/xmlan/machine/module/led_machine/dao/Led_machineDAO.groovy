@@ -2,6 +2,7 @@ package com.xmlan.machine.module.led_machine.dao;
 
 import com.xmlan.machine.common.base.BaseDAO;
 import com.xmlan.machine.module.led_machine.entity.Led_machine
+import org.apache.ibatis.annotations.Param
 import org.springframework.stereotype.Repository
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -39,4 +40,18 @@ interface Led_machineDAO  extends BaseDAO<Led_machine> {
      * @return
      */
     List<Led_machine> findAll()
+
+    /**
+     * 变更节目播放列表
+     * @param led
+     * @return
+     */
+    boolean updatePlayList(@Param("play_list") String play_list, @Param("led") String led)
+
+    /**
+     * 查询播放列表
+     * @param led
+     * @return
+     */
+    String selectPlayList(@Param("led")String led)
 }
