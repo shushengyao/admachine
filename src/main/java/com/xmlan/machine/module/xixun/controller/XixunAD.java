@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import com.xmlan.machine.common.base.BaseBean;
@@ -145,40 +146,138 @@ public class XixunAD extends BaseController {
         Date date = new Date();
         String dataForm = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss").format(date);
         String filenameTemp;
-        User user=(User)modelMap.get("loginUser");
-        String authname = user.getAuthname();
 
         HttpServletRequest httpRequest = (HttpServletRequest)request;
         CommonsMultipartResolver commonsMultipartResolver = new CommonsMultipartResolver(httpRequest.getSession().getServletContext());
         MultipartHttpServletRequest multipartRequest = commonsMultipartResolver.resolveMultipart(httpRequest);
-
         String led = multipartRequest.getParameter("led");
-        UploadUtils.saveFile(dataForm,file, BaseBean.path);
-        String fileName = UploadUtils.saveFile(dataForm,file, BaseBean.path);
-        filenameTemp= BaseBean.path+authname+".html";
+
+        String oldName = file.getOriginalFilename();
+        int index = oldName.lastIndexOf(".");
+        String type = oldName.substring(index);
+        UploadUtils.saveFile(dataForm, file, BaseBean.path);
+        String fileName = UploadUtils.saveFile(dataForm, file, BaseBean.path);
+        User user = (User) modelMap.get("loginUser");
+        String authname = user.getAuthname();
+        filenameTemp = BaseBean.path + authname+"_"+led + ".html";
         File filename = new File(filenameTemp);
         ScreenWidth width = new ScreenWidth();
         ScreenHeight height = new ScreenHeight();
-        String screenWidth =  width.getScreenWidth(led);
+        String screenWidth = width.getScreenWidth(led);
         String screeHeight = height.getScreenHeight(led);
-        if (!filename.exists()) {
-            filename.createNewFile();
-        }
-        if (filename.delete()){
-            filename.createNewFile();
-        }
-        boolean bea= FileUtils.writeToFile("<head><style>body{margin:0;padding:0;}</style></head><img src=\""+fileName+"\" style=\"width: "+screenWidth+"px;height: "+screeHeight+"px\"/></head>",filenameTemp);
-        if (bea == true){
+        if (type.equals(".mp4")){
+            downloadFileToLocal(fileName,led,screenWidth,screeHeight);
+        }else if (type.equals(".png") || type.equals(".jpg") || type.equals(".jpeg") || type.equals(".gif")) {
+
+            if (!filename.exists()) {
+                filename.createNewFile();
+            }
+            if (filename.delete()) {
+                filename.createNewFile();
+            }
+            boolean bea = FileUtils.writeToFile("<head><style>body{margin:0;padding:0;}</style></head><img src=\"" + fileName + "\" style=\"width: " + screenWidth + "px;height: " + screeHeight + "px\"/></head>", filenameTemp);
+            if (bea == true) {
 //                    CallXwalkFn callXwalkFn = new CallXwalkFn();
 //                    callXwalkFn.callXwalkFn(call,led);
-            clear(led);
-            LoadUrl loadUrl =new  LoadUrl();
-            loadUrl.loadUrl(led,authname);
-
+                clear(led);
+                LoadUrl loadUrl = new LoadUrl();
+                loadUrl.loadUrl(led, authname);
+            }
         }
+
         String play_list =fileName;
+
         led_machineService.updatePlayList(play_list,led);
         return "redirect:list/1";
+    }
+    /**
+     * 媒体文件上传到led板卡内存
+     * @param
+     */
+//    @RequestMapping(value = "/downloadFileToLocal",method =RequestMethod.POST)
+    public String downloadFileToLocal(String fileName,String led,String screenWidth,String screeHeight){
+        int width = Integer.parseInt( screenWidth);
+        int height =Integer.parseInt(screeHeight);
+
+        DownloadFileToLocal downloadFileToLocal = new DownloadFileToLocal();
+        downloadFileToLocal.DownloadFileToLocal(fileName,led);
+        setPlayList(led,fileName,width,height);
+        clear(led);
+        return "redirect:list/1";
+    }
+    /**
+     * 批量上传图片文件
+     * @param file
+     * @return
+     */
+    @RequestMapping(value = "/uploads",method =RequestMethod.POST)
+    public String uploads(@RequestParam("file") MultipartFile file, HttpServletRequest request, ModelMap modelMap,Model model) throws IOException {
+        //获取当前时间
+        Date date = new Date();
+        String dataForm = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss").format(date);
+        //从file中获取传过来的leds
+        HttpServletRequest httpRequest = (HttpServletRequest)request;
+        CommonsMultipartResolver commonsMultipartResolver = new CommonsMultipartResolver(httpRequest.getSession().getServletContext());
+        MultipartHttpServletRequest multipartRequest = commonsMultipartResolver.resolveMultipart(httpRequest);
+        String leds[] = multipartRequest.getParameter("led").split(",");
+
+        User user = (User) modelMap.get("loginUser");
+        String authname = user.getAuthname();
+        String led;
+        HashMap<String,String> map = new HashMap<>();
+        String oldName = file.getOriginalFilename();
+        String fileName = UploadUtils.saveFile(dataForm, file, BaseBean.path);
+        int index = oldName.lastIndexOf(".");
+        String type = oldName.substring(index);
+        if (leds.length !=NEW_ID){
+            for (int i = 0;i<leds.length;i++){
+                led = leds[i];
+                if (led != "" || led.equals(null)){
+                    if (upload(type,led,authname,fileName)){
+                        map.put(led,"true");
+                    }else {
+                        map.put(led,"flase");
+                    }
+                }else {
+                    map.put(led,"error");
+                }
+            }
+        }else {
+            map.put("LEDS","NULL");
+        }
+        model.addAttribute(map);
+        System.err.println(leds);
+        return "redirect:list/1";
+    }
+
+    public boolean upload(String type,String led,String authname,String fileName)throws IOException{
+        String filenameTemp = BaseBean.path + authname+"_"+led + ".html";
+        File filename = new File(filenameTemp);
+        ScreenWidth width = new ScreenWidth();
+        ScreenHeight height = new ScreenHeight();
+        String screenWidth = width.getScreenWidth(led);
+        String screeHeight = height.getScreenHeight(led);
+        if (type.equals(".mp4")){
+            downloadFileToLocal(fileName,led,screenWidth,screeHeight);
+        }else if (type.equals(".png") || type.equals(".jpg") || type.equals(".jpeg") || type.equals(".gif")) {
+
+            if (!filename.exists()) {
+                filename.createNewFile();
+            }
+            if (filename.delete()) {
+                filename.createNewFile();
+            }
+            boolean bea = FileUtils.writeToFile("<head><style>body{margin:0;padding:0;}</style></head><img src=\"" + fileName + "\" style=\"width: " + screenWidth + "px;height: " + screeHeight + "px\"/></head>", filenameTemp);
+            if (bea == true) {
+                clear(led);
+                LoadUrl loadUrl = new LoadUrl();
+                loadUrl.loadUrl(led, authname);
+            }
+        }
+        String play_list =fileName;
+        boolean updatePlayList = led_machineService.updatePlayList(play_list,led);
+        logger.info(updatePlayList);
+        return true;
     }
 
 
@@ -350,27 +449,4 @@ public class XixunAD extends BaseController {
         return s;
     }
 
-    /**
-     * 媒体文件上传到led板卡内存
-     * @param
-     */
-    @RequestMapping(value = "/downloadFileToLocal",method =RequestMethod.POST)
-    public String downloadFileToLocal(@RequestParam("file") MultipartFile file,HttpServletRequest request) throws IOException{
-        Date date = new Date();
-        String dataForm = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss").format(date);
-        HttpServletRequest httpRequest = (HttpServletRequest)request;
-        CommonsMultipartResolver commonsMultipartResolver = new CommonsMultipartResolver(httpRequest.getSession().getServletContext());
-        MultipartHttpServletRequest multipartRequest = commonsMultipartResolver.resolveMultipart(httpRequest);
-        String led = multipartRequest.getParameter("led");
-        String fileName = UploadUtils.saveFile(dataForm,file, BaseBean.path);
-        DownloadFileToLocal downloadFileToLocal = new DownloadFileToLocal();
-        downloadFileToLocal.DownloadFileToLocal(fileName,led);
-        ScreenWidth width = new ScreenWidth();
-        ScreenHeight height = new ScreenHeight();
-        int screenWidth = Integer.parseInt( width.getScreenWidth(led));
-        int screeHeight =Integer.parseInt( height.getScreenHeight(led));
-        setPlayList(led,fileName,screenWidth,screeHeight);
-        clear(led);
-        return "redirect:list/1";
-    }
 }

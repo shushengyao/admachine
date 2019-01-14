@@ -187,8 +187,8 @@ public class AdvertisementMobileServiceProvider extends BaseController {
 
     /**
      * 手机端上传led广告
-     * @param id led的id
-     * @param led led的编号
+     * @param
+     * @param
      * @param token 验证
      * @param file 文件
      * @return
@@ -196,8 +196,8 @@ public class AdvertisementMobileServiceProvider extends BaseController {
      */
     @RequestMapping(value = "/uploadLed", method = RequestMethod.POST, produces = "application/json; charset=utf-8")
     @ResponseBody
-    public Map uploadLed(int id, String led, String token, MultipartFile file, String authname) throws IOException {
-        HashMap<String, Integer> pushData = Maps.newHashMap();
+    public Map uploadLed(String leds[], String token, MultipartFile file, String authname) throws IOException {
+        HashMap<String, Object> pushData = Maps.newHashMap();
         Date date = new Date();
         String dataForm = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss").format(date);
         if (!TokenUtils.validateToken(token)) {
@@ -206,38 +206,30 @@ public class AdvertisementMobileServiceProvider extends BaseController {
             map.put(keyMessage, "身份校验失败");
             return map;
         }
+        HashMap<String,String> map = new HashMap<>();
+        String led;
         int responseCode = -3;
         String oldName = file.getOriginalFilename();
         int index = oldName.lastIndexOf(".");
         String type = oldName.substring(index);
         String fileName = UploadUtils.saveFile(dataForm,file, BaseBean.path);
-        ScreenWidth width = new ScreenWidth();
-        ScreenHeight height = new ScreenHeight();
-        String screenWidth =  width.getScreenWidth(led);
-        String screeHeight = height.getScreenHeight(led);
-        if (type.equals(".mp4")){
-            mp4(responseCode,fileName,led,screenWidth,screeHeight);
-        } else if (type.equals(".png") || type.equals(".jpg") || type.equals(".jpeg") || type.equals(".gif")) {
-            String filenameTemp= BaseBean.path+authname+".html";
-            String call = BaseBean.XWALKURL+dataForm+".html";
-            File filename = new File(filenameTemp);
-            if (!filename.exists()) {
-                filename.createNewFile();
+        XixunAD xixunAD = new XixunAD();
+        if (leds.length !=NEW_ID){
+            for (int i = 0;i<leds.length;i++){
+                led = leds[i];
+                if (led != "" || led.equals(null)){
+                    if (xixunAD.upload(type,led,authname,fileName)){
+                        map.put(led,"true");
+                    }else {
+                        map.put(led,"flase");
+                    }
+                }else {
+                    map.put(led,"error");
+                }
             }
-            if (filename.delete()){
-                filename.createNewFile();
-            }
-            boolean bea= FileUtils.writeToFile("<head><style>body{margin:0;padding:0;}</style><body><img src=\""+fileName+"\" style=\"width: "+screenWidth+"px;height: "+screeHeight+"px\"/></head>",filenameTemp);
-            if (bea == true){
-                XixunAD xixunAD = new XixunAD();
-                xixunAD.clear(led);
-                util(responseCode,call,led,authname);
-            }else {
-                responseCode = BaseBean.FAILURE;
-            }
+        }else {
+            map.put("LEDS","NULL");
         }
-        String play_list =fileName;
-        boolean updatePlayList = led_machineService.updatePlayList(play_list,led);
         taskExecutor.execute(()->
                 sysLogService.log(
                         ModuleEnum.Advertisement,
@@ -247,9 +239,9 @@ public class AdvertisementMobileServiceProvider extends BaseController {
                         "在手机上手动推送更新led广告"
                 )
         );
-        logger.info(updatePlayList);
         pushData.put("type", TYPE_MEDIA_UPDATE);
         pushData.put("responseCode", responseCode);
+        pushData.put("result",map);
         return pushData;
     }
     private int util(int responseCode,String call,String led,String authname){

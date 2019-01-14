@@ -31,7 +31,7 @@ public class LoadUrl {
     public void loadUrl(String led,String authname) {
         Gson gson = new Gson();
         LoadUrlData data = new LoadUrlData();
-        data.url = BaseBean.XWALKURL+ authname+".html";
+        data.url = BaseBean.XWALKURL+ authname+"_"+led+".html";
         String jsonData = gson.toJson(data);
         LoadUrl test = new LoadUrl();
         String url = BaseBean.URL +led;

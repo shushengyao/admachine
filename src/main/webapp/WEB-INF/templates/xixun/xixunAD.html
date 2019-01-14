@@ -26,6 +26,10 @@
                 <table class="highlight responsive-table" >
                     <thead>
                     <tr>
+                        <th>
+                            <input type="button" style="display:block" id="selectAll" value="全选" class="btn">
+                            <input type="button" style="display:none" id="closeAll" value="取消" class="btn red">
+                        </th>
                         <th>名称</th>
                         <th>所属板卡</th>
                         <th>所属广告机</th>
@@ -79,7 +83,7 @@
                 </select>
                 <form th:action="@{${adminPath}+'/xixunAD/upload'}" method="post" enctype="multipart/form-data">
                     <input type="file" name="file"  accept="video/*">
-                    <input type="text" style="display: none" name="led" id="led" value="">
+                    <input type="text" style="display: none" name="led" id="led_video" value="">
                     <a class="material-icons"><input type="submit" value="提交视频文件">file_upload</a>
                 </form>
                 <form th:action="@{${adminPath}+'/xixunAD/clear'}" method="post">
@@ -153,10 +157,28 @@
                 </div>
             </div>
         </div>
-        <div th:if="${loginUser.id}==1">
-            <input class="" type="button" onclick="invokeJs()" value="第二部">
-            <input class="" type="button" onclick="startActivity('y10-a18-00006')" value="启动">
-            <!--<input class="" type="button" onclick="callCardService()" value="设置屏幕开关">-->
+        <!--<div th:if="${loginUser.id}==1">-->
+            <!--<input class="" type="button" onclick="invokeJs()" value="第二部">-->
+            <!--<input class="" type="button" onclick="startActivity('y10-a18-00006')" value="启动">-->
+            <!--&lt;!&ndash;<input class="" type="button" onclick="callCardService()" value="设置屏幕开关">&ndash;&gt;-->
+        <!--</div>-->
+        <div class="row center" style="display: none" id="footRow">
+            <form th:action="@{${adminPath}+'/xixunAD/uploads'}" method="post" id="fromFile_1" enctype="multipart/form-data">
+                <div class="col s6 deep-purple accent-3">
+                    <p class="btn waves-effect light-green">选择图片:</p>&nbsp;
+                    <input type="file"  name="file" id="fileInput_1" accept="image/*">
+                    <input type="text" style="display: none" name="led" id="led_code_1" value="">
+                    <a class="btn waves-effect waves-light" id=""><input type="submit" value="提交图片"></a>
+                </div>
+            </form>
+            <form th:action="@{${adminPath}+'/xixunAD/uploads'}" method="post" enctype="multipart/form-data">
+                <div class="col s6 cyan lighten-4">
+                    <p class="btn waves-effect light-green">选择视频:</p>
+                        <input type="file" name="file"  accept="video/*">
+                        <input type="text" style="display: none"  name="led" id="led_video_1" value="">
+                        <a class="btn waves-effect waves-light"><input type="submit" value="提交视频"></a>
+                </div>
+            </form>
         </div>
         <div id="weather-modal" class="modal modal-fixed-footer" style="height: 300px;width: 200px">
             <h4  class="text" style=" text-align:center;">led屏幕画面</h4>
@@ -176,6 +198,33 @@
 </html>
 <script type="text/javascript">
     var led;
+    var leds = [];
+    jQuery(function($){
+        $("#selectAll").click(function(){
+            $("input[name='checkbox']").prop("checked","true");
+            document.getElementById("closeAll").style.display="block";
+            document.getElementById("selectAll").style.display="none";
+            document.getElementById("footRow").style.display="block";
+            leds = countCheckbox().split(",");
+            $("#led_code_1").val(leds);
+            $("#led_video_1").val(leds);
+        })
+        $("#closeAll").click(function(){
+            $("input[name='checkbox']").prop("checked",false);
+            document.getElementById("selectAll").style.display="block";
+            document.getElementById("closeAll").style.display="none";
+            document.getElementById("footRow").style.display="none";
+            leds = countCheckbox().split(",");
+            $("#led_code_1").val(leds);
+            $("#led_video_1").val(leds);
+        })
+    })
+    function countCheckbox(){
+        leds = $("input:checkbox[name='checkbox']:checked").map(function(index,elem) {
+            return $(elem).val();
+        }).get().join(',');
+        return leds;
+    }
     $(function () {
         $("#detail-modal").modal();
         $("#weather-modal").modal();
@@ -199,6 +248,7 @@
                     // console.log(adStr)
                     var tr =
                         "<tr>"+
+                        "<td><input type=\"checkbox\" name=\"checkbox\" value=\""+adStr[idx].led+"\" id=\""+adStr[idx].led+"\" onclick=\"checkboxOnclick(this)\"></td>"+
                         "<td>"+adStr[idx].name+"</td>"+
                         "<td>"+adStr[idx].led+"</td>"+
                         "<td>"+adStr[idx].machine_id+"</td>"+
@@ -243,6 +293,24 @@
             }
         });
     });
+    function checkboxOnclick() {
+        var num = $("input[name='checkbox']:checked").length;
+        if (num > 0){
+            $("#footRow")[0].style.display = 'block';
+            document.getElementById("closeAll").style.display="block";
+            document.getElementById("selectAll").style.display="none";
+            leds = countCheckbox().split(",");
+            $("#led_code_1").val(leds);
+            $("#led_video_1").val(leds);
+        }else {
+            $("#footRow")[0].style.display = 'none';
+            document.getElementById("closeAll").style.display="none";
+            document.getElementById("selectAll").style.display="block";
+            leds = countCheckbox().split(",");
+            $("#led_code_1").val(leds);
+            $("#led_video_1").val(leds);
+        }
+    }
     function changeColor(){ 　　　　　　　　　　　　　　　　　　　　 //改变颜色的事件
         colorInfo.style.color = color.value;
         colorInfo.innerHTML = color.value;
@@ -341,7 +409,8 @@
                 $("#led_co").val(code);
                 $("#led_").val(code);
                 $("#led_code").val(jsonObj[0].led);
-                $("#led").val(code);
+                $("#led_video").val(code);
+                console.log(code)
                 // startActivity(led);
             },error:function () {
                 console.log("失败！")
@@ -357,7 +426,7 @@
                 var jsonObj =  JSON.parse(data);
                 $("#update-id").val(jsonObj[0].id)
                 $("#update-name").val(jsonObj[0].name)
-                $("#update-code").val(jsonObj[0].led);
+                $("#update-led").val(jsonObj[0].led);
                 $("#update-machine_id").val(jsonObj[0].machine_id);
                 $("#update-user_id").val(jsonObj[0].user_id);
             },error:function () {
