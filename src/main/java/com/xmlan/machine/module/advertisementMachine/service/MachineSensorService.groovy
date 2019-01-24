@@ -16,4 +16,8 @@ class MachineSensorService extends BaseService<MachineSensor, MachineSensorDAO> 
         return dao.getByMachineID(id)
     }
 
+    List<MachineSensor> findAll(){
+        return dao.findAll()
+    }
+
 }

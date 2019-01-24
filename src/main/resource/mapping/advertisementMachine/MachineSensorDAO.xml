@@ -7,6 +7,7 @@
 
     <resultMap id="machineSensorResultMap" type="com.xmlan.machine.module.advertisementMachine.entity.MachineSensor">
         <id column="id" property="id"/>
+        <result column="eCH2O" property="eCH2O"/>
         <result column="temperature" property="temperature"/>
         <result column="humidity" property="humidity"/>
         <result column="pm25" property="pm25"/>
@@ -19,6 +20,7 @@
 
     <sql id="columns">
         t.id as "id",
+        t.eCH2O as "eCH2O",
         t.temperature as "temperature",
         t.humidity as "humidity",
         t.pm25 as "pm25",
@@ -49,6 +51,9 @@
         <include refid="columns"/>
         from machine_sensor t
         <where>
+            <if test="eCH2O != null and eCH2O != ''">
+                t.eCH2O = #{eCH2O}
+            </if>
             <if test="temperature != null and temperature != ''">
                 t.temperature = #{temperature}
             </if>
@@ -75,6 +80,7 @@
     <insert id="insert" parameterType="com.xmlan.machine.module.advertisementMachine.entity.MachineSensor">
         insert into machine_sensor (
         id,
+        eCH2O,
         temperature,
         humidity,
         pm25,
@@ -85,6 +91,7 @@
         machineID
         ) values (
         id,
+        #{eCH2O},
         #{temperature},
         #{humidity},
         #{pm25},
@@ -99,6 +106,7 @@
     <update id="update" parameterType="com.xmlan.machine.module.advertisementMachine.entity.MachineSensor">
         update machine_sensor
         set
+        eCH2O = #{eCH2O},
         temperature = #{temperature},
         humidity = #{humidity},
         pm25 = #{pm25},

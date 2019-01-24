@@ -102,6 +102,15 @@ class AdvertisementMachineService extends BaseService<AdvertisementMachine, Adve
         dao.lightControl(id, operate)
         return DONE
     }
+    int updateControl(int id, int control){
+        if (null == AdvertisementMachineCache.get(id)){
+            return NO_SUCH_ROW
+        }
+        def machine = AdvertisementMachineCache.get(id)
+        machine.control = control
+        dao.updateControl(id,control)
+        return DONE
+    }
 
     int chargeControl(int id, int operate) {
         if (null == AdvertisementMachineCache.get(id)) {

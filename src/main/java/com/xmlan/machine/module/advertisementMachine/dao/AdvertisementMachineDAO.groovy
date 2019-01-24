@@ -65,7 +65,13 @@ interface AdvertisementMachineDAO extends BaseDAO<AdvertisementMachine> {
      * @return 操作返回码
      */
     int lightControl(@Param("id") int id, @Param("operate") int operate)
-
+    /**
+     * 新的单灯控制命令
+     * @param id
+     * @param control 控制命令
+     * @return
+     */
+    int updateControl(@Param("id") int id, @Param("control") int control)
     /**
      * 充电控制
      * @param id 广告机ID

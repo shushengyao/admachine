@@ -10,10 +10,7 @@ import com.xmlan.machine.module.advertisementMachine.service.AdvertisementMachin
 import com.xmlan.machine.module.advertisementMachine.service.MachineSensorService;
 import com.xmlan.machine.module.led_machine.entity.Led_machine;
 import com.xmlan.machine.module.led_machine.service.Led_machineService;
-import com.xmlan.machine.module.xixun.controller.Clear;
-import com.xmlan.machine.module.xixun.controller.InvokeBuildInJs;
-import com.xmlan.machine.module.xixun.controller.LoadUrl;
-import com.xmlan.machine.module.xixun.controller.ScreenHeight;
+import com.xmlan.machine.module.xixun.controller.*;
 import com.xmlan.machine.module.xixun.util.InvokeBuildInJsData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -69,18 +66,33 @@ public class SensorMobileServiceProvider extends BaseController {
 //        int id = Integer.parseInt(ledID);
         int machineID_ =Integer.parseInt(machineID);
         HashMap<String,String> hashMap= new HashMap<>();
-        MachineSensor sensorList;
+        MachineSensor sensorList = null;
         String info;
         String city = "珠海";
-        sensorList = sensorService.getByMachineID(machineID_);
+        if (machineID.equals("all")){
+            List<MachineSensor> allList = new ArrayList<>();
+            allList = sensorService.findAll();
+            if (allList.size() != 0){
+                for (int i = 0;i < allList.size();i++){
+                    sensorList = allList.get(i);
+                }
+            }else {
+                sensorList = null;
+            }
+        }else {
+            sensorList = sensorService.getByMachineID(machineID_);
+        }
+
+
         ScreenHeight height = new ScreenHeight();
         int screeHeight = Integer.parseInt(height.getScreenHeight(led));
-        String size = String.valueOf(screeHeight/12);
+        String size = String.valueOf(screeHeight/16);
         if (inf.equals("1")){
             info = inf;
         }else {
             Date date = new Date();
-            String dataForm = new SimpleDateFormat("yyyy年MM月dd日HH时mm分").format(date);
+            String dataForm = new SimpleDateFormat("yyyy年MM月dd日").format(date);//
+            String dataNow = new SimpleDateFormat("HH时mm分").format(date);
             Object unknownObject = null;
             AdvertisementMachine machine;
 
@@ -88,7 +100,54 @@ public class SensorMobileServiceProvider extends BaseController {
             if (machine.getCity()!=null || !machine.getCity().equals(unknownObject)){
                 city = machine.getCity();
             }
-            info = "<i style=\"font-size:"+size+"px\">地点"+city + "<br/>时间：" + dataForm + "<br/>温度：" + sensorList.getTemperature() + "℃&nbsp;&nbsp;湿度：" + sensorList.getHumidity() + "%RH<br/>环境亮度：" + sensorList.getBrightness() + "cd/m²<br/>空气污染指数：" + sensorList.getPm25() + "μg/m³</i>#030303";
+            String temperature = "-";//温度
+            String humidity = "-";//湿度
+            String brightness = "-";//亮度
+            String co2 = "-";//
+            String cH2O = "-";
+            String tVoc = "-";
+            String pm25 = "-";
+            String pm10 = "-";
+            if (sensorList.getTemperature() != null){
+                temperature = sensorList.getTemperature();
+            }
+            if (sensorList.getHumidity() != null){
+                humidity = sensorList.getHumidity();
+            }
+            if (sensorList.getBrightness() != null){
+                brightness = sensorList.getBrightness();
+            }
+            if (sensorList.geteCo2() != null){
+                co2 = sensorList.geteCo2();
+            }
+            if (sensorList.geteCH2O() != null){
+                cH2O = sensorList.geteCH2O();
+            }
+            if (sensorList.gettVoc() != null){
+                tVoc = sensorList.gettVoc();
+            }
+            if (sensorList.getPm25() != null){
+                pm25 = sensorList.getPm25();
+            }
+            if (sensorList.getPm10() != null){
+                pm10 = sensorList.getPm10();
+            }
+            StringBuffer buffer = new StringBuffer();
+            buffer.append("<p style=\"font-size:");
+            buffer.append(size);
+            buffer.append("px;line-height:20px\">");
+            buffer.append(city);
+            info = buffer.toString()+ "<br/>" +
+                    dataForm + "<br/>" +
+                    dataNow+"<br/>" +
+                    "温度：" + temperature + "℃<br/>" +
+                    "湿度：" + humidity +"<br/>" +
+                    "亮度：" + brightness +"lux<br/>" +
+                    "CO2："+ co2 +"ppm<br/>" +
+                    "甲醛："+ cH2O +"mg/m³<br/>"+
+                    "TVOC："+ tVoc +"mg/m³<br/>" +
+                    "PM25：" + pm25 + "mg/m³<br/>"+
+                    "PM10："+ pm10 +"</p>#030303" ;
         }
         if (push(led,info,authname)==true){
             hashMap.put("result","success");
@@ -98,9 +157,14 @@ public class SensorMobileServiceProvider extends BaseController {
         return hashMap;
     }
 
+    private boolean pushInfo(MachineSensor machineSensor){
+//        boolean push =
+        return false;
+    }
+
     public boolean push(String led,String info,String authname) {
         Timer timer = new Timer();
-        InvokeBuildInJs inJs = new InvokeBuildInJs();
+        InvokeBuildInP inJs = new InvokeBuildInP();
         InvokeBuildInJsData inJsData = new InvokeBuildInJsData();
         inJsData.html = info;
         inJsData.type = "invokeBuildInJs"+led;

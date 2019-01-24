@@ -31,6 +31,7 @@
                             <input type="button" style="display:none" id="closeAll" value="取消" class="btn red">
                         </th>
                         <th>名称</th>
+                        <th>屏幕开关</th>
                         <th>所属板卡</th>
                         <th>所属广告机</th>
                         <th>所属厂商</th>
@@ -241,15 +242,29 @@
             type:"GET",
             success:function (data) {
                 adStr =eval('(' + data + ')');
+                var ledArray=new Array();
+                var ledIdArray=new Array();
                 $.each(adStr,function (idx, obj) {
                     var adid = adStr[idx].id;
                     var ledco = adStr[idx].led;
                     led = adStr[idx].led;
-                    // console.log(adStr)
+                    ledArray[idx] = led;
+                    ledIdArray[idx] = adid;
                     var tr =
                         "<tr>"+
                         "<td><input type=\"checkbox\" name=\"checkbox\" value=\""+adStr[idx].led+"\" id=\""+adStr[idx].led+"\" onclick=\"checkboxOnclick(this)\"></td>"+
                         "<td>"+adStr[idx].name+"</td>"+
+                        "<td>"+"<div id=\""+adid+"\"><i style='color: red'>检测屏幕开关</i><div class=\"preloader-wrapper small active\">\n" +
+                        "    <div class=\"spinner-layer spinner-green-only\">\n" +
+                        "      <div class=\"circle-clipper left\">\n" +
+                        "        <div class=\"circle\"></div>\n" +
+                        "      </div><div class=\"gap-patch\">\n" +
+                        "        <div class=\"circle\"></div>\n" +
+                        "      </div><div class=\"circle-clipper right\">\n" +
+                        "        <div class=\"circle\"></div>\n" +
+                        "      </div>\n" +
+                        "    </div>\n" +
+                        "  </div></div>"+"</td>"+
                         "<td>"+adStr[idx].led+"</td>"+
                         "<td>"+adStr[idx].machine_id+"</td>"+
                         "<td>"+"测试"+"</td>"+
@@ -287,12 +302,34 @@
                         "</tr>";
                     $("table").append(tr);
                 });
+                ledStatus(ledArray,ledIdArray)
             },error:function (data) {
                 console.log("readyState :"+data.readyState)
                 console.log("status :"+data.status)
             }
         });
     });
+    function ledStatus(ledArray,ledIdArray) {
+        $.ajax({
+            url:'[[${adminPath}]]/xixunAD/ledStatus',
+            data:{"leds":ledArray},
+            dataType : 'json',
+            type:'post',
+            success:function (map) {
+                for (var key in map){
+                   var id = ledIdArray[ledArray.indexOf(key)];
+                   if (map[key] == "true" ){
+                       $("#"+id+"").html("<b style='color: #0f9d58'>连接中</b><i class=\"material-icons\">done</i>");
+                   }else if (map[key] != "true") {
+                       $("#"+id+"").html("<b style='color: red'>设备未开启</b><i class=\"material-icons\">error_outline</i>");
+                       $("#"+key+"").attr("disabled","disabled");
+                   }
+                }
+            },error:function () {
+                console.log("失败！")
+            }
+        });
+    }
     function checkboxOnclick() {
         var num = $("input[name='checkbox']:checked").length;
         if (num > 0){

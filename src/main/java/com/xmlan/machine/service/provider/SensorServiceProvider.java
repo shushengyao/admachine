@@ -69,8 +69,9 @@ public class SensorServiceProvider extends BaseController {
      */
     @RequestMapping(value = "/update", method = RequestMethod.POST, produces = "application/json; charset=utf-8")
     @ResponseBody
-    public HashMap<String, Object> update(int id, String temperature, String humidity, String pm25, String brightness,String pm10, String eCo2, String tVoc) {
+    public HashMap<String, Object> update(int id, String eCH2O,String temperature, String humidity, String pm25, String brightness,String pm10, String eCo2, String tVoc) {
         MachineSensor sensor = AdvertisementMachineCache.getSensorInfo(id);
+        sensor.seteCH2O(eCH2O);
         sensor.setTemperature(temperature);
         sensor.setHumidity(humidity);
         sensor.setPm25(pm25);

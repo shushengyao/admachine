@@ -8,6 +8,7 @@ package com.xmlan.machine.module.advertisementMachine.entity
 class MachineSensor implements Serializable {
 
     int id
+    String eCH2O;//甲醛
     String temperature
     String humidity
     String pm25
@@ -19,6 +20,14 @@ class MachineSensor implements Serializable {
 
     int getId() {
         return id
+    }
+
+    String geteCH2O() {
+        return eCH2O
+    }
+
+    void seteCH2O(String eCH2O) {
+        this.eCH2O = eCH2O
     }
 
     String getTemperature() {

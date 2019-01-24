@@ -14,7 +14,7 @@ import java.util.List;
  * @create: 2018-11-07 10:44
  **/
 @Repository
-public interface SingLampDAO extends BaseDAO<SingLamp> {
+interface SingLampDAO extends BaseDAO<SingLamp> {
     @Override
     List<SingLamp> findAll();
 

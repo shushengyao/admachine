@@ -46,7 +46,7 @@
             <h6 class="green-text text-darken-2">状态 (灯/充电)</h6>
             <p id="detail-item-status">status</p>
             <h6 class="green-text text-darken-2">地址</h6>
-            <p id="detail-item-address">address</p>
+            <p id="detail-item-addrStr">addrStr</p>
             <h6 class="green-text text-darken-2">备注</h6>
             <p id="detail-item-remark">remark</p>
             <h6 class="green-text text-darken-2">摄像头ip</h6>
@@ -115,12 +115,12 @@
 <div id="groupBatch" class="groupBatch" style="z-index:9999;position:fixed;margin-left: 20%; top: 80%;border:5px solid #a9c9e2;background:#e8f5fe;width: 70%;height: 10%;display: none">
     <div style="display: flex;float: left">
             <h5 style="width: 150px;height: 45px;margin: 20px">当前分组：</h5>
-            <select style="display: inline-block;width: 200px;height: 45px;float: left;margin: 10px">
-                <option th:each="item:${machineGroupList}" th:value="*{item.id}" th:text="*{item.getGroupName()}"></option>
+            <select style="display: inline-block;width: 200px;height: 45px;float: left;margin: 10px" id="machineGroupList">
+                <option th:each="item:${machineGroupList}" th:value="*{item.machineID}" th:text="*{item.getGroupName()}"></option>
             </select>
             <button style="display: flex;width: 80px;height: 45px;float: left;margin-top: 10px;background-color: #00c1de;text-align: center;" onclick="addGroup()">添加分组</button>
         <button style="display: flex;width: 80px;height: 45px;float: left;margin-top: 10px;background-color: #00c1de;text-align: center;" id="updateGroup" onclick="updateGroup(1)">编辑分组</button>
-            <select style="display: inline-block;width: 200px;height: 45px;float: left;margin: 10px;margin-left: 100px">
+            <select style="display: inline-block;width: 200px;height: 45px;float: left;margin: 10px;margin-left: 100px" id="controlLight">
                 <option>-- 请选择 --</option>
                 <option value="1">正常开灯</option>
                 <option value="0">关灯</option>
@@ -129,8 +129,7 @@
                 <option value="8">80%亮度</option>
                 <option value="10">100%亮度</option>
             </select>
-            <button style="display: flex;width: 80px;height: 45px;float: left;margin-top: 10px;background-color: #00c1de;text-align: center;">确认控制</button>
-            <a href="javascript:closeBatch()" class="material-icons" style="margin-left: 300px;">clear</a>
+            <button style="display: flex;width: 80px;height: 45px;float: left;margin-top: 10px;background-color: #00c1de;text-align: center;" onclick=closeBatch()>确认控制</button>
     </div>
 </div>
 <div id="updateGroupDiv" class="groupBatch" style="z-index:9999;position:fixed;margin-left: 20%; top: 30%;border:5px solid #a9c9e2;background:#e8f5fe;width: 50%;height: 480px;display: none">
@@ -340,13 +339,13 @@
                 $.each(data,function (idx, obj) {
                     var id =data[idx].id;
                     var name =data[idx].name;
-                    var address =data[idx].address;
+                    var addrStr =data[idx].addrStr;
                     var tr =
                         "<tr>"+
                         "<td><input type=\"checkbox\" name=\"checkbox\" value="+id+" onclick=\"checkboxOnclick(this)\"></td>"+
                         "<td>"+id+"</td>"+
                         "<td>"+name+"</td>"+
-                        "<td>"+address+"</td>"+
+                        "<td>"+addrStr+"</td>"+
                         "</tr>";
                     $("table").append(tr);
                 });
@@ -371,13 +370,13 @@
                 $.each(data,function (idx, obj) {
                     var id =data[idx].id;
                     var name =data[idx].name;
-                    var address =data[idx].address;
+                    var addrStr =data[idx].addrStr;
                     var tr =
                         "<tr>"+
                         "<td><input type=\"checkbox\" name=\"checkbox\" value="+id+" onclick=\"checkboxOnclick(this)\"></td>"+
                         "<td>"+id+"</td>"+
                         "<td>"+name+"</td>"+
-                        "<td>"+address+"</td>"+
+                        "<td>"+addrStr+"</td>"+
                         "</tr>";
                     $("table").append(tr);
                 });
@@ -411,18 +410,19 @@
             data:{"ids":ids,"name":name},
             dataType:"json",
             type:"post",
-            success:function () {
-                console.log("456456")
+            success:function (data) {
+                // window.location='/mng/baiduMap/map/1'
+                console.log(data)
 
             },error:function () {
 
             }
         });
+        // layer.msg("请选择需要删除的素材");
         previousPage();
     }
     function checkboxOnclick() {
         var result="";
-        console.log(111)
         $("input[name='checkbox']:checked").each(function(){
             result+=$(this).val()+'、';
         });
@@ -447,13 +447,13 @@
                 $.each(data,function (idx, obj) {
                     var id =data[idx].id;
                     var name =data[idx].name;
-                    var address =data[idx].address;
+                    var addrStr =data[idx].addrStr;
                     var tr =
                         "<tr>"+
                         "<td><input type=\"checkbox\" name=\"checkbox\"  value="+id+" onclick=\"checkboxOnclick(this)\" ></td>"+
                         "<td>"+id+"</td>"+
                         "<td>"+name+"</td>"+
-                        "<td>"+address+"</td>"+
+                        "<td>"+addrStr+"</td>"+
                         "</tr>";
                     $("table").append(tr);
                 });
@@ -571,7 +571,7 @@
                 $("#detail-item-latitude").text(data['machine'].latitude);
                 $("#detail-item-ads").text(data['ads']);
                 $("#detail-item-status").text(data['status']);
-                $("#detail-item-address").text(data['machine'].address);
+                $("#detail-item-addrStr").text(data['machine'].addrStr);
                 $("#detail-item-remark").text(data['machine'].remark);
                 $("#detail-item-cameraIP").text(data['machine'].cameraIP);
                 $("#detail-item-cameraSequence").text(data['machine'].cameraSequence);
@@ -588,6 +588,25 @@
         $('#detail-modal').hide();
     }
     function closeBatch() {
+        var adIds = [];
+        var machineGroupList = $('#machineGroupList').val();
+        var adIds  = machineGroupList.split('、');
+        var controlLight = $('#controlLight').val();
+        var url = '[[${adminPath}]]/advertisementMachine/lightBatch';
+        // console.log(arr)
+        // console.log(controlLight)
+        $.ajax({
+            url:url,
+            data:{"adIds":adIds,"operate":controlLight},
+            traditional :true,
+            dataType:"json",
+            type:"post",
+            success:function (data) {
+                console.log("开灯成功！")
+            },error:function () {
+                console.log("开灯失败！")
+            }
+        });
         $('#groupBatch').hide();
     }
     function closeGroup() {
@@ -595,7 +614,6 @@
         $('#updateGroupDiv').hide();
     }
     function updataLight(id) {
-        console.log(id)
         var operate = $("#control_light").val();
         var url = '[[${adminPath}]]/advertisementMachine/lightBatch';
         $.ajax({

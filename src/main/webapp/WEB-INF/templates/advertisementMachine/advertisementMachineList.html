@@ -67,8 +67,8 @@
       <thead>
       <tr>
         <th>
-          <input type="button" style="display:block" id="selectAll" value="全选">
-          <input type="button" style="display:none" id="closeAll" value="取消">
+          <input type="button" style="display:block" id="selectAll" value="全选" class="btn">
+          <input type="button" style="display:none" id="closeAll" value="取消" class="btn red">
         </th>
         <th>名称</th>
         <th>地址</th>
@@ -364,7 +364,6 @@
                 success:function (data) {
                     window.location='/mng/advertisementMachine/list/1'
                 },error:function () {
-
                     window.location='/mng/advertisementMachine/list/1'
                 }
             });

@@ -20,4 +20,6 @@ interface MachineSensorDAO extends BaseDAO<MachineSensor> {
      */
     MachineSensor getByMachineID(@Param("machineID") int machineID)
 
+    List<MachineSensor> findAll()
+
 }

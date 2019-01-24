@@ -22,16 +22,11 @@ import com.xmlan.machine.module.xixun.controller.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
-import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 
-import javax.servlet.http.HttpServletRequest;
-import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -196,7 +191,7 @@ public class AdvertisementMobileServiceProvider extends BaseController {
      */
     @RequestMapping(value = "/uploadLed", method = RequestMethod.POST, produces = "application/json; charset=utf-8")
     @ResponseBody
-    public Map uploadLed(String leds[], String token, MultipartFile file, String authname) throws IOException {
+    public Map uploadLed(String leds, MultipartFile file, String authname, String token) throws IOException {
         HashMap<String, Object> pushData = Maps.newHashMap();
         Date date = new Date();
         String dataForm = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss").format(date);
@@ -206,6 +201,7 @@ public class AdvertisementMobileServiceProvider extends BaseController {
             map.put(keyMessage, "身份校验失败");
             return map;
         }
+        String ledss[] = leds.split(",");
         HashMap<String,String> map = new HashMap<>();
         String led;
         int responseCode = -3;
@@ -213,10 +209,10 @@ public class AdvertisementMobileServiceProvider extends BaseController {
         int index = oldName.lastIndexOf(".");
         String type = oldName.substring(index);
         String fileName = UploadUtils.saveFile(dataForm,file, BaseBean.path);
-        XixunAD xixunAD = new XixunAD();
-        if (leds.length !=NEW_ID){
-            for (int i = 0;i<leds.length;i++){
-                led = leds[i];
+        XixunAD xixunAD = new XixunAD(taskExecutor);
+        if (ledss.length !=NEW_ID){
+            for (int i = 0;i<ledss.length;i++){
+                led = ledss[i];
                 if (led != "" || led.equals(null)){
                     if (xixunAD.upload(type,led,authname,fileName)){
                         map.put(led,"true");
@@ -263,7 +259,7 @@ public class AdvertisementMobileServiceProvider extends BaseController {
     public  void setPlayList(String led,String fileName,int width,int height){
         SetPlayList setPlayList = new SetPlayList();
         setPlayList.setPlayList(led,fileName,width,height);
-        XixunAD xixunAD = new XixunAD();
+        XixunAD xixunAD = new XixunAD(taskExecutor);
         xixunAD.clear(led);
     }
 

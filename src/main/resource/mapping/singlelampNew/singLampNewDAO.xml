@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xmlan.machine.module.singlelamp_new.dao.SingLampNewDAO">
+    <resultMap id="SingLampNewResultMap" type="com.xmlan.machine.module.singlelamp_new.entity.SingLampNew">
+        <id column="id" property="id"/>
+        <result column="machineID" property="machineID"/>
+        <result column="userID" property="userID"/>
+        <result column="updateTime" property="updateTime"/>
+        <result column="deviceCode" property="deviceCode"/>
+        <result column="temperature" property="temperature"/>
+        <result column="inputVoltage" property="inputVoltage"/>
+        <result column="inputCurrent" property="inputCurrent"/>
+        <result column="outputVol" property="outputVol"/>
+        <result column="outputCurr" property="outputCurr"/>
+        <result column="gridAP" property="gridAP"/>
+        <result column="gridAPD" property="gridAPD"/>
+        <result column="ledBright" property="ledBright"/>
+        <result column="powerStatus" property="powerStatus"/>
+    </resultMap>
+    <sql id="columns">
+         t.id as "id",
+        t.machineID as "machineID",
+        t.userID as "userID",
+        t.updateTime as "updateTime",
+        t.deviceCode as "deviceCode",
+        t.temperature as "temperature",
+        t.inputVoltage as "inputVoltage",
+        t.inputCurrent as "inputCurrent",
+        t.outputVol as "outputVol",
+        t.outputCurr as "outputCurr",
+        t.gridAP as "gridAP",
+        t.gridAPD as "gridAPD",
+        t.ledBright as "ledBright",
+        t.powerStatus as "powerStatus"
+    </sql>
+    <select id="findListByUserID" parameterType="com.xmlan.machine.module.singlelamp_new.entity.SingLampNew">
+        SELECT
+        t.*
+        FROM
+        singlelampdata_new AS t
+        <where>
+            <if test="userID != null and userID != ''">
+                t.userID = #{userID}
+            </if>
+        </where>
+    </select>
+    <select id="findListByID" parameterType="com.xmlan.machine.module.singlelamp_new.entity.SingLampNew">
+         SELECT
+        t.*
+        FROM
+        singlelampdata_new AS t
+        where id =#{id}
+    </select>
+    <select id="findAll" resultMap="SingLampNewResultMap">
+        select <include refid="columns"/>
+        from
+        singlelampdata_new as t
+    </select>
+    <insert id="insertSingLamp" parameterType="com.xmlan.machine.module.singlelamp_new.entity.SingLampNew">
+        <selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="id">
+            SELECT LAST_INSERT_ID() AS id
+        </selectKey>
+        insert into
+        singlelampdata (id,machineID, userID,updateTime, deviceCode, temperature, inputVoltage, inputCurrent, outputVol, outputCurr,
+        gridAP, gridAPD, ledBright, powerStatus
+        )values (id,#{machineID},#{userID},#{updateTime},#{deviceCode},#{temperature},#{inputVoltage},#{inputCurrent},#{outputVol},#{outputCurr},
+        #{gridAP},#{gridAPD},#{ledBright},#{powerStatus});
+    </insert>
+    <update id="update" parameterType="com.xmlan.machine.module.singlelamp_new.entity.SingLampNew">
+        update singlelampdata_new
+        set machineID = #{machineID},userID = #{userID},updateTime = #{updateTime},deviceCode = #{deviceCode},temperature = #{temperature},
+        inputVoltage = #{inputVoltage},inputCurrent = #{inputCurrent},outputVol = #{outputVol}, outputCurr = #{outputCurr},gridAP = #{gridAP},
+        gridAPD = #{gridAPD},ledBright = #{ledBright},powerStatus = #{powerStatus}
+        where id = #{id}
+    </update>
+</mapper>

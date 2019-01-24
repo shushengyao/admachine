@@ -8,13 +8,13 @@ import okhttp3.*;
 import java.io.IOException;
 
 /**
- * 滚动字幕
  * @program: admachine
- * @description: controller
+ * @description: con
  * @author: YSS
- * @create: 2018-07-25 10:45
+ * @create: 2019-01-22 13:43
  **/
-public class InvokeBuildInJs {
+public class InvokeBuildInP {
+
     public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
     private OkHttpClient client = new OkHttpClient();
 
@@ -35,7 +35,7 @@ public class InvokeBuildInJs {
         String type = inJsData.type.substring(0,inJsData.type.indexOf("s")+1);
         String led = inJsData.type.substring(inJsData.type.indexOf("s")+1);
         String color ="#"+inJsData.html.substring(inJsData.html.indexOf("#")+1);
-        data.html = "<head><style type=\"text/css\">body{background-color:"+color+";}</style></head><i>"+html+"</i>";
+        data.html = "<head><style type=\"text/css\">body{background-color:"+color+";}</style></head>"+html;
         data.align=inJsData.align;
         Number number1 =inJsData.interval.intValue();
         Number number2 =inJsData.num.intValue();

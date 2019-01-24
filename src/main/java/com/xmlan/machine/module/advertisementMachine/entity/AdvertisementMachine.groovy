@@ -25,6 +25,8 @@ class AdvertisementMachine implements Serializable {
     private String addTime
     // 机器标识码(注册码)
     private String codeNumber
+    //新的控灯命令
+    private int control
     // 灯开关, 1 开灯, 0 关灯
     private int light
     // 充电状态, 1 充电, 0 闲置
@@ -188,6 +190,14 @@ class AdvertisementMachine implements Serializable {
 
     void setCodeNumber(String codeNumber) {
         this.codeNumber = codeNumber
+    }
+
+    int getControl() {
+        return control
+    }
+
+    void setControl(int control) {
+        this.control = control
     }
 
     int getLight() {

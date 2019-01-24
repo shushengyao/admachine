@@ -23,7 +23,6 @@ import com.xmlan.machine.module.advertisementMachine.entity.AdvertisementMachine
 import com.xmlan.machine.module.advertisementMachine.service.AdvertisementMachineService;
 import com.xmlan.machine.module.led_machine.entity.Led_machine;
 import com.xmlan.machine.module.led_machine.service.Led_machineService;
-import com.xmlan.machine.module.monitor.MonitorController;
 import com.xmlan.machine.module.system.service.SysLogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
@@ -252,44 +251,7 @@ public class AdvertisementMachineMobileServiceProvider extends BaseController {
                     } else if (responseCode == ERROR_REQUEST) {
                         map.put(keyMessage, "操作码不正确");
                     } else if (responseCode == DONE) {
-                        HashMap<String, Integer> command = Maps.newHashMap();
-                        command.put("id", id);
-                        command.put("operate", operate);
-                        command.put("type", TYPE_LIGHT);
-                        JPushClient pushClient = new JPushClient(Global.getMasterSecret(), Global.getAppKey(), null, ClientConfig.getInstance());
-                        PushPayload payload = PushUtils.buildPayload(String.valueOf(id), "Light switch.", command);
-                        try {
-                            map.put(keyMessage, operate == 1 ? "开灯！" : "关灯！");
-                            taskExecutor.execute(() -> {
-                                if (operate == 1) {
-                                    sysLogService.log(
-                                            ModuleEnum.Machine,
-                                            OperateEnum.Push,
-                                            TokenUtils.validateTokenGetUser(token).getId(),
-                                            ObjectEnum.User,
-                                            "打开了" + AdvertisementMachineCache.getMachineNameByID(id) + "的灯"
-                                    );
-                                } else {
-                                    sysLogService.log(
-                                            ModuleEnum.Machine,
-                                            OperateEnum.Push,
-                                            TokenUtils.validateTokenGetUser(token).getId(),
-                                            ObjectEnum.User,
-                                            "关闭了" + AdvertisementMachineCache.getMachineNameByID(id) + "的灯"
-                                    );
-                                }
-                            });
-                            PushResult result = pushClient.sendPush(payload);
-                            logger.trace(result);
-                        } catch (APIRequestException e) {
-                            map.put(keyMessage, "Push request error.");
-                            map.put(keyResponseCode, ERROR_API_REQUEST_EXCEPTION);
-                            logger.error("API exception with: " + e.getMessage());
-                        } catch (APIConnectionException e) {
-                            map.put(keyMessage, "Push connect error.");
-                            map.put(keyResponseCode, ERROR_API_CONNECTION_EXCEPTION);
-                            logger.error("API exception with: " + e.getMessage());
-                        }
+                        util(id,operate,token);
                     } else {
                         map.put(keyResponseCode, PASS);
                         map.put(keyMessage, "系统繁忙");
@@ -302,6 +264,106 @@ public class AdvertisementMachineMobileServiceProvider extends BaseController {
         }
         return map;
     }
+
+    /**
+     * 单灯控制
+     * <p>
+     * URL: /mob/machine/light/{id}/{operate}
+     * <p>
+     * Method: Get/Post
+     *
+     * @param ids      int 广告机ID
+     * @param control int 操作码：0/1
+     * @param token   String token身份验证
+     * @return 操作结果
+     */
+    @RequestMapping(value = "/control/{ids}/{control}", produces = "application/json; charset=utf-8")
+    @ResponseBody
+    public HashMap<String, Object> control(@PathVariable("ids") String ids, @PathVariable("control") int control, String token) {
+        HashMap<String, Object> map = Maps.newHashMap();
+        if (!TokenUtils.validateToken(token)) {
+            map.put(keyResponseCode, FAILURE);
+            map.put(keyMessage, "身份校验失败");
+            return map;
+        }
+        String[] strarr = StringUtils.replaceNull( ids.split("id"));
+        String idstr;
+        if (strarr.length != 0) {
+            for (int i = 0; i < strarr.length; i++) {
+                idstr = strarr[i];
+                if (idstr !=null && idstr!="" && idstr!= " ") {
+                    int id = Integer.parseInt(idstr);
+                    int responseCode = service.updateControl(id, control);
+                    map.put(keyResponseCode, responseCode);
+                    if (responseCode == NO_SUCH_ROW) {
+                        map.put(keyMessage, "目标路灯不存在");
+                    } else if (responseCode == ERROR_REQUEST) {
+                        map.put(keyMessage, "操作码不正确");
+                    } else if (responseCode == DONE) {
+                       util(id,control,token);
+                    } else {
+                        map.put(keyResponseCode, PASS);
+                        map.put(keyMessage, "系统繁忙");
+                    }
+                }
+            }
+        }else {
+            map.put(keyResponseCode, PASS);
+            map.put(keyMessage, "系统繁忙");
+        }
+        return map;
+    }
+
+    /**
+     * 通用控灯方法
+     * @param id
+     * @param control
+     * @param token
+     * @return
+     */
+    public HashMap<String,Object> util(int id,int control,String token){
+        HashMap<String, Object> map = Maps.newHashMap();
+        HashMap<String, Integer> command = Maps.newHashMap();
+        command.put("id", id);
+        command.put("operate", control);
+        command.put("type", TYPE_LIGHT);
+        JPushClient pushClient = new JPushClient(Global.getMasterSecret(), Global.getAppKey(), null, ClientConfig.getInstance());
+        PushPayload payload = PushUtils.buildPayload(String.valueOf(id), "Light switch.", command);
+        try {
+            map.put(keyMessage, control == 1 ? "开灯！" : "关灯！");
+            taskExecutor.execute(() -> {
+                if (control == 1) {
+                    sysLogService.log(
+                            ModuleEnum.Machine,
+                            OperateEnum.Push,
+                            TokenUtils.validateTokenGetUser(token).getId(),
+                            ObjectEnum.User,
+                            "打开了" + AdvertisementMachineCache.getMachineNameByID(id) + "的灯"
+                    );
+                } else {
+                    sysLogService.log(
+                            ModuleEnum.Machine,
+                            OperateEnum.Push,
+                            TokenUtils.validateTokenGetUser(token).getId(),
+                            ObjectEnum.User,
+                            "关闭了" + AdvertisementMachineCache.getMachineNameByID(id) + "的灯"
+                    );
+                }
+            });
+            PushResult result = pushClient.sendPush(payload);
+            logger.trace(result);
+        } catch (APIRequestException e) {
+            map.put(keyMessage, "Push request error.");
+            map.put(keyResponseCode, ERROR_API_REQUEST_EXCEPTION);
+            logger.error("API exception with: " + e.getMessage());
+        } catch (APIConnectionException e) {
+            map.put(keyMessage, "Push connect error.");
+            map.put(keyResponseCode, ERROR_API_CONNECTION_EXCEPTION);
+            logger.error("API exception with: " + e.getMessage());
+        }
+        return map;
+    }
+
 
     /**
      * 充电开关

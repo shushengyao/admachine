@@ -7,6 +7,8 @@ import com.xmlan.machine.common.util.DateUtils;
 import com.xmlan.machine.common.util.StringUtils;
 import com.xmlan.machine.module.singLamp.entity.SingLamp;
 import com.xmlan.machine.module.singLamp.service.SingLampService;
+import com.xmlan.machine.module.singlelamp_new.entity.SingLampNew;
+import com.xmlan.machine.module.singlelamp_new.service.SingLampNewService;
 import com.xmlan.machine.module.system.service.SysLogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
@@ -26,12 +28,16 @@ import java.util.HashMap;
 public class SingLampServiceProvider extends BaseController {
     @Autowired
     private SingLampService singLampService;
+
+    @Autowired
+    private final SingLampNewService singLampNewService;
     private final SysLogService sysLogService;
     private final ThreadPoolTaskExecutor taskExecutor;
 
-    public SingLampServiceProvider(SysLogService sysLogService, ThreadPoolTaskExecutor taskExecutor) {
+    public SingLampServiceProvider(SysLogService sysLogService, ThreadPoolTaskExecutor taskExecutor,SingLampNewService singLampNewService) {
         this.sysLogService = sysLogService;
         this.taskExecutor = taskExecutor;
+        this.singLampNewService = singLampNewService;
     }
 
     /**
@@ -85,6 +91,45 @@ public class SingLampServiceProvider extends BaseController {
             map.put("id",id);
         }else {
 //            singLampService.update(singLamp);
+            map.put(keyResponseCode, DONE);
+            map.put(keyMessage, "Updated!");
+        }
+        return map;
+    }
+
+    /**
+     * 保存/更新单灯控制器数据
+     * @param
+     * @param
+     * @return
+     */
+    @RequestMapping(value = "/newSave", method = RequestMethod.POST, produces = "application/json; charset=utf-8")
+    @ResponseBody
+    HashMap<String, Object> newSave(int id,int machineID,double deviceCode,double inputVoltage,double inputCurrent,double outputVol,double outputCurr,double gridAP,double gridAPD,
+                                 double temperature,double ledBright,String powerStatus){
+        SingLampNew singLamp = new SingLampNew();
+        singLamp.setId(id);
+        singLamp.setMachineID(machineID);
+        singLamp.setUpdateTime(DateUtils.getDateTime());
+        singLamp.setTemperature(temperature);
+        singLamp.setDeviceCode(deviceCode);
+        singLamp.setTemperature(temperature);
+        singLamp.setInputVoltage(inputVoltage);
+        singLamp.setInputCurrent(inputCurrent);
+        singLamp.setOutputVol(outputVol);
+        singLamp.setOutputCurr(outputCurr);
+        singLamp.setGridAP(gridAP);
+        singLamp.setGridAPD(gridAPD);
+        singLamp.setPowerStatus(powerStatus);
+        System.err.print(JSONObject.toJSONString(singLamp));
+        HashMap<String, Object> map = Maps.newHashMap();
+        if (id == NEW_ID){
+            singLampNewService.insertSingLamp(singLamp);
+            id = singLamp.getId();
+            map.put(keyResponseCode, DONE);
+            map.put(keyMessage, "Insert!");
+            map.put("id",id);
+        }else {
             map.put(keyResponseCode, DONE);
             map.put(keyMessage, "Updated!");
         }

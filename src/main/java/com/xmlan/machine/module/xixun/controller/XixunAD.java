@@ -2,10 +2,12 @@ package com.xmlan.machine.module.xixun.controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.SocketTimeoutException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.xmlan.machine.common.base.BaseBean;
 import com.xmlan.machine.common.base.BaseController;
@@ -17,7 +19,9 @@ import com.xmlan.machine.module.led_machine.entity.Led_machine;
 import com.xmlan.machine.module.led_machine.service.Led_machineService;
 import com.xmlan.machine.module.user.entity.User;
 import com.xmlan.machine.module.xixun.util.InvokeBuildInJsData;
+import groovy.json.internal.Exceptions;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -43,6 +47,16 @@ public class XixunAD extends BaseController {
     @Autowired
     private Led_machineService led_machineService;
 
+    private ThreadPoolTaskExecutor taskExecutor;
+
+    public XixunAD(ThreadPoolTaskExecutor taskExecutor) {
+        this.taskExecutor = taskExecutor;
+    }
+
+    public XixunAD() {
+
+    }
+
     /**
      * 列表findList
      * @return
@@ -60,15 +74,34 @@ public class XixunAD extends BaseController {
     @RequestMapping(value = "/findList")
     @ResponseBody
     public List<Led_machine> findList(@RequestParam("user_id") int user_id){
+        List<Led_machine> list;
         if (user_id == 1){
-            List<Led_machine> list = led_machineService.findAll();
-            return list;
+            list = led_machineService.findAll();
         }else {
-            List<Led_machine> list = led_machineService.findAllByUserID(user_id);
-            return list;
+            list = led_machineService.findAllByUserID(user_id);
         }
+        return list;
     }
 
+    /**
+     * 预查询led屏幕状态
+     * @param leds
+     * @return
+     */
+    @RequestMapping(value = "/ledStatus",method =RequestMethod.POST)
+    @ResponseBody
+    public Map<String,String> ledStatus(@RequestParam("leds[]")String[] leds){
+        Map<String,String> hashMap = new HashMap<>();
+        if (leds.length != NEW_ID){
+            for (int i = 0; i < leds.length; i++) {
+                String led = leds[i];
+                String result;
+                    result = getIsScreenOpen(led);
+                    hashMap.put(led, result);
+            }
+        }
+        return hashMap;
+    }
     /**
      * 新增led或者编辑界面
      * @param led_machine
@@ -246,7 +279,6 @@ public class XixunAD extends BaseController {
             map.put("LEDS","NULL");
         }
         model.addAttribute(map);
-        System.err.println(leds);
         return "redirect:list/1";
     }
 
@@ -280,6 +312,17 @@ public class XixunAD extends BaseController {
         return true;
     }
 
+    /**
+     * 监测led屏幕开关
+     * @param led
+     * @return
+     */
+    public String getIsScreenOpen(String led){
+        IsScreenOpen isScreenOpen = new IsScreenOpen();
+        String result;
+            result = isScreenOpen.getIsScreenOpen(led);
+        return result;
+    }
 
     /**
      * 删除led

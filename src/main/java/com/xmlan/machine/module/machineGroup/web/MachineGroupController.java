@@ -115,7 +115,9 @@ public class MachineGroupController extends BaseController {
      * @param modelMap
      */
     @RequestMapping(value = "/adddGroup")
-    String adddGroup(@RequestParam("ids") String ids, @RequestParam("name") String name, ModelMap modelMap, MachineGroup machineGroup ){
+    @ResponseBody
+    HashMap<String,String> adddGroup(@RequestParam("ids") String ids, @RequestParam("name") String name, ModelMap modelMap, MachineGroup machineGroup ){
+        HashMap<String,String> map = new HashMap<>();
         Object object = modelMap.get("loginUser");
         User user = (User) object;
         int userID = user.getId();
@@ -123,12 +125,12 @@ public class MachineGroupController extends BaseController {
             machineGroup.setMachineID(ids);
             machineGroup.setUserID(userID);
             machineGroup.setGroupName(name);
-            service.insert(machineGroup);
-            return "baiduMap/baiduMap";
+//            service.insert(machineGroup);
+            map.put("result","sucess");
         }else {
-            System.err.print(ids);
-            return "baiduMap/baiduMap";
+            map.put("result","error");
         }
+        return map;
     }
 
     /**

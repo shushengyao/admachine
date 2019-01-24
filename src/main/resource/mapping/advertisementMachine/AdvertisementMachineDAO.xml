@@ -14,6 +14,7 @@
         <result column="latitude" property="latitude"/>
         <result column="addTime" property="addTime"/>
         <result column="codeNumber" property="codeNumber"/>
+        <result column="control" property="control"/>
         <result column="light" property="light"/>
         <result column="charge" property="charge"/>
         <result column="checked" property="checked"/>
@@ -52,6 +53,7 @@
         t.latitude as "latitude",
         date_format(t.addTime, '%Y-%m-%d %H:%i:%s') as "addTime",
         t.codeNumber as "codeNumber",
+        t.control as "control",
         t.light as "light",
         t.charge as "charge",
         t.checked as "checked",
@@ -221,6 +223,7 @@
         latitude,
         addTime,
         codeNumber,
+        control,
         light,
         charge,
         checked,
@@ -242,6 +245,7 @@
         #{latitude},
         #{addTime},
         #{codeNumber},
+        0,
         0,
         0,
         0,
@@ -325,6 +329,12 @@
         where id = #{id}
     </update>
 
+    <update id="updateControl">
+        update advertisement_machine
+        set control = #{control}
+        where id = #{id}
+    </update>
+    
     <update id="chargeControl">
         update advertisement_machine
         set charge = #{operate}

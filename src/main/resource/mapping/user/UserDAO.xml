@@ -27,6 +27,7 @@
         <result column="latitude" property="latitude"/>
         <result column="addTime" property="addTime"/>
         <result column="codeNumber" property="codeNumber"/>
+        <result column="control" property="control"/>
         <result column="light" property="light"/>
         <result column="charge" property="charge"/>
         <result column="checked" property="checked"/>
