@@ -24,9 +24,11 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -63,10 +65,12 @@ public class AdvertisementMobileServiceProvider extends BaseController {
     public AdvertisementMobileServiceProvider(
             AdvertisementService advertisementService,
             SysLogService sysLogService,
-            ThreadPoolTaskExecutor taskExecutor) {
+            ThreadPoolTaskExecutor taskExecutor,
+            Led_machineService led_machineService) {
         this.advertisementService = advertisementService;
         this.sysLogService = sysLogService;
         this.taskExecutor = taskExecutor;
+        this.led_machineService = led_machineService;
     }
 
     /**
@@ -209,12 +213,12 @@ public class AdvertisementMobileServiceProvider extends BaseController {
         int index = oldName.lastIndexOf(".");
         String type = oldName.substring(index);
         String fileName = UploadUtils.saveFile(dataForm,file, BaseBean.path);
-        XixunAD xixunAD = new XixunAD(taskExecutor);
+//        XixunAD xixunAD = new XixunAD(taskExecutor);
         if (ledss.length !=NEW_ID){
             for (int i = 0;i<ledss.length;i++){
                 led = ledss[i];
                 if (led != "" || led.equals(null)){
-                    if (xixunAD.upload(type,led,authname,fileName)){
+                    if (upload(type,led,authname,fileName)){
                         map.put(led,"true");
                     }else {
                         map.put(led,"flase");
@@ -240,6 +244,49 @@ public class AdvertisementMobileServiceProvider extends BaseController {
         pushData.put("result",map);
         return pushData;
     }
+    public boolean upload(String type,String led,String authname,String fileName)throws IOException{
+        String filenameTemp = BaseBean.path + authname+"_"+led + ".html";
+        File filename = new File(filenameTemp);
+        ScreenWidth width = new ScreenWidth();
+        ScreenHeight height = new ScreenHeight();
+        String screenWidth = width.getScreenWidth(led);
+        String screeHeight = height.getScreenHeight(led);
+        if (type.equals(".mp4")){
+            downloadFileToLocal(fileName,led,screenWidth,screeHeight);
+        }else if (type.equals(".png") || type.equals(".jpg") || type.equals(".jpeg") || type.equals(".gif")) {
+
+            if (!filename.exists()) {
+                filename.createNewFile();
+            }
+            if (filename.delete()) {
+                filename.createNewFile();
+            }
+            boolean bea = FileUtils.writeToFile("<head><style>body{margin:0;padding:0;}</style></head><img src=\"" + fileName + "\" style=\"width: " + screenWidth + "px;height: " + screeHeight + "px\"/></head>", filenameTemp);
+            if (bea == true) {
+                clear(led);
+                LoadUrl loadUrl = new LoadUrl();
+                loadUrl.loadUrl(led, authname);
+            }
+        }
+        String play_list =fileName;
+        boolean updatePlayList = led_machineService.updatePlayList(play_list,led);
+        logger.info(updatePlayList);
+        return true;
+    }
+    public void downloadFileToLocal(String fileName,String led,String screenWidth,String screeHeight){
+        int width = Integer.parseInt( screenWidth);
+        int height =Integer.parseInt(screeHeight);
+
+        DownloadFileToLocal downloadFileToLocal = new DownloadFileToLocal();
+        downloadFileToLocal.DownloadFileToLocal(fileName,led);
+        setPlayList(led,fileName,width,height);
+        clear(led);
+    }
+    public void clear(String led_code) {
+        Clear clear = new Clear();
+        clear.clea(led_code);
+    }
+
     private int util(int responseCode,String call,String led,String authname){
 //        CallXwalkFn callXwalkFn = new CallXwalkFn();
 //        callXwalkFn.callXwalkFn(call,led);
