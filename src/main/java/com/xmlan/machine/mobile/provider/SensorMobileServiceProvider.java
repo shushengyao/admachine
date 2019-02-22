@@ -141,13 +141,13 @@ public class SensorMobileServiceProvider extends BaseController {
                     dataForm + "<br/>" +
                     dataNow+"<br/>" +
                     "温度：" + temperature + "℃<br/>" +
-                    "湿度：" + humidity +"<br/>" +
+                    "湿度：" + humidity +"%RH<br/>" +
                     "亮度：" + brightness +"lux<br/>" +
                     "CO2："+ co2 +"ppm<br/>" +
                     "甲醛："+ cH2O +"mg/m³<br/>"+
                     "TVOC："+ tVoc +"mg/m³<br/>" +
                     "PM25：" + pm25 + "mg/m³<br/>"+
-                    "PM10："+ pm10 +"</p>#030303" ;
+                    "PM10："+ pm10 +"mg/m³</p>#030303" ;
         }
         if (push(led,info,authname)==true){
             hashMap.put("result","success");
@@ -157,10 +157,6 @@ public class SensorMobileServiceProvider extends BaseController {
         return hashMap;
     }
 
-    private boolean pushInfo(MachineSensor machineSensor){
-//        boolean push =
-        return false;
-    }
 
     public boolean push(String led,String info,String authname) {
         Timer timer = new Timer();
@@ -178,6 +174,7 @@ public class SensorMobileServiceProvider extends BaseController {
             return true;
         }catch (Exception e){
             return false;
+
         }finally {
             timer.schedule(new Task(led,mp4,authname), 60000);
         }
