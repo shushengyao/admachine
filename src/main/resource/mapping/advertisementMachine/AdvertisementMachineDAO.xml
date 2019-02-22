@@ -38,6 +38,7 @@
         <result column="authname" property="authname"/>
         <result column="password" property="password"/>
         <result column="roleID" property="roleID"/>
+        <result column="url" property="url"/>
         <result column="address" property="address"/>
         <result column="addTime" property="addTime"/>
         <result column="phone" property="phone"/>

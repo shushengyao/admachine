@@ -6,6 +6,7 @@ import com.xmlan.machine.common.base.BaseController
 import com.xmlan.machine.common.cache.RoleCache
 import com.xmlan.machine.common.cache.UserCache
 import com.xmlan.machine.common.util.DateUtils
+import com.xmlan.machine.common.util.MediaUtils
 import com.xmlan.machine.common.util.SessionUtils
 import com.xmlan.machine.common.util.StringUtils
 import com.xmlan.machine.common.util.TokenUtils
@@ -20,9 +21,13 @@ import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.ui.ModelMap
 import org.springframework.web.bind.annotation.*
+import org.springframework.web.multipart.MultipartFile
+import org.springframework.web.multipart.MultipartHttpServletRequest
+import org.springframework.web.multipart.commons.CommonsMultipartResolver
 import org.springframework.web.servlet.mvc.support.RedirectAttributes
 
 import javax.servlet.http.HttpServletRequest
+import javax.servlet.http.HttpServletResponse
 import java.lang.reflect.Field
 
 /**
@@ -53,6 +58,11 @@ class UserController extends BaseController {
         return entity
     }
 
+    /**
+     * 查看用户详情
+     * @param id
+     * @return
+     */
     @RequestMapping(value = "/detail/{id}", produces = "application/json; charset=utf-8")
     @ResponseBody
     Map<String, Object> detail(@PathVariable int id) {
@@ -60,6 +70,18 @@ class UserController extends BaseController {
         data['user'] = UserCache.get(id)
         data['roleName'] = RoleCache.get(UserCache.get(id).roleID).name
         return data
+    }
+
+    /**
+     * 媒体请求
+     * @param id 广告ID
+     * @param response 输出流
+     */
+    @RequestMapping('/media/{id}')
+    @ResponseBody
+    void media(@PathVariable int id, HttpServletResponse response) {
+        User user = UserCache.get(id)
+        MediaUtils.mediaTransfer user.url, response
     }
 
     /**
@@ -200,6 +222,30 @@ class UserController extends BaseController {
         }
     }
 
+    /**
+     * 管理员模式列表
+     * @param user
+     * @param pageNo
+     * @param model
+     * @return
+     */
+    @RequestMapping(value ='/adminMode/{pageNo}')
+    String adminMode(User user,@PathVariable int pageNo, Model model){
+        List<User> list = service.findAll(pageNo)
+        PageInfo<User> page = new PageInfo<>(list)
+        model.addAttribute "page", page
+        return "system/adminMode"
+    }
+
+    String upload(@RequestParam("file") MultipartFile file, HttpServletRequest request){
+        HttpServletRequest httpRequest = (HttpServletRequest)request;
+        CommonsMultipartResolver commonsMultipartResolver = new CommonsMultipartResolver(httpRequest.getSession().getServletContext());
+        MultipartHttpServletRequest multipartRequest = commonsMultipartResolver.resolveMultipart(httpRequest);
+        String authname = multipartRequest.getParameter("authname");
+
+        "system/adminMode"
+    }
+
     @RequestMapping(value = '/chgrp/{id}')
     @ResponseBody
     String chgrp(@PathVariable String id, int roleID, String cto) {
@@ -217,5 +263,29 @@ class UserController extends BaseController {
             return "修改用户角色完成"
         }
     }
+
+    /**
+     * 上传用户头像
+     * @param id
+     * @param request
+     * @param attributes
+     * @return
+     */
+    @RequestMapping(value = '/uploadMedia/{id}')
+    String uploadMedia(@PathVariable int id, HttpServletRequest request, RedirectAttributes attributes) {
+        if (!TokenUtils.validateFormToken(request, "uploadToken", request.getParameter("uploadToken"))) {
+            addMessage attributes, "本次提交的表单验证失败"
+            return "redirect:$adminPath/user/adminMode/1"
+        }
+        def responseCode = service.uploadAdmin(String.valueOf(id), request)
+        if (responseCode == DONE) {
+            addMessage attributes, "上传成功"
+        }
+        if (responseCode == FAILURE) {
+            addMessage attributes, "上传失败，文件类型错误"
+        }
+        "redirect:$adminPath/user/adminMode/1"
+    }
+
 
 }

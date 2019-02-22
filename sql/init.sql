@@ -87,6 +87,7 @@ create table `advertisement_machine` (
   addTime    datetime comment '添加时间',
   codeNumber varchar(512)       not null unique
   comment '机器标识码(注册码)',
+  control int comment '新的灯开关',
   light      int comment '灯开关, 1 开灯, 0 关灯',
   charge     int comment '充电状态, 1 充电, 0 闲置',
   checked    int comment '选中',
@@ -135,6 +136,7 @@ create table `led_machine` (
   led        varchar(255) comment 'led屏幕编号',
   machine_id    int comment '所属广告机',
   user_id int    comment '用户ID',
+  play_list varchar(255) comment '播放列表',
   primary key (id)
 )
   char set utf8
@@ -145,6 +147,7 @@ drop table if exists `machine_sensor`;
 create table `machine_sensor` (
   id          int auto_increment not null
   comment '传感记录ID',
+  eCH2O varchar(64) comment '甲醛',
   temperature varchar(64) comment '温度',
   humidity    varchar(64) comment '湿度',
   pm25        varchar(64) comment 'PM2.5',
@@ -199,6 +202,24 @@ CREATE TABLE `singlelampdata` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+DROP TABLE IF EXISTS `singlelampdata`;
+CREATE TABLE `singlelampdata_new` (
+   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键',
+    `machineID` int(13) DEFAULT NULL,
+   `userID` int(13) DEFAULT NULL,
+   `updateTime` datetime DEFAULT NULL COMMENT '更新时间',
+   `deviceCode` double(64,0) DEFAULT NULL COMMENT '设备码',
+   `temperature` double(64,0) DEFAULT NULL COMMENT '电源温度',
+    `inputVoltage` double(64,0) DEFAULT NULL COMMENT '输入电压',
+   `inputCurrent` double(64,0) DEFAULT NULL COMMENT '输入电流',
+   `outputVol` double(64,0) DEFAULT NULL COMMENT '输出电压',
+   `outputCurr` double(64,0) DEFAULT NULL COMMENT '输出电流',
+   `gridAP` double(64,0) DEFAULT NULL COMMENT '电源有功功率',
+   `gridAPD` double(64,0) DEFAULT NULL COMMENT '电源有功功率因素',
+   `ledBright` double(64,0) DEFAULT NULL COMMENT 'led亮度',
+   powerStatus     varchar(64) comment '电源状态',
+   PRIMARY KEY (`id`)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- 创建操作记录表, 本表用于持久化所有用户以及广告机发出的操作记录, 同理如果存在则抛弃旧表重新创建
 drop table if exists `sys_log`;

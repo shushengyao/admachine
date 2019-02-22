@@ -217,7 +217,7 @@ public class AdvertisementMachineMobileServiceProvider extends BaseController {
     }
 
     /**
-     * 开关灯
+     * 批量开关灯
      * <p>
      * URL: /mob/machine/light/{id}/{operate}
      * <p>
@@ -300,7 +300,7 @@ public class AdvertisementMachineMobileServiceProvider extends BaseController {
                     } else if (responseCode == ERROR_REQUEST) {
                         map.put(keyMessage, "操作码不正确");
                     } else if (responseCode == DONE) {
-                       util(id,control,token);
+                        util(id,control,token);
                     } else {
                         map.put(keyResponseCode, PASS);
                         map.put(keyMessage, "系统繁忙");
@@ -330,26 +330,26 @@ public class AdvertisementMachineMobileServiceProvider extends BaseController {
         JPushClient pushClient = new JPushClient(Global.getMasterSecret(), Global.getAppKey(), null, ClientConfig.getInstance());
         PushPayload payload = PushUtils.buildPayload(String.valueOf(id), "Light switch.", command);
         try {
-            map.put(keyMessage, control == 1 ? "开灯！" : "关灯！");
-            taskExecutor.execute(() -> {
-                if (control == 1) {
-                    sysLogService.log(
-                            ModuleEnum.Machine,
-                            OperateEnum.Push,
-                            TokenUtils.validateTokenGetUser(token).getId(),
-                            ObjectEnum.User,
-                            "打开了" + AdvertisementMachineCache.getMachineNameByID(id) + "的灯"
-                    );
-                } else {
-                    sysLogService.log(
-                            ModuleEnum.Machine,
-                            OperateEnum.Push,
-                            TokenUtils.validateTokenGetUser(token).getId(),
-                            ObjectEnum.User,
-                            "关闭了" + AdvertisementMachineCache.getMachineNameByID(id) + "的灯"
-                    );
-                }
-            });
+//            map.put(keyMessage, control == 1 ? "开灯！" : "关灯！");
+//            taskExecutor.execute(() -> {
+//                if (control == 1) {
+//                    sysLogService.log(
+//                            ModuleEnum.Machine,
+//                            OperateEnum.Push,
+//                            TokenUtils.validateTokenGetUser(token).getId(),
+//                            ObjectEnum.User,
+//                            "打开了" + AdvertisementMachineCache.getMachineNameByID(id) + "的灯"
+//                    );
+//                } else {
+//                    sysLogService.log(
+//                            ModuleEnum.Machine,
+//                            OperateEnum.Push,
+//                            TokenUtils.validateTokenGetUser(token).getId(),
+//                            ObjectEnum.User,
+//                            "关闭了" + AdvertisementMachineCache.getMachineNameByID(id) + "的灯"
+//                    );
+//                }
+//            });
             PushResult result = pushClient.sendPush(payload);
             logger.trace(result);
         } catch (APIRequestException e) {

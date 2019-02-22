@@ -22,6 +22,8 @@ class User implements Serializable {
     private int roleID
     // 角色ID
     private String address
+    //用户头像地址
+    private String url
     // 地址
     private String addTime
     // 加入时间
@@ -96,6 +98,14 @@ class User implements Serializable {
 
     void setRoleID(int roleID) {
         this.roleID = roleID
+    }
+
+    String getUrl() {
+        return url
+    }
+
+    void setUrl(String url) {
+        this.url = url
     }
 
     String getAddress() {

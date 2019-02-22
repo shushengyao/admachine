@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:include="/common/head::head('首页 - 智慧灯杆管理后台')"></head>
+
+<!--/*@thymesVar id="adminPath" type="java.lang.String"*/-->
+<!--/*@thymesVar id="page" type="com.github.pagehelper.PageInfo<com.xmlan.machine.module.user.entity.User>"*/-->
+<!--/*@thymesVar id="loginUser" type="com.xmlan.machine.module.user.entity.User"*/-->
+
+<body>
+<th:block th:include="/common/header::header('index')"/>
+<main style="z-index: 0;height: 800px">
+        <nav>
+            <div class="nav-wrapper">
+                <ul class="left hide-on-med-and-down">
+                    <li class="active"><a href="#">设置图像logo</a></li>
+                    <li><a href="#">组件</a></li>
+                    <li ><a href="#">JavaScript</a></li>
+                </ul>
+            </div>
+        </nav>
+
+    <div>
+        <table class="highlight responsive-table striped bordered" style="width: 45%;float: left">
+            <thead>
+            <tr>
+                <th>用户名</th>
+                <th>创建人</th>
+                <th>权限级别</th>
+                <th>删除用户</th>
+            </tr>
+            </thead>
+            <tbody class="card">
+                <tr th:each="item:${page.list}">
+                    <td>
+                        <a th:text="*{item.authname}" th:onclick="'javascript:openUploadModal(\''+${item.id}+'\',\''+${item.authname}+'\')'"></a>
+                    </td>
+                    <td th:text="*{item.founder}">name</td>
+                    <td th:if="${item.roleID == 1}" >管理员</td>
+                    <td th:if="${item.roleID != 1}" >普通用户</td>
+                    <td>删除</td>
+                </tr>
+            </tbody>
+        </table>
+        <div id="pagination-div" style="position:fixed;margin-top: 600px;margin-left: 250px" class="center">
+            <ul class="pagination">
+                <li th:if="${!page.hasPreviousPage}" class="disabled">
+                    <a href="#"><i class="material-icons">chevron_left</i></a>
+                </li>
+                <li th:if="${page.hasPreviousPage}" class="waves-effect">
+                    <a th:href="@{${adminPath}+'/user/list/'+${page.prePage}}"><i
+                            class="material-icons">chevron_left</i></a>
+                </li>
+                <th:block th:each="number:${page.navigatepageNums}">
+                    <li th:if="${number==page.pageNum}" class="waves-effect" id="active-page">
+                        <a href="#" th:text="${number}"></a>
+                    </li>
+                    <li th:if="${number!=page.pageNum}" class="waves-effect">
+                        <a th:href="@{${adminPath}+'/user/list/'+${number}}"
+                           th:text="${number}"></a>
+                    </li>
+                </th:block>
+                <li th:if="${!page.hasNextPage}" class="disabled">
+                    <a href="#"><i class="material-icons">chevron_right</i></a>
+                </li>
+                <li th:if="${page.hasNextPage}" class="waves-effect">
+                    <a th:href="@{${adminPath}+'/user/list/'+${page.nextPage}}"><i
+                            class="material-icons">chevron_right</i></a>
+                </li>
+            </ul>
+        </div>
+    </div>
+        <div class="row" style="float: left;margin-left: 300px">
+            <div class="col s12 m12">
+                <div class="card">
+                    <p id="detail-item-media">请选择用户</p>
+                    <div id="nullClick" class="card-image" style="width: 370px;height: 370px">
+                        <img id="userImage" src="../../../static/application/image/noimg.jpg">
+                    </div>
+                    <input id="upload-target-id" value="0" type="hidden"/>
+                    <form id="upload-image-or-video-form" method="post" enctype="multipart/form-data" action="#"
+                                onsubmit="return uploadImageOrVideo();">
+                        <div class="file-field input-field">
+                            <input type="text" style="display: none" name="authname" id="authname">
+                            <div class="btn">
+                                <span>选择图片</span>
+                                <input id="selectImage" disabled="" type="file" name="file" accept="image/*">
+                            </div>
+                            <div class="file-path-wrapper">
+                                <input class="file-path validate" type="text" style="width: 100px;float: left">
+                                <button type="submit" class="waves-effect waves-light btn">上传</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div style="clear:both;"></div>
+        </div>
+</main>
+<th:block th:include="/common/footer::footer"/>
+<th:block th:include="/common/script::script"/>
+<script type="text/javascript">
+    function openUploadModal(id,authname) {
+        $("#upload-target-id").val(id);
+        $("#upload-target-id").val(id);
+        $('#selectImage').removeAttr("disabled");
+        var url = '[[${adminPath}]]/user/detail/' + id;
+        var request_url = '[[${adminPath}]]/user/media/' + id;
+        $.ajax({
+            url:url,
+            type: "GET",
+            success: function (data) {
+                if (data['user'].url !== null && data['user'].url.indexOf("images") !== -1) {
+                    $("#nullClick").html(
+                        '<img id="userImage"  width="370px" src="' + request_url + '"/>'
+                    );
+                } else {
+                    $("#nullClick").html(
+                        '<img id="userImage"  width="370px" src="../../../static/application/image/noimg.jpg"/>'
+                    );
+                }
+                $("#detail-item-media").html(
+                    '<p id="detail-item-media">用户'+authname+'图像</p>'
+                );
+            }
+        });
+    }
+
+    function uploadImageOrVideo() {
+        var file = $("#url").val();
+        if (file === '') {
+            toast("没有选择文件，该广告的图片/视频没有更新。");
+            return false;
+        } else {
+            var id = $("#upload-target-id").val();
+            if (id == 0){
+                return false
+            } else {
+                var url = '[[${adminPath}]]/user/uploadMedia/' + id;
+                $("#upload-image-or-video-form").attr('action', url);
+                $("#upload-image-or-video-form").submit();
+                return true;
+            }
+        }
+    }
+</script>
+</body>
+</html>

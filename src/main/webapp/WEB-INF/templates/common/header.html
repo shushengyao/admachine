@@ -20,12 +20,7 @@
         <ul id="nav-mobile" class="side-nav fixed" style="transform: translateX(0%);background-color: #f2fddb ">
           <li class="logo">
             <a id="logo-container" th:href="@{${adminPath}+'/main'}" class="brand-logo">
-              <!--<img src="../../../static/application/image/logo.png" alt="logo" class="center-block" />-->
-                <img th:if="${loginUser.getUsername()=='junpai'}" src="../../../static/application/image/20180525.jpg" alt="logo" class="center-block" style="height: 150px;width: 150px;margin-left: 50px" />
-                <img th:if="${loginUser.getUsername()=='xm'}" src="../../../static/application/image/logo.png" alt="logo" class="center-block" />
-              <img th:if="${loginUser.getUsername()=='nande'}" src="../../../static/application/image/nande.jpg" alt="logo" class="center-block" />
-              <img th:if="${loginUser.getUsername()=='test'}" src="../../../static/application/image/test.jpg" alt="logo" class="center-block" />
-              <img th:if="${loginUser.getUsername()=='youwei'}" src="../../../static/application/image/youwei.jpg" alt="logo" class="center-block" style="height: 150px"/>
+                <img th:src="@{${adminPath}+'/user/media/'+${loginUser.id}}" style="width: 230px;height: 150px" alt="logo" class="center-block" />
             </a>
           </li>
           <th:block th:switch="${module}">
@@ -34,6 +29,9 @@
             </li>
             <li th:case="*">
               <a th:href="@{${adminPath}+'/main'}" class="waves-effect waves-teal">后台首页<i class="material-icons">arrow_forward_ios</i> </a>
+            </li>
+            <li th:if="${loginUser.username == 'xm'}">
+              <a th:href="@{${adminPath}+'/user/adminMode/1'}" class="waves-effect waves-teal">管理员模式<i class="material-icons">supervised_user_circle</i> </a>
             </li>
           </th:block>
           <th:block th:switch="${module}">

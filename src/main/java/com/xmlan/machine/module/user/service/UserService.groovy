@@ -1,10 +1,14 @@
 package com.xmlan.machine.module.user.service
 
+import com.github.pagehelper.PageHelper
 import com.xmlan.machine.common.base.BaseService
 import com.xmlan.machine.common.cache.AdvertisementMachineCache
 import com.xmlan.machine.common.cache.RoleCache
+import com.xmlan.machine.common.config.Global
 import com.xmlan.machine.common.util.EncryptUtils
+import com.xmlan.machine.common.util.JsonUtils
 import com.xmlan.machine.common.util.StringUtils
+import com.xmlan.machine.common.util.UploadUtils
 import com.xmlan.machine.module.advertisementMachine.dao.AdvertisementMachineDAO
 import com.xmlan.machine.module.user.dao.UserDAO
 import com.xmlan.machine.module.user.entity.User
@@ -13,6 +17,8 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.bind.annotation.RequestParam
+
+import javax.servlet.http.HttpServletRequest
 
 /**
  * Created by ayakurayuki on 2017/12/12-11:09.
@@ -43,6 +49,15 @@ class UserService extends BaseService<User, UserDAO> {
      */
     List<User> findListByUserID(@RequestParam("userID") int userID){
         dao.findListByUserID(userID)
+    }
+    /**
+     * 查询所有
+     * @param pageNo
+     * @return
+     */
+    List<User> findAll(int pageNo){
+        PageHelper.startPage pageNo, 10
+        dao.findAll();
     }
     /**
      * 根据创建者查询用户id列表
@@ -94,6 +109,41 @@ class UserService extends BaseService<User, UserDAO> {
             return DONE
         } else {
             return ROLE_IS_NOT_EXISTS
+        }
+    }
+
+    /**
+     * 上传用户头像
+     * @param userID
+     * @param request
+     * @return
+     */
+    int uploadAdmin(String userID,HttpServletRequest request){
+        def user = dao.get(userID)
+        if (user.url != null && !user.url.equals("")){
+            deleteMedia(user)
+        }
+        def jsonString = UploadUtils.uploadImages(request,user.authname)
+        if (jsonString == '[]') {
+            return FAILURE
+        }
+        def json = JsonUtils.fromJsonString(jsonString, Map.class) as Map
+        def list = json.get(UploadUtils.MEDIA_KEY) as List<String>
+        user.url = list.get(0)
+        update(user)
+        return DONE
+    }
+    /**
+     * 更新前删除旧图像
+     * @param entity
+     * @return
+     */
+    private static int deleteMedia(User entity) {
+        if (UploadUtils.isMedia(entity.url)) {
+            new File("${Global.mediaPath}/${entity.url}").delete()
+            return DONE
+        } else {
+            return LOST_MEDIA_RESOURCE_WHEN_DELETE
         }
     }
 

@@ -42,6 +42,11 @@ interface UserDAO extends BaseDAO<User> {
      */
     List<User> findListByUserID(@RequestParam("userID") int userID)
     /**
+     * 查询所有
+     * @return
+     */
+    List<User> findAll()
+    /**
      * 根据创建人查询使用者id列表
      * @param username
      * @return

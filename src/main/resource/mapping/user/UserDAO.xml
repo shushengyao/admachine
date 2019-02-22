@@ -11,10 +11,12 @@
         <result column="authname" property="authname"/>
         <result column="password" property="password"/>
         <result column="roleID" property="roleID"/>
+        <result column="url" property="url"/>
         <result column="address" property="address"/>
         <result column="addTime" property="addTime"/>
         <result column="phone" property="phone"/>
         <result column="remark" property="remark"/>
+        <result column="founder" property="founder"/>
         <association property="advertisementMachineList" resultMap="advertisementMachineResultMap"/>
     </resultMap>
 
@@ -50,10 +52,12 @@
         t.authname as "authname",
         t.password as "password",
         t.roleID as "roleID",
+        t.url as "url",
         t.address as "address",
         date_format(t.addTime, '%Y-%m-%d %H:%i:%s') as "addTime",
         t.phone as "phone",
-        t.remark as "remark"
+        t.remark as "remark",
+        t.founder as "founder"
     </sql>
 
     <select id="findListByUserID" resultType="com.xmlan.machine.module.user.entity.User">
@@ -113,6 +117,7 @@
         authname,
         password,
         roleID,
+        url,
         address,
         addTime,
         phone,
@@ -124,6 +129,7 @@
         #{authname},
         #{password},
         #{roleID},
+        #{url},
         #{address},
         #{addTime},
         #{phone},
@@ -136,6 +142,7 @@
         update `user`
         set
         username = #{username},
+        url = #{url},
         address = #{address},
         phone = #{phone},
         remark = #{remark},

@@ -11,22 +11,29 @@ import javax.servlet.http.HttpServletResponse
  */
 class MediaUtils {
 
-    static void mediaTransfer(String url, HttpServletResponse response) {
+    static void mediaTransfer(String url, HttpServletResponse response) throws Exception{
         new File("${Global.mediaPath}/${url}".toString()).withInputStream { input ->
             ServletOutputStream output = response.outputStream
-            byte[] bytes = null
-            while (input.available() > 0) {
-                if (input.available() > 10240) {
-                    bytes = new byte[10240]
-                } else {
-                    bytes = new byte[input.available()]
+                try {
+                    byte[] bytes = null
+                    while (input.available() > 0) {
+                        bytes = new byte[input.available()]
+                        input.read(bytes, 0, bytes.length)
+                        output.write(bytes, 0, bytes.length)
+                    }
+                    output.flush()
+                    output.close()
+                }catch (Exception e){
+                    throw e
                 }
-                input.read(bytes, 0, bytes.length)
-                output.write(bytes, 0, bytes.length)
-            }
-            output.flush()
-            output.close()
+                finally {
+                    if (input !=null){
+                        input.close()
+                    }
+                    if (output !=null){
+                        output.close()
+                    }
+                }
         }
     }
-
 }

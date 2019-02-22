@@ -241,9 +241,7 @@ class AdvertisementController extends BaseController {
      * @return
      */
     @RequestMapping(value = '/uploadMedia/{id}')
-    String uploadMedia(@PathVariable int id, HttpServletRequest request, RedirectAttributes attributes,Map modelMap) {
-        User user= modelMap.get("loginUser")
-        int userID = user.id
+    String uploadMedia(@PathVariable int id, HttpServletRequest request, RedirectAttributes attributes) {
         if (!TokenUtils.validateFormToken(request, "uploadToken", request.getParameter("uploadToken"))) {
             addMessage attributes, "本次提交的表单验证失败"
             return "redirect:$adminPath/advertisement/list/1"

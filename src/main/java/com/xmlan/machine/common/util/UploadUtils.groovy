@@ -22,9 +22,14 @@ final class UploadUtils {
 
     public static final String MEDIA_KEY = "media"
 
-
-
-    static String saveFile(dataForm,MultipartFile file, String path) {
+    /**
+     * 按照时间戳保存文件
+     * @param dataForm
+     * @param file
+     * @param path
+     * @return
+     */
+    static String saveFile(String dataForm,MultipartFile file, String path) {
         // 判断文件是否为空
         if (!file.isEmpty()) {
             String str = file.getOriginalFilename();
@@ -117,6 +122,57 @@ final class UploadUtils {
                 }
             } catch (StringIndexOutOfBoundsException ignored) {
                 logger.info "没有选中文件！"
+            }
+        }
+        json.put MEDIA_KEY, fileList
+        logger.trace "map size: ${json.size()}\tfileList size: ${fileList.size()}"
+        return fileList.isEmpty() ? "[]" : JsonUtils.toJsonString(json)
+    }
+
+    static String uploadImages(Object request,String name) {
+        def imagePath = new File("${Global.mediaPath}/${Global.imageTag}".toString())
+        if (!imagePath.exists()) imagePath.mkdirs()
+        def videoPath = new File("${Global.mediaPath}/${Global.videoTag}".toString())
+        if (!videoPath.exists()) videoPath.mkdirs()
+
+        Map<String, List<String>> json = Maps.newHashMap()
+        List<String> fileList = Lists.newArrayList()
+        if (request instanceof HttpServletRequest) {
+            CommonsMultipartResolver resolver = new CommonsMultipartResolver(request.session.servletContext)
+            if (resolver.isMultipart(request)) {
+                // 检查form中是否带有 enctype="multipart/form-data"
+                // 转化normal-request为multipart-request
+                MultipartHttpServletRequest multiRequest = (MultipartHttpServletRequest) request
+                Iterator iterator = multiRequest.fileNames
+                // 获取multiRequest的全部文件名
+                int i = 1
+                // 编号计数器
+                while (iterator.hasNext()) {
+                    // 遍历所有文件
+                    MultipartFile file = multiRequest.getFile(iterator.next().toString())
+                    try {
+                        String extension = file.originalFilename.substring(file.originalFilename.lastIndexOf('.'))
+                        if (file != null && isMedia(file.originalFilename)) {
+                            String filename = "${name}_No${i}${extension}"
+                            try {
+                                // 存储文件
+                                if (isImage(extension)) {
+                                    file.transferTo(new File("${Global.mediaPath}/${Global.imageTag}/${filename}"))
+                                    fileList.add "${Global.imageTag}/${filename}".toString()
+                                } else if (isVideo(extension)) {
+                                    file.transferTo(new File("${Global.mediaPath}/${Global.videoTag}/${filename}"))
+                                    fileList.add "${Global.videoTag}/${filename}".toString()
+                                }
+                            } catch (IOException e) {
+                                logger.debug e
+                            }
+                            i++
+                            logger.trace "Added media: ${filename}"
+                        }
+                    } catch (StringIndexOutOfBoundsException ignored) {
+                        logger.info "没有选中文件！"
+                    }
+                }
             }
         }
         json.put MEDIA_KEY, fileList
