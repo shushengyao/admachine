@@ -251,7 +251,7 @@ public class AdvertisementMobileServiceProvider extends BaseController {
         ScreenHeight height = new ScreenHeight();
         String screenWidth = width.getScreenWidth(led);
         String screeHeight = height.getScreenHeight(led);
-        if (type.equals(".mp4")){
+        if (type.equals(".mp4") || type.equals(".MP4")){
             downloadFileToLocal(fileName,led,screenWidth,screeHeight);
         }else if (type.equals(".png") || type.equals(".jpg") || type.equals(".jpeg") || type.equals(".gif")) {
 
