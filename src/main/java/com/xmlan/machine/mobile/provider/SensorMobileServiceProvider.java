@@ -68,7 +68,7 @@ public class SensorMobileServiceProvider extends BaseController {
         HashMap<String,String> hashMap= new HashMap<>();
         MachineSensor sensorList = null;
         String info;
-        String city = "珠海";
+        String city = service.getAD(machineID_).getCity();
         if (machineID.equals("all")){
             List<MachineSensor> allList = new ArrayList<>();
             allList = sensorService.findAll();
