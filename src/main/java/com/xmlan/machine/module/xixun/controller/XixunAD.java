@@ -2,24 +2,22 @@ package com.xmlan.machine.module.xixun.controller;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.SocketTimeoutException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import com.xmlan.machine.common.base.BaseBean;
 import com.xmlan.machine.common.base.BaseController;
+import com.xmlan.machine.common.cache.AdvertisementMachineCache;
 import com.xmlan.machine.common.cache.UserCache;
 import com.xmlan.machine.common.util.FileUtils;
 import com.xmlan.machine.common.util.TokenUtils;
 import com.xmlan.machine.common.util.UploadUtils;
+import com.xmlan.machine.module.advertisementMachine.entity.AdvertisementMachine;
+import com.xmlan.machine.module.advertisementMachine.entity.SimpleAdvertisementMachine;
 import com.xmlan.machine.module.led_machine.entity.Led_machine;
 import com.xmlan.machine.module.led_machine.service.Led_machineService;
 import com.xmlan.machine.module.user.entity.User;
 import com.xmlan.machine.module.xixun.util.InvokeBuildInJsData;
-import groovy.json.internal.Exceptions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Controller;
@@ -104,13 +102,34 @@ public class XixunAD extends BaseController {
     }
     /**
      * 新增led或者编辑界面
-     * @param led_machine
+     * @param
      * @param model
      * @return
      */
     @RequestMapping(value = "/form")
-    public String form(Led_machine led_machine,Model model,HttpServletRequest request){
-        model.addAttribute( "led_machine", led_machine);
+    public String form(Model model,HttpServletRequest request,ModelMap modelMap){
+        User user= (User) modelMap.get("loginUser");
+        Enumeration enu=request.getParameterNames();
+        while(enu.hasMoreElements()){
+            String paraName=(String)enu.nextElement();
+            System.out.println(paraName+":"+request.getParameter(paraName));
+            int id = Integer.parseInt(request.getParameter(paraName).replace(" ",""));
+            Led_machine led_machine = led_machineService.getLEDByID(id);
+            model.addAttribute( "led_machine", led_machine);
+            model.addAttribute( "advertisementMachine", led_machine.getMachine_id());
+        }
+        List<SimpleAdvertisementMachine> machineList = AdvertisementMachineCache.getDropdownAdvertisementMachineList();
+        if (user.getId() == 1){
+            model.addAttribute( "machineList",machineList );
+        }else {
+            Iterator<SimpleAdvertisementMachine> iterator = machineList.iterator();
+            while(iterator.hasNext()){
+                if (iterator.next().getId() != 1){
+                    iterator.remove();
+                }
+            }
+            model.addAttribute( "machineList",machineList );
+        }
         model.addAttribute ("userList", UserCache.getDropdownUserList());
         model.addAttribute ("token", TokenUtils.getFormToken(request));
         return "xixun/xixunAdd";

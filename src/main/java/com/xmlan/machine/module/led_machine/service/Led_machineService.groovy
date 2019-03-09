@@ -25,6 +25,14 @@ class Led_machineService extends BaseService<Led_machine,Led_machineDAO> {
     List<Led_machine> findAllByUserID (int user_id){
         dao.findAllByUserID(user_id)
     }
+    /**
+     * 根据id获取led
+     * @param id
+     * @return
+     */
+    Led_machine getLEDByID(int id){
+        dao.getLEDByID(id)
+    }
     int delete(int id){
         int result = dao.delete(id)
         return result

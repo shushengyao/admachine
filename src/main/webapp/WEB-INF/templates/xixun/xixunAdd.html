@@ -4,8 +4,12 @@
 <!--/* <editor-fold desc="define"> */-->
 <!--/*@thymesVar id="adminPath" type="java.lang.String"*/-->
 <!--/*@thymesVar id="loginUser" type="com.xmlan.machine.module.user.entity.User"*/-->
+<!--/*@thymesVar id="loginUser" type="com.xmlan.machine.module.user.entity.User"*/-->
 <!--/*@thymesVar id="newEntityID" type="java.lang.Integer"*/-->
 <!--/*@thymesVar id="led_machine" type="com.xmlan.machine.module.led_machine.entity.Led_machine"*/-->
+<!--/*@thymesVar id="machineList" type="java.util.List<com.xmlan.machine.module.advertisementMachine.entity.SimpleAdvertisementMachine>"*/-->
+<!--/*@thymesVar id="advertisementMachine" type="java.lang.String"*/-->
+<!--/*@thymesVar id="adminRoleID" type="java.lang.Integer"*/-->
 <!--/*@thymesVar id="userList" type="java.util.List<com.xmlan.machine.module.user.entity.SimpleUser>"*/-->
 <!--/*@thymesVar id="token" type="java.lang.String"*/-->
 <!--/*@thymesVar id="cameraIP" type="com.xmlan.machine.module.advertisementMachine.entity.AdvertisementMachine.cameraIP"*/-->
@@ -23,9 +27,10 @@
         </div>
     </div>
     <br/>
-    <div id="main-content" class="container">
+    <div id="main-content" class="container" style="height: 600px">
             <input name="token" th:value="${token}" type="hidden"/>
             <input id="user_id" name="user_id" type="hidden" class="validate" th:value="${loginUser.id}"/>
+            <input id="id" name="id" th:value="${led_machine.id}" type="hidden" class="validate" required="required"/>
             <div class="row">
                 <div class="input-field col s6 m6 l6">
                     <i class="material-icons prefix">create</i>
@@ -39,17 +44,30 @@
                            th:value="${led_machine.led}"/>
                     <label for="name">led板卡编号</label>
                 </div>
-                <div class="input-field col s12 m12 112">
-                    <i class="material-icons prefix">create</i>
-                    <input id="machine_id" name="machine_id" type="text" class="validate" placeholder="输入广告机id" required="required"
-                           th:value="${led_machine.machine_id}"/>
-                    <label for="name">广告机id</label>
+                <div class="input-field col s6 m6 l6" style="height: 66px">
+                    <i class="material-icons prefix">personal_video</i>
+                    <select id="machine_id" name="machine_id">
+                        <option th:each="item:${machineList}" th:value="${item.id}" th:text="${item.name}"
+                                th:if="${item.id==advertisementMachine}" selected="selected"></option>
+                        <option th:each="item:${machineList}" th:value="${item.id}" th:text="${item.name}"></option>
+                    </select>
+                    <label for="machine_id">所属广告机</label>
                 </div>
-                <div class="input-field col s6 m6 l6 right-align">
-                    <button type="reset" class="waves-effect waves-light btn"><i class="material-icons left">clear</i>清空</button>
+                <div class="input-field col s6 m6 l6" style="height: 66px">
+                    <i class="material-icons prefix">account_circle</i>
+                    <select id="userID" name="userID" th:if="${loginUser.roleID==adminRoleID}">
+                        <option th:each="item:${userList}" th:value="*{item.id}" th:text="*{item.username}" th:if="${item.getId()==led_machine.user_id}" selected="selected"></option>
+                        <option th:each="item:${userList}" th:value="*{item.id}" th:text="*{item.username}"></option>
+                    </select>
+                    <label for="userID">所属用户</label>
                 </div>
-                <div class="input-field col s6 m6 l6 left-align">
-                    <button type="submit" class="waves-effect waves-light btn" onclick="send()"><i class="material-icons right">send</i>提交</button>
+                <div class="row">
+                    <div class="input-field col s6 m6 l6 right-align">
+                        <button type="reset" class="waves-effect waves-light btn"><i class="material-icons left">clear</i>清空</button>
+                    </div>
+                    <div class="input-field col s6 m6 l6 left-align">
+                        <button type="submit" class="waves-effect waves-light btn" onclick="send()"><i class="material-icons right">send</i>提交</button>
+                    </div>
                 </div>
             </div>
     </div>
@@ -59,12 +77,19 @@
 </body>
 </html>
 <script type="text/javascript">
+    $(function () {
+        $("#machine_id").material_select();
+        var roleID = '[[${loginUser.roleID}]]';
+        if (roleID === '1') {
+            $("#userID").material_select();
+        }
+    });
     function send() {
         var id = $('#id');
         var name = $('#name');//led名称
         var led = $('#led');//led编号
         var machine_id = $('#machine_id');//广告机编号
-        var user_id = $('#user_id');//使用者id
+        var user_id = $('#userID');//使用者id
         var data = {
             "id":id.val(),
             "name": name.val(),

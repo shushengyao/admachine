@@ -22,6 +22,13 @@ interface Led_machineDAO  extends BaseDAO<Led_machine> {
      * @return
      */
     List<Led_machine> findAllByUserID (@RequestParam("user_id") int user_id)
+
+    /**
+     * 根据id获取led
+     * @param id
+     * @return
+     */
+    Led_machine getLEDByID(@RequestParam("id") int id)
     /**
      * 根据id删除
      * @param id

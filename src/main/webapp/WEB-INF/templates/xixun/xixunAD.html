@@ -3,9 +3,13 @@
 <!--/*@thymesVar id="adminPath" type="java.lang.String"*/-->
 <!--/* <editor-fold desc="define"> */-->
 <!--/*@thymesVar id="loginUser" type="com.xmlan.machine.module.user.entity.User"*/-->
+<!--/*@thymesVar id="adminRoleID" type="java.lang.Integer"*/-->
+<!--/*@thymesVar id="userList" type="java.util.List<com.xmlan.machine.module.user.entity.SimpleUser>"*/-->
 <!--/*@thymesVar id="adminPath" type="java.lang.String"*/-->
 <!--/*@thymesVar id="page" type="com.github.pagehelper.PageInfo<com.xmlan.machine.module.advertisementMachine.entity.AdvertisementMachine>"*/-->
+<!--/*@thymesVar id="machineList" type="java.util.List<com.xmlan.machine.module.advertisementMachine.entity.SimpleAdvertisementMachine>"*/-->
 <!--/*@thymesVar id="adCount" type="java.util.List<com.xmlan.machine.module.advertisement.entity.AdvertisementCount>"*/-->
+<!--/*@thymesVar id="advertisementMachine" type="com.xmlan.machine.module.advertisementMachine.entity.AdvertisementMachine"*/-->
 <!--/*@thymesVar id="name" type="java.lang.String"*/-->
 <!--/*@thymesVar id="codeNumber" type="java.lang.String"*/-->
 <!--/*@thymesVar id="addTime" type="java.lang.String"*/-->
@@ -41,9 +45,9 @@
                     </tr>
                     </thead>
                 </table>
-                <div id="deleteLed" class="modal" style="display: none;margin-top: 10%">
+                <div id="deleteLed" class="modal" style="display: none;position:absolute; top:50%; left:300px;width: 500px">
                     <div class="modal-content">
-                        <h4>注意！</h4>
+                        <h4 >注意！</h4>
                         <input id="delete-confirm-id" name="id" type="hidden"/>
                         <p>是否要删除广告 <span id="delete-name"></span> ?</p>
                     </div>
@@ -89,13 +93,13 @@
                 </form>
                 <form th:action="@{${adminPath}+'/xixunAD/clear'}" method="post">
                     <input type="hidden" id="led_co" name="led_code" value="">
-                    <input class="date-picker" type="submit" value="清空屏幕字幕">
+                    <input class="waves-effect waves-light btn red" type="submit" value="清空屏幕字幕">
                 </form>
                 <form th:action="@{${adminPath}+'/xixunAD/clearPlayList'}" method="post">
                     <input type="hidden" id="led_" name="led_code" value="">
-                    <input class="date-picker" type="submit" value="清空视频播放">
+                    <input class="waves-effect waves-light btn" type="submit" value="清空视频播放">
                 </form>
-                <input class="" type="button" onclick="loadUrl()" value="覆盖屏幕">
+                <!--<input class="" type="button" onclick="loadUrl()" value="覆盖屏幕">-->
             </div>
             <div class="modal-footer">
                 <a href="#" class="modal-action modal-close waves-effect waves-green btn-flat">关闭</a>
@@ -110,12 +114,19 @@
                 <input id="update-name" value="name"/>
                 <h6 class="green-text text-darken-2">led编号</h6>
                 <input id="update-led" value="led"/>
-                <h6 class="green-text text-darken-2">所属广告机id</h6>
-                <input id="update-machine_id" value="machine_id"/>
-                <div th:if="${loginUser.id}==1">
-                    <h6 class="green-text text-darken-2">所属用户id</h6>
-                    <input id="update-user_id" value="user_id"/>
-                </div>
+                <h6 class="green-text text-darken-2">所属广告机</h6>
+                <!--<input id="update-machine_id" value="machine_id"/>-->
+                <select id="machine_id" name="machine_id">
+                    <option th:each="item:${machineList}" th:value="${item.id}" th:text="${item.name}"
+                             th:if="${item.id==advertisementMachine.id}" selected="selected"></option>
+                    <option th:each="item:${machineList}" th:value="${item.id}" th:text="${item.name}"></option>
+                </select>
+                <h6 class="green-text text-darken-2">所属用户</h6>
+
+                <select id="userID" name="userID" th:if="${loginUser.roleID==adminRoleID}">
+                    <option th:each="item:${userList}" th:value="*{item.id}" th:text="*{item.username}" ></option>
+                    <option th:each="item:${userList}" th:value="*{item.id}" th:text="*{item.username}"></option>
+                </select>
             </div>
             <div class="modal-footer">
                 <button type="submit" class="waves-effect waves-light btn" onclick="send()"><i class="material-icons right">send</i>提交</button>
@@ -231,6 +242,11 @@
         $("#weather-modal").modal();
         $("#update-modal").modal();
         $("#operate-modal").modal();
+        $("#machine_id").material_select();
+        var roleID = '[[${loginUser.roleID}]]';
+        if (roleID === '1') {
+            $("#userID").material_select();
+        }
         var user =$("#user_id").val();
         var color = document.getElementById("color"); 　　      　　　　　　　　//通过使用 getElementById() 来访问 <color> 元素
         var colorInfo = document.getElementById("colorInfo");
@@ -284,8 +300,8 @@
                         "                        </li>\n" +
                         "                        <li>\n" +
                         "                           <a class=\"btn-floating green waves-effect waves-light tooltipped btn modal-trigger\" data-position=\"top\"\n" +
-                        "                                data-delay=\"50\" data-tooltip='编辑' href=\"#update-modal\"\n" +
-                        "                                onclick='update("+adid+")'>\n" +
+                        "                                data-delay=\"50\" data-tooltip='编辑' href=\'/mng/xixunAD/form?id=\+"+adid+"'\n" +
+                        // "                               onclick='update("+adid+")'>\n" +
                         "                                <i class=\"material-icons\">edit</i>\n" +
                         "                            </a>\n" +
                         "                        </li>\n" +
@@ -405,7 +421,7 @@
         var id = $('#update-id');
         var name = $('#update-name');//led名称
         var led = $('#update-led');//led编号
-        var machine_id = $('#update-machine_id');//广告机编号
+        var machine_id = $('#machine_id');//广告机编号
         var user_id = $('#update-user_id');//使用者id
         var data = {
             "id":id.val(),
@@ -464,7 +480,12 @@
                 $("#update-id").val(jsonObj[0].id)
                 $("#update-name").val(jsonObj[0].name)
                 $("#update-led").val(jsonObj[0].led);
-                $("#update-machine_id").val(jsonObj[0].machine_id);
+                $("#machine_id").val(jsonObj[0].machine_id);
+                var machineID = $("#machine_id").val();
+                console.log(machineID)
+                // $("#machine_id  option[value=machineID] ").attr("selected",true);
+                // $("#machine_id").attr(machineID);
+                $("select").val(machineID);
                 $("#update-user_id").val(jsonObj[0].user_id);
             },error:function () {
                 console.log("失败！")

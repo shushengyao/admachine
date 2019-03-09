@@ -33,6 +33,11 @@
         from led_machine t
     </select>
 
+    <select id="getLEDByID" parameterType="int" resultType="com.xmlan.machine.module.led_machine.entity.Led_machine">
+        select *
+        from led_machine t
+        where id = #{id}
+    </select>
     <select id="selectPlayList" parameterType="java.lang.String" resultType="String">
         select play_list
         from led_machine t
