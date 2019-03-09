@@ -110,13 +110,18 @@ public class XixunAD extends BaseController {
     public String form(Model model,HttpServletRequest request,ModelMap modelMap){
         User user= (User) modelMap.get("loginUser");
         Enumeration enu=request.getParameterNames();
-        while(enu.hasMoreElements()){
+        if(enu.hasMoreElements()){
             String paraName=(String)enu.nextElement();
             System.out.println(paraName+":"+request.getParameter(paraName));
             int id = Integer.parseInt(request.getParameter(paraName).replace(" ",""));
             Led_machine led_machine = led_machineService.getLEDByID(id);
             model.addAttribute( "led_machine", led_machine);
             model.addAttribute( "advertisementMachine", led_machine.getMachine_id());
+        }else {
+            Led_machine led_machine = new Led_machine();
+            led_machine.setId(NEW_INSERT_ID);
+            led_machine.setUser_id(user.getId());
+            model.addAttribute( "led_machine", led_machine);
         }
         List<SimpleAdvertisementMachine> machineList = AdvertisementMachineCache.getDropdownAdvertisementMachineList();
         if (user.getId() == 1){
