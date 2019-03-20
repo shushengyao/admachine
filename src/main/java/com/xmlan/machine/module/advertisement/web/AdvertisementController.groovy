@@ -93,7 +93,7 @@ class AdvertisementController extends BaseController {
      * @return
      */
     @RequestMapping(value = "/list/{pageNo}")
-    String list(AdvertisementMachine advertisementMachine,Advertisement advertisement, @PathVariable int pageNo, Model model, ModelMap modelMap) {
+    String list(Advertisement advertisement, @PathVariable int pageNo, Model model, ModelMap modelMap) {
         if (advertisement.name == 'null') advertisement.name = StringUtils.EMPTY
         if (advertisement.addTime == 'null') advertisement.addTime = StringUtils.EMPTY
         if (advertisement.machineID < 1) advertisement.machineID = NEW_INSERT_ID
